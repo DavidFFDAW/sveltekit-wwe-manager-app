@@ -1,0 +1,19 @@
+{
+    "display": "standalone",
+    "start_url": "/",
+    "theme_color": "#000000",
+    "background_color": "#ffffff",
+    "name": "WWE 2K App",
+    "short_name": "WWE 2K",
+    "author": "David Fernandez Flores",
+    "description": "WWE 2K App",
+    "lang": "es",
+    "orientation": "portrait",
+
+    "icons": [{
+        "src": "/icons/versatile.png",
+        "type": "image/png",
+        "sizes": "512x512",
+        "purpose": "maskable"
+    }]
+}

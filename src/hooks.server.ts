@@ -1,20 +1,18 @@
-import type { Handle } from '@sveltejs/kit';
+import { type Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
-	// console.log('Comprobando la sesión para: ', event.request.url);
-	
-  // Obtener la cookie de sesión
-//   const sessionCookie = event.cookies.get('session');
+    console.log('checking...');
+    console.log('url: ', event.url.pathname);
+    console.log('requested route: ', event.request.url);
 
-  // Comprobar si la sesión es válida
-//   if (sessionCookie) {
-//     const user = await getSessionFromCookie(sessionCookie);
-//     if (user) {
-//       // Añadir el usuario al contexto local
-//       event.locals.user = user;
-//     }
-//   }
+    const isAdminRequestedRoute = event.url.pathname.startsWith('/admin');
+    if (!isAdminRequestedRoute) resolve(event);
 
-  // Continuar con la resolución de la solicitud
-  return resolve(event);
+    if (isAdminRequestedRoute) {
+        event.locals.user = { uuid: 45, name: 'admin', role: 'admin', username: 'admin', email: 'test' };
+        console.log('Check for user authentication');
+        return resolve(event);
+    }
+
+    return resolve(event);
 };

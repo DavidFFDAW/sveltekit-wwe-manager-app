@@ -1,0 +1,59 @@
+@import './resets.css';
+
+body main.app-main-entrypoint {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+.page-content {
+    padding: 0 10px;
+}
+.w1 {
+    width: 100%;
+}
+.flex {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+}
+.flex.column {
+    flex-direction: column;
+}
+.flex.center {
+    justify-content: center;
+}
+.flex.acenter {
+    align-items: center;
+}
+
+
+.btn {
+    padding: 5px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+}
+
+.btn.secondary {
+    border: 1px solid #6c757d;
+    background-color: transparent;
+    color: #6c757d;
+}
+
+.btn.cta {
+    border: 1px solid #121212;
+    background-color: #121212;
+}
+
+
+.resource-list.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    place-items: center;
+    gap: 20px;
+}
