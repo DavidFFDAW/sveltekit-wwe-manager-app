@@ -10,6 +10,26 @@
 	// console.log(data);
 </script>
 
+<AsyncForm redirect="/">
+	<input type="text" name="search" placeholder="Search" value="wadsda" />
+	<div class="checks">
+		<label>
+			<input type="checkbox" name="status" value="active" checked />
+			Active
+		</label>
+		<label>
+			<input type="checkbox" name="status" value="inactive" checked />
+			Inactive
+		</label>
+
+		<label>
+			<input type="checkbox" name="status" value="featured" checked />
+			Featured
+		</label>
+	</div>
+	<button type="submit">Search</button>
+</AsyncForm>
+
 <div class="ppvs-list resource-list grid">
 	{#each data.ppvs as ppv}
 		<div class="single-ppv">
@@ -21,26 +41,6 @@
 		</div>
 	{/each}
 </div>
-
-<AsyncForm>
-	<input type="text" name="search" placeholder="Search" />
-	<div class="checks">
-		<label>
-			<input type="checkbox" name="statuses" value="active" />
-			Active
-		</label>
-		<label>
-			<input type="checkbox" name="statuses" value="inactive" />
-			Inactive
-		</label>
-
-		<label>
-			<input type="checkbox" name="statuses" value="featured" />
-			Featured
-		</label>
-	</div>
-	<button type="submit">Search</button>
-</AsyncForm>
 
 <style>
 	.single-ppv img {

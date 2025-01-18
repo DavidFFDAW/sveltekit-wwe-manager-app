@@ -10,3 +10,4 @@
 
 <p role="presentation" on:click={addCounter}>{counter}</p>
 <a href="/wrestlers">Wrestlers</a>
+<a href="/admin/ppvs">PPVs</a>
