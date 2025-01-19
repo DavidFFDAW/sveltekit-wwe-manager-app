@@ -1,9 +1,10 @@
 <script>
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
+	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 </script>
 
-<section class="wwe-new-wrestler-create-panel" style="padding: 20px;">
-	<AsyncForm redirect="/admin/wrestlers" method="post">
+<PageWrapper page="wrestler-create">
+	<AsyncForm redirect="/admin/wrestlers" method="post" buttonText="Crear luchador">
 		<div class="form-cols">
 			<div class="form-item">
 				<label for="name">Nombre</label>
@@ -67,8 +68,179 @@
 			<input type="hidden" name="test[]" value="b" />
 			<input type="hidden" name="test[]" value="c" />
 		</div>
+
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
+			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
+			corrupti eligendi doloribus. Repellendus ullam est minus.
+		</p>
 	</AsyncForm>
-</section>
+</PageWrapper>
 
 <style>
 	.form-cols {

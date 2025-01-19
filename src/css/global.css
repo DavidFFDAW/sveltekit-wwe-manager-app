@@ -1,41 +1,31 @@
 @import './resets.css';
+@import './layout.css';
+@import './typography.css';
 
-body main.app-main-entrypoint {
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	gap: 50px;
-}
 i.customs-icons.app-bootstrap-custom-icon {
 	line-height: 0;
 	color: inherit;
 }
+aside.admin-sidebar.sidebar.shown {
+	width: 250px;
+	height: 100%;
+	background-color: #333;
+	color: white;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	transition: 0.3s;
+}
+aside.admin-sidebar.sidebar.shown + main.app-main-entrypoint {
+	margin-left: 250px;
+}
+
 .padding {
 	padding: 20px;
 }
 .page-content {
-	padding: 0 10px;
-}
-.w1 {
-	width: 100%;
-}
-.relative {
-	position: relative;
-}
-.flex {
-	display: flex;
-	justify-content: flex-start;
-	align-items: center;
-	gap: 5px;
-}
-.flex.column {
-	flex-direction: column;
-}
-.flex.center {
-	justify-content: center;
-}
-.flex.acenter {
-	align-items: center;
+	padding: 0 15px;
 }
 
 .btn {

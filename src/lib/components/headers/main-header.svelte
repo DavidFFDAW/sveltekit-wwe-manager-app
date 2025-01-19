@@ -1,0 +1,110 @@
+<script lang="ts">
+	export let title: string = 'Universo WWE';
+	export let links: boolean = true;
+	export let background: string =
+		'https://media.bleacherreport.com/image/upload/v1688552009/ftzi2nvfvqea8nsoq8fe.jpg';
+	export let mobileBackground: string =
+		'https://media.bleacherreport.com/image/upload/v1688552009/ftzi2nvfvqea8nsoq8fe.jpg';
+</script>
+
+<header
+	class="w1 home-page-header main-app-header"
+	style="--bg-image: url({background}); --mobile-bg-image: url({mobileBackground})"
+>
+	<div class="header-image-block">
+		<div class="w1 header-logo-page-container" style="padding: 0 15px;">
+			<img src="/icons/versatile.png" alt="logo" />
+		</div>
+	</div>
+	<div class="w1 flex column gap-smaller">
+		<div class="w1" style="padding: 0 15px;">
+			<h1 class="title dreadnotus">{title}</h1>
+		</div>
+		{#if links}
+			<nav class="w1 thin-home-navigation-menu">
+				<ul class="w1 flex evenly acenter gap list-style-none">
+					<li class="list-item">
+						<a href="/">Home</a>
+					</li>
+					<li class="list-item">
+						<a href="/pages">Paginas</a>
+					</li>
+					<li class="list-item">
+						<a href="/blog">Blog</a>
+					</li>
+					<li class="list-item">
+						<a href="/twitter">Twitter</a>
+					</li>
+					<li class="list-item">
+						<a href="/admin">Admin</a>
+					</li>
+				</ul>
+			</nav>
+		{/if}
+	</div>
+</header>
+
+<style>
+	header.home-page-header.main-app-header {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		width: 100%;
+		min-height: 350px;
+		background-image: var(--bg-image);
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: center -100px;
+	}
+	header.home-page-header.main-app-header .header-image-block img {
+		width: 96px;
+		height: 96px;
+	}
+	header.home-page-header.main-app-header h1 {
+		font-size: 2.5em;
+		color: #fff;
+		text-align: start;
+		text-transform: uppercase;
+		text-shadow:
+			-1px -1px 0 #000,
+			1px -1px 0 #000,
+			-1px 1px 0 #000,
+			1px 1px 0 #000;
+	}
+	header.home-page-header.main-app-header nav {
+		width: 100%;
+		background-color: #001;
+		text-transform: uppercase;
+		color: #fff;
+		padding: 10px 15px;
+	}
+	header.home-page-header.main-app-header nav ul {
+		width: 100%;
+		display: flex;
+		justify-content: space-evenly;
+		align-items: center;
+		gap: 35px;
+	}
+	header.home-page-header.main-app-header nav ul li.list-item {
+		display: block;
+		width: 100%;
+		text-align: center;
+	}
+	header.home-page-header.main-app-header nav ul li.list-item a {
+		display: block;
+		font-family: 'dreadnotus', sans-serif;
+	}
+	header.home-page-header.main-app-header nav ul li.list-item a:hover {
+		color: #f00;
+	}
+
+	@media (max-width: 768px) {
+		header.home-page-header.main-app-header {
+			background-image: var(--mobile-bg-image);
+			background-position: center;
+		}
+		header.home-page-header.main-app-header h1 {
+			font-size: 2em;
+		}
+	}
+</style>

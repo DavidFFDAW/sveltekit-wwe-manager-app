@@ -1,0 +1,154 @@
+.w1 {
+	width: 100%;
+}
+.h1 {
+	height: 100%;
+}
+.block {
+	display: block;
+}
+.relative {
+	position: relative;
+}
+.absolute {
+	position: absolute;
+}
+.absolute.top {
+	top: 0;
+}
+.absolute.bottom {
+	bottom: 0;
+}
+.absolute.left {
+	left: 0;
+}
+.absolute.right {
+	right: 0;
+}
+.absolute.center {
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+.flex {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 5px;
+}
+.flex.column {
+	flex-direction: column;
+}
+.flex.center {
+	justify-content: center;
+}
+.flex.end {
+	justify-content: flex-end;
+}
+.flex.start {
+	justify-content: flex-start;
+}
+.flex.between {
+	justify-content: space-between;
+}
+.flex.around {
+	justify-content: space-around;
+}
+.flex.evenly {
+	justify-content: space-evenly;
+}
+.flex.wrap {
+	flex-wrap: wrap;
+}
+.flex.nowrap {
+	flex-wrap: nowrap;
+}
+.flex.acenter {
+	align-items: center;
+}
+.flex.aend {
+	align-items: flex-end;
+}
+.flex.astart {
+	align-items: flex-start;
+}
+.flex.abaseline {
+	align-items: baseline;
+}
+.grid {
+	display: grid;
+}
+.grid.cols {
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+.grid.rows {
+	grid-template-rows: repeat(auto-fill, minmax(200px, 1fr));
+}
+.gap {
+	gap: 35px;
+}
+.gap-20 {
+	gap: 20px;
+}
+.gap-small {
+	gap: 15px;
+}
+.gap-smaller {
+	gap: 10px;
+}
+.gap-5 {
+	gap: 5px;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+.lowercase {
+	text-transform: lowercase;
+}
+.capitalize {
+	text-transform: capitalize;
+}
+.bold {
+	font-weight: bold;
+}
+.down {
+	margin-top: 20px;
+}
+
+body main.app-main-entrypoint {
+	height: 100%;
+}
+body main.app-main-entrypoint .page-wrapper-content {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 50px;
+}
+body main.app-main-entrypoint.public-page .page-wrapper-content {
+	padding: 0;
+}
+body main.app-main-entrypoint.admin-page .page-wrapper-content {
+	padding: 0px 0;
+}
+body main.app-main-entrypoint .page-wrapper-content > * {
+	padding: 0 15px;
+}
+body main.app-main-entrypoint.admin-page .page-wrapper-content > * {
+	padding: 0 0;
+}
+body
+	main.app-main-entrypoint.public-page
+	.page-wrapper-content
+	> header.home-page-header.main-app-header {
+	padding: 0;
+}
+
+@media only screen and (max-width: 768px) {
+	.flex.responsive {
+		flex-direction: column;
+	}
+	.grid.responsive {
+		grid-template-columns: 1fr;
+	}
+}

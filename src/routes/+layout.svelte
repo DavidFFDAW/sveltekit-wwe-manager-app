@@ -3,10 +3,9 @@
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import '../css/global.css';
 	import 'bootstrap-icons/font/bootstrap-icons.css';
+	import Sidebar from '$lib/components/sidebar/sidebar.svelte';
 
 	const getRoute = (route: string | null) => {
-		console.log(route);
-
 		if (!route) return 'non-page';
 		if (route === '/') return 'home';
 		return route
@@ -14,6 +13,8 @@
 			.replace(/\//gi, '-')
 			.replace(/[\(\)\$\?\&\`\'\"]/gi, '');
 	};
+
+	$: adminPage = $page.route.id?.startsWith('/admin');
 </script>
 
 <svelte:head>
@@ -21,7 +22,15 @@
 	<meta name="robots" content="noindex nofollow" />
 </svelte:head>
 
-<main class="app-main-entrypoint page-{getRoute($page.route.id)}">
+{#if adminPage}
+	<Sidebar bind:url={$page.route.id as string} />
+{/if}
+
+<main
+	class="app-main-entrypoint page-{getRoute($page.route.id)} {adminPage
+		? 'admin-page'
+		: 'public-page'}"
+>
 	<SvelteToast
 		options={{
 			duration: 4000,

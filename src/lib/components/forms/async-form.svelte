@@ -9,6 +9,9 @@
 	export let method: 'post' | 'get' | 'put' | 'delete' = 'post';
 	export let action: string = '';
 	export let redirect: string = '';
+	export let showReset: boolean = false;
+	export let buttonText: string = 'Submit';
+	export let classes: string = 'default-form';
 	let loading = false;
 
 	const submitForm: SubmitFunction = ({ formData }) => {
@@ -43,41 +46,56 @@
 
 <form
 	action={action ? `?/${action}` : ''}
-	class="relative app-custom-form"
+	class="relative app-custom-form w1 h1 {classes}"
 	data-method={method}
 	method={method === 'get' ? 'get' : 'post'}
 	use:enhance={submitForm}
 >
-	{#if redirect}
-		<input type="hidden" name="_redirect" value={redirect} />
-	{/if}
+	<div class="form-inner-content">
+		{#if redirect}
+			<input type="hidden" name="_redirect" value={redirect} />
+		{/if}
 
-	{#if loading}
-		<div class="loading-wrapper">
-			<SpinnerLogo />
-		</div>
-	{/if}
+		{#if loading}
+			<div class="loading-wrapper">
+				<SpinnerLogo />
+			</div>
+		{/if}
 
-	<slot />
+		<slot />
 
-	<div class="w1 buttons-block flex">
-		<button type="reset" class="btn secondary">Reset</button>
-		<button type="submit" class="btn cta" disabled={loading}>
-			{#if loading}
-				<SpinnerSimple />
-			{:else}
-				Submit
+		<div class="w1 buttons-block flex">
+			{#if showReset}
+				<button type="reset" class="btn secondary">Reset</button>
 			{/if}
-		</button>
+			<button type="submit" class="btn cta uppercase" disabled={loading}>
+				{#if loading}
+					<SpinnerSimple />
+				{:else}
+					{buttonText}
+				{/if}
+			</button>
+		</div>
 	</div>
 </form>
 
 <style>
 	form .buttons-block {
-		padding: 10px;
+		padding: 10px 15px;
 	}
 	form .buttons-block button {
 		width: 100%;
 		display: block;
+	}
+
+	form.app-custom-form .form-inner-content {
+		height: calc(100% - 50px);
+		padding: 12px 15px;
+	}
+	form.app-custom-form .buttons-block {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
 	}
 </style>
