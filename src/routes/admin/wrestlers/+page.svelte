@@ -1,19 +1,18 @@
 <script lang="ts">
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
-
-	export let data = { wrestlers: [] };
+	export let data = { wrestlers: [], search: '' };
 </script>
 
-<div class="admin-page-wrapper admin-wrestlers">
+<div class="admin-page-wrapper admin-wrestlers padding">
+	<form action="/admin/wrestlers" method="get">
+		<div class="flex search-wrapper">
+			<input type="search" name="search" placeholder="Search..." bind:value={data.search} />
+			<button type="submit">Search</button>
+		</div>
+	</form>
+
 	<h1>Wrestlers</h1>
-	<nav class="admin-wrestlers-page-navigation">
-		<ul class="admin-wrestlers-list" role="list">
-			<li>
-				<a href="/admin/wrestlers">Luchadores</a>
-				<a href="/admin/ppvs">PPVs</a>
-			</li>
-		</ul>
-	</nav>
+
 	<div class="admin-wrestlers-list">
 		{#if data.wrestlers.length > 0}
 			{#each data.wrestlers as wrestler}
@@ -36,9 +35,24 @@
 </div>
 
 <style>
-	.admin-wrestlers-page-navigation {
-		display: flex;
-		justify-content: space-between;
+	.search-wrapper {
+		margin-bottom: 1rem;
+	}
+
+	.search-wrapper input {
+		padding: 0.5rem;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		width: 100%;
+	}
+
+	.search-wrapper button {
+		padding: 0.5rem 1rem;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		background-color: #f9f9f9;
+		margin-left: 1rem;
+		cursor: pointer;
 	}
 
 	.admin-wrestlers-list {

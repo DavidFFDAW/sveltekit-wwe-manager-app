@@ -3,13 +3,10 @@
 </script>
 
 <section class="wwe-new-wrestler-create-panel" style="padding: 20px;">
-	<h1>Create a new wrestler</h1>
-
 	<AsyncForm redirect="/admin/wrestlers" method="post">
-		<fieldset class="wwe-new-wrestler-create-panel-fieldset">
-			<legend>Campos obligatorios</legend>
+		<div class="form-cols">
 			<div class="form-item">
-				<label for="name">Name</label>
+				<label for="name">Nombre</label>
 				<input type="text" id="name" name="name" required />
 			</div>
 
@@ -23,7 +20,7 @@
 			</div>
 
 			<div class="form-item">
-				<label for="status">Status</label>
+				<label for="status">Estado</label>
 				<select name="status" id="status" required>
 					<option value="active">Activo</option>
 					<option value="inactive">Inactivo</option>
@@ -31,12 +28,12 @@
 			</div>
 
 			<div class="form-item">
-				<label for="twitter_acc">Twitter Account</label>
+				<label for="twitter_acc">Cuenta Twitter</label>
 				<input type="text" id="twitter_acc" name="twitter_acc" required />
 			</div>
 
 			<div class="form-item">
-				<label for="twitter_name">Twitter Name</label>
+				<label for="twitter_name">Nombre de Twitter</label>
 				<input type="text" id="twitter_name" name="twitter_name" required />
 			</div>
 
@@ -46,7 +43,7 @@
 			</div>
 
 			<div class="form-item">
-				<label for="overall">Overall</label>
+				<label for="overall">Media</label>
 				<input type="number" id="overall" name="overall" required />
 			</div>
 
@@ -66,9 +63,40 @@
 				</select>
 			</div>
 
-			<input type="hidden" name="test" value="a" />
-			<input type="hidden" name="test" value="b" />
-			<input type="hidden" name="test" value="c" />
-		</fieldset>
+			<input type="hidden" name="test[]" value="a" />
+			<input type="hidden" name="test[]" value="b" />
+			<input type="hidden" name="test[]" value="c" />
+		</div>
 	</AsyncForm>
 </section>
+
+<style>
+	.form-cols {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		padding: 25px;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		background-color: #eee;
+		border-radius: 10px;
+		gap: 20px;
+	}
+
+	.form-cols .form-item {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+	}
+
+	.form-cols .form-item input {
+		padding: 10px;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+	}
+
+	.form-cols .form-item select {
+		padding: 10px;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+	}
+</style>
