@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { fade } from 'svelte/transition';
 	import SpinnerLogo from '../spinner/spinner-logo.svelte';
-	import { type SubmitFunction } from '@sveltejs/kit';
+	import { type ActionResult, type SubmitFunction } from '@sveltejs/kit';
 	import SpinnerSimple from '../spinner/spinner-simple.svelte';
 	import { goto } from '$app/navigation';
+	import { Toast } from '$lib/utils/toast.helper';
 
 	export let method: 'post' | 'get' | 'put' | 'delete' = 'post';
 	export let action: string = '';
@@ -16,15 +16,26 @@
 		loading = true;
 
 		return async ({ result, update }) => {
-			loading = false;
-			const hasSuccess = result.status === 200 && result.type !== 'error';
-			if (hasSuccess) await update({ reset: false });
+			setTimeout(() => {
+				loading = false;
+			}, 500);
+			const response = result as ActionResult & { data: any };
+			const hasError = result.type === 'error' || result.type === 'failure';
 
-			if (redirectURL && result.status === 200 && result.type !== 'error') {
-				console.log('FORM - redirecting to', redirectURL);
-				setTimeout(() => {
-					goto(redirectURL);
-				}, 100);
+			if (hasError) {
+				const errorMessage =
+					response.data?.message ||
+					'Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.';
+				Toast.error(errorMessage);
+			}
+
+			const hasSuccess = !hasError && /20\d/g.test(result.status.toString());
+			if (hasSuccess) {
+				const successMessage = response.data?.message || '¡Operación exitosa!';
+				await update({ reset: false });
+				Toast.success(successMessage);
+
+				if (redirectURL) goto(redirectURL);
 			}
 		};
 	};
@@ -42,7 +53,7 @@
 	{/if}
 
 	{#if loading}
-		<div class="loading-wrapper" in:fade out:fade>
+		<div class="loading-wrapper">
 			<SpinnerLogo />
 		</div>
 	{/if}

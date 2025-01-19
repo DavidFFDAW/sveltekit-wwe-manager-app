@@ -6,6 +6,10 @@ body main.app-main-entrypoint {
 	flex-direction: column;
 	gap: 50px;
 }
+i.customs-icons.app-bootstrap-custom-icon {
+	line-height: 0;
+	color: inherit;
+}
 .page-content {
 	padding: 0 10px;
 }

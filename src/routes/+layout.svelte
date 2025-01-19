@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import '../css/global.css';
+	import 'bootstrap-icons/font/bootstrap-icons.css';
 
 	const getRoute = (route: string | null) => {
 		console.log(route);
@@ -20,5 +22,14 @@
 </svelte:head>
 
 <main class="app-main-entrypoint page-{getRoute($page.route.id)}">
+	<SvelteToast
+		options={{
+			duration: 4000,
+			initial: 40,
+			intro: { y: 250 },
+			dismissable: true,
+			classes: ['wwe-app-toast', 'custom-toast']
+		}}
+	/>
 	<slot />
 </main>

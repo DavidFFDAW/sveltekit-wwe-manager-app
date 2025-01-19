@@ -1,4 +1,5 @@
 import prisma from '$lib/server/prisma';
+import { Helpers } from '$lib/server/server.helpers.js';
 
 export async function load() {
 	return {
@@ -19,8 +20,9 @@ export const actions = {
 			statuses: formData.getAll('status')
 		});
 
-		await new Promise((resolve) => setTimeout(resolve, 5000));
+		await new Promise((resolve) => setTimeout(resolve, 2000));
 
+		return Helpers.error('Error al intentar crear recurso PPV', 500);
 		throw new Error('test error');
 
 		return {
