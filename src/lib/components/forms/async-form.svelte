@@ -9,9 +9,11 @@
 	export let method: 'post' | 'get' | 'put' | 'delete' = 'post';
 	export let action: string = '';
 	export let redirect: string = '';
+	export let showButtons: boolean = true;
 	export let showReset: boolean = false;
 	export let buttonText: string = 'Submit';
 	export let classes: string = 'default-form';
+	export let showToast: boolean = true;
 	let loading = false;
 
 	const submitForm: SubmitFunction = ({ formData }) => {
@@ -36,7 +38,7 @@
 			if (hasSuccess) {
 				const successMessage = response.data?.message || '¡Operación exitosa!';
 				await update({ reset: false });
-				Toast.success(successMessage);
+				if (showToast) Toast.success(successMessage);
 
 				if (redirectURL) goto(redirectURL);
 			}
@@ -64,18 +66,20 @@
 
 		<slot />
 
-		<div class="w1 buttons-block flex">
-			{#if showReset}
-				<button type="reset" class="btn secondary">Reset</button>
-			{/if}
-			<button type="submit" class="btn cta uppercase" disabled={loading}>
-				{#if loading}
-					<SpinnerSimple />
-				{:else}
-					{buttonText}
+		{#if showButtons}
+			<div class="w1 buttons-block flex">
+				{#if showReset}
+					<button type="reset" class="btn secondary">Reset</button>
 				{/if}
-			</button>
-		</div>
+				<button type="submit" class="btn cta uppercase" disabled={loading}>
+					{#if loading}
+						<SpinnerSimple />
+					{:else}
+						{buttonText}
+					{/if}
+				</button>
+			</div>
+		{/if}
 	</div>
 </form>
 
@@ -90,12 +94,13 @@
 
 	form.app-custom-form .form-inner-content {
 		height: calc(100% - 50px);
-		padding: 12px 15px;
+		margin-bottom: 50px;
 	}
 	form.app-custom-form .buttons-block {
-		position: absolute;
+		position: fixed;
 		bottom: 0;
 		left: 0;
 		width: 100%;
+		background-color: #fff;
 	}
 </style>

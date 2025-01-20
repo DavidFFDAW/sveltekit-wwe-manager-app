@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { blur, fade } from 'svelte/transition';
+
 	export let title: string = 'Universo WWE';
 	export let links: boolean = true;
 	export let background: string =
@@ -8,6 +10,8 @@
 </script>
 
 <header
+	in:fade
+	out:blur
 	class="w1 home-page-header main-app-header"
 	style="--bg-image: url({background}); --mobile-bg-image: url({mobileBackground})"
 >
@@ -21,7 +25,7 @@
 			<h1 class="title dreadnotus">{title}</h1>
 		</div>
 		{#if links}
-			<nav class="w1 thin-home-navigation-menu">
+			<nav class="w1 thin-home-navigation-menu overflow-horizontal">
 				<ul class="w1 flex evenly acenter gap list-style-none">
 					<li class="list-item">
 						<a href="/">Home</a>
@@ -89,6 +93,9 @@
 		display: block;
 		width: 100%;
 		text-align: center;
+	}
+	header.home-page-header.main-app-header nav ul li.list-item:last-child {
+		padding-right: 10px;
 	}
 	header.home-page-header.main-app-header nav ul li.list-item a {
 		display: block;

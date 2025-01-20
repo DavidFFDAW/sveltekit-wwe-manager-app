@@ -9,8 +9,6 @@
 	padding: 0;
 	color: inherit;
 	transition: all 0.3s ease-in-out;
-	overflow-x: hidden;
-	overflow-y: auto;
 }
 
 ul,
@@ -79,10 +77,9 @@ a {
 }
 
 /* SCROLL BAR CUSTOM STYLES */
-::-webkit-scrollbar {
+*::-webkit-scrollbar {
 	width: 3px;
 	height: 3px;
-	height: auto;
 }
 .noscrollbar::-webkit-scrollbar,
 .none-scroll::-webkit-scrollbar {

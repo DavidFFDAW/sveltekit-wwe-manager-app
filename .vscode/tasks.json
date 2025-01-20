@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Bring repo changes and run dev server",
+			"type": "npm",
+			"script": "dev:pull",
+			"runOptions": {
+				"runOn": "folderOpen"
+			}
+		}
+	]
+}

@@ -115,34 +115,34 @@
 .down {
 	margin-top: 20px;
 }
+.overflow-vertical {
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.overflow-horizontal {
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+.overflow-hidden {
+	overflow: hidden;
+}
 
 body main.app-main-entrypoint {
 	height: 100%;
 }
 body main.app-main-entrypoint .page-wrapper-content {
-	height: 100%;
 	display: flex;
 	flex-direction: column;
 	gap: 50px;
 }
-body main.app-main-entrypoint.public-page .page-wrapper-content {
-	padding: 0;
+
+/* body main.app-main-entrypoint.public-page .page-wrapper-content { */
+body main.app-main-entrypoint .page-wrapper-content {
+	padding: 15px 15px;
 }
-body main.app-main-entrypoint.admin-page .page-wrapper-content {
-	padding: 0px 0;
-}
-body main.app-main-entrypoint .page-wrapper-content > * {
-	padding: 0 15px;
-}
-body main.app-main-entrypoint.admin-page .page-wrapper-content > * {
+/* body main.app-main-entrypoint.admin-page .page-wrapper-content {
 	padding: 0 0;
-}
-body
-	main.app-main-entrypoint.public-page
-	.page-wrapper-content
-	> header.home-page-header.main-app-header {
-	padding: 0;
-}
+} */
 
 @media only screen and (max-width: 768px) {
 	.flex.responsive {
@@ -150,5 +150,8 @@ body
 	}
 	.grid.responsive {
 		grid-template-columns: 1fr;
+	}
+	.w1-responsive {
+		width: 100%;
 	}
 }
