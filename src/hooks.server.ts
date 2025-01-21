@@ -5,7 +5,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const isAdminRequestedRoute = event.url.pathname.startsWith('/admin');
 	const isLoginRequestedRoute = event.url.pathname.startsWith('/login');
 	const sessionToken = event.cookies.get('session');
-	if (!isAdminRequestedRoute) resolve(event);
+
+	if (!isAdminRequestedRoute) return resolve(event);
 
 	if (isLoginRequestedRoute) {
 		if (!sessionToken) return resolve(event);
@@ -14,7 +15,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 
 	if (isAdminRequestedRoute) {
-		const sessionToken = event.cookies.get('session');
 		if (!sessionToken) throw redirect(302, '/login');
 
 		event.locals.user = {

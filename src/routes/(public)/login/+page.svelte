@@ -1,6 +1,8 @@
 <script>
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
+
+	let showPassword = false;
 </script>
 
 <PageWrapper page="login">
@@ -9,37 +11,45 @@
 			<h1><img width="96" height="96" src="/icons/versatile.png" alt="" /></h1>
 			<h2><span class="dreadnotus">Acceder</span></h2>
 			<div class="down login-auth-form-container">
-				<AsyncForm method="post" showButtons={false}>
+				<AsyncForm method="post" showButtons={false} redirect="/admin">
 					<div class="flex center gap-small column astart relative" style="height:205px">
-						<input type="hidden" name="redirect" value="/private" /><input
+						<input
 							type="text"
 							placeholder="example@email.com"
 							autocomplete="email"
 							aria-autocomplete="list"
 							class="w1 app-custom-input"
+							name="email"
 							required
-							name="login_email"
 						/>
 						<div class="w1 flex between">
 							<input
-								type="password"
+								type={showPassword ? 'text' : 'password'}
 								placeholder="Password"
 								class="w1 app-custom-input nradius"
 								autocomplete="current-password"
 								aria-autocomplete="list"
+								name="password"
 								required
-								name="login_password"
-							/><button class="nradius pointer btn cta" type="button">Mostrar</button>
+							/>
+							<button
+								class="nradius pointer btn cta"
+								type="button"
+								on:click={() => (showPassword = !showPassword)}
+							>
+								{showPassword ? 'Ocultar' : 'Mostrar'}
+							</button>
 						</div>
-						<a href="#forgot" class="w1 block forgot opensans fw-800 tcenter"
-							>He olvidado mi contraseña</a
-						>
+						<a href="#forgot" class="w1 block forgot opensans fw-800 tcenter">
+							He olvidado mi contraseña
+						</a>
 					</div>
+
 					<div class="w1 flex between row">
-						<a href="/register"><button type="button" class="w1 btn">Registrar</button></a><button
-							class="btn cta"
-							type="submit">Acceder</button
-						>
+						<a href="/register">
+							<button type="button" class="w1 btn"> Registrar </button>
+						</a>
+						<button class="btn cta" type="submit">Acceder</button>
 					</div>
 				</AsyncForm>
 			</div>

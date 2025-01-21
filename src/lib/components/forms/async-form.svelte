@@ -16,8 +16,8 @@
 	export let showToast: boolean = true;
 	let loading = false;
 
-	const submitForm: SubmitFunction = ({ formData }) => {
-		const redirectURL = formData.has('_redirect') ? formData.get('_redirect')?.toString() : false;
+	const submitForm: SubmitFunction = () => {
+		const redirectURL = redirect.trim();
 		loading = true;
 
 		return async ({ result, update }) => {
