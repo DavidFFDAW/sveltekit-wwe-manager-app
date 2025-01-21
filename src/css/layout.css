@@ -139,6 +139,10 @@ body main.app-main-entrypoint .page-wrapper-content {
 /* body main.app-main-entrypoint.public-page .page-wrapper-content { */
 body main.app-main-entrypoint .page-wrapper-content {
 	padding: 15px 15px;
+	height: 100%;
+}
+body main.app-main-entrypoint-public-page .page-wrapper-content {
+	height: 100%;
 }
 /* body main.app-main-entrypoint.admin-page .page-wrapper-content {
 	padding: 0 0;

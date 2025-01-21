@@ -8,7 +8,7 @@
 	height="450px"
 	bgPosition="top"
 	mobileBgPosition="center"
-	background="https://images.squarespace-cdn.com/content/v1/610c6ac52d9ef15f1ce71190/1712081879267-UE65YTQSXHK7N13F9D1U/20240401_RAW_final--2d0803ef5580e141235ad4c14ad30c77.jpg"
+	background="https://www.wrestlinginc.com/img/gallery/cody-rhodes-says-the-final-boss-reminds-him-of-wwe-hall-of-famers-heel-turn/l-intro-1712436460.jpg"
 	mobileBackground="https://e00-xlk-ue-marca.uecdn.es/uploads/2024/03/28/66056608b302d.jpeg"
 />
 <PageWrapper page="blog">

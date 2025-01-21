@@ -10,6 +10,8 @@
 </script>
 
 <MainHeader
+	height="450px"
+	bgPosition="top"
 	mobileBackground="https://www.usanetwork.com/sites/usablog/files/2023/06/wwe-undertaker-dream-match1.jpg"
 />
 

@@ -120,4 +120,11 @@
 			font-size: 2em;
 		}
 	}
+
+	@media screen and (min-width: 1300px) {
+		header.home-page-header.main-app-header {
+			min-height: 450px;
+			background-position: center -100px;
+		}
+	}
 </style>
