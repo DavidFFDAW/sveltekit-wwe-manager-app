@@ -23,18 +23,22 @@
 		<div class="footer-content-item footer-item">
 			<p class="footer-title">Páginas de interés</p>
 			<ul class="footer-pages-list list-style-none">
-				<li class="footer-list-item"><a class="footer-link" href="/contact">Contacto</a></li>
-				<li class="footer-list-item"><a class="footer-link" href="/about">Sobre nosotros</a></li>
 				<li class="footer-list-item">
-					<a class="footer-link" href="/pages/champions">Campeones</a>
+					<a class="footer-link" href="/contact">Contacto</a>
 				</li>
+				<li class="footer-list-item">
+					<a class="footer-link" href="/about">Sobre nosotros</a>
+				</li>
+				<!-- <li class="footer-list-item">
+					<a class="footer-link" href="/pages/champions">Campeones</a>
+				</li> -->
 				<li class="footer-list-item"><a class="footer-link" href="/blog">Blog</a></li>
 			</ul>
 		</div>
 		<div class="footer-content-item footer-item">
 			<p class="footer-title">Páginas relevantes</p>
 			<ul class="footer-pages-list list-style-none">
-				<li class="footer-list-item">
+				<!-- <li class="footer-list-item">
 					<a class="footer-link" href="/pages/roster">Roster</a>
 				</li>
 				<li class="footer-list-item">
@@ -43,7 +47,7 @@
 				<li class="footer-list-item">
 					<a class="footer-link" href="/pages/historic">Histórico de campeones</a>
 				</li>
-				<li class="footer-list-item"><a class="footer-link" href="/twitter">Twitter</a></li>
+				<li class="footer-list-item"><a class="footer-link" href="/twitter">Twitter</a></li> -->
 			</ul>
 		</div>
 		<div class="footer-content-item footer-item">
