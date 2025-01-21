@@ -1,19 +1,24 @@
 <script lang="ts">
 	import { blur, fade } from 'svelte/transition';
 
+	type BgPosition = 'center' | 'top' | 'bottom' | 'left' | 'right';
+
+	export let height = '350px';
 	export let title: string = 'Universo WWE';
 	export let links: boolean = true;
 	export let background: string =
 		'https://media.bleacherreport.com/image/upload/v1688552009/ftzi2nvfvqea8nsoq8fe.jpg';
 	export let mobileBackground: string =
 		'https://media.bleacherreport.com/image/upload/v1688552009/ftzi2nvfvqea8nsoq8fe.jpg';
+	export let bgPosition: BgPosition = 'center';
+	export let mobileBgPosition: BgPosition = 'center';
 </script>
 
 <header
 	in:fade
 	out:blur
 	class="w1 home-page-header main-app-header"
-	style="--bg-image: url({background}); --mobile-bg-image: url({mobileBackground})"
+	style="--bg-image: url({background}); --mobile-bg-image: url({mobileBackground}); --header-height: {height}; --bg-position: {bgPosition}; --mobile-bg-position: {mobileBgPosition};"
 >
 	<div class="header-image-block">
 		<div class="w1 header-logo-page-container" style="padding: 0 15px;">
@@ -54,11 +59,11 @@
 		flex-direction: column;
 		justify-content: space-between;
 		width: 100%;
-		min-height: 350px;
+		min-height: var(--header-height);
 		background-image: var(--bg-image);
 		background-size: cover;
 		background-repeat: no-repeat;
-		background-position: center -100px;
+		background-position: var(--bg-position);
 	}
 	header.home-page-header.main-app-header .header-image-block img {
 		width: 96px;
@@ -107,8 +112,9 @@
 
 	@media (max-width: 768px) {
 		header.home-page-header.main-app-header {
+			min-height: 300px;
 			background-image: var(--mobile-bg-image);
-			background-position: center;
+			background-position: var(--mobile-bg-position);
 		}
 		header.home-page-header.main-app-header h1 {
 			font-size: 2em;
