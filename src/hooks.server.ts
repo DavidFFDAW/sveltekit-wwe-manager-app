@@ -16,16 +16,22 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const isAdminRequestedRoute = event.url.pathname.startsWith('/admin');
 	const isLoginRequestedRoute = event.url.pathname.startsWith('/login');
 	const sessionToken = event.cookies.get('session');
+	const cookies = event.cookies.getAll();
 
 	console.log('Hook middleware', {
 		isAdminRequestedRoute,
 		isLoginRequestedRoute,
-		sessionToken
+		sessionToken,
+		cookies
 	});
 
 	if (isLoginRequestedRoute) {
 		if (!sessionToken) return resolve(event);
 		const payload = JWT.verify(sessionToken) as UserLoginPayload;
+		console.log('Hook middleware in login', {
+			payload
+		});
+
 		if (!payload) {
 			event.locals.user = undefined;
 			event.cookies.delete('session', { path: '/' });
@@ -40,6 +46,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 	if (isAdminRequestedRoute) {
 		if (!sessionToken) throw redirect(303, '/login');
 		const payload = JWT.verify(sessionToken);
+		console.log('Hook middleware in admin', {
+			payload
+		});
+
 		if (!payload) throw redirect(304, '/login');
 		event.locals.user = getUserFromPayloadToLocals(payload as UserLoginPayload);
 
