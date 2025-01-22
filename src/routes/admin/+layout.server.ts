@@ -1,4 +1,4 @@
-import { redirect } from '@sveltejs/kit';
+// import { redirect } from '@sveltejs/kit';
 
 export const load = async ({ cookies, locals }) => {
 	const token = cookies.get('session');
@@ -8,8 +8,7 @@ export const load = async ({ cookies, locals }) => {
 
 	if (!token && !user) {
 		console.log('Admin layout redirecting to login');
-
-		throw redirect(306, '/login');
+		// throw redirect(306, '/login');
 	}
 
 	return { token };
