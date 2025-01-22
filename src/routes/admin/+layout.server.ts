@@ -6,7 +6,7 @@ export const load = async ({ cookies, locals }) => {
 
 	console.log('Admin layout', { token, user });
 
-	if (!token || !user) {
+	if (!token && !user) {
 		throw redirect(302, '/login');
 	}
 

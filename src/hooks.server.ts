@@ -32,15 +32,15 @@ export const handle: Handle = async ({ event, resolve }) => {
 			return resolve(event);
 		}
 		event.locals.user = getUserFromPayloadToLocals(payload);
-		throw redirect(302, '/admin');
+		throw redirect(301, '/admin');
 	}
 
 	if (!isAdminRequestedRoute) return resolve(event);
 
 	if (isAdminRequestedRoute) {
-		if (!sessionToken) throw redirect(302, '/login');
+		if (!sessionToken) throw redirect(303, '/login');
 		const payload = JWT.verify(sessionToken);
-		if (!payload) throw redirect(302, '/login');
+		if (!payload) throw redirect(304, '/login');
 		event.locals.user = getUserFromPayloadToLocals(payload as UserLoginPayload);
 
 		return resolve(event);
