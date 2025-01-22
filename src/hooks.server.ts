@@ -17,7 +17,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const isLoginRequestedRoute = event.url.pathname.startsWith('/login');
 	const sessionToken = event.cookies.get('session');
 
-	if (!isAdminRequestedRoute) return resolve(event);
+	console.log('Hook middleware', {
+		isAdminRequestedRoute,
+		isLoginRequestedRoute,
+		sessionToken
+	});
 
 	if (isLoginRequestedRoute) {
 		if (!sessionToken) return resolve(event);
@@ -30,6 +34,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.user = getUserFromPayloadToLocals(payload);
 		throw redirect(302, '/admin');
 	}
+
+	if (!isAdminRequestedRoute) return resolve(event);
 
 	if (isAdminRequestedRoute) {
 		if (!sessionToken) throw redirect(302, '/login');

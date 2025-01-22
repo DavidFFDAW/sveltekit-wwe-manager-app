@@ -5,7 +5,7 @@
 	let showPassword = false;
 </script>
 
-<PageWrapper page="login">
+<PageWrapper page="login" showFooter={false}>
 	<div class="login-container-wrapper">
 		<div class="login-container">
 			<div class="flex column acenter center">

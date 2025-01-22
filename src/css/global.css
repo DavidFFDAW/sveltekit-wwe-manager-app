@@ -83,11 +83,6 @@ body main.app-main-entrypoint.page-public-login.public-page {
 	background-size: cover;
 	background-repeat: no-repeat;
 }
-body
-	main.app-main-entrypoint.page-public-login.public-page
-	footer.footer.public-footer.footer-block {
-	display: none;
-}
 
 /* SPINNER */
 aside.sidebar.shown + main.app-main-entrypoint .spinner-overlay-layer {
