@@ -45,7 +45,7 @@
 						<a href="/twitter">Twitter</a>
 					</li>
 					<li class="list-item">
-						<a href="/admin">Admin</a>
+						<a href="/admin" data-sveltekit-preload-data={false}>Admin</a>
 					</li>
 				</ul>
 			</nav>
