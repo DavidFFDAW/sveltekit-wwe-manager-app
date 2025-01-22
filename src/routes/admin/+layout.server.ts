@@ -1,13 +1,12 @@
-// import { redirect } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 
-// export const load = async ({ cookies, locals }) => {
-// 	const token = cookies.get('token');
-// 	const user = locals.user;
-// 	console.log('User: ', user);
+export const load = async ({ cookies, locals }) => {
+	const token = cookies.get('session');
+	const user = locals.user;
 
-// 	if (!token || !user) {
-// 		throw redirect(302, '/login');
-// 	}
+	if (!token || !user) {
+		throw redirect(302, '/login');
+	}
 
-// 	return { token };
-// };
+	return { token };
+};
