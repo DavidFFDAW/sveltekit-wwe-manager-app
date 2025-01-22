@@ -38,7 +38,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			return resolve(event);
 		}
 		event.locals.user = getUserFromPayloadToLocals(payload);
-		throw redirect(301, '/admin');
+		throw redirect(302, '/admin');
 	}
 
 	if (!isAdminRequestedRoute) return resolve(event);
