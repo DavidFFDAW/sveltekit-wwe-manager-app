@@ -1,5 +1,5 @@
 import { JWT } from '$lib/server/jwt.helper';
-import { redirect, type Handle } from '@sveltejs/kit';
+import { type Handle } from '@sveltejs/kit';
 import type { UserLoginPayload } from './@types/UserLoginPayload';
 
 const getUserFromPayloadToLocals = (payload: UserLoginPayload) => {
@@ -38,19 +38,19 @@ export const handle: Handle = async ({ event, resolve }) => {
 			return resolve(event);
 		}
 		event.locals.user = getUserFromPayloadToLocals(payload);
-		throw redirect(302, '/admin');
+		return new Response(null, { status: 302, headers: { location: '/admin' } });
 	}
 
 	if (!isAdminRequestedRoute) return resolve(event);
 
 	if (isAdminRequestedRoute) {
-		if (!sessionToken) throw redirect(303, '/login');
+		if (!sessionToken) return new Response(null, { status: 302, headers: { location: '/login' } });
 		const payload = JWT.verify(sessionToken);
 		console.log('Hook middleware in admin', {
 			payload
 		});
 
-		if (!payload) throw redirect(304, '/login');
+		if (!payload) return new Response(null, { status: 302, headers: { location: '/login' } });
 		event.locals.user = getUserFromPayloadToLocals(payload as UserLoginPayload);
 
 		return resolve(event);
