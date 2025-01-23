@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { blur, fade } from 'svelte/transition';
 
 	type BgPosition = 'center' | 'top' | 'bottom' | 'left' | 'right';
@@ -45,7 +46,13 @@
 						<a href="/twitter">Twitter</a>
 					</li>
 					<li class="list-item">
-						<a href="/admin" data-sveltekit-preload-data={false}>Admin</a>
+						<a
+							href="/admin"
+							data-sveltekit-preload-code={false}
+							data-sveltekit-preload-data={false}
+						>
+							Admin
+						</a>
 					</li>
 				</ul>
 			</nav>

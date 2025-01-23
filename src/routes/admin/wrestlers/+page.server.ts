@@ -2,6 +2,8 @@ import prisma from '$lib/server/prisma';
 
 export async function load({ url }) {
 	const search = url.searchParams.has('search') ? (url.searchParams.get('search') as string) : '';
+	console.log('buscando luchadores...');
+
 	return {
 		search,
 		wrestlers: await prisma.wrestler.findMany({

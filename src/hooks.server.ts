@@ -3,42 +3,36 @@ import { redirect, type Handle } from '@sveltejs/kit';
 import type { UserLoginPayload } from './@types/UserLoginPayload';
 
 const getUserFromPayloadToLocals = (payload: UserLoginPayload) => {
-    return {
-        uuid: payload.uuid,
-        name: payload.name,
-        role: payload.role,
-        username: payload.username,
-        email: payload.email,
-    };
+	return {
+		uuid: payload.uuid,
+		name: payload.name,
+		role: payload.role,
+		username: payload.username,
+		email: payload.email
+	};
 };
 
 export const handle: Handle = async ({ event, resolve }) => {
-    const isAdminRequestedRoute = event.url.pathname.startsWith('/admin');
-    const isLoginRequestedRoute = event.url.pathname.startsWith('/login');
-    const sessionToken = event.cookies.get('session');
+	const sessionToken = event.cookies.get('session') || '';
 
-    if (isLoginRequestedRoute) {
-        if (!sessionToken) return await resolve(event);
-        const payload = JWT.verify(sessionToken) as UserLoginPayload;
-        if (!payload) {
-            event.locals.user = undefined;
-            event.cookies.delete('session', { path: '/' });
-            return await resolve(event);
-        }
-        event.locals.user = getUserFromPayloadToLocals(payload);
-        throw redirect(302, '/admin');
-    }
+	const isTokenValid = JWT.verify(sessionToken) as UserLoginPayload;
+	if (isTokenValid) {
+		event.locals.user = getUserFromPayloadToLocals(isTokenValid);
+	}
 
-    if (!isAdminRequestedRoute) return await resolve(event);
+	const hasUser = Boolean(event.locals.user?.uuid);
 
-    if (isAdminRequestedRoute) {
-        if (!sessionToken) throw redirect(302, '/login');
-        const payload = JWT.verify(sessionToken) as UserLoginPayload;
-        if (!payload) throw redirect(302, '/login');
+	const isAdmin = event.url.pathname === '/admin';
+	if (!isAdmin && event.url.pathname.startsWith('/admin')) {
+		if (!hasUser) {
+			throw redirect(302, `/login?next=${event.url.pathname}`);
+		}
+	}
 
-        event.locals.user = getUserFromPayloadToLocals(payload as UserLoginPayload);
-        return await resolve(event);
-    }
-
-    return await resolve(event);
+	const response = await resolve(event);
+	response.headers.set(
+		'cache-control',
+		'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0'
+	);
+	return response;
 };

@@ -1,7 +1,14 @@
 import { JWT } from '$lib/server/jwt.helper';
 import prisma from '$lib/server/prisma';
 import { Helpers } from '$lib/server/server.helpers';
+import { redirect } from '@sveltejs/kit';
 import bcrypt from 'bcryptjs';
+
+export const load = async ({ locals }) => {
+	if (!locals.user) return null;
+	const redirectTo = locals.user.role === 'admin' ? '/admin/dashboard' : '/';
+	if (locals.user) throw redirect(302, redirectTo);
+};
 
 export const actions = {
 	default: async ({ request, cookies }) => {
@@ -43,7 +50,7 @@ export const actions = {
 			// Set cookie
 			cookies.set('session', jwtToken, {
 				maxAge: tokenTime,
-				secure: true,
+				secure: process.env.NODE_ENV === 'production',
 				sameSite: 'strict',
 				httpOnly: true,
 				path: '/'

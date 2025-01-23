@@ -12,7 +12,7 @@
 				<h1><img width="96" height="96" src="/icons/versatile.png" alt="" /></h1>
 				<h2><span class="dreadnotus">Acceder</span></h2>
 				<div class="down login-auth-form-container">
-					<AsyncForm method="post" showButtons={false} redirect="/admin">
+					<AsyncForm method="post" showButtons={false} redirect="/admin/dashboard">
 						<div class="flex center gap-small column astart relative" style="height:205px">
 							<input
 								type="text"
