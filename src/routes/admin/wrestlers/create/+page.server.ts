@@ -6,11 +6,15 @@ import { Helpers } from '$lib/server/server.helpers.js';
 export const actions = {
 	default: async ({ request }) => {
 		const formData = await request.formData();
+		console.log(Object.fromEntries(formData));
+
+		return { brands: ['raw', 'smackdown', 'awl'] };
 		const created = await prisma.wrestler.create({
 			data: {
 				name: formData.get('name') as string,
 				brand: formData.get('brand') as string,
 				status: formData.get('status') as string,
+				image_name: formData.get('image') as string,
 				twitter_acc: formData.get('twitter_acc') as string,
 				twitter_name: formData.get('twitter_name') as string,
 				finisher: formData.get('finisher') as string,

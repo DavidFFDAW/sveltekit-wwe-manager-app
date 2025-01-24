@@ -84,10 +84,15 @@
 .grid.rows {
 	grid-template-rows: repeat(auto-fill, minmax(200px, 1fr));
 }
+.grid.grid-two-column,
+.grid.two-column-grid {
+	grid-template-columns: repeat(2, 1fr);
+}
 .gap {
 	gap: 35px;
 }
-.gap-20 {
+.gap-20,
+.gap-medium {
 	gap: 20px;
 }
 .gap-small {
@@ -143,6 +148,10 @@ body main.app-main-entrypoint .page-wrapper-content {
 }
 body main.app-main-entrypoint-public-page .page-wrapper-content {
 	height: 100%;
+}
+
+body main.app-main-entrypoint.admin-page {
+	background-color: #ebebeb;
 }
 /* body main.app-main-entrypoint.admin-page .page-wrapper-content {
 	padding: 0 0;

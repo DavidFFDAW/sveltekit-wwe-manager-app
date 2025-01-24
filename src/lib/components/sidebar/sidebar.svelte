@@ -1,10 +1,21 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
 	import Icon from '../icons/icon.svelte';
 
 	export let url: string;
 	let isMobile = browser ? window.innerWidth < 600 : false;
 	let showSidebar = browser ? window.innerWidth > 600 : false;
+
+	const handleResize = () => {
+		isMobile = window.innerWidth < 600;
+		showSidebar = window.innerWidth > 600;
+	};
+
+	onMount(() => {
+		window.addEventListener('resize', handleResize);
+		return () => window.removeEventListener('resize', handleResize);
+	});
 </script>
 
 <aside
@@ -74,8 +85,9 @@
 			width: 100%;
 		}
 		aside.sidebar.hide {
-			position: absolute;
+			position: fixed;
 			transform: translateX(-100%);
+			z-index: 16;
 		}
 		aside.sidebar.shown {
 			min-height: 100%;
@@ -98,7 +110,6 @@
 		}
 
 		aside.sidebar.hide .sidebar-toggle-btn {
-			top: 50%;
 			transform: rotate(0) translateX(100%);
 		}
 	}

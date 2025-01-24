@@ -93,8 +93,10 @@
 	}
 
 	form.app-custom-form .form-inner-content {
-		height: calc(100% - 50px);
-		margin-bottom: 50px;
+		height: calc(100% - 56px);
+		margin-bottom: 56px;
+		overflow-x: hidden;
+		overflow-y: auto;
 	}
 	form.app-custom-form .buttons-block {
 		position: fixed;

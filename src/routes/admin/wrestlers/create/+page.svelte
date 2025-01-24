@@ -1,274 +1,57 @@
 <script>
+	import Box from '$lib/components/box/box.svelte';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
+	import BrandsSelector from '$lib/components/forms/inputs/brands-selector.svelte';
+	import ImageInput from '$lib/components/forms/inputs/image-input.svelte';
+	import Input from '$lib/components/forms/inputs/input.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 </script>
 
 <PageWrapper page="wrestler-create">
 	<AsyncForm redirect="/admin/wrestlers" method="post" buttonText="Crear luchador">
-		<div class="form-cols">
-			<div class="form-item">
-				<label for="name">Nombre</label>
-				<input type="text" id="name" name="name" required />
-			</div>
-
-			<div class="form-item">
-				<label for="brand">Marca</label>
-				<select name="brand" id="brand" required>
-					<option value="raw">RAW</option>
-					<option value="smackdown">SmackDown</option>
-					<option value="AWL">AWL</option>
-				</select>
-			</div>
-
-			<div class="form-item">
-				<label for="status">Estado</label>
-				<select name="status" id="status" required>
-					<option value="active">Activo</option>
-					<option value="inactive">Inactivo</option>
-				</select>
-			</div>
-
-			<div class="form-item">
-				<label for="twitter_acc">Cuenta Twitter</label>
-				<input type="text" id="twitter_acc" name="twitter_acc" required />
-			</div>
-
-			<div class="form-item">
-				<label for="twitter_name">Nombre de Twitter</label>
-				<input type="text" id="twitter_name" name="twitter_name" required />
-			</div>
-
-			<div class="form-item">
-				<label for="finisher">Finisher</label>
-				<input type="text" id="finisher" name="finisher" required />
-			</div>
-
-			<div class="form-item">
-				<label for="overall">Media</label>
-				<input type="number" id="overall" name="overall" required />
-			</div>
-
-			<div class="form-item">
-				<label for="sex">Género</label>
-				<select name="gender" id="sex" required>
-					<option value="M">Hombre</option>
-					<option value="F">Mujer</option>
-				</select>
-			</div>
-
-			<div class="form-item">
-				<label for="kayfabe">Kayfabe</label>
-				<select name="kayfabe" id="kayfabe" required>
-					<option value="face">Face</option>
-					<option value="heel">Heel</option>
-				</select>
-			</div>
+		<div class="grid two-column-grid responsive gap-medium">
+			<Box title="Información" icon="info-circle">
+				<Input
+					maxLength={2}
+					label="Nombre"
+					name="name"
+					type="text"
+					placeholder="Nombre del luchador"
+					required
+				/>
+				<Input label="Alias" name="alias" type="text" placeholder="Nombre del luchador" />
+				<Input
+					label="Finisher"
+					name="finisher"
+					type="text"
+					required
+					placeholder="Finisher del luchador"
+				/>
+				<Input label="Media" name="overall" type="number" placeholder="85" inputmode="numeric" />
+			</Box>
 
 			<input type="hidden" name="test[]" value="a" />
 			<input type="hidden" name="test[]" value="b" />
 			<input type="hidden" name="test[]" value="c" />
-		</div>
 
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium ratione neque commodi,
-			porro quaerat, est explicabo ea corporis repudiandae alias consequuntur impedit debitis
-			corrupti eligendi doloribus. Repellendus ullam est minus.
-		</p>
+			<Box title="Datos de estados" icon="file-bar-graph">
+				<div class="form-item">
+					<label for="twitter_acc">Cuenta Twitter</label>
+					<input type="text" id="twitter_acc" name="twitter_acc" required />
+				</div>
+
+				<div class="form-item">
+					<label for="twitter_name">Nombre de Twitter</label>
+					<input type="text" id="twitter_name" name="twitter_name" required />
+				</div>
+
+				<BrandsSelector required />
+			</Box>
+
+			<Box title="Imágenes" icon="image">
+				<ImageInput label="Imagen de luchador" name="image" />
+				<ImageInput label="Imagen de twitter" name="twitter-image" />
+			</Box>
+		</div>
 	</AsyncForm>
 </PageWrapper>
-
-<style>
-	.form-cols {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-		padding: 25px;
-		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-		background-color: #eee;
-		border-radius: 10px;
-		gap: 20px;
-	}
-
-	.form-cols .form-item {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		gap: 5px;
-	}
-
-	.form-cols .form-item input {
-		padding: 10px;
-		border: 1px solid #ccc;
-		border-radius: 5px;
-	}
-
-	.form-cols .form-item select {
-		padding: 10px;
-		border: 1px solid #ccc;
-		border-radius: 5px;
-	}
-</style>
