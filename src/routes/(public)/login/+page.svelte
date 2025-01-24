@@ -4,7 +4,9 @@
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 
 	let showPassword = false;
-	const nextRedirect = page.url.searchParams.get('next');
+	const nextRedirect = page.url.searchParams.has('next')
+		? page.url.searchParams.get('next')?.toString()
+		: '/admin/dashboard';
 </script>
 
 <PageWrapper page="login" showFooter={false}>
@@ -14,12 +16,7 @@
 				<h1><img width="96" height="96" src="/icons/versatile.png" alt="" /></h1>
 				<h2><span class="dreadnotus">Acceder</span></h2>
 				<div class="down login-auth-form-container">
-					<AsyncForm
-						method="post"
-						showButtons={false}
-						showToast={false}
-						redirect={nextRedirect ? nextRedirect : '/admin/dashboard'}
-					>
+					<AsyncForm method="post" showButtons={false} showToast={false} redirect={nextRedirect}>
 						<div class="flex center gap-small column astart relative" style="height:205px">
 							<input
 								type="text"
