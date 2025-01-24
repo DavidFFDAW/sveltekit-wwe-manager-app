@@ -11,7 +11,7 @@
 		</div>
 	</form>
 
-	<h1>Wrestlers</h1>
+	<h1 class="uppercase">Wrestlers</h1>
 
 	<div class="admin-wrestlers-list">
 		{#if data.wrestlers.length > 0}

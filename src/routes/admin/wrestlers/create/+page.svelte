@@ -45,7 +45,7 @@
 					<input type="text" id="twitter_name" name="twitter_name" required />
 				</div>
 
-				<BrandsSelector required />
+				<BrandsSelector />
 			</Box>
 
 			<Box title="Imágenes" icon="image">
