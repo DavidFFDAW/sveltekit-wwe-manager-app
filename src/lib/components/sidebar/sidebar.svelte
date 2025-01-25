@@ -5,7 +5,7 @@
 
 	export let url: string;
 	let isMobile = browser ? window.innerWidth < 600 : false;
-	let showSidebar = browser ? window.innerWidth > 600 : false;
+	let showSidebar = browser ? window.innerWidth > 600 : true;
 
 	const handleResize = () => {
 		isMobile = window.innerWidth < 600;

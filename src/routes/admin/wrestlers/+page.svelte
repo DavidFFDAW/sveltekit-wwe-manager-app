@@ -16,13 +16,19 @@
 	<div class="admin-wrestlers-list">
 		{#if data.wrestlers.length > 0}
 			{#each data.wrestlers as wrestler}
-				<div class="admin-wrestler-card">
+				<div class="admin-wrestler-card" data-id={wrestler.id}>
 					<div class="admin-wrestler-card-image">
 						<img src={wrestler.image_name} alt={wrestler.name} />
 					</div>
 					<div class="admin-wrestler-card-info">
 						<h2>{wrestler.name}</h2>
 						<p>{wrestler.status}</p>
+						<a
+							href="/admin/wrestlers/update/{wrestler.id}"
+							class="block tcenter btn secondary blue"
+						>
+							Editar
+						</a>
 					</div>
 				</div>
 			{/each}
