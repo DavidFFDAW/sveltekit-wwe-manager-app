@@ -7,221 +7,232 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model brands {
-  id         BigInt    @id @default(autoincrement())
-  name       String    @db.VarChar(20)
-  active     Boolean   @default(true)
-  logo       String    @db.VarChar(255)
-  created_at DateTime? @default(now()) @db.DateTime(0)
-  updated_at DateTime? @default(now()) @db.DateTime(0)
-  background String?   @db.VarChar(255)
+model Brand {
+    id         Int       @id @default(autoincrement())
+    name       String    @db.VarChar(50)
+    active     Boolean   @default(true) @db.TinyInt
+    logo       String    @db.VarChar(255)
+    created_at DateTime? @default(now())
+    updated_at DateTime? @updatedAt
+    background String?   @db.VarChar(255)
+
+    @@map(name: "brands")
 }
 
-model championship {
-  id                  BigInt                @id @default(autoincrement()) @db.UnsignedBigInt
-  name                String?               @db.VarChar(100)
-  metadata            String                @db.VarChar(255)
-  type                String                @default("title") @db.VarChar(100)
-  gender              String                @db.VarChar(1)
-  image               String                @db.VarChar(255)
-  tag                 Boolean
-  active              Boolean               @default(false)
-  created_at          DateTime?             @db.Timestamp(0)
-  updated_at          DateTime?             @db.Timestamp(0)
-  brand               String?               @db.VarChar(10)
-  short_title         String?               @db.VarChar(20)
-  order               Int?                  @default(1) @db.SmallInt
-  championship_reigns championship_reigns[]
+model Championship {
+    id                Int                 @id @default(autoincrement())
+    name              String?             @db.VarChar(100)
+    metadata          String              @db.VarChar(255)
+    type              String              @db.VarChar(100) @default("title")
+    gender            String              @db.VarChar(1)
+    image             String              @db.VarChar(255)
+    tag               Boolean             @db.TinyInt
+    active            Boolean             @db.TinyInt
+    created_at        DateTime?           @default(now())
+    updated_at        DateTime?           @updatedAt
+    brand             String?             @db.VarChar(10)
+    short_title       String?             @db.VarChar(20)
+    order             Int?                @db.SmallInt
+    ChampionshipReign ChampionshipReign[]
+
+    @@map(name: "championship")
 }
 
-model championship_reigns {
-  id                                                 BigInt       @id @default(autoincrement()) @db.UnsignedBigInt
-  days                                               Int
-  current                                            Boolean
-  wrestler_id                                        BigInt       @db.UnsignedBigInt
-  championship_id                                    BigInt       @db.UnsignedBigInt
-  won_date                                           DateTime     @db.DateTime(0)
-  lost_date                                          DateTime?    @db.DateTime(0)
-  created_at                                         DateTime?    @db.Timestamp(0)
-  updated_at                                         DateTime?    @db.Timestamp(0)
-  team_id                                            Int?
-  partner                                            BigInt?      @db.UnsignedBigInt
-  is_adjustable                                      Boolean?     @default(true)
-  last_time_updated                                  DateTime?    @db.Timestamp(0)
-  victory_way                                        String?      @db.VarChar(250)
-  can_stats_count                                    Boolean?     @default(true)
-  ppv_won                                            String?      @db.VarChar(255)
-  wrestler_championship_reigns_partnerTowrestler     wrestler?    @relation("championship_reigns_partnerTowrestler", fields: [partner], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_PARTNER")
-  teams                                              teams?       @relation(fields: [team_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_TEAMS")
-  championship                                       championship @relation(fields: [championship_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "championship_reigns_championship_id_foreign")
-  wrestler_championship_reigns_wrestler_idTowrestler wrestler     @relation("championship_reigns_wrestler_idTowrestler", fields: [wrestler_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "championship_reigns_wrestler_id_foreign")
+model User {
+    id                      Int        @id @default(autoincrement())
+    name                    String     @db.VarChar(255)
+    username                String     @db.VarChar(255)
+    email                   String     @unique @db.VarChar(255)
+    email_verified_at       DateTime?  @db.DateTime
+    password                String     @db.VarChar(255)
+    last_connection         DateTime?  @db.DateTime
+    image                   String     @db.VarChar(255)
+    type                    String     @db.VarChar(255)
+    remember_token          String?    @db.VarChar(100)
+    newsletter_subscription Boolean    @default(false) @db.TinyInt
+    created_at              DateTime?  @default(now())
+    updated_at              DateTime?  @updatedAt
+    api_token               String?    @db.VarChar(255)
+    UserRole                UserRole[]
+    Report                  Report[]
 
-  @@index([partner], map: "FK_PARTNER")
-  @@index([team_id], map: "FK_TEAMS")
-  @@index([championship_id], map: "championship_reigns_championship_id_foreign")
-  @@index([wrestler_id], map: "championship_reigns_wrestler_id_foreign")
+    @@map(name: "users")
 }
 
-model gallery {
-  id               Int       @id @default(autoincrement())
-  external_item_id Int?
-  type             String?   @db.VarChar(15)
-  image            String    @db.VarChar(255)
-  assigned         Boolean?  @default(false)
-  created_at       DateTime? @default(now()) @db.Timestamp(0)
+model Roles {
+    id         Int        @id @default(autoincrement())
+    name       String     @db.VarChar(255)
+    created_at DateTime?  @default(now())
+    updated_at DateTime?  @updatedAt
+    UserRole   UserRole[]
+
+    @@map(name: "roles")
 }
 
-model news {
-  id            BigInt          @id @default(autoincrement()) @db.UnsignedBigInt
-  image         String?         @db.VarChar(255)
-  title         String          @db.VarChar(255)
-  content       String          @db.Text
-  admin_id      BigInt          @db.UnsignedBigInt
-  created_at    DateTime?       @db.Timestamp(0)
-  updated_at    DateTime?       @db.Timestamp(0)
-  exceptr       String?         @db.Text
-  visible       Boolean?        @default(true)
-  category      String?         @db.VarChar(255)
-  deletable     Boolean?        @default(false)
-  users         users           @relation(fields: [admin_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "news_admin_id_foreign")
-  user_comments user_comments[]
+model UserRole {
+    user    User  @relation(fields: [user_id], references: [id])
+    user_id Int
+    role    Roles @relation(fields: [role_id], references: [id])
+    role_id Int
 
-  @@index([admin_id], map: "news_admin_id_foreign")
+    @@id([user_id, role_id])
+    @@map(name: "user_role")
 }
 
-model ppv {
-  id                  Int       @id @default(autoincrement())
-  name                String    @db.VarChar(255)
-  abbreviation        String?   @db.VarChar(10)
-  description         String?   @db.Text
-  game_date           DateTime? @db.DateTime(0)
-  estimated_real_date DateTime? @db.DateTime(0)
-  type                String    @db.VarChar(150)
-  image               String?   @db.VarChar(255)
-  active              Boolean?  @default(false)
-  visible             Boolean?  @default(false)
-  created_at          DateTime? @default(now()) @db.Timestamp(0)
-  updated_at          DateTime? @db.Timestamp(0)
-  specific_match_type String?   @db.VarChar(50)
-  city                String?   @db.VarChar(100)
-  stadium             String?   @db.VarChar(100)
+model Wrestler {
+    id                Int                 @id @default(autoincrement())
+    name              String              @db.VarChar(255)
+    alias             String?             @db.VarChar(255)
+    brand             String              @db.VarChar(255)
+    status            String              @db.VarChar(255)
+    is_tag            Boolean?            @default(false) @db.TinyInt
+    is_champ          Boolean?            @default(false) @db.TinyInt
+    twitter_acc       String              @db.VarChar(255)
+    twitter_name      String              @db.VarChar(255)
+    finisher          String              @db.VarChar(255)
+    overall           Int                 @db.Int
+    image_name        String?             @db.VarChar(255)
+    sex               String              @db.VarChar(1)
+    kayfabe_status    String?             @db.VarChar(10)
+    twitter_image     String?             @db.VarChar(255)
+    categories        String?             @default("general") @db.VarChar(150)
+    created_at        DateTime?           @default(now())
+    updated_at        DateTime?           @updatedAt
+    WrestlerTeam      WrestlerTeam[]
+    ChampionshipReign ChampionshipReign[] @relation("wrestler")
+    Partner           ChampionshipReign[] @relation("partner")
+    Tweets            Tweets[]
+
+    @@map(name: "wrestler")
 }
 
-model roles {
-  id         BigInt      @id @default(autoincrement()) @db.UnsignedBigInt
-  name       String      @db.VarChar(255)
-  created_at DateTime?   @db.Timestamp(0)
-  updated_at DateTime?   @db.Timestamp(0)
-  user_role  user_role[]
+model Report {
+    id             Int              @id @default(autoincrement())
+    title          String           @db.VarChar(255)
+    image          String?          @db.VarChar(255)
+    content        String           @db.Text
+    admin_id       Int              @db.Int
+    admin          User             @relation(fields: [admin_id], references: [id])
+    created_at     DateTime?        @default(now())
+    updated_at     DateTime?        @updatedAt
+    exceptr        String?          @db.Text
+    visible        Boolean?         @default(true) @db.TinyInt
+    category       String?          @db.VarChar(255)
+    deletable      Boolean?         @default(false) @db.TinyInt
+    ReportComments ReportComments[]
+
+    @@map(name: "news")
 }
 
-model teams {
-  id                  Int                   @id @default(autoincrement())
-  name                String                @db.VarChar(125)
-  slug                String                @default("") @db.VarChar(125)
-  average             Int?                  @default(50)
-  brand               String                @default("RAW") @db.VarChar(10)
-  created_at          DateTime              @default(now()) @db.Timestamp(0)
-  updated_at          DateTime?             @db.Timestamp(0)
-  member_champion_2   BigInt?
-  member_champion_1   BigInt?
-  active              Boolean?              @default(true)
-  championship_reigns championship_reigns[]
-  wrestler_team       wrestler_team[]
+model ReportComments {
+    id         Int       @id @default(autoincrement())
+    username   String    @db.VarChar(255)
+    comment    String    @db.Text
+    news_id    Int       @db.Int
+    report     Report    @relation(fields: [news_id], references: [id])
+    created_at DateTime? @default(now())
+    updated_at DateTime? @updatedAt
+
+    @@map(name: "user_comments")
 }
 
-model tweets {
-  id           BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
-  message      String    @db.Text
-  likes        Int
-  retweets     Int
-  device       String    @db.VarChar(20)
-  author_id    BigInt    @db.UnsignedBigInt
-  created_at   DateTime? @default(now()) @db.Timestamp(0)
-  updated_at   DateTime? @default(now()) @db.Timestamp(0)
-  comments     Int?      @default(0)
-  reply_to     BigInt?   @db.UnsignedBigInt
-  tweets       tweets?   @relation("tweetsTotweets", fields: [reply_to], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tweet_reply_to")
-  other_tweets tweets[]  @relation("tweetsTotweets")
-  wrestler     wrestler  @relation(fields: [author_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tweets_author_id_foreign")
+model Tweets {
+    id             Int       @id @default(autoincrement())
+    message        String    @db.Text
+    likes          Int       @db.Int
+    retweets       Int       @db.Int
+    comments       Int       @db.Int
+    device         String    @db.VarChar(20)
+    author_id      Int       @db.Int
+    wrestler       Wrestler  @relation(fields: [author_id], references: [id])
+    created_at     DateTime? @default(now())
+    updated_at     DateTime? @updatedAt
+    reply_to       Int?      @db.Int
+    reply_to_tweet Tweets?   @relation("reply_to", fields: [reply_to], references: [id])
+    replies        Tweets[]  @relation("reply_to")
 
-  @@index([reply_to], map: "tweet_reply_to")
-  @@index([author_id], map: "tweets_author_id_foreign")
+    @@map(name: "tweets")
 }
 
-model user_comments {
-  id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
-  username   String    @db.VarChar(255)
-  comment    String    @db.Text
-  news_id    BigInt    @db.UnsignedBigInt
-  created_at DateTime? @db.Timestamp(0)
-  updated_at DateTime? @db.Timestamp(0)
-  news       news      @relation(fields: [news_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_comments_news_id_foreign")
+model Team {
+    id                Int                 @id @default(autoincrement())
+    name              String              @db.VarChar(125)
+    slug              String              @db.VarChar(125)
+    average           Int?                @db.Int
+    brand             String              @db.VarChar(10)
+    created_at        DateTime?           @default(now())
+    updated_at        DateTime?           @updatedAt
+    member_champion_1 Int?                @db.Int
+    member_champion_2 Int?                @db.Int
+    active            Boolean             @default(true) @db.TinyInt
+    ChampionshipReign ChampionshipReign[]
+    WrestlerTeam      WrestlerTeam[]
 
-  @@index([news_id], map: "user_comments_news_id_foreign")
+    @@map(name: "teams")
 }
 
-model user_role {
-  user_id BigInt @db.UnsignedBigInt
-  role_id BigInt @db.UnsignedBigInt
-  roles   roles  @relation(fields: [role_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_role_role_id_foreign")
-  users   users  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_role_user_id_foreign")
+model WrestlerTeam {
+    id          Int      @id @default(autoincrement())
+    wrestler_id Int      @db.Int
+    team_id     Int      @db.Int
+    Wrestler    Wrestler @relation(fields: [wrestler_id], references: [id])
+    Team        Team     @relation(fields: [team_id], references: [id])
 
-  @@id([user_id, role_id])
-  @@index([role_id], map: "user_role_role_id_foreign")
+    @@map(name: "wrestler_team")
 }
 
-model users {
-  id                      BigInt      @id @default(autoincrement()) @db.UnsignedBigInt
-  name                    String      @db.VarChar(255)
-  username                String      @db.VarChar(255)
-  email                   String      @unique(map: "users_email_unique") @db.VarChar(255)
-  email_verified_at       DateTime?   @db.Timestamp(0)
-  password                String      @db.VarChar(255)
-  last_connection         DateTime?   @db.Timestamp(0)
-  image                   String      @db.VarChar(255)
-  type                    String      @db.VarChar(255)
-  remember_token          String?     @db.VarChar(100)
-  created_at              DateTime?   @db.Timestamp(0)
-  updated_at              DateTime?   @db.Timestamp(0)
-  api_token               String?     @db.VarChar(255)
-  newsletter_subscription Boolean?    @default(false)
-  news                    news[]
-  user_role               user_role[]
+model ChampionshipReign {
+    id                Int          @id @default(autoincrement())
+    days              Int          @db.Int
+    current           Boolean      @db.TinyInt
+    wrestler_id       Int          @db.Int
+    Wrestler          Wrestler     @relation("wrestler", fields: [wrestler_id], references: [id])
+    championship_id   Int          @db.Int
+    Championship      Championship @relation(fields: [championship_id], references: [id])
+    partner           Int?         @db.Int
+    Partner           Wrestler?    @relation("partner", fields: [partner], references: [id])
+    team_id           Int?         @db.Int
+    Team              Team?        @relation(fields: [team_id], references: [id])
+    won_date          DateTime     @db.DateTime
+    lost_date         DateTime?    @db.DateTime
+    is_adjustable     Boolean      @default(true) @db.TinyInt
+    victory_way       String?      @db.VarChar(250)
+    can_stats_count   Boolean      @default(true) @db.TinyInt
+    ppv_won           String?      @db.VarChar(255)
+    created_at        DateTime?    @default(now())
+    updated_at        DateTime?    @updatedAt
+    last_time_updated DateTime?    @db.DateTime
+
+    @@map(name: "championship_reigns")
 }
 
-model wrestler {
-  id                                                            BigInt                @id @default(autoincrement()) @db.UnsignedBigInt
-  name                                                          String                @db.VarChar(255)
-  alias                                                         String?               @db.VarChar(255)
-  brand                                                         String                @db.VarChar(255)
-  status                                                        String                @db.VarChar(255)
-  is_tag                                                        Boolean?
-  is_champ                                                      Boolean?
-  twitter_acc                                                   String                @db.VarChar(255)
-  twitter_name                                                  String                @db.VarChar(255)
-  finisher                                                      String                @db.VarChar(255)
-  overall                                                       Int
-  image_name                                                    String?               @db.VarChar(255)
-  sex                                                           String                @db.VarChar(1)
-  kayfabe_status                                                String                @db.VarChar(255)
-  created_at                                                    DateTime?             @db.Timestamp(0)
-  updated_at                                                    DateTime?             @db.Timestamp(0)
-  twitter_image                                                 String?               @db.VarChar(255)
-  categories                                                    String?               @default("general") @db.VarChar(150)
-  championship_reigns_championship_reigns_partnerTowrestler     championship_reigns[] @relation("championship_reigns_partnerTowrestler")
-  championship_reigns_championship_reigns_wrestler_idTowrestler championship_reigns[] @relation("championship_reigns_wrestler_idTowrestler")
-  tweets                                                        tweets[]
-  wrestler_team                                                 wrestler_team[]
+model Gallery {
+    id               Int       @id @default(autoincrement())
+    external_item_id Int?      @db.Int
+    type             String?   @db.VarChar(15)
+    image            String    @db.VarChar(255)
+    assigned         Boolean?  @default(false) @db.TinyInt
+    created_at       DateTime? @default(now())
+
+    @@map(name: "gallery")
 }
 
-model wrestler_team {
-  id          Int      @id @default(autoincrement())
-  wrestler_id BigInt   @db.UnsignedBigInt
-  team_id     Int
-  teams       teams    @relation(fields: [team_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_WT_TEAM")
-  wrestler    wrestler @relation(fields: [wrestler_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_WT_WRESTLER")
+model PPV {
+    id                  Int       @id @default(autoincrement())
+    name                String    @db.VarChar(255)
+    abbreviation        String?   @db.VarChar(10)
+    description         String?   @db.Text
+    specific_match_type String?   @db.VarChar(50)
+    game_date           DateTime? @db.DateTime
+    estimated_real_date DateTime? @db.DateTime
+    type                String    @db.VarChar(150)
+    image               String?   @db.VarChar(255)
+    active              Boolean   @default(true) @db.TinyInt
+    visible             Boolean   @default(true) @db.TinyInt
+    stadium             String?   @db.VarChar(100)
+    city                String?   @db.VarChar(100)
+    created_at          DateTime? @default(now())
+    updated_at          DateTime? @updatedAt
 
-  @@index([team_id], map: "FK_WT_TEAM")
-  @@index([wrestler_id], map: "FK_WT_WRESTLER")
+    @@map("ppv")
 }

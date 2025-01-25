@@ -1,5 +1,3 @@
-export const load = async ({ locals }) => {
-	console.log('Admin dashboard log: ', {
-		locals: locals.user?.username
-	});
+export const load = async () => {
+	console.log('dashboard');
 };

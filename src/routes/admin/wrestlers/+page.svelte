@@ -1,6 +1,10 @@
 <script lang="ts">
+	import { errorimage } from '$lib/actions/error.image.js';
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
-	export let data = { wrestlers: [], search: '' };
+	import AsyncForm from '$lib/components/forms/async-form.svelte';
+	import Pagination from '$lib/components/visual/pagination.svelte';
+	import { WrestlerConstants } from '$lib/constants/wrestler.constants.js';
+	export let data = { wrestlers: [], search: '', total: 0, page: 1 };
 </script>
 
 <div class="admin-page-wrapper admin-wrestlers padding">
@@ -11,21 +15,45 @@
 		</div>
 	</form>
 
-	<h1 class="uppercase">Wrestlers</h1>
+	<div class="w1 flex between gap-small responsive down">
+		<h1 class="uppercase">Wrestlers</h1>
+		<Pagination total={data.total} itemsPerPage={10} bind:currentPage={data.page} />
+	</div>
 
-	<div class="admin-wrestlers-list">
+	<div class="admin-wrestlers-list flex column gap-smaller down">
 		{#if data.wrestlers.length > 0}
 			{#each data.wrestlers as wrestler}
-				<div class="admin-wrestler-card" data-id={wrestler.id}>
-					<div class="admin-wrestler-card-image">
-						<img src={wrestler.image_name} alt={wrestler.name} />
+				<div class="w1 flex gap-medium admin-wrestler-card responsive">
+					<div class="w1 flex gap-small astart responsive">
+						<img use:errorimage src={wrestler.image_name} alt={wrestler.name} width="100" />
+
+						<div class="w1 admin-wrestler-card-info gap-0">
+							<h2>{wrestler.name}</h2>
+							<div class="status-quick-change-action-block">
+								<AsyncForm
+									action="updateStatus"
+									updateId={wrestler.id}
+									method="put"
+									showButtons={false}
+								>
+									<div class="flex nogap responsive">
+										<select name="status" bind:value={wrestler.status}>
+											{#each WrestlerConstants.statuses as status}
+												<option value={status.value}>{status.label}</option>
+											{/each}
+										</select>
+
+										<button type="submit" class="w1 btn">Actualizar</button>
+									</div>
+								</AsyncForm>
+							</div>
+						</div>
 					</div>
-					<div class="admin-wrestler-card-info">
-						<h2>{wrestler.name}</h2>
-						<p>{wrestler.status}</p>
+
+					<div class="wrestler-actions responsive-w1">
 						<a
 							href="/admin/wrestlers/update/{wrestler.id}"
-							class="block tcenter btn secondary blue"
+							class="block tcenter btn secondary blue responsive-w1"
 						>
 							Editar
 						</a>
@@ -61,41 +89,63 @@
 		cursor: pointer;
 	}
 
-	.admin-wrestlers-list {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-		gap: 1rem;
-	}
-
 	.admin-wrestler-card {
+		padding: 5px;
 		display: flex;
-		flex-direction: column;
 		background-color: #f9f9f9;
 		border-radius: 5px;
 		overflow: hidden;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 	}
 
-	.admin-wrestler-card-image {
-		width: 100%;
-		height: 200px;
-		overflow: hidden;
+	.admin-wrestler-card .admin-wrestler-card-info {
+		padding: 6px 0;
 	}
 
-	.admin-wrestler-card-image img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
+	.status-quick-change-action-block {
+		max-width: 220px;
+	}
+	.status-quick-change-action-block select {
+		border-radius: 5px 0 0 5px;
+		height: 40px;
+	}
+	.status-quick-change-action-block .btn {
+		border-radius: 0 5px 5px 0;
+		height: 40px;
+		padding: 0;
+		background-color: #415972;
+		color: white;
 	}
 
-	.admin-wrestler-card-info {
-		padding: 1rem;
-	}
+	@media only screen and (max-width: 768px) {
+		.admin-wrestlers-list {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 20px;
+			align-items: start;
+		}
+		.admin-wrestler-card img {
+			width: 100%;
+		}
 
-	.admin-wrestler-card-info h2 {
-		margin: 0;
-	}
-
-	.admin-wrestler-card-info p {
-		margin: 0;
+		.admin-wrestler-card .admin-wrestler-card-info h2 {
+			white-space: pre;
+			overflow-y: hidden;
+			overflow-x: auto;
+			padding: 0 5px;
+			max-width: 100%;
+		}
+		.admin-wrestler-card .admin-wrestler-card-info h2::-webkit-scrollbar {
+			display: none;
+		}
+		.status-quick-change-action-block {
+			max-width: 100%;
+		}
+		.status-quick-change-action-block select {
+			border-radius: 5px 5px 0 0;
+		}
+		.status-quick-change-action-block .btn {
+			border-radius: 0 0 5px 5px;
+		}
 	}
 </style>

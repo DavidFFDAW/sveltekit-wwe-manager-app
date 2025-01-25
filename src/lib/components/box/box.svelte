@@ -16,7 +16,7 @@
 		</header>
 	{/if}
 
-	<div class="w1 box-content flex column gap-small">
+	<div class="w1 box-content flex column gap-medium">
 		<slot />
 	</div>
 </div>

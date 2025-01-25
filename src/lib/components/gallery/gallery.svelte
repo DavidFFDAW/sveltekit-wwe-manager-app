@@ -100,9 +100,4 @@
 		border: 1px solid #c91727;
 		background-color: #f9f9f9;
 	}
-
-	.gallery-dialog img.active {
-		border: 1px solid #c91727;
-		background-color: #f9f9f9;
-	}
 </style>

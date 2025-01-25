@@ -9,5 +9,13 @@ export const Helpers = {
 	},
 	error: (message: string, code?: number) => {
 		return fail(code || 500, { message });
+	},
+	checkRequiredFields: (formData: FormData, requiredFields: string[]) => {
+		const missingFields = requiredFields.filter(
+			(field) => !formData.has(field) || !formData.get(field)
+		);
+		if (missingFields.length > 0)
+			return { error: true, message: `Faltan campos requeridos: ${missingFields.join(', ')}` };
+		return { error: false, message: '' };
 	}
 };

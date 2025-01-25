@@ -49,11 +49,9 @@
 		</div>
 	</div>
 
-	{#if isMobile}
-		<button class="btn sidebar-toggle-btn" on:click={() => (showSidebar = !showSidebar)}>
-			<Icon icon={showSidebar ? 'x' : 'list'} />
-		</button>
-	{/if}
+	<button class="btn sidebar-toggle-btn" on:click={() => (showSidebar = !showSidebar)}>
+		<Icon icon={showSidebar ? 'x' : 'list'} />
+	</button>
 </aside>
 
 <style>
@@ -78,6 +76,10 @@
 	.links-container-block a:hover {
 		background: #c91727;
 		background: linear-gradient(140deg, #c91727, #1f1f1f);
+	}
+
+	.sidebar-toggle-btn {
+		display: none;
 	}
 
 	@media only screen and (max-width: 768px) {

@@ -14,6 +14,7 @@
 	export let buttonText: string = 'Submit';
 	export let classes: string = 'default-form';
 	export let showToast: boolean = true;
+	export let updateId: string | number = '';
 	let loading = false;
 
 	const submitForm: SubmitFunction = () => {
@@ -53,9 +54,18 @@
 	method={method === 'get' ? 'get' : 'post'}
 	use:enhance={submitForm}
 >
-	<div class="form-inner-content">
+	<div class="form-inner-content" class:form-custom-height={showButtons}>
 		{#if redirect}
 			<input type="hidden" name="_redirect" value={redirect} />
+		{/if}
+		{#if updateId}
+			<input type="hidden" name="_update_id" value={updateId} />
+		{/if}
+
+		{#if loading}
+			<div class="loading-wrapper">
+				<SpinnerLogo />
+			</div>
 		{/if}
 
 		{#if loading}
@@ -92,7 +102,7 @@
 		display: block;
 	}
 
-	form.app-custom-form .form-inner-content {
+	form.app-custom-form .form-inner-content.form-custom-height {
 		height: calc(100% - 56px);
 		margin-bottom: 56px;
 		overflow-x: hidden;

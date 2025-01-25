@@ -1,30 +1,22 @@
 // import { Helpers } from '$lib/server/server.helpers';
 
-import prisma from '$lib/server/prisma.js';
+import { WrestlerDao } from '$lib/server/dao/wrestler.dao';
 import { Helpers } from '$lib/server/server.helpers.js';
 
 export const actions = {
-    default: async ({ request }) => {
-        const formData = await request.formData();
-        console.log(Object.fromEntries(formData));
+	default: async ({ request }) => {
+		const formData = await request.formData();
+		const { error, message } = Helpers.checkRequiredFields(formData, WrestlerDao.required);
+		if (error) return Helpers.error(message);
 
-        return { brands: ['raw', 'smackdown', 'awl'] };
-        const created = await prisma.wrestler.create({
-            data: {
-                name: formData.get('name') as string,
-                brand: formData.get('brand') as string,
-                status: formData.get('status') as string,
-                image_name: formData.get('image') as string,
-                twitter_acc: formData.get('twitter_acc') as string,
-                twitter_name: formData.get('twitter_name') as string,
-                finisher: formData.get('finisher') as string,
-                overall: parseInt(formData.get('overall') as string),
-                sex: formData.get('gender') as string,
-                kayfabe_status: formData.get('kayfabe') as string,
-            },
-        });
-
-        if (!created) return Helpers.error('Error al intentar crear luchador', 500);
-        return Helpers.success('Luchador creado correctamente', 201);
-    },
+		const wrestlerObject = WrestlerDao.transformToWrestlerObject(formData);
+		try {
+			const updatedWrestler = await WrestlerDao.createWrestler(wrestlerObject);
+			if (updatedWrestler) return Helpers.success('Luchador actualizado correctamente');
+		} catch (error: unknown) {
+			console.log(typeof error);
+			if (error instanceof Error) return Helpers.error(`Error:: ${error.message}`, 500);
+		}
+		return Helpers.error('No implementado');
+	}
 };

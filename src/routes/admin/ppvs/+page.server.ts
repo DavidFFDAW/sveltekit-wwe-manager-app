@@ -3,7 +3,7 @@ import { Helpers } from '$lib/server/server.helpers.js';
 
 export async function load() {
 	return {
-		ppvs: await prisma.ppv.findMany({
+		ppvs: await prisma.pPV.findMany({
 			orderBy: {
 				game_date: 'desc'
 			}

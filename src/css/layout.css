@@ -88,6 +88,10 @@
 .grid.two-column-grid {
 	grid-template-columns: repeat(2, 1fr);
 }
+.grid.three-column-grid,
+.grid.grid-three-column {
+	grid-template-columns: repeat(3, 1fr);
+}
 .gap {
 	gap: 35px;
 }
@@ -103,6 +107,11 @@
 }
 .gap-5 {
 	gap: 5px;
+}
+.nogap,
+.gap-0,
+.no-gap {
+	gap: 0;
 }
 
 .uppercase {
@@ -149,6 +158,9 @@ body main.app-main-entrypoint .page-wrapper-content {
 body main.app-main-entrypoint-public-page .page-wrapper-content {
 	height: 100%;
 }
+body main.app-main-entrypoint.admin-page {
+	height: auto;
+}
 
 body main.app-main-entrypoint.admin-page {
 	background-color: #ebebeb;
@@ -164,7 +176,47 @@ body main.app-main-entrypoint.admin-page {
 	.grid.responsive {
 		grid-template-columns: 1fr;
 	}
+	.responsive-w1,
 	.w1-responsive {
 		width: 100%;
+	}
+	.flex.responsive-astart {
+		align-items: flex-start;
+	}
+	.flex.responsive-acenter {
+		align-items: center;
+	}
+	.flex.responsive-aend {
+		align-items: flex-end;
+	}
+	.flex.responsive-center {
+		justify-content: center;
+	}
+	.flex.responsive-between {
+		justify-content: space-between;
+	}
+	.flex.responsive-evenly {
+		justify-content: space-evenly;
+	}
+	.flex.responsive-around {
+		justify-content: space-around;
+	}
+	.flex.responsive-end {
+		justify-content: flex-end;
+	}
+	.flex.responsive-start {
+		justify-content: flex-start;
+	}
+	.flex.responsive-column {
+		flex-direction: column;
+	}
+	.flex.responsive-column-reverse {
+		flex-direction: column-reverse;
+	}
+	.flex.responsive-wrap {
+		flex-wrap: wrap;
+	}
+	.flex.responsive-nowrap {
+		flex-wrap: nowrap;
 	}
 }
