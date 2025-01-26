@@ -160,6 +160,7 @@ body main.app-main-entrypoint-public-page .page-wrapper-content {
 }
 body main.app-main-entrypoint.admin-page {
 	height: auto;
+	min-height: 100vh;
 }
 
 body main.app-main-entrypoint.admin-page {

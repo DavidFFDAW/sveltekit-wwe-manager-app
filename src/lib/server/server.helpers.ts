@@ -17,5 +17,14 @@ export const Helpers = {
 		if (missingFields.length > 0)
 			return { error: true, message: `Faltan campos requeridos: ${missingFields.join(', ')}` };
 		return { error: false, message: '' };
+	},
+	slugify: (text: string) => {
+		return text
+			.trim()
+			.toLowerCase()
+			.replace(/ /g, '-')
+			.replace(/[^a-z0-9-]/g, '')
+			.replace(/-+/g, '-')
+			.replace(/[()$?&`'"=!¿¡]/gi, '');
 	}
 };

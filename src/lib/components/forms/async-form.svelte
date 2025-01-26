@@ -15,11 +15,21 @@
 	export let classes: string = 'default-form';
 	export let showToast: boolean = true;
 	export let updateId: string | number = '';
+	export let preProcess: ((formData: FormData) => boolean) | null = null;
 	let loading = false;
 
-	const submitForm: SubmitFunction = () => {
+	const submitForm: SubmitFunction = ({ formData }) => {
 		const redirectURL = redirect.trim();
 		loading = true;
+
+		if (preProcess) {
+			const shouldSubmit = preProcess(formData);
+			if (!shouldSubmit) {
+				loading = false;
+				Toast.error('Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.');
+				return;
+			}
+		}
 
 		return async ({ result, update }) => {
 			setTimeout(() => {

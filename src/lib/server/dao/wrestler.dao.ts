@@ -10,7 +10,7 @@ export const WrestlerDao = {
 		'twitter_name',
 		'finisher',
 		'overall',
-		'sex'
+		'gender'
 	],
 	transformToWrestlerObject(form: FormData): WrestlerObject {
 		return {

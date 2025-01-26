@@ -24,9 +24,10 @@
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^4.0.0",
+		"@types/bcryptjs": "^2.4.6",
+		"@types/fabric": "^5.3.7",
 		"@types/jsonwebtoken": "^9.0.7",
 		"@types/node": "^22.10.7",
-		"@zerodevx/svelte-toast": "^0.9.6",
 		"drizzle-kit": "^0.22.0",
 		"eslint": "^9.7.0",
 		"eslint-config-prettier": "^9.1.0",
@@ -43,10 +44,11 @@
 	},
 	"dependencies": {
 		"@prisma/client": "^6.2.1",
-		"@types/bcryptjs": "^2.4.6",
+		"@zerodevx/svelte-toast": "^0.9.6",
 		"bcryptjs": "^2.4.3",
 		"bootstrap-icons": "^1.11.3",
 		"drizzle-orm": "^0.33.0",
+		"fabric": "^5.3.0",
 		"jsonwebtoken": "^9.0.2",
 		"mysql2": "^3.11.0"
 	}
