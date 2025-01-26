@@ -9,7 +9,7 @@ const getUserFromPayloadToLocals = (payload: UserLoginPayload) => {
 		role: payload.role,
 		username: payload.username,
 		email: payload.email,
-		api_token: payload.api_token
+		api_token: payload.token
 	};
 };
 

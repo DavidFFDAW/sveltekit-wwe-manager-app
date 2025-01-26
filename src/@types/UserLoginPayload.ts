@@ -6,4 +6,5 @@ export interface UserLoginPayload extends JwtPayload {
 	email: string;
 	role: string;
 	username: string;
+	token: string;
 }
