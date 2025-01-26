@@ -107,6 +107,8 @@
 
 <style>
 	section.home-content {
+		max-width: 1200px;
+		margin: 0 auto;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -165,6 +167,10 @@
 		section.home-content article.home-article .article-content .text-content,
 		section.home-content article.home-article .article-content.reverse .text-content {
 			padding: 15px;
+		}
+
+		section.home-content article.home-article .article-content .text-content p {
+			font-size: 15px;
 		}
 	}
 </style>
