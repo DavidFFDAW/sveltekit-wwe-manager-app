@@ -22,7 +22,7 @@ export const actions = {
 			return Helpers.error('Por favor, ingrese su email y contraseña', 400);
 
 		try {
-			const foundUser = await prisma.users.findUnique({
+			const foundUser = await prisma.user.findUnique({
 				where: {
 					email: credentials.email
 				}
@@ -42,7 +42,8 @@ export const actions = {
 					name: foundUser.name,
 					email: foundUser.email,
 					role: foundUser.type,
-					username: foundUser.username
+					username: foundUser.username,
+					token: foundUser.api_token
 				},
 				tokenTime
 			);
