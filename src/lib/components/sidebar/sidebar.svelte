@@ -45,6 +45,9 @@
 				<li class:active={url.startsWith('/admin/ppvs')}>
 					<a href="/admin/ppvs">PPVs</a>
 				</li>
+				<li class:active={url.startsWith('/admin/image-editor')}>
+					<a href="/admin/image-editor">Editor de imagenes</a>
+				</li>
 			</ul>
 		</div>
 	</div>
