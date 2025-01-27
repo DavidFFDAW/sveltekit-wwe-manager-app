@@ -1,3 +1,4 @@
+export const COOKIE_NAME = 'wwe-manager-session';
 export type Brands = 'raw' | 'smackdown' | 'awl';
 export const brands = {
     raw: {

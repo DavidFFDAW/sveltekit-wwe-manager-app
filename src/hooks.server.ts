@@ -1,6 +1,7 @@
 import { JWT } from '$lib/server/jwt.helper';
 import { redirect, type Handle } from '@sveltejs/kit';
 import type { UserLoginPayload } from './@types/UserLoginPayload';
+import { COOKIE_NAME } from '$lib/constants/app';
 
 const getUserFromPayloadToLocals = (payload: UserLoginPayload) => {
 	return {
@@ -14,7 +15,7 @@ const getUserFromPayloadToLocals = (payload: UserLoginPayload) => {
 };
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const sessionToken = event.cookies.get('session') || '';
+	const sessionToken = event.cookies.get(COOKIE_NAME) || '';
 
 	const isTokenValid = JWT.verify(sessionToken) as UserLoginPayload;
 	if (isTokenValid) {
