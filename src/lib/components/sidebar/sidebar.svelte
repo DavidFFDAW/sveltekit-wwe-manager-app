@@ -2,6 +2,7 @@
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
 	import Icon from '../icons/icon.svelte';
+	import { goto } from '$app/navigation';
 
 	export let url: string;
 	let isMobile = browser ? window.innerWidth < 600 : false;
@@ -16,6 +17,18 @@
 		window.addEventListener('resize', handleResize);
 		return () => window.removeEventListener('resize', handleResize);
 	});
+
+	const logout = async (event: Event) => {
+		event.preventDefault();
+		const response = await fetch('/api/auth/logout', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (response.ok && response.status === 200) goto('/');
+	};
 </script>
 
 <aside
@@ -50,7 +63,7 @@
 				</li>
 				<!-- .... -->
 				<li>
-					<button type="button">Logout</button>
+					<button type="button" on:click={logout}>Logout</button>
 				</li>
 			</ul>
 		</div>
