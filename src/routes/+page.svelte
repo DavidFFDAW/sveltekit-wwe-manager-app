@@ -1,12 +1,6 @@
 <script lang="ts">
-	import { blur } from 'svelte/transition';
 	import MainHeader from '$lib/components/headers/main-header.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
-
-	let counter: number = 0;
-	const addCounter = () => {
-		counter += 1;
-	};
 </script>
 
 <MainHeader
@@ -125,11 +119,24 @@
 	}
 
 	section.home-content article.home-article h2 {
+		position: relative;
 		font-size: 2rem;
 		font-weight: 700;
 		font-family: 'dreadnotus';
 		text-transform: uppercase;
 	}
+
+	section.home-content article.home-article h2::after {
+		content: '';
+		position: absolute;
+		bottom: -5px;
+		left: 0;
+		width: 50px;
+		height: 5px;
+		border-radius: 15px;
+		background-color: var(--raw);
+	}
+
 	section.home-content article.home-article .article-content {
 		width: 100%;
 		height: 400px;

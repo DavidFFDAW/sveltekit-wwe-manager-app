@@ -13,6 +13,7 @@
 		'https://media.bleacherreport.com/image/upload/v1688552009/ftzi2nvfvqea8nsoq8fe.jpg';
 	export let bgPosition: BgPosition = 'center';
 	export let mobileBgPosition: BgPosition = 'center';
+	export let titlePosition: string = 'bottom';
 </script>
 
 <header
@@ -27,7 +28,7 @@
 		</div>
 	</div>
 	<div class="w1 flex column gap-smaller">
-		<div class="w1" style="padding: 0 15px;">
+		<div class="w1 header-title-block title-block-{titlePosition}" style="padding: 0 15px;">
 			<h1 class="title dreadnotus">{title}</h1>
 		</div>
 		{#if links}
@@ -62,6 +63,7 @@
 
 <style>
 	header.home-page-header.main-app-header {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
@@ -86,6 +88,15 @@
 			1px -1px 0 #000,
 			-1px 1px 0 #000,
 			1px 1px 0 #000;
+	}
+
+	header.home-page-header.main-app-header .header-title-block.title-block-center h1 {
+		position: absolute;
+		top: 50%;
+		left: 0;
+		width: 100%;
+		transform: translateY(-50%);
+		text-align: center;
 	}
 	header.home-page-header.main-app-header nav {
 		width: 100%;
