@@ -46,6 +46,13 @@ export const WrestlerDao = {
 		});
 	},
 
+	updateImage(image: string, id: number) {
+		return prisma.wrestler.update({
+			data: { image_name: image },
+			where: { id }
+		});
+	},
+
 	createWrestler(wrestler: WrestlerObject) {
 		return prisma.wrestler.create({
 			data: wrestler
