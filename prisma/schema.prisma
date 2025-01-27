@@ -1,10 +1,10 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+    provider = "mysql"
+    url      = env("DATABASE_URL")
 }
 
 model Brand {
@@ -23,7 +23,7 @@ model Championship {
     id                Int                 @id @default(autoincrement())
     name              String?             @db.VarChar(100)
     metadata          String              @db.VarChar(255)
-    type              String              @db.VarChar(100) @default("title")
+    type              String              @default("title") @db.VarChar(100)
     gender            String              @db.VarChar(1)
     image             String              @db.VarChar(255)
     tag               Boolean             @db.TinyInt
@@ -54,7 +54,7 @@ model User {
     updated_at              DateTime?  @updatedAt
     api_token               String?    @db.VarChar(255)
     UserRole                UserRole[]
-    Report                  Report[]
+    BlogPost                BlogPost[]
 
     @@map(name: "users")
 }
@@ -106,9 +106,10 @@ model Wrestler {
     @@map(name: "wrestler")
 }
 
-model Report {
+model BlogPost {
     id             Int              @id @default(autoincrement())
     title          String           @db.VarChar(255)
+    slug           String?          @db.VarChar(255)
     image          String?          @db.VarChar(255)
     content        String           @db.Text
     admin_id       Int              @db.Int
@@ -129,7 +130,7 @@ model ReportComments {
     username   String    @db.VarChar(255)
     comment    String    @db.Text
     news_id    Int       @db.Int
-    report     Report    @relation(fields: [news_id], references: [id])
+    report     BlogPost  @relation(fields: [news_id], references: [id])
     created_at DateTime? @default(now())
     updated_at DateTime? @updatedAt
 
