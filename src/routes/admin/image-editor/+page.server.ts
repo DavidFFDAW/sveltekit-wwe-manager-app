@@ -56,6 +56,11 @@ export const actions = {
 
 			const uploadResponseContent = await uploadResponse.json();
 			if (!uploadResponseContent.data || uploadResponseContent.data.length <= 0) {
+				console.error('Respuesta vacía del servidor', {
+					uploadResponseContent,
+					uploadResponse,
+					req: `${api}?fileToDelete=${resourceName}`
+				});
 				return Helpers.error('La respueta del servidor está vacía', 500);
 			}
 
