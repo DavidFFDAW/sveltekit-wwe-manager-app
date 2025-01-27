@@ -48,6 +48,10 @@
 				<li class:active={url.startsWith('/admin/image-editor')}>
 					<a href="/admin/image-editor">Editor de imagenes</a>
 				</li>
+				<!-- .... -->
+				<li>
+					<button type="button">Logout</button>
+				</li>
 			</ul>
 		</div>
 	</div>
@@ -64,8 +68,13 @@
 	.links-container-block li {
 		width: 100%;
 	}
+	.links-container-block button {
+		background-color: transparent;
+		border: none;
+	}
 
-	.links-container-block a {
+	.links-container-block a,
+	.links-container-block button {
 		display: block;
 		font-size: 16px;
 		color: #fff;
@@ -76,7 +85,8 @@
 	}
 
 	.links-container-block li.active a,
-	.links-container-block a:hover {
+	.links-container-block a:hover,
+	.links-container-block button:hover {
 		background: #c91727;
 		background: linear-gradient(140deg, #c91727, #1f1f1f);
 	}
