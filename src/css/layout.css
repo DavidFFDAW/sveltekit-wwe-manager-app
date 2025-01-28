@@ -260,7 +260,20 @@ body main.app-main-entrypoint.admin-page {
 	padding: 0 0;
 } */
 
+
+.onmobile {
+	display: none;
+}
+
 @media only screen and (max-width: 768px) {
+	.onmobile {
+		display: block;
+	}
+
+	.ondesktop {
+		display: none;
+	}
+
 	.flex.responsive {
 		flex-direction: column;
 	}

@@ -15,14 +15,19 @@
 		position: fixed;
 		bottom: 20px;
 		right: 20px;
+		font-size: 25px;
+		background-color: var(--blue);
+		border-radius: 50%;
+		color: #fff;
+		width: 50px;
+		height: 50px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 	}
 
 	.create-resource-global-link-wrapper a {
-		color: #fff;
 		display: block;
-		background-color: #537cb6;
-		padding: 10px;
-		border-radius: 50%;
-		font-size: 25px;
 	}
 </style>
