@@ -56,14 +56,15 @@ export const actions = {
 				return Helpers.error('No se ha podido subir la imagen al servidor', 500);
 
 			const uploadResponseContent = await uploadResponse.json();
-			if (!uploadResponseContent.data || uploadResponseContent.data.length <= 0) {
-				console.error('Respuesta vacía del servidor', {
-					uploadResponseContent,
-					uploadResponse,
-					req: `${api}?fileToDelete=${resourceName}`
-				});
-				return Helpers.error('La respueta del servidor está vacía', 500);
-			}
+			console.error('Respuesta del servidor', {
+				uploadResponseContent,
+				uploadResponse,
+				req: `${api}?fileToDelete=${resourceName}`
+			});
+
+			if (!uploadResponseContent.data || uploadResponseContent.data.length <= 0)
+				return Helpers.error('La respuesta del servidor está vacía', 500);
+			
 
 			const newImageURL = uploadResponseContent.data[0].url;
 			if (!newImageURL)
