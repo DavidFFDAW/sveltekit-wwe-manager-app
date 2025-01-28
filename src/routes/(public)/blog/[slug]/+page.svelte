@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import { errorimage } from '$lib/actions/error.image';
 	import Icon from '$lib/components/icons/icon.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
@@ -7,7 +8,7 @@
 	import { fade } from 'svelte/transition';
 
 	let showShareButton = false;
-	export let data: { post: BlogPost | null } = { post: null };
+	export let data: { post: BlogPost } = { post: {} as BlogPost };
 
 	function buttonShare(event: Event) {
 		event.preventDefault();
@@ -32,6 +33,29 @@
 		return () => window.removeEventListener('scroll', checkButtonVisibility);
 	});
 </script>
+
+<svelte:head>
+	<meta name="description" content={data.post.exceptr?.slice(0, 157) + '...'} />
+	<link rel="canonical" href={$page.url.href} />
+	<meta property="og:url" content={$page.url.href} />
+	<meta property="og:title" content={data.post.title} />
+	<meta property="og:description" content={data.post.exceptr?.slice(0, 157) + '...'} />
+	<meta property="og:image" itemprop="image" content={data.post.image} />
+	<meta property="og:type" content="article" />
+	<meta property="og:updated_time" content={data.post.updated_at?.getTime().toString()} />
+	<meta property="article:published_time" content={data.post.created_at?.getTime().toString()} />
+	<meta property="article:author" content="WWE Manager" />
+	<meta property="article:section" content="Blog" />
+	<meta property="article:tag" content="WWE" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content={data.post.title} />
+	<meta name="twitter:description" content={data.post.exceptr} />
+	<meta name="twitter:image" content={data.post.image} />
+	<meta name="twitter:site" content="@wwemanager" />
+	<meta name="twitter:creator" content="@wwemanager" />
+	<meta name="twitter:url" content="https://x.com" />
+	<meta name="twitter:domain" content="wwemanager" />
+</svelte:head>
 
 <PageWrapper page="blog-post-page">
 	<div class="blog-container" class:error={!data.post}>
