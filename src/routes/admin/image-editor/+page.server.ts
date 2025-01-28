@@ -57,10 +57,10 @@ export const actions = {
 			const uploadResponseContent = await uploadResponse.json();
 			if (!uploadResponseContent.data || uploadResponseContent.data.length <= 0)
 				return Helpers.error('La respuesta del servidor está vacía', 500);
-			
-			if (Number(uploadResponseContent.status) !== 200) return Helpers.error(uploadResponseContent.message, Number(uploadResponseContent.status));
 
-			const newImageURL = uploadResponseContent.data.length ? uploadResponseContent.data[0].url : uploadResponseContent.data.url;
+			const newImageURL = uploadResponseContent.data.length
+				? uploadResponseContent.data[0].url
+				: uploadResponseContent.data.url;
 			if (!newImageURL)
 				return Helpers.error('No se ha podido obtener la URL de la imagen subida', 500);
 
