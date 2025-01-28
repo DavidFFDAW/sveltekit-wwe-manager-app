@@ -1,5 +1,5 @@
 @font-face {
-	font-family: 'Dreadnotus';
+	font-family: 'dreadnotus';
 	src: url('/fonts/DreadnoughtusMedium.ttf') format('truetype');
 	font-weight: normal;
 	font-style: normal;
@@ -7,7 +7,7 @@
 }
 
 @font-face {
-	font-family: 'SourceSans';
+	font-family: 'sourcesans';
 	src: url('/fonts/source-sans/SourceSans3-Regular.ttf') format('truetype');
 	font-weight: normal;
 	font-style: normal;
@@ -15,13 +15,13 @@
 }
 
 .sourcesans {
-	font-family: 'SourceSans', sans-serif;
+	font-family: 'sourcesans', sans-serif;
 }
 
 .dreadnotus {
-	font-family: 'Dreadnotus', sans-serif;
+	font-family: 'dreadnotus', sans-serif;
 }
 
 h1 {
-	font-family: 'Dreadnotus', sans-serif;
+	font-family: 'dreadnotus', sans-serif;
 }

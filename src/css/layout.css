@@ -1,119 +1,179 @@
 .w1 {
 	width: 100%;
 }
+
 .h1 {
 	height: 100%;
 }
+
 .vh {
-    height: 100vh;
+	height: 100vh;
 }
+
+.tcenter {
+	text-align: center;
+}
+
+.tleft {
+	text-align: left;
+}
+
+.tright {
+	text-align: right;
+}
+
+.tjustify {
+	text-align: justify;
+}
+
+.tstart {
+	text-align: start;
+}
+
+.tend {
+	text-align: end;
+}
+
 .block {
 	display: block;
 }
+
 .relative {
 	position: relative;
 }
+
 .absolute {
 	position: absolute;
 }
+
 .absolute.top {
 	top: 0;
 }
+
 .absolute.bottom {
 	bottom: 0;
 }
+
 .absolute.left {
 	left: 0;
 }
+
 .absolute.right {
 	right: 0;
 }
+
 .absolute.center {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 }
+
 .flex {
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
 	gap: 5px;
 }
+
 .flex.column {
 	flex-direction: column;
 }
+
 .flex.center {
 	justify-content: center;
 }
+
 .flex.end {
 	justify-content: flex-end;
 }
+
 .flex.start {
 	justify-content: flex-start;
 }
+
 .flex.between {
 	justify-content: space-between;
 }
+
 .flex.around {
 	justify-content: space-around;
 }
+
 .flex.evenly {
 	justify-content: space-evenly;
 }
+
 .flex.wrap {
 	flex-wrap: wrap;
 }
+
 .flex.nowrap {
 	flex-wrap: nowrap;
 }
+
 .flex.acenter {
 	align-items: center;
 }
+
 .flex.aend {
 	align-items: flex-end;
 }
+
 .flex.astart {
 	align-items: flex-start;
 }
+
 .flex.abaseline {
 	align-items: baseline;
 }
+
 .flex.reverse {
 	flex-direction: row-reverse;
 }
+
 .grid {
 	display: grid;
 }
+
 .grid.cols {
 	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 }
+
 .grid.rows {
 	grid-template-rows: repeat(auto-fill, minmax(200px, 1fr));
 }
+
 .grid.grid-two-column,
 .grid.two-column-grid {
 	grid-template-columns: repeat(2, 1fr);
 }
+
 .grid.three-column-grid,
 .grid.grid-three-column {
 	grid-template-columns: repeat(3, 1fr);
 }
+
 .gap {
 	gap: 35px;
 }
+
 .gap-20,
 .gap-medium {
 	gap: 20px;
 }
+
 .gap-small {
 	gap: 15px;
 }
+
 .gap-smaller {
 	gap: 10px;
 }
+
 .gap-5 {
 	gap: 5px;
 }
+
 .nogap,
 .gap-0,
 .no-gap {
@@ -123,26 +183,33 @@
 .uppercase {
 	text-transform: uppercase;
 }
+
 .lowercase {
 	text-transform: lowercase;
 }
+
 .capitalize {
 	text-transform: capitalize;
 }
+
 .bold {
 	font-weight: bold;
 }
+
 .down {
 	margin-top: 20px;
 }
+
 .overflow-vertical {
 	overflow-x: hidden;
 	overflow-y: auto;
 }
+
 .overflow-horizontal {
 	overflow-x: auto;
 	overflow-y: hidden;
 }
+
 .overflow-hidden {
 	overflow: hidden;
 }
@@ -152,6 +219,7 @@ body main.app-main-entrypoint {
 	height: auto;
 	min-height: 100vh;
 }
+
 body main.app-main-entrypoint .page-wrapper-content {
 	display: flex;
 	flex-direction: column;
@@ -163,9 +231,11 @@ body main.app-main-entrypoint .page-wrapper-content {
 	padding: 15px 15px;
 	height: 100%;
 }
+
 body main.app-main-entrypoint-public-page .page-wrapper-content {
 	height: 100%;
 }
+
 body main.app-main-entrypoint.admin-page {
 	height: auto;
 	min-height: 100vh;
@@ -174,6 +244,7 @@ body main.app-main-entrypoint.admin-page {
 body main.app-main-entrypoint.admin-page {
 	background-color: #ebebeb;
 }
+
 /* body main.app-main-entrypoint.admin-page .page-wrapper-content {
 	padding: 0 0;
 } */
@@ -182,49 +253,64 @@ body main.app-main-entrypoint.admin-page {
 	.flex.responsive {
 		flex-direction: column;
 	}
+
 	.grid.responsive {
 		grid-template-columns: 1fr;
 	}
+
 	.responsive-w1,
 	.w1-responsive {
 		width: 100%;
 	}
+
 	.flex.responsive-astart {
 		align-items: flex-start;
 	}
+
 	.flex.responsive-acenter {
 		align-items: center;
 	}
+
 	.flex.responsive-aend {
 		align-items: flex-end;
 	}
+
 	.flex.responsive-center {
 		justify-content: center;
 	}
+
 	.flex.responsive-between {
 		justify-content: space-between;
 	}
+
 	.flex.responsive-evenly {
 		justify-content: space-evenly;
 	}
+
 	.flex.responsive-around {
 		justify-content: space-around;
 	}
+
 	.flex.responsive-end {
 		justify-content: flex-end;
 	}
+
 	.flex.responsive-start {
 		justify-content: flex-start;
 	}
+
 	.flex.responsive-column {
 		flex-direction: column;
 	}
+
 	.flex.responsive-column-reverse {
 		flex-direction: column-reverse;
 	}
+
 	.flex.responsive-wrap {
 		flex-wrap: wrap;
 	}
+
 	.flex.responsive-nowrap {
 		flex-wrap: nowrap;
 	}

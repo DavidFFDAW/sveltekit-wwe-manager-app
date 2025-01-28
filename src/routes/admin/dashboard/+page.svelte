@@ -11,6 +11,9 @@
 					<a href="/admin/wrestlers">Luchadores</a>
 				</li>
 				<li class="w1">
+					<a href="/admin/blog">Blog</a>
+				</li>
+				<li class="w1">
 					<a href="/admin/ppvs">PPVs</a>
 				</li>
 			</ul>

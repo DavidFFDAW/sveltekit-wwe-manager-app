@@ -78,12 +78,6 @@
 			</div>
 		{/if}
 
-		{#if loading}
-			<div class="loading-wrapper">
-				<SpinnerLogo />
-			</div>
-		{/if}
-
 		<slot />
 
 		{#if showButtons}
