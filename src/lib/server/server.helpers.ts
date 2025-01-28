@@ -25,5 +25,12 @@ export const Helpers = {
 	},
 	redirection: (url: string, status: number = 302) => {
 		return redirect(status, url);
+	},
+	getSelectorItem(data: FormData, field?: string) {
+		const number = (field ? data.get(`${field}-selected-editor-resource-id`) : data.get('selected-editor-resource-id'));
+		return {
+			id: Number(number),
+			name: (field ? data.get(`${field}-selected-editor-resource-name`) : data.get('selected-editor-resource-name')) as string
+		}
 	}
 };

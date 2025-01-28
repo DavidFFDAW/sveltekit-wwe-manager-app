@@ -23,12 +23,11 @@ export const actions = {
 		if (locals.user.role !== 'admin') return Helpers.error('Unauthorized', 403);
 		if (!locals.user.api_token) return Helpers.error('No API token found');
 
-		const api = `${IMAGE_API_URL}image/bydataurl/upsert`;
 		const datas = await request.formData();
+		const api = `${IMAGE_API_URL}image/bydataurl/upsert`;
 
 		const imageDataURL = datas.get('editor-image-data-resource') as string;
-		const resourceName = datas.get('selected-editor-resource-name') as string;
-		const resourceUUID = datas.get('selected-editor-resource-id') as string;
+		const { id, name } = Helpers.getSelectorItem(datas);
 		if (!imageDataURL) return Helpers.error('No image data URL provided');
 
 		try {
@@ -40,8 +39,8 @@ export const actions = {
 
 			const requestBody = new FormData();
 			requestBody.append('data_url', imageDataURL);
-			const savingName = Helpers.slugify(resourceName);
-			if (resourceName) requestBody.append('name', savingName);
+			const savingName = Helpers.slugify(name);
+			if (name) requestBody.append('name', savingName);
 
 			const options: RequestInit = {
 				method: 'POST',
@@ -56,22 +55,17 @@ export const actions = {
 				return Helpers.error('No se ha podido subir la imagen al servidor', 500);
 
 			const uploadResponseContent = await uploadResponse.json();
-			console.error('Respuesta del servidor', {
-				uploadResponseContent,
-				uploadResponse,
-				req: `${api}?fileToDelete=${resourceName}`
-			});
-
 			if (!uploadResponseContent.data || uploadResponseContent.data.length <= 0)
 				return Helpers.error('La respuesta del servidor está vacía', 500);
 			
+			if (Number(uploadResponseContent.status) !== 200) return Helpers.error(uploadResponseContent.message, Number(uploadResponseContent.status));
 
-			const newImageURL = uploadResponseContent.data[0].url;
+			const newImageURL = uploadResponseContent.data.length ? uploadResponseContent.data[0].url : uploadResponseContent.data.url;
 			if (!newImageURL)
 				return Helpers.error('No se ha podido obtener la URL de la imagen subida', 500);
 
-			if (resourceUUID) {
-				const updated = await WrestlerDao.updateImage(newImageURL, Number(resourceUUID));
+			if (id) {
+				const updated = await WrestlerDao.updateImage(newImageURL, id);
 				return Helpers.success(`Se ha actualizado la imagen de ${updated.name}`, 200);
 			}
 
