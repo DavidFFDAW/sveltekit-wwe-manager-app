@@ -20,17 +20,24 @@ export const Helpers = {
 		return { error: false, message: '' };
 	},
 	slugify: Utils.slugify,
-	apiResponse: (data: any, status: number = 200) => {
+	apiResponse: (data: Record<string, any>, status: number = 200) => {
 		return json(data, { status });
+	},
+	apiResponseMessage: (message: string, status: number = 200) => {
+		return json({ message }, { status });
 	},
 	redirection: (url: string, status: number = 302) => {
 		return redirect(status, url);
 	},
 	getSelectorItem(data: FormData, field?: string) {
-		const number = (field ? data.get(`${field}-selected-editor-resource-id`) : data.get('selected-editor-resource-id'));
+		const number = field
+			? data.get(`${field}-selected-editor-resource-id`)
+			: data.get('selected-editor-resource-id');
 		return {
 			id: Number(number),
-			name: (field ? data.get(`${field}-selected-editor-resource-name`) : data.get('selected-editor-resource-name')) as string
-		}
+			name: (field
+				? data.get(`${field}-selected-editor-resource-name`)
+				: data.get('selected-editor-resource-name')) as string
+		};
 	}
 };
