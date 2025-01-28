@@ -22,7 +22,7 @@
 		<div class="w1 flex center astart gap-medium blog-list">
 			{#each data.posts.slice(0, 3) as post}
 				<article class="w1 blog-article">
-					<a href="/blog/{Utils.slugify(post.title)}">
+					<a href="/blog/{post.slug}">
 						<div class="w1 article-content">
 							<img src={post.image} alt={post.title} use:errorimage />
 							<div class="w1 text-content flex column gap-medium astart">
@@ -41,7 +41,7 @@
 		<div class="w1 flex center astart gap-medium blog-list">
 			{#each data.posts.slice(3) as post}
 				<article class="w1 blog-article">
-					<a href="/blog/{Utils.slugify(post.title)}" class="w1 block">
+					<a href="/blog/{post.slug}" class="w1 block">
 						<div class="w1 article-content">
 							<img src={post.image} alt={post.title} use:errorimage />
 							<div class="w1 text-content flex column gap-medium astart">
