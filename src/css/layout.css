@@ -34,6 +34,12 @@
 	text-align: end;
 }
 
+.background {
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
 .block {
 	display: block;
 }
@@ -239,6 +245,11 @@ body main.app-main-entrypoint-public-page .page-wrapper-content {
 body main.app-main-entrypoint.admin-page {
 	height: auto;
 	min-height: 100vh;
+}
+
+body main.app-main-entrypoint.admin-page h1 {
+	font-family: 'dreadnotus', sans-serif;
+	text-transform: uppercase;
 }
 
 body main.app-main-entrypoint.admin-page {

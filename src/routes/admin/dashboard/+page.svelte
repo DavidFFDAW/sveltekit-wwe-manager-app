@@ -5,16 +5,43 @@
 <PageWrapper page="dashboard">
 	<div class="admin-page-wrapper admin-dashboard">
 		<h1>Dashboard</h1>
-		<nav class="admin-dashboard-page-navigation down">
-			<ul class="admin-dashboard-list" role="list">
-				<li class="w1">
-					<a href="/admin/wrestlers">Luchadores</a>
+		<nav class="admin-dashboard-page-navigation down" style="margin-top: 50px;">
+			<ul class="grid three-column-grid gap-20 admin-dashboard-list responsive" role="list">
+				<li class="w1 background">
+					<a href="/admin/wrestlers">
+						Luchadores
+						<img
+							src="https://davidfernandezdeveloper.es/2k/images/john-cena.webp"
+							alt="se muestra a John Cena y al pasar por encima se hace más grande saliendo del recuadro"
+						/>
+					</a>
 				</li>
-				<li class="w1">
-					<a href="/admin/blog">Blog</a>
+				<li class="w1 background reverse">
+					<a href="/admin/blog">
+						Blog
+						<img
+							src="https://davidfernandezdeveloper.es/2k/images/the-rock.webp"
+							alt="se muestra a Roman Reigns y al pasar por encima se hace más grande saliendo del recuadro"
+						/>
+					</a>
 				</li>
-				<li class="w1">
-					<a href="/admin/ppvs">PPVs</a>
+				<li class="w1 background">
+					<a href="/admin/ppvs">
+						PPVs
+						<img
+							src="https://davidfernandezdeveloper.es/2k/images/shawn-michaels.webp"
+							alt="se muestra a The Undertaker y al pasar por encima se hace más grande saliendo del recuadro"
+						/>
+					</a>
+				</li>
+				<li class="w1 background reverse">
+					<a href="/admin/image-editor">
+						Editor
+						<img
+							src="https://davidfernandezdeveloper.es/2k/images/kurt-angle.webp"
+							alt="se muestra a Stone Cold y al pasar por encima se hace más grande saliendo del recuadro"
+						/>
+					</a>
 				</li>
 			</ul>
 		</nav>
@@ -22,24 +49,84 @@
 </PageWrapper>
 
 <style>
-	ul.admin-dashboard-list {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		place-items: center;
-		gap: 20px;
+	:root {
+		/* --dashboard-item-bg: url('https://cdn.pixabay.com/photo/2016/11/18/22/58/stars-1837306_640.jpg'); */
+		--dashboard-item-bg: url('https://cdn.pixabay.com/photo/2016/11/18/22/58/stars-1837306_640.jpg');
+	}
+	ul.admin-dashboard-list li {
+		height: 200px;
+		position: relative;
+		border-radius: 8px;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		background-color: #ffffff;
+		background-image: var(--dashboard-item-bg);
 	}
 
 	ul.admin-dashboard-list li a {
-		display: block;
+		padding: 1rem;
+		display: flex;
+		position: relative;
 		width: 100%;
-		min-height: 250px;
-		color: #fff;
+		height: 100%;
+		align-items: center;
+		color: #ffffff;
 		text-decoration: none;
-		background-color: rgba(0, 0, 0, 0.5);
-		background-position: center;
-		background-size: cover;
-		background-repeat: no-repeat;
-		padding: 10px;
-		border-radius: 4px;
+		font-family: 'dreadnotus', sans-serif;
+		text-transform: uppercase;
+		font-size: 28px;
+	}
+
+	ul.admin-dashboard-list li:nth-child(odd) a {
+		justify-content: flex-end;
+		text-align: right;
+	}
+
+	ul.admin-dashboard-list li:nth-child(even) a {
+		justify-content: flex-start;
+	}
+
+	ul.admin-dashboard-list li img {
+		position: absolute;
+		bottom: 0;
+		width: 238px;
+		object-fit: cover;
+		object-position: right;
+		transition: transform 0.3s;
+		transform-origin: bottom;
+		border-radius: 0 0 8px 8px;
+	}
+
+	ul.admin-dashboard-list li:nth-child(odd) a img {
+		left: 0;
+		object-position: left;
+	}
+
+	ul.admin-dashboard-list li:nth-child(even) a img {
+		right: 0;
+		object-position: left;
+	}
+
+	ul.admin-dashboard-list li:hover img {
+		transform: scale(1.1);
+	}
+	ul.admin-dashboard-list li a::after {
+		content: '';
+		position: absolute;
+		top: calc(50% + 15px);
+		width: 0;
+		height: 4px;
+		background-color: #bf9bf0;
+		border-radius: 8px;
+		transition: width 0.3s;
+	}
+
+	ul.admin-dashboard-list li a:hover::after {
+		width: 60px;
+	}
+
+	@media screen and (max-width: 768px) {
+		ul.admin-dashboard-list li a {
+			font-size: 18px;
+		}
 	}
 </style>
