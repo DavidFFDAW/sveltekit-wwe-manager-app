@@ -23,7 +23,7 @@ export const actions = {
 		if (locals.user.role !== 'admin') return Helpers.error('Unauthorized', 403);
 		if (!locals.user.api_token) return Helpers.error('No API token found');
 
-		const api = `${IMAGE_API_URL}/image/bydataurl/upsert`;
+		const api = `${IMAGE_API_URL}image/bydataurl/upsert`;
 		const datas = await request.formData();
 
 		const imageDataURL = datas.get('editor-image-data-resource') as string;
