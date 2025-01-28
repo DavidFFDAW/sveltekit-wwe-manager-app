@@ -40,7 +40,8 @@ export const actions = {
 
 			const requestBody = new FormData();
 			requestBody.append('data_url', imageDataURL);
-			if (resourceName) requestBody.append('name', Helpers.slugify(resourceName));
+			const savingName = Helpers.slugify(resourceName);
+			if (resourceName) requestBody.append('name', savingName);
 
 			const options: RequestInit = {
 				method: 'POST',
@@ -50,7 +51,7 @@ export const actions = {
 				},
 				body: requestBody
 			};
-			const uploadResponse = await fetch(`${api}?fileToDelete=${resourceName}`, options);
+			const uploadResponse = await fetch(`${api}?fileToDelete=${savingName}`, options);
 			if (!uploadResponse.ok)
 				return Helpers.error('No se ha podido subir la imagen al servidor', 500);
 
