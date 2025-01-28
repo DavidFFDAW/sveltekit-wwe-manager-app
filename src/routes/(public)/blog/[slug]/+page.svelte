@@ -1,9 +1,36 @@
 <script lang="ts">
 	import { errorimage } from '$lib/actions/error.image';
+	import Icon from '$lib/components/icons/icon.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import type { BlogPost } from '@prisma/client';
+	import { onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
 
+	let showShareButton = false;
 	export let data: { post: BlogPost | null } = { post: null };
+
+	function buttonShare(event: Event) {
+		event.preventDefault();
+		if (!navigator.share)
+			return console.error('Tu navegador no soporta la funcionalidad de compartir');
+
+		if (data.post) {
+			navigator.share({
+				title: data.post.title,
+				text: data.post.exceptr as string,
+				url: window.location.href
+			});
+		}
+	}
+
+	const checkButtonVisibility = (event: Event) => {
+		showShareButton = window.scrollY > 120;
+	};
+
+	onMount(() => {
+		window.addEventListener('scroll', checkButtonVisibility);
+		return () => window.removeEventListener('scroll', checkButtonVisibility);
+	});
 </script>
 
 <PageWrapper page="blog-post-page">
@@ -16,6 +43,12 @@
 					<p>{@html data.post.content}</p>
 				</div>
 			</article>
+
+			{#if showShareButton}
+				<button class="btn-share" type="button" on:click={buttonShare} transition:fade>
+					<Icon icon="share" />
+				</button>
+			{/if}
 		{:else}
 			<div class="blog-post-error-container flex column center acenter">
 				<h1 class="tcenter">Post no encontrado</h1>
@@ -27,6 +60,22 @@
 </PageWrapper>
 
 <style>
+	.btn-share {
+		position: fixed;
+		bottom: 10px;
+		right: 10px;
+		background-color: var(--all);
+		color: #fff;
+		border: none;
+		border-radius: 50%;
+		width: 50px;
+		height: 50px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	}
+
 	.blog-container {
 		max-width: 800px;
 		margin: 0 auto;
