@@ -1,7 +1,6 @@
 import { BlogDao } from '$lib/server/dao/blog.dao.js';
 import { Helpers } from '$lib/server/server.helpers.js';
 
-//this function updates the field `slug` of every post in the blog. If the post already has a slug, it will be kept.
 export async function POST({ locals }) {
 	if (!locals.user)
 		return Helpers.apiResponseMessage('No tienes permisos para realizar esta acción', 403);
