@@ -16,7 +16,8 @@
 </script>
 
 <dialog class="app-general-dialog" bind:this={dialog}>
-	<header class="app-general-dialog-header">
+	<header class="app-general-dialog-header" class:has-header={$$slots.header}>
+		<slot name="header"></slot>
 		<button on:click={closeDialog} type="button" class="app-general-dialog-close">
 			<Icon icon="x" />
 		</button>
@@ -48,10 +49,17 @@
 	}
 
 	.app-general-dialog header.app-general-dialog-header {
+		position: sticky;
+		top: 0;
+		left: 0;
 		display: flex;
 		justify-content: flex-end;
 		width: 100%;
 		background-color: #f1f1f1;
+	}
+
+	.app-general-dialog header.app-general-dialog-header.has-header {
+		justify-content: space-between;
 	}
 
 	.app-general-dialog header.app-general-dialog-header button.app-general-dialog-close {

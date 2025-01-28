@@ -6,13 +6,13 @@
 	--sidebar-width: 250px;
 	--blue: #1da1f2;
 	--dark-blue: #0f75bc;
-    --sidebar-bg: #17181c;
-    --smackdown: #00a2ff;
-    --raw: #f44336;
-    --awl: #a43fb8;
-    --legend: #ff9800;
-    --all: #c9b041;
-    --font-color: #2f2f2f;
+	--sidebar-bg: #17181c;
+	--smackdown: #00a2ff;
+	--raw: #f44336;
+	--awl: #a43fb8;
+	--legend: #ff9800;
+	--all: #c9b041;
+	--font-color: #2f2f2f;
 }
 
 /* ESTILOS GLOBALES RELEVANTES */
@@ -180,6 +180,12 @@ button,
 	border: 1px solid #1bb76e;
 	background-color: #1bb76e;
 	color: white;
+}
+.btn.icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
 }
 
 .resource-list.grid {

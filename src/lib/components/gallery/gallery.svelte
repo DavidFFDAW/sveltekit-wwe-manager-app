@@ -56,7 +56,6 @@
 	.gallery img {
 		width: 100%;
 		height: auto;
-		padding: 10px;
 		border: 1px solid #ccc;
 		cursor: pointer;
 	}
@@ -64,5 +63,14 @@
 	.gallery img:hover {
 		border: 1px solid #c91727;
 		background-color: #f9f9f9;
+	}
+
+	@media (max-width: 768px) {
+		.gallery {
+			grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+		}
+		.gallery img {
+			height: 100%;
+		}
 	}
 </style>
