@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Gallery from '$lib/components/gallery/gallery.svelte';
+	import Imgur from '$lib/components/modules/imgur/imgur.svelte';
 
 	const size = 120;
 	export let label: string;
@@ -43,7 +44,7 @@
 		</div>
 		<div class="w1 flex gap-smaller">
 			<Gallery bind:value={image} />
-			<button type="button" class="btn imgur">Imgur</button>
+			<Imgur bind:value={image} />
 		</div>
 	</div>
 </div>
