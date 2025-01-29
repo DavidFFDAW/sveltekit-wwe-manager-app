@@ -45,5 +45,9 @@ export const Utils = {
 			reader.onerror = reject;
 			reader.readAsDataURL(file);
 		});
+	},
+	getRandomID: (name: string): string => {
+		if (!name) return Math.random().toString(36).substring(7);
+		return `${name}-${Math.random().toString(36).substring(7)}`;
 	}
 };

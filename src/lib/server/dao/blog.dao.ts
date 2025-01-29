@@ -1,3 +1,4 @@
+import { get } from 'http';
 import prisma from '../prisma';
 
 export const BlogDao = {
@@ -5,6 +6,7 @@ export const BlogDao = {
 	getPosts: () => prisma.blogPost.findMany(),
 	getOrderedPosts: () => prisma.blogPost.findMany({ orderBy: { created_at: 'desc' } }),
 	getPostBySlug: (slug: string) => prisma.blogPost.findFirst({ where: { slug }, take: 1 }),
+	getPostById: (id: number) => prisma.blogPost.findFirst({ where: { id }, take: 1 }),
 	getPublishedBlogPosts: () => {
 		return prisma.blogPost.findMany({
 			orderBy: {

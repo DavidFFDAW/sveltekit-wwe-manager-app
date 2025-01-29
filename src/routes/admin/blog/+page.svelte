@@ -20,7 +20,7 @@
 
 	<div class="w1 grid three-column-grid gap-small responsive">
 		{#each data.posts as post}
-			<div class="blog-post-card flex column gap-5">
+			<div class="blog-post-card flex column gap-5" data-id={post.id}>
 				<div class="image-container">
 					<img src={post.image} alt={post.title} use:errorimage />
 				</div>

@@ -1,10 +1,12 @@
 <script lang="ts">
+	import { Utils } from '$lib/utils/general.utils';
+
 	export let label: string;
 	export let name: string;
 	export let type: string;
 	export let value: string | number = '';
 	export let maxLength: number = 255;
-	const randomId = Math.random().toString(36).substring(7);
+	const randomId = Utils.getRandomID(name);
 </script>
 
 <div class="form-item">

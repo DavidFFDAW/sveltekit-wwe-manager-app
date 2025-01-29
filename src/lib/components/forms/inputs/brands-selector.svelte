@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { brands, type Brands } from '$lib/constants/app';
+	import { Utils } from '$lib/utils/general.utils';
 	const allBrands = Object.values(brands);
 	export let value: Brands = allBrands[0].name as Brands;
-	const randomId = Math.random().toString(36).substring(7);
+	const randomId = Utils.getRandomID('brands-selector');
 </script>
 
 <div class="form-item brands-selector">
@@ -14,7 +15,7 @@
 					type="radio"
 					name="brand"
 					value={brand.name}
-					id="brands-selector-{randomId}"
+					id="{randomId}-{brand.name}"
 					checked={value === brand.name}
 					bind:group={value}
 				/>

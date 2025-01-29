@@ -52,6 +52,8 @@
 		"fabric": "^5.3.0",
 		"jsonwebtoken": "^9.0.2",
 		"mysql2": "^3.11.0",
-		"svelte-carousel": "^1.0.25"
+		"quill": "^2.0.3",
+		"svelte-carousel": "^1.0.25",
+		"svelte-quill": "^1.2.0"
 	}
 }

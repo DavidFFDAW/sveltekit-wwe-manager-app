@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Gallery from '$lib/components/gallery/gallery.svelte';
 	import Imgur from '$lib/components/modules/imgur/imgur.svelte';
+	import { Utils } from '$lib/utils/general.utils';
 
 	const size = 120;
 	export let label: string;
@@ -8,7 +9,7 @@
 	export let image = '';
 	export let required = false;
 	export let placeholder = '/noimage.jpg';
-	const randomId = Math.random().toString(36).substring(7);
+	const randomId = Utils.getRandomID(name);
 
 	function handleImageError(event: Event) {
 		const image = event.target as HTMLImageElement;
