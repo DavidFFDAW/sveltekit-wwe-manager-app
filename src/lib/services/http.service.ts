@@ -1,15 +1,23 @@
 type HttpBody = FormData | Record<string, any>;
-const _makeRequest = async (url: string, method: string, data?: HttpBody) => {
-	const options: RequestInit = {
+
+const _makeRequest = async (url: string, method: string, options?: RequestInit) => {
+	const httpOptions: RequestInit = {
 		method,
 		mode: 'cors',
-		headers: {
-			'Content-Type': 'application/json'
-		}
+		...options
 	};
-	if (data) options.body = data instanceof FormData ? data : JSON.stringify(data);
 
-	const response = await fetch(url, options);
+	if (method === 'GET' || method === 'DELETE') {
+		httpOptions.headers = {
+			'Content-Type': 'application/json',
+			...httpOptions.headers
+		};
+	}
+
+	console.log('url: ', url);
+	console.log('options: ', httpOptions);
+
+	const response = await fetch(url, httpOptions);
 	return {
 		ok: response.ok,
 		status: response.status,
@@ -19,7 +27,7 @@ const _makeRequest = async (url: string, method: string, data?: HttpBody) => {
 
 export const HttpService = {
 	get: (url: string) => _makeRequest(url, 'GET'),
-	post: (url: string, data: HttpBody) => _makeRequest(url, 'POST', data),
-	put: (url: string, data: HttpBody) => _makeRequest(url, 'PUT', data),
+	post: (url: string, options?: RequestInit) => _makeRequest(url, 'POST', options),
+	put: (url: string, options?: RequestInit) => _makeRequest(url, 'PUT', options),
 	delete: (url: string) => _makeRequest(url, 'DELETE')
 };

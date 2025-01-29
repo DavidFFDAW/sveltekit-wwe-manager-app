@@ -32,5 +32,18 @@ export const Utils = {
 			.replace(/[^a-z0-9-]/g, '')
 			.replace(/-+/g, '-')
 			.replace(/[()$?&`'"=!¿¡]/gi, '');
+	},
+	readFile: (file: File): Promise<string> => {
+		return new Promise((resolve, reject) => {
+			const reader = new FileReader();
+			reader.onload = (event: ProgressEvent<FileReader>) => {
+				if (!event.target || typeof event.target.result !== 'string') {
+					return reject(new Error('No se ha podido leer el archivo'));
+				}
+				resolve(event.target.result);
+			};
+			reader.onerror = reject;
+			reader.readAsDataURL(file);
+		});
 	}
 };

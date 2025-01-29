@@ -11,12 +11,15 @@ export interface ImgurRequestProps {
 	endpoint: string;
 	body?: FormData | string;
 	token?: string;
+	extraHeaders?: HeadersInit;
 }
 
 export const imgurRequest = async (props: ImgurRequestProps) => {
-	const { method, endpoint, body, token } = props;
-	const headers: HeadersInit = {};
-	if (token) headers['Authorization'] = `Bearer ${token}`;
+	const { method, endpoint, body, token, extraHeaders } = props;
+	const headers = new Headers({
+		Authorization: `Bearer ${token}`,
+		...extraHeaders
+	});
 
 	const options = {
 		method,
@@ -28,12 +31,12 @@ export const imgurRequest = async (props: ImgurRequestProps) => {
 		options.body = body instanceof FormData ? body : JSON.stringify(body);
 
 	const response = await fetch(`https://api.imgur.com/${endpoint}`, options);
-	console.log('Request to imgur', `https://api.imgur.com/${endpoint}`, options);
+	// console.log('Request to imgur', `https://api.imgur.com/${endpoint}`, options);
 
 	return {
 		ok: response.ok,
 		status: response.status,
-		response: await response.json()
+		response: (await response.json()) as Record<string, unknown>
 	};
 };
 
@@ -58,7 +61,7 @@ export const ImgurServerService = {
 		if (!result.ok || !result.response.access_token)
 			return new Error('No se ha podido obtener un token de acceso');
 
-		cookies.set('imgur_access_token', result.response.access_token, {
+		cookies.set('imgur_access_token', result.response.access_token as string, {
 			httpOnly: true,
 			secure: true,
 			path: '/',
@@ -69,18 +72,34 @@ export const ImgurServerService = {
 		return result.response.access_token as string;
 	},
 
-	getUserImages: async (token: string) => {
-		return await imgurRequest({
+	getUserImages: (token: string) => {
+		return imgurRequest({
 			method: 'GET',
 			endpoint: `3/account/${IMGUR_ACCOUNT_USERNAME}/images`,
 			token
 		});
 	},
 
-	deleteImage: async (deleteHash: string, token: string) => {
-		return await imgurRequest({
+	deleteImage: (deleteHash: string, token: string) => {
+		return imgurRequest({
 			method: 'DELETE',
 			endpoint: `3/image/${deleteHash}`,
+			token
+		});
+	},
+
+	uploadImage: (file: File, token: string) => {
+		const formData = new FormData();
+		formData.append('type', 'file');
+		formData.append('image', file);
+		formData.append('privacy', 'hidden');
+		formData.append('title', file.name);
+		formData.append('description', 'Image uploaded from wwe-manager');
+
+		return imgurRequest({
+			method: 'POST',
+			endpoint: '3/image',
+			body: formData,
 			token
 		});
 	}
