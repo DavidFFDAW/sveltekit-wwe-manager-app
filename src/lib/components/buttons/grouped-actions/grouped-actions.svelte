@@ -2,12 +2,13 @@
 	import { fly } from 'svelte/transition';
 	import Icon from '../../icons/icon.svelte';
 	import { onMount } from 'svelte';
-	import AsyncForm from '$lib/components/forms/async-form.svelte';
+	import SimpleAsyncForm from '$lib/components/forms/simple-async-form.svelte';
 
 	export let open: boolean = false;
 	export let item: boolean = false;
 	export let text: string = 'Acciones agrupadas';
 	export let position: 'left' | 'right' = 'left';
+	export let updateId: string | number = 0;
 
 	function closeDropdown(event: KeyboardEvent) {
 		event.preventDefault();
@@ -33,21 +34,23 @@
 	class="grouped-actions-wrapper-container {position} {item ? 'is-item' : 'normal-action'}"
 	class:open
 >
-	<button
-		class="grouped-actions-button btn cta icon"
-		on:click|preventDefault={() => (open = !open)}
-	>
-		<div class="icon-container-rotation">
-			<Icon icon={open ? 'x' : 'list'} />
-		</div>
-		<span>{text}</span>
-	</button>
+	<SimpleAsyncForm bind:updateId>
+		<button
+			class="grouped-actions-button btn cta icon"
+			on:click|preventDefault={() => (open = !open)}
+		>
+			<div class="icon-container-rotation">
+				<Icon icon={open ? 'x' : 'list'} />
+			</div>
+			<span>{text}</span>
+		</button>
 
-	{#if open}
-		<div class="grouped-actions-container" transition:fly>
-			<slot></slot>
-		</div>
-	{/if}
+		{#if open}
+			<div class="grouped-actions-container {position}" transition:fly>
+				<slot></slot>
+			</div>
+		{/if}
+	</SimpleAsyncForm>
 </div>
 
 <style>
@@ -93,6 +96,9 @@
 		border: 1px solid rgba(0, 0, 0, 0.4);
 		overflow: hidden;
 		z-index: 2;
+	}
+	.grouped-actions-container.left {
+		width: calc(100% + 150px);
 	}
 
 	.grouped-actions-wrapper-container.left .grouped-actions-container {

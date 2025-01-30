@@ -59,7 +59,7 @@
 <form
 	{action}
 	data-method={method}
-	class="relative app-http-form w1 h1 {classes}"
+	class="relative app-http-form {classes}"
 	method={method === 'get' ? 'get' : 'post'}
 	on:submit|preventDefault={customSubmit}
 >

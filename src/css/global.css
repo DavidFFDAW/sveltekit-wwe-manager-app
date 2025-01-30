@@ -314,21 +314,28 @@ aside.sidebar.shown+main.app-main-entrypoint form.app-custom-form .buttons-block
 	color: #888888;
 }
 
-.grouped-actions-container>.grouped-actions-link:hover,
-.grouped-actions-container>.grouped-actions-button:hover {
+.grouped-actions-container .grouped-actions-link:hover,
+.grouped-actions-container .grouped-actions-button:hover {
 	background-color: #f9f9f9;
 }
 
-.grouped-actions-container>.grouped-actions-link,
-.grouped-actions-container>.grouped-actions-button {
+.grouped-actions-container .grouped-actions-link,
+.grouped-actions-container .grouped-actions-button {
+	background-color: #fff;
 	border-bottom: 1px solid #ccc;
 	border-radius: 0;
 }
 
-.grouped-actions-container>.grouped-actions-link:last-child,
-.grouped-actions-container>.grouped-actions-button:last-child {
+.grouped-actions-container .grouped-actions-link:last-child,
+.grouped-actions-container .grouped-actions-button:last-child {
 	border-bottom: none;
 	border-radius: 0 0 5px 5px;
+}
+
+.grouped-actions-container button {
+	width: 100%;
+	display: block;
+	background-color: #ffffff;
 }
 
 @media only screen and (max-width: 768px) {
