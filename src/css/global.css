@@ -13,6 +13,13 @@
 	--legend: #ff9800;
 	--all: #c9b041;
 	--font-color: #2f2f2f;
+
+	--color-success: #deffec;
+	--color-danger: #fde7e7;
+	--color-warn: #fff3cd;
+	--color-info: #d1ecf1;
+	--color-light: #f8f9fa;
+	--color-dark: #343a40;
 }
 
 /* ESTILOS GLOBALES RELEVANTES */
@@ -305,6 +312,23 @@ aside.sidebar.shown+main.app-main-entrypoint form.app-custom-form .buttons-block
 	text-align: center;
 	font-size: 12px;
 	color: #888888;
+}
+
+.grouped-actions-container>.grouped-actions-link:hover,
+.grouped-actions-container>.grouped-actions-button:hover {
+	background-color: #f9f9f9;
+}
+
+.grouped-actions-container>.grouped-actions-link,
+.grouped-actions-container>.grouped-actions-button {
+	border-bottom: 1px solid #ccc;
+	border-radius: 0;
+}
+
+.grouped-actions-container>.grouped-actions-link:last-child,
+.grouped-actions-container>.grouped-actions-button:last-child {
+	border-bottom: none;
+	border-radius: 0 0 5px 5px;
 }
 
 @media only screen and (max-width: 768px) {

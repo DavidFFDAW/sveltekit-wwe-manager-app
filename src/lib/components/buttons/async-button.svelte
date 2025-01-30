@@ -4,9 +4,9 @@
 
 	export let url: string;
 	export let text: string;
-	export let classes: string;
 	export let icon: string = '';
 	export let redirect: string = '';
+	export let classes: string = 'async-button';
 	export let method: 'get' | 'post' | 'put' | 'delete' = 'post';
 </script>
 

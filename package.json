@@ -53,7 +53,6 @@
 		"jsonwebtoken": "^9.0.2",
 		"mysql2": "^3.11.0",
 		"quill": "^2.0.3",
-		"svelte-carousel": "^1.0.25",
 		"svelte-quill": "^1.2.0"
 	}
 }

@@ -51,19 +51,27 @@
 
 		<div class="w1 links-container-block flex center">
 			<ul class="w1 flex column gap-smaller">
-				<li on:click={afterClick}>
+				<li on:click={afterClick} role="presentation">
 					<a href="/">Home</a>
 				</li>
-				<li class:active={url === '/admin/dashboard'} on:click={afterClick}>
+				<li class:active={url === '/admin/dashboard'} on:click={afterClick} role="presentation">
 					<a href="/admin/dashboard">Dashboard</a>
 				</li>
-				<li class:active={url.startsWith('/admin/wrestlers')} on:click={afterClick}>
+				<li
+					class:active={url.startsWith('/admin/wrestlers')}
+					on:click={afterClick}
+					role="presentation"
+				>
 					<a href="/admin/wrestlers">Luchadores</a>
 				</li>
-				<li class:active={url.startsWith('/admin/ppvs')} on:click={afterClick}>
+				<li class:active={url.startsWith('/admin/ppvs')} on:click={afterClick} role="presentation">
 					<a href="/admin/ppvs">PPVs</a>
 				</li>
-				<li class:active={url.startsWith('/admin/image-editor')} on:click={afterClick}>
+				<li
+					class:active={url.startsWith('/admin/image-editor')}
+					on:click={afterClick}
+					role="presentation"
+				>
 					<a href="/admin/image-editor">Editor de imagenes</a>
 				</li>
 				<!-- .... -->

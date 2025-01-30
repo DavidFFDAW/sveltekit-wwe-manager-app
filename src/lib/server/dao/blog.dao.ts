@@ -18,10 +18,16 @@ export const BlogDao = {
 		});
 	},
 
-	updateSlug: async (id: number, slug: string) => {
+	updateSlug: (id: number, slug: string) => {
 		return prisma.blogPost.update({
 			where: { id },
 			data: { slug }
+		});
+	},
+	updatePublish: (id: number, visible: boolean) => {
+		return prisma.blogPost.update({
+			where: { id },
+			data: { visible }
 		});
 	}
 };

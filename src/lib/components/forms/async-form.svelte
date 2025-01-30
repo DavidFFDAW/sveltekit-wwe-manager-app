@@ -3,7 +3,7 @@
 	import SpinnerLogo from '../spinner/spinner-logo.svelte';
 	import { type ActionResult, type SubmitFunction } from '@sveltejs/kit';
 	import SpinnerSimple from '../spinner/spinner-simple.svelte';
-	import { goto } from '$app/navigation';
+	import { goto, invalidate } from '$app/navigation';
 	import { Toast } from '$lib/utils/toast.helper';
 
 	export let method: 'post' | 'get' | 'put' | 'delete' = 'post';
@@ -49,6 +49,7 @@
 			if (hasSuccess) {
 				const successMessage = response.data?.message || '¡Operación exitosa!';
 				await update({ reset: false });
+				await invalidate(''); // Invalidate the current page to refresh the data
 				if (showToast) Toast.success(successMessage);
 
 				if (redirectURL) goto(redirectURL);
