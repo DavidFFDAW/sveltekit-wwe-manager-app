@@ -4,6 +4,7 @@
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import editorUtils from '../editor.utils';
 	import ResourceSelector from './resource-selector.svelte';
+	import Icon from '$lib/components/icons/icon.svelte';
 	export let templateImage = 'https://davidfernandezdeveloper.es/2k/images/cody-rhodes.webp';
 	export let resourceList: { id: number; name: string; image: string }[] = [];
 	let canvas: HTMLCanvasElement;
@@ -48,6 +49,8 @@
 		fabricCanvas.discardActiveObject().renderAll();
 		return canvas.toDataURL('image/webp');
 	}
+
+	const size = 420;
 
 	async function addImageToCanvas(file: File) {
 		const imageData = await editorUtils.readFile(file);
@@ -102,6 +105,19 @@
 		return true;
 	};
 
+	function adjustSize() {
+		const activeObject = fabricCanvas.getActiveObject();
+		if (!activeObject) return;
+
+		activeObject.scaleToWidth(size);
+		activeObject.set({
+			left: (size - activeObject.getScaledWidth()) / 2,
+			top: (size - activeObject.getScaledHeight()) / 2
+		});
+		activeObject.setCoords();
+		fabricCanvas.renderAll();
+	}
+
 	function clearAllCanvas() {
 		fabricCanvas.clear();
 	}
@@ -122,21 +138,34 @@
 				<img src={templateImage} alt="template to know what the sizes should be" />
 				<canvas id="canvas" width={canvaSize} height={canvaSize} bind:this={canvas}></canvas>
 			</div>
-			<footer>
-				<button type="button" class="btn">
-					<label>
+			<footer class="buttons-container">
+				<button type="button" class="btn upload">
+					<label class="flex center acenter gap-smaller">
+						<Icon icon="upload" />
 						<input type="file" accept="image/*" on:change={addSingleImage} />
-						Upload
+						Añadir imagen
 					</label>
 				</button>
 
-				<button type="button" class="btn" on:click={removeSelectedCanvaObject}>
-					Remove selected
+				<button type="button" class="btn adjust icon" on:click={adjustSize}>
+					<Icon icon="arrows-angle-expand" />
+					Ajustar tamaño
 				</button>
 
-				<button type="button" class="btn" on:click={clearAllCanvas}> Clear all </button>
+				<button type="button" class="btn cta download icon" on:click={downloadImage}>
+					<Icon icon="download" />
+					Descargar
+				</button>
 
-				<button type="button" class="btn" on:click={downloadImage}> Download </button>
+				<button type="button" class="btn remove" on:click={removeSelectedCanvaObject}>
+					<Icon icon="trash" />
+					Eliminar selección
+				</button>
+
+				<button type="button" class="btn clear icon" on:click={clearAllCanvas}>
+					<Icon icon="trash" />
+					Borrar todo
+				</button>
 			</footer>
 		</div>
 
@@ -175,18 +204,43 @@
 		border: 1px solid #000;
 		background: transparent;
 	}
+
+	footer.buttons-container {
+		margin-top: 8px;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 5px;
+		align-items: center;
+	}
 	.btn {
 		position: relative;
 		background-color: #4caf50;
 		border: none;
 		color: white;
-		padding: 15px 32px;
+		padding: 10px;
 		text-align: center;
 		text-decoration: none;
-		display: inline-block;
 		font-size: 16px;
-		margin: 4px 2px;
 		cursor: pointer;
+	}
+
+	.btn.remove,
+	.btn.clear {
+		background-color: #f44336;
+	}
+
+	.btn.upload {
+		background-color: #2196f3;
+	}
+
+	.btn.cta {
+		background-color: #333;
+	}
+
+	.btn.adjust {
+		background-color: transparent;
+		color: #333;
+		box-shadow: 0 0 0 1px #333;
 	}
 
 	.btn input[type='file'] {

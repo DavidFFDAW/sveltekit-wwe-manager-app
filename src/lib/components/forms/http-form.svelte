@@ -1,6 +1,6 @@
 <script lang="ts">
 	import SpinnerLogo from '../spinner/spinner-logo.svelte';
-	import { goto } from '$app/navigation';
+	import { goto, invalidate } from '$app/navigation';
 	import { Toast } from '$lib/utils/toast.helper';
 
 	let loading = false;
@@ -40,14 +40,13 @@
 		loading = true;
 
 		const { response, content } = await sendRequest(action, method, formData);
-		console.log({ response, content });
-
 		if (!response.ok)
 			return showError(
 				content.message || 'Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.'
 			);
 
 		loading = false;
+		await invalidate(''); // Invalidate the current page to refresh the data
 		Toast.success(content.message || '¡Operación exitosa!');
 		if (redirectURL) {
 			setTimeout(() => {
@@ -60,7 +59,7 @@
 <form
 	{action}
 	data-method={method}
-	class="relative app-http-form w1 h1 {classes}"
+	class="relative app-http-form {classes}"
 	method={method === 'get' ? 'get' : 'post'}
 	on:submit|preventDefault={customSubmit}
 >

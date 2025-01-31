@@ -2,36 +2,51 @@
 	import { errorimage } from '$lib/actions/error.image';
 	import AsyncButton from '$lib/components/buttons/async-button.svelte';
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
+	import GroupedActions from '$lib/components/buttons/grouped-actions/grouped-actions.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import type { BlogPost } from '@prisma/client';
+	import BlogActions from './blog-actions.svelte';
+
 	export let data: { posts: BlogPost[] } = { posts: [] };
 </script>
 
 <PageWrapper page="admin-blog-page">
 	<h1>Administrar Blog</h1>
 
-	<AsyncButton
-		url="/api/blog/slug/refresh"
-		method="post"
-		text="Regenerar slug de los posts"
-		classes="w1 cta"
-		icon="arrow-clockwise"
-	/>
+	<div class="blog-page-admin-list flex column astart gap-smaller">
+		<div class="w1 flex end">
+			<AsyncButton
+				url="/api/blog/slug/refresh"
+				method="post"
+				text="Regenerar slug de los posts"
+				icon="arrow-clockwise"
+				classes="btn cta"
+			/>
+		</div>
 
-	<div class="w1 grid three-column-grid gap-small responsive">
-		{#each data.posts as post}
-			<div class="blog-post-card flex column gap-5">
-				<div class="image-container">
-					<img src={post.image} alt={post.title} use:errorimage />
+		<div class="w1 grid two-column-grid gap-small responsive">
+			{#each data.posts as post}
+				<div
+					class="blog-post-card relative flex column gap-5"
+					class:visible={post.visible}
+					data-id={post.id}
+				>
+					<div class="image-container">
+						<img src={post.image} alt={post.title} use:errorimage />
+					</div>
+					<small>{post.slug}</small>
+					<h2>{post.title}</h2>
+					<p class="down">{post.exceptr}</p>
+
+					<div class="w1 flex end absolute top righ">
+						<BlogActions {post} />
+					</div>
 				</div>
-				<small>{post.slug}</small>
-				<h2>{post.title}</h2>
-				<p class="down">{post.exceptr}</p>
-			</div>
-		{/each}
+			{/each}
+		</div>
 	</div>
 
-	<!-- <ButtonCreate endpoint="/blog/create" /> -->
+	<ButtonCreate endpoint="/blog/new" />
 </PageWrapper>
 
 <style>
@@ -41,6 +56,13 @@
 		background-color: #ffffff;
 		border-radius: 5px;
 		margin-bottom: 1rem;
+	}
+
+	.blog-post-card {
+		filter: grayscale(100%) opacity(0.5);
+	}
+	.blog-post-card.visible {
+		filter: none;
 	}
 
 	.blog-post-card .image-container {

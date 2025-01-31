@@ -24,7 +24,11 @@
 		<input type="search" placeholder="Buscar recurso" bind:value={search} />
 	</div>
 
-	<div class="resource-selector-list-container" transition:fade>
+	<div
+		class="resource-selector-list-container"
+		class:has-selection={selectedItem !== 0}
+		transition:fade
+	>
 		{#each results as resource, index}
 			<div
 				class="w1 resource-item-radio-container"

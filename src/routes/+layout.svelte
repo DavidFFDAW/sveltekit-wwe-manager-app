@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import '../css/global.css';
 	import 'bootstrap-icons/font/bootstrap-icons.css';
+	import 'quill/dist/quill.snow.css';
+	import { page } from '$app/stores';
+	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import Sidebar from '$lib/components/sidebar/sidebar.svelte';
 
 	const getRoute = (route: string | null) => {

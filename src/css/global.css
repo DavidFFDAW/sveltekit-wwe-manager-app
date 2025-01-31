@@ -6,13 +6,20 @@
 	--sidebar-width: 250px;
 	--blue: #1da1f2;
 	--dark-blue: #0f75bc;
-    --sidebar-bg: #17181c;
-    --smackdown: #00a2ff;
-    --raw: #f44336;
-    --awl: #a43fb8;
-    --legend: #ff9800;
-    --all: #c9b041;
-    --font-color: #2f2f2f;
+	--sidebar-bg: #17181c;
+	--smackdown: #00a2ff;
+	--raw: #f44336;
+	--awl: #a43fb8;
+	--legend: #ff9800;
+	--all: #c9b041;
+	--font-color: #2f2f2f;
+
+	--color-success: #deffec;
+	--color-danger: #fde7e7;
+	--color-warn: #fff3cd;
+	--color-info: #d1ecf1;
+	--color-light: #f8f9fa;
+	--color-dark: #343a40;
 }
 
 /* ESTILOS GLOBALES RELEVANTES */
@@ -22,6 +29,7 @@ i.customs-icons.app-bootstrap-custom-icon {
 	white-space: pre-wrap;
 	vertical-align: middle;
 }
+
 i.customs-icons.app-bootstrap-custom-icon.bi.bi-twitter {
 	color: #1da1f2;
 }
@@ -33,11 +41,13 @@ i.customs-icons.app-bootstrap-custom-icon.bi.bi-twitter {
 	border-radius: 10px;
 	box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
+
 .box .box-content,
 .panel .box-content {
 	padding: 15px 0;
 	padding-top: 20px;
 }
+
 .box .title-block .box-title,
 .panel .title-block .box-title {
 	font-size: 20px;
@@ -45,6 +55,7 @@ i.customs-icons.app-bootstrap-custom-icon.bi.bi-twitter {
 	text-transform: uppercase;
 	font-family: 'dreadnotus', sans-serif;
 }
+
 .box .title-block i.customs-icons.app-bootstrap-custom-icon,
 .panel .title-block i.customs-icons.app-bootstrap-custom-icon {
 	font-size: 20px;
@@ -57,24 +68,29 @@ i.customs-icons.app-bootstrap-custom-icon.bi.bi-twitter {
 	flex-direction: column;
 	gap: 10px;
 }
+
 .form-item.form-item-horizontal {
 	flex-direction: row;
 	align-items: center;
 }
+
 .form-item.form-item-image {
 	gap: 10px;
 }
+
 .form-item .label.form-label {
 	font-size: 14px;
 	font-weight: 500;
 	text-transform: uppercase;
 	font-family: 'dreadnotus', sans-serif;
 }
+
 .form-item .label.form-label.required-label {
 	display: flex;
 	align-items: center;
 	gap: 5px;
 }
+
 .form-item label span.required-label {
 	color: red;
 	font-size: 22px;
@@ -96,6 +112,21 @@ select {
 	outline: none;
 }
 
+input[type="radio"].app-radio,
+input[type="file"].app-file {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	opacity: 0;
+	cursor: pointer;
+}
+
+input[type='date'] {
+	position: relative;
+}
+
 input[type='date']::-webkit-calendar-picker-indicator {
 	width: 100%;
 	height: 100%;
@@ -108,24 +139,25 @@ input[type='date']::-webkit-calendar-picker-indicator {
 	opacity: 0;
 	pointer-events: auto;
 }
+
 input:focus,
 textarea:focus {
 	border-color: #1bb76e;
 }
 
-.radio-checkbox-container-wrapper
-	.radio-checkbox-input:checked
-	+ .radio-checkbox-inner-item.label-item-legend {
+textarea {
+	min-height: 150px;
+	resize: vertical;
+}
+
+.radio-checkbox-container-wrapper .radio-checkbox-input:checked+.radio-checkbox-inner-item.label-item-legend {
 	background-image: url(https://upload.wikimedia.org/wikipedia/en/9/93/WWE_Hall_of_Fame_Logo%2C_2019_version.png);
 	background-size: 50%;
 	background-position: center;
 	background-repeat: no-repeat;
 }
 
-.radio-checkbox-container-wrapper
-	.radio-checkbox-input:checked
-	+ .radio-checkbox-inner-item.label-item-legend
-	.label-item-text {
+.radio-checkbox-container-wrapper .radio-checkbox-input:checked+.radio-checkbox-inner-item.label-item-legend .label-item-text {
 	opacity: 0;
 }
 
@@ -141,13 +173,15 @@ aside.admin-sidebar.sidebar.shown {
 	z-index: 1000;
 	transition: 0.3s;
 }
-aside.admin-sidebar.sidebar.shown + main.app-main-entrypoint {
+
+aside.admin-sidebar.sidebar.shown+main.app-main-entrypoint {
 	margin-left: var(--sidebar-width);
 }
 
 .padding {
 	padding: 20px;
 }
+
 .page-content {
 	padding: 0 15px;
 }
@@ -165,6 +199,17 @@ button,
 	outline: none;
 }
 
+.btn.btn-danger {
+	background-color: #f44336;
+	color: white;
+}
+
+.btn.btn-small {
+	padding: 5px 10px;
+	font-size: 14px;
+	border-radius: 0;
+}
+
 .btn.secondary {
 	border: 1px solid #333;
 	background-color: transparent;
@@ -176,10 +221,18 @@ button,
 	background-color: #121212;
 	color: white;
 }
+
 .btn.imgur {
 	border: 1px solid #1bb76e;
 	background-color: #1bb76e;
 	color: white;
+}
+
+.btn.icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
 }
 
 .resource-list.grid {
@@ -199,14 +252,14 @@ body main.app-main-entrypoint.page-public-login.public-page {
 }
 
 /* SPINNER */
-aside.sidebar.shown + main.app-main-entrypoint .spinner-overlay-layer {
+aside.sidebar.shown+main.app-main-entrypoint .spinner-overlay-layer {
 	padding-left: var(--sidebar-width);
 	overflow: hidden;
 	user-select: none;
 }
 
 /* FORM */
-aside.sidebar.shown + main.app-main-entrypoint form.app-custom-form .buttons-block {
+aside.sidebar.shown+main.app-main-entrypoint form.app-custom-form .buttons-block {
 	position: fixed;
 	margin-left: var(--sidebar-width);
 	width: calc(100% - var(--sidebar-width));
@@ -221,6 +274,7 @@ aside.sidebar.shown + main.app-main-entrypoint form.app-custom-form .buttons-blo
 	padding: 20px;
 	margin: 0;
 }
+
 .legal-pages-container .container {
 	max-width: 800px;
 	margin: 0 auto;
@@ -229,24 +283,30 @@ aside.sidebar.shown + main.app-main-entrypoint form.app-custom-form .buttons-blo
 	border-radius: 8px;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
 .legal-pages-container h1 {
 	color: #e31b23;
 	text-align: center;
 }
+
 .legal-pages-container h2 {
 	color: #000000;
 	margin-top: 20px;
 }
+
 .legal-pages-container p {
 	margin: 10px 0;
 }
+
 .legal-pages-container ul {
 	margin: 10px 0;
 	padding-left: 20px;
 }
+
 .legal-pages-container li {
 	margin-bottom: 10px;
 }
+
 .legal-pages-container .footer {
 	margin-top: 20px;
 	text-align: center;
@@ -254,11 +314,36 @@ aside.sidebar.shown + main.app-main-entrypoint form.app-custom-form .buttons-blo
 	color: #888888;
 }
 
+.grouped-actions-container .grouped-actions-link:hover,
+.grouped-actions-container .grouped-actions-button:hover {
+	background-color: #f9f9f9;
+}
+
+.grouped-actions-container .grouped-actions-link,
+.grouped-actions-container .grouped-actions-button {
+	background-color: #fff;
+	border-bottom: 1px solid #ccc;
+	border-radius: 0;
+}
+
+.grouped-actions-container .grouped-actions-link:last-child,
+.grouped-actions-container .grouped-actions-button:last-child {
+	border-bottom: none;
+	border-radius: 0 0 5px 5px;
+}
+
+.grouped-actions-container button {
+	width: 100%;
+	display: block;
+	background-color: #ffffff;
+}
+
 @media only screen and (max-width: 768px) {
 	.form-item .form-label {
 		font-size: 0.9em;
 	}
-	aside.admin-sidebar.sidebar.shown + main.app-main-entrypoint {
+
+	aside.admin-sidebar.sidebar.shown+main.app-main-entrypoint {
 		margin-left: 0;
 	}
 }

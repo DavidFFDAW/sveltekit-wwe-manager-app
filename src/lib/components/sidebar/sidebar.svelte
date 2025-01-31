@@ -18,6 +18,10 @@
 		return () => window.removeEventListener('resize', handleResize);
 	});
 
+	const afterClick = () => {
+		if (isMobile) showSidebar = false;
+	};
+
 	const logout = async (event: Event) => {
 		event.preventDefault();
 		const response = await fetch('/api/auth/logout', {
@@ -27,6 +31,7 @@
 			}
 		});
 
+		if (response.ok && isMobile) showSidebar = false;
 		if (response.ok && response.status === 200) goto('/');
 	};
 </script>
@@ -46,19 +51,27 @@
 
 		<div class="w1 links-container-block flex center">
 			<ul class="w1 flex column gap-smaller">
-				<li>
+				<li on:click={afterClick} role="presentation">
 					<a href="/">Home</a>
 				</li>
-				<li class:active={url === '/admin/dashboard'}>
+				<li class:active={url === '/admin/dashboard'} on:click={afterClick} role="presentation">
 					<a href="/admin/dashboard">Dashboard</a>
 				</li>
-				<li class:active={url.startsWith('/admin/wrestlers')}>
+				<li
+					class:active={url.startsWith('/admin/wrestlers')}
+					on:click={afterClick}
+					role="presentation"
+				>
 					<a href="/admin/wrestlers">Luchadores</a>
 				</li>
-				<li class:active={url.startsWith('/admin/ppvs')}>
+				<li class:active={url.startsWith('/admin/ppvs')} on:click={afterClick} role="presentation">
 					<a href="/admin/ppvs">PPVs</a>
 				</li>
-				<li class:active={url.startsWith('/admin/image-editor')}>
+				<li
+					class:active={url.startsWith('/admin/image-editor')}
+					on:click={afterClick}
+					role="presentation"
+				>
 					<a href="/admin/image-editor">Editor de imagenes</a>
 				</li>
 				<!-- .... -->

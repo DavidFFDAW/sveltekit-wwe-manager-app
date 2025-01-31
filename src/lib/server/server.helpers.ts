@@ -39,5 +39,11 @@ export const Helpers = {
 				? data.get(`${field}-selected-editor-resource-name`)
 				: data.get('selected-editor-resource-name')) as string
 		};
+	},
+	hasPermission: (locals: App.Locals, role: string = 'admin') => {
+		return locals.user && locals.user.role === role;
+	},
+	getUpdateID: (data: FormData) => {
+		return Number(data.get('_update_id'));
 	}
 };
