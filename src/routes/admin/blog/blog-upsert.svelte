@@ -4,6 +4,7 @@
 	import Input from '$lib/components/forms/inputs/input.svelte';
 	import QuillInput from '$lib/components/forms/inputs/quill-input.svelte';
 	import RadioList from '$lib/components/forms/inputs/radio-list.svelte';
+	import Icon from '$lib/components/icons/icon.svelte';
 	import { Utils } from '$lib/utils/general.utils';
 	import type { BlogPost } from '@prisma/client';
 
@@ -38,13 +39,23 @@
 			required
 		/>
 
-		<QuillInput
-			label="Contenido"
-			name="content"
-			placeholder="Contenido del post"
-			value={post.content}
-			required
-		/>
+		<div class="quill-container flex column gap-5">
+			<QuillInput
+				label="Contenido"
+				name="content"
+				placeholder="Contenido del post"
+				value={post.content}
+				required
+			/>
+			<a
+				href="https://chatgpt.com/c/9b2d8a04-cd8a-4fb1-9e0f-f76bc23a0479"
+				target="_blank"
+				class="w1 block btn cta icon"
+			>
+				<Icon icon="robot" />
+				Generar artículo con ChatGPT
+			</a>
+		</div>
 
 		<Input
 			label="Fecha de publicacion"
