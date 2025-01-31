@@ -1,6 +1,6 @@
 <script lang="ts">
 	import SpinnerLogo from '../spinner/spinner-logo.svelte';
-	import { goto, invalidate } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { Toast } from '$lib/utils/toast.helper';
 
 	let loading = false;
@@ -46,7 +46,7 @@
 			);
 
 		loading = false;
-		await invalidate(''); // Invalidate the current page to refresh the data
+		await invalidateAll();
 		Toast.success(content.message || '¡Operación exitosa!');
 		if (redirectURL) {
 			setTimeout(() => {

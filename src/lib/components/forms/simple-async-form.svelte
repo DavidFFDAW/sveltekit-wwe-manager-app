@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import SpinnerLogo from '../spinner/spinner-logo.svelte';
 	import { submitForm } from './custom.enhance';
 
 	export let method: 'post' | 'get' | 'put' | 'delete' = 'post';

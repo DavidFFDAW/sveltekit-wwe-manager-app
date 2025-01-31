@@ -1,19 +1,21 @@
-import { BlogDao } from '$lib/server/dao/blog.dao';
+import { WrestlerDao } from '$lib/server/dao/wrestler.dao';
 import { Helpers } from '$lib/server/server.helpers';
 
 export async function POST({ locals }) {
-    if (!locals.user) return Helpers.apiResponseMessage('No tienes permisos para realizar esta acción', 403);
-    if (locals.user.role !== 'admin')
+    if (!Helpers.hasPermission(locals, 'admin'))
         return Helpers.apiResponseMessage('No tienes permisos para realizar esta acción', 403);
 
     try {
-        const posts = await BlogDao.getPosts();
-        const updatedPosts = posts.map(post => {
-            post.slug = Helpers.slugify(post.title) as string;
-            return post;
+        const wrestlers = await WrestlerDao.getWrestlers();
+        const updatedWrestlers = wrestlers.map(wrestler => {
+            wrestler.slug = Helpers.slugify(wrestler.name) as string;
+            return wrestler;
         });
+        //
 
-        await Promise.all(updatedPosts.map(post => BlogDao.updateSlug(post.id, post.slug as string)));
+        await Promise.all(
+            updatedWrestlers.map(wrestler => WrestlerDao.updatePartialWrestler({ slug: wrestler.slug }, wrestler.id)),
+        );
         return Helpers.apiResponseMessage('Se han actualizado los slugs para todos los posts', 200);
     } catch (error) {
         if (error instanceof Error) return Helpers.apiResponseMessage(error.message, 500);

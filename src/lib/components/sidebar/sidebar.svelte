@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import Icon from '../icons/icon.svelte';
 	import { goto } from '$app/navigation';
+	import { SidebarLinks } from './sidebar.links';
 
 	export let url: string;
 	let isMobile = browser ? window.innerWidth < 600 : false;
@@ -54,29 +55,19 @@
 				<li on:click={afterClick} role="presentation">
 					<a href="/">Home</a>
 				</li>
-				<li class:active={url === '/admin/dashboard'} on:click={afterClick} role="presentation">
-					<a href="/admin/dashboard">Dashboard</a>
-				</li>
-				<li
-					class:active={url.startsWith('/admin/wrestlers')}
-					on:click={afterClick}
-					role="presentation"
-				>
-					<a href="/admin/wrestlers">Luchadores</a>
-				</li>
-				<li class:active={url.startsWith('/admin/ppvs')} on:click={afterClick} role="presentation">
-					<a href="/admin/ppvs">PPVs</a>
-				</li>
-				<li
-					class:active={url.startsWith('/admin/image-editor')}
-					on:click={afterClick}
-					role="presentation"
-				>
-					<a href="/admin/image-editor">Editor de imagenes</a>
-				</li>
-				<!-- .... -->
-				<li>
-					<button type="button" on:click={logout}>Logout</button>
+
+				{#each SidebarLinks as link}
+					<li
+						class:active={link.equals ? url === '/admin/dashboard' : url.startsWith(link.url)}
+						on:click={afterClick}
+						role="presentation"
+					>
+						<a href={link.url}> {link.label}</a>
+					</li>
+				{/each}
+
+				<li class="w1">
+					<button type="button" class="w1 tstart" on:click={logout}>Logout</button>
 				</li>
 			</ul>
 		</div>
@@ -108,6 +99,7 @@
 		padding: 6px 20px;
 		border-radius: 10px;
 		font-family: 'dreadnotus';
+		text-transform: uppercase;
 	}
 
 	.links-container-block li.active a,

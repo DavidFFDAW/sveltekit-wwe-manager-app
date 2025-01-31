@@ -3,6 +3,7 @@
 	export let icon: string;
 	export let action: string;
 	export let method: 'post' | 'get' = 'post';
+	export let confirm: boolean = false;
 	export let color: 'success' | 'info' | 'danger' | 'warn' = 'info';
 </script>
 
@@ -11,6 +12,8 @@
 	type="submit"
 	formaction={`?/${action}`}
 	formmethod={method}
+	formenctype="application/x-www-form-urlencoded"
+	data-confirm={confirm}
 >
 	<div class="icon-wrapper">
 		<Icon {icon} />

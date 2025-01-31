@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { errorimage } from '$lib/actions/error.image.js';
+	import AsyncButton from '$lib/components/buttons/async-button.svelte';
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import Pagination from '$lib/components/visual/pagination.svelte';
@@ -15,6 +16,16 @@
 		</div>
 	</form>
 
+	<div class="w1 flex end">
+		<AsyncButton
+			url="/api/wrestler/slug/refresh"
+			method="post"
+			classes="btn cta"
+			text="Regenerar slugs de luchadores"
+			icon="arrow-clockwise"
+		/>
+	</div>
+
 	<div class="w1 flex between gap-small responsive down">
 		<h1 class="uppercase">Wrestlers</h1>
 		<Pagination total={data.total} itemsPerPage={10} bind:currentPage={data.page} />
@@ -29,6 +40,7 @@
 
 						<div class="w1 admin-wrestler-card-info gap-0">
 							<h2>{wrestler.name}</h2>
+							<small>{wrestler.slug}</small>
 							<div class="status-quick-change-action-block">
 								<AsyncForm
 									action="updateStatus"

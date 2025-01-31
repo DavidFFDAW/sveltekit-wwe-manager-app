@@ -17,6 +17,7 @@
 		action={'toggleVisibility'}
 		method="post"
 		icon={post.visible ? 'eye-slash' : 'eye'}
+		confirm={true}
 	>
 		{post.visible ? 'Ocultar' : 'Publicar'} post
 	</ActionsButton>
