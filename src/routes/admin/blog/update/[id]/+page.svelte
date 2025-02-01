@@ -7,7 +7,12 @@
 </script>
 
 <PageWrapper page="blog-update-blog-post">
-	<AsyncForm redirect="/admin/blog" method="put" buttonText="Guardar cambios">
+	<AsyncForm
+		redirect="/admin/blog"
+		method="put"
+		buttonText="Guardar cambios"
+		updateId={data.post.id}
+	>
 		<BlogUpsert bind:post={data.post} />
 	</AsyncForm>
 </PageWrapper>

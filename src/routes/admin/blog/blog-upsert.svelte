@@ -65,7 +65,7 @@
 
 		<Input
 			label="Fecha de publicacion"
-			name="publishedAt"
+			name="published_at"
 			type="date"
 			value={post.created_at ? post.created_at.toISOString().split('T')[0] : ''}
 			required
@@ -86,20 +86,20 @@
 			label="Estado"
 			name="is_published"
 			options={[
-				{ label: 'Publicado', value: 'true' },
-				{ label: 'Borrador', value: 'false' }
+				{ label: 'Publicado', value: 'published' },
+				{ label: 'Borrador', value: 'draft' }
 			]}
-			value={post.visible ? 'true' : 'false'}
+			value={post.visible ? 'published' : 'draft'}
 		/>
 
 		<RadioList
 			label="¿Borrado automatico?"
 			name="auto_delete"
 			options={[
-				{ label: 'Si', value: 'true' },
-				{ label: 'No', value: 'false' }
+				{ label: 'Si', value: 'active' },
+				{ label: 'No', value: 'inactive' }
 			]}
-			value={post.deletable ? 'true' : 'false'}
+			value={post.deletable ? 'active' : 'inactive'}
 		/>
 	</Box>
 </div>

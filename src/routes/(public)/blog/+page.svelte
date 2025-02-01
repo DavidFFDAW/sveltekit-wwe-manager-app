@@ -2,7 +2,6 @@
 	import { errorimage } from '$lib/actions/error.image';
 	import MainHeader from '$lib/components/headers/main-header.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
-	import { Utils } from '$lib/utils/general.utils';
 
 	export let data = { posts: [] };
 </script>
@@ -23,11 +22,17 @@
 			{#each data.posts.slice(0, 3) as post}
 				<article class="w1 blog-article">
 					<a href="/blog/{post.slug}">
-						<div class="w1 article-content">
-							<img src={post.image} alt={post.title} use:errorimage />
-							<div class="w1 text-content flex column gap-medium astart">
+						<div class="w1 h1 article-content">
+							<header>
+								<img src={post.image} alt={post.title} use:errorimage />
+							</header>
+							<div class="w1 h1 text-content flex column gap-medium astart">
 								<h3>{post.title}</h3>
 								<p>{post.exceptr}</p>
+
+								<footer class="w1 flex end">
+									<p>{post.created_at?.toLocaleDateString()}</p>
+								</footer>
 							</div>
 						</div>
 					</a>
@@ -43,10 +48,16 @@
 				<article class="w1 blog-article">
 					<a href="/blog/{post.slug}" class="w1 block">
 						<div class="w1 article-content">
-							<img src={post.image} alt={post.title} use:errorimage />
+							<header>
+								<img src={post.image} alt={post.title} use:errorimage />
+							</header>
 							<div class="w1 text-content flex column gap-medium astart">
 								<h3>{post.title}</h3>
 								<p>{post.exceptr}</p>
+
+								<footer class="w1 flex end">
+									<p>{post.created_at?.toLocaleDateString()}</p>
+								</footer>
 							</div>
 						</div>
 					</a>
@@ -94,6 +105,10 @@
 		overflow: hidden;
 	}
 
+	article a {
+		display: block;
+		height: 100%;
+	}
 	article .text-content {
 		padding: 1rem;
 		background-color: #fff;

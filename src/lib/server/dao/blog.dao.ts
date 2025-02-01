@@ -13,13 +13,35 @@ export const BlogDao = {
 				created_at: 'desc'
 			},
 			where: {
-				visible: true
+				visible: true,
+				created_at: {
+					lte: new Date()
+				}
 			}
+		});
+	},
+	getReadablePostBySlug: (slug: string) => {
+		return prisma.blogPost.findFirst({
+			where: {
+				slug,
+				visible: true,
+				created_at: {
+					lte: new Date()
+				}
+			},
+			take: 1
 		});
 	},
 
 	createBlogPost: (datas: BlogObject) => {
 		return prisma.blogPost.create({
+			data: datas
+		});
+	},
+
+	updateBlogPost: (uuid: number, datas: BlogObject) => {
+		return prisma.blogPost.update({
+			where: { id: Number(uuid) },
 			data: datas
 		});
 	},
