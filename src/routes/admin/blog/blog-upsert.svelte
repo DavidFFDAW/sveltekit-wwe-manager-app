@@ -9,6 +9,11 @@
 	import type { BlogPost } from '@prisma/client';
 
 	export let post: BlogPost = {} as BlogPost;
+	let slug = post.slug;
+
+	const slugify = (value: string | number) => {
+		slug = Utils.slugify(value.toString());
+	};
 </script>
 
 <div class="grid two-column-grid responsive gap-medium">
@@ -19,6 +24,7 @@
 			type="text"
 			placeholder="Titulo del post"
 			bind:value={post.title}
+			oninput={slugify}
 			required
 		/>
 
@@ -27,7 +33,7 @@
 			name="slug"
 			type="text"
 			placeholder="Slug del post"
-			bind:value={post.slug}
+			bind:value={slug}
 			required
 		/>
 

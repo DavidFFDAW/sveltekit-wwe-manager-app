@@ -1,4 +1,4 @@
-import { get } from 'http';
+import type { BlogObject } from '../interfaces';
 import prisma from '../prisma';
 
 export const BlogDao = {
@@ -15,6 +15,12 @@ export const BlogDao = {
 			where: {
 				visible: true
 			}
+		});
+	},
+
+	createBlogPost: (datas: BlogObject) => {
+		return prisma.blogPost.create({
+			data: datas
 		});
 	},
 

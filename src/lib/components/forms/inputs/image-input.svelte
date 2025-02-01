@@ -42,6 +42,11 @@
 				{placeholder}
 				{required}
 			/>
+			{#if image.toString().length > 255}
+				<p class="error-message">
+					Este valor es demasiado largo. Intenta reducirlo a un máximo de 255 caracteres.
+				</p>
+			{/if}
 		</div>
 		<div class="w1 flex gap-smaller">
 			<Gallery bind:value={image} />
