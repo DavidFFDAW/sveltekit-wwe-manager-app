@@ -18,7 +18,7 @@
 <PageWrapper page="blog">
 	<section class="blog-content flex column gap latest-news">
 		<h2 class="w1 tleft">Ultimas noticias</h2>
-		<div class="w1 flex center astart gap-medium blog-list">
+		<div class="w1 flex center astart gap-medium blog-list responsive">
 			{#each data.posts.slice(0, 3) as post}
 				<article class="w1 blog-article">
 					<a href="/blog/{post.slug}">
@@ -43,7 +43,7 @@
 
 	<section class="blog-content rest-of-news flex column gap astart down">
 		<h2>Otras noticias</h2>
-		<div class="w1 flex center astart gap-medium blog-list">
+		<div class="w1 grid three-column-grid responsive gap-medium blog-list">
 			{#each data.posts.slice(3) as post}
 				<article class="w1 blog-article">
 					<a href="/blog/{post.slug}" class="w1 block">
@@ -121,8 +121,6 @@
 	}
 
 	.blog-content.rest-of-news .blog-list {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
 		gap: 25px;
 	}
 	.blog-content.rest-of-news article img {
