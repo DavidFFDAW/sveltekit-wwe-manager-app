@@ -10,18 +10,22 @@
 	export let oninput: Callback | undefined = undefined;
 	const randomId = Utils.getRandomID(name);
 
-	$: if (oninput) oninput(value);
+	$: if (oninput && value) oninput(value);
 </script>
 
 <div class="form-item">
 	<label
-		class="label form-label {$$restProps.required ? 'required-label' : ''}"
+		class="label flex between form-label {$$restProps.required ? 'required-label' : ''}"
 		for={`${name}-${randomId}`}
 	>
-		{label}
-		{#if $$restProps.required}
-			<span class="required-label">*</span>
-		{/if}
+		<span>
+			{label}
+			{#if $$restProps.required}
+				<span class="required-label">*</span>
+			{/if}
+		</span>
+
+		<small class="sourcesans">{value.toString().length} / {maxLength}</small>
 	</label>
 	<input
 		{type}

@@ -27,11 +27,19 @@
 	/>
 	<div class="w1 flex start column astart gap-smaller">
 		<div class="w1 flex astart column gap-smaller">
-			<label class="label form-label" class:required-label={required} for={`${name}-${randomId}`}
-				>{label}
-				{#if required}
-					<span class="required-label">*</span>
-				{/if}
+			<label
+				class="w1 label form-label flex between"
+				class:required-label={required}
+				for={`${name}-${randomId}`}
+			>
+				<span>
+					{label}
+					{#if required}
+						<span class="required-label">*</span>
+					{/if}
+				</span>
+
+				<small class="sourcesans">{image.toString().length} / 255</small>
 			</label>
 			<input
 				type="text"

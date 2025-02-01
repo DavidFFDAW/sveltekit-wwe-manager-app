@@ -22,7 +22,7 @@
 					[{ header: '1' }, { header: '2' }, { font: [] }],
 					[{ size: [] }],
 					['bold', 'italic', 'underline', 'strike', 'blockquote'],
-					[{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+					[{ list: 'ordered' }, { indent: '-1' }, { indent: '+1' }],
 					['link', 'image', 'video'],
 					['clean']
 				],
@@ -71,5 +71,5 @@
 		<div bind:this={component} id={`${name}-${randomId}`}></div>
 	</div>
 
-	<!-- <input type="hidden" {name} bind:value /> -->
+	<input type="hidden" {name} bind:value required />
 </div>

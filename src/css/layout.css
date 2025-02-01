@@ -241,6 +241,9 @@ body main.app-main-entrypoint .page-wrapper-content {
 body main.app-main-entrypoint-public-page .page-wrapper-content {
 	height: 100%;
 }
+body main.app-main-entrypoint.public-page .page.page-blog-wrapper .page-wrapper-content {
+	padding-top: 0;
+}
 
 body main.app-main-entrypoint.admin-page {
 	height: auto;
@@ -259,7 +262,6 @@ body main.app-main-entrypoint.admin-page {
 /* body main.app-main-entrypoint.admin-page .page-wrapper-content {
 	padding: 0 0;
 } */
-
 
 .onmobile {
 	display: none;
