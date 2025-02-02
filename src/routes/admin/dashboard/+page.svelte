@@ -26,6 +26,15 @@
 					</a>
 				</li>
 				<li class="w1 background">
+					<a href="/admin/championship-reigns">
+						Reinados
+						<img
+							src="https://davidfernandezdeveloper.es/2k/images/gunther.webp"
+							alt="se muestra a Gunther y al pasar por encima se hace más grande saliendo del recuadro"
+						/>
+					</a>
+				</li>
+				<li class="w1 background reverse">
 					<a href="/admin/ppvs">
 						PPVs
 						<img

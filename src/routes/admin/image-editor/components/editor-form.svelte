@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import editorUtils from '../editor.utils';
-	import ResourceSelector from './resource-selector.svelte';
+	import ResourceSelector from '$lib/components/forms/selector/resource-selector.svelte';
 	import Icon from '$lib/components/icons/icon.svelte';
 	export let templateImage = 'https://davidfernandezdeveloper.es/2k/images/cody-rhodes.webp';
 	export let resourceList: { id: number; name: string; image: string }[] = [];
