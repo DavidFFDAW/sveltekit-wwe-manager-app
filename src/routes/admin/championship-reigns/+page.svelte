@@ -42,6 +42,10 @@
 							{/if}
 							<p><strong>Dias: </strong>{reign.days}</p>
 						</div>
+
+						<div class="w1 flex center gap-medium">
+							<a href="/admin/championship-reigns/update/{reign.id}" class="btn cta">Editar</a>
+						</div>
 					</div>
 				</div>
 			{/each}

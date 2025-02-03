@@ -7,6 +7,7 @@
 	export let type: string;
 	export let value: string | number = '';
 	export let maxLength: number = 255;
+	export let options: string[] = [];
 	export let oninput: Callback | undefined = undefined;
 	const randomId = Utils.getRandomID(name);
 
@@ -27,6 +28,14 @@
 
 		<small class="sourcesans">{value.toString().length} / {maxLength}</small>
 	</label>
+	{#if options.length > 0}
+		<datalist id={`$${name}-options`}>
+			{#each options as option}
+				<option value={option}>{option}</option>
+			{/each}
+		</datalist>
+	{/if}
+
 	<input
 		{type}
 		{name}
@@ -34,6 +43,7 @@
 		id={`${name}-${randomId}`}
 		maxlength={maxLength}
 		{...$$restProps}
+		list="${options.length > 0 ? `${name}-options` : ''}"
 	/>
 	{#if value.toString().length > maxLength}
 		<p class="error-message">

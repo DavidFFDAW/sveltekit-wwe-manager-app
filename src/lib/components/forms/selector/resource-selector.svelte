@@ -5,13 +5,14 @@
 	interface Resource {
 		id: number;
 		name: string;
-		image: string;
+		image: string | null;
 		status?: string;
 	}
 	export let list: Resource[] = [];
 
 	let search = '';
-	let selectedItem: number = 0;
+	export let selectedItem: number = 0;
+	export let name: string = '';
 
 	$: results = list.filter((resource) =>
 		resource.name.toLowerCase().includes(search.toLowerCase())
@@ -19,7 +20,7 @@
 	$: selectedName = results.find((resource) => resource.id === selectedItem)?.name;
 </script>
 
-<div class="resource-selector">
+<div class="w1 resource-selector">
 	<div class="search-container">
 		<input type="search" placeholder="Buscar recurso" bind:value={search} />
 	</div>
@@ -38,7 +39,7 @@
 				<label class="w1 block">
 					<input
 						type="radio"
-						name="selected-editor-resource-id"
+						name={name ? `selected-${name}-resource-id` : 'selected-resource-id'}
 						value={resource.id}
 						bind:group={selectedItem}
 					/>
@@ -46,7 +47,9 @@
 						<img src={resource.image} alt={resource.name} class="h1" use:errorimage />
 						<div class="info-block">
 							<span>{resource.name}</span>
-							<p>{resource.status}</p>
+							{#if resource.status}
+								<p>{resource.status}</p>
+							{/if}
 						</div>
 					</div>
 				</label>
@@ -55,7 +58,11 @@
 	</div>
 
 	{#if selectedName}
-		<input type="hidden" name="selected-editor-resource-name" value={selectedName} />
+		<input
+			type="hidden"
+			name={name ? `selected-${name}-resource-name` : 'selected-editor-resource-name'}
+			value={selectedName}
+		/>
 	{/if}
 </div>
 
@@ -91,7 +98,7 @@
 		position: relative;
 		display: block;
 		width: 100%;
-		height: 100px;
+		height: 80px;
 		cursor: pointer;
 		background-color: #e9e9e9;
 		border-radius: 10px;
@@ -117,11 +124,12 @@
 	}
 
 	.resource-item-radio-container input[type='radio'] + .resource-item-radio-inner img {
+		max-width: 85px;
 		background-color: #fff;
 		border-radius: 6px;
 	}
 	.resource-item-radio-container input[type='radio'] + .resource-item-radio-inner span {
-		font-size: 1.2rem;
+		font-size: 15px;
 		text-transform: uppercase;
 		font-weight: 600;
 		/* font-family: 'dreadnotus', sans-serif; */

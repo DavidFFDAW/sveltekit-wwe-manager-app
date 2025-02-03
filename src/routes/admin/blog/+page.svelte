@@ -46,7 +46,7 @@
 		</div>
 	</div>
 
-	<ButtonCreate endpoint="/blog/new" />
+	<ButtonCreate endpoint="/blog/create" />
 </PageWrapper>
 
 <style>
