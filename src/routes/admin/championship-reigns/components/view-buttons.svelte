@@ -51,6 +51,7 @@
 		border-radius: 0;
 		background-color: #ddd;
 		text-align: center;
+		white-space: nowrap;
 	}
 	.team-view-buttons-container label.selected {
 		background-color: var(--sidebar-bg);

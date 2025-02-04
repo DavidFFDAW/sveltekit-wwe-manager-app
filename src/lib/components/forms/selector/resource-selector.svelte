@@ -11,8 +11,10 @@
 	export let list: Resource[] = [];
 
 	let search = '';
-	export let selectedItem: number = 0;
 	export let name: string = '';
+	export let selectedItem: number = 0;
+	export let maxHeight: number = 512;
+	export let afterSelection: (id: number) => void = () => {};
 
 	$: results = list.filter((resource) =>
 		resource.name.toLowerCase().includes(search.toLowerCase())
@@ -26,6 +28,7 @@
 	</div>
 
 	<div
+		style="--maxheight: {maxHeight}px;"
 		class="resource-selector-list-container"
 		class:has-selection={selectedItem !== 0}
 		transition:fade
@@ -42,6 +45,7 @@
 						name={name ? `selected-${name}-resource-id` : 'selected-resource-id'}
 						value={resource.id}
 						bind:group={selectedItem}
+						on:change={() => afterSelection(resource.id)}
 					/>
 					<div class="resource-item-radio-inner h1">
 						<img src={resource.image} alt={resource.name} class="h1" use:errorimage />
@@ -84,7 +88,7 @@
 		display: flex;
 		padding: 5px 10px;
 		flex-direction: column;
-		max-height: 512px;
+		max-height: var(--maxheight);
 		overflow-x: hidden;
 		overflow-y: auto;
 		gap: 10px;

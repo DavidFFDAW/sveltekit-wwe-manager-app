@@ -4,6 +4,7 @@ import { ReignsDao } from '$lib/server/dao/reigns.dao.js';
 import { TeamsDao } from '$lib/server/dao/teams.dao';
 import { WrestlerDao } from '$lib/server/dao/wrestler.dao.js';
 import { Helpers } from '$lib/server/server.helpers.js';
+import fs from 'fs';
 
 export const load = async ({ locals, params }) => {
 	if (!Helpers.hasPermission(locals)) throw Helpers.redirection('/');
@@ -27,11 +28,14 @@ export const actions = {
 			return Helpers.error('No tienes permisos suficientes para realizar esta acción');
 
 		const formData = await request.formData();
-		console.log({
+		const debugObj = {
 			...Object.fromEntries(formData.entries()),
 			date_won: new Date(formData.get('won_date') as string),
-			date_lost: formData.get('lost_date') ? new Date(formData.get('lost_date') as string) : null
-		});
+			date_lost: formData.get('lost_date') ? new Date(formData.get('lost_date') as string) : null,
+			members: formData.getAll('team-members[]')
+		};
+		console.log(debugObj);
+		// fs.writeFileSync('./src/logs/update-reigns.json', JSON.stringify(debugObj, null, 4));
 
 		const reignID = Helpers.getUpdateID(formData);
 		if (!reignID || isNaN(reignID))

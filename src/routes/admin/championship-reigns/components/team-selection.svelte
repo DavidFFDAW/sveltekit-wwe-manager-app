@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { errorimage } from '$lib/actions/error.image';
-	import { tick } from 'svelte';
+	import type { UpsertReignTeams } from '../interfaces/reigns.interfaces';
 
 	type Team = {
 		id: number;
@@ -10,9 +10,11 @@
 	};
 
 	let search: string = '';
-	export let selectedTeam: number = 0;
 	export let teams: Team[] = [];
-	let selectedTeamMembers: number[] = [];
+	export let selectedTeam: number = 0;
+	export let selectedTeamMembers: number[] = [];
+	let teamMembers: UpsertReignTeams['members'] = [];
+
 	$: teamMembers = teams.find((team) => team.id === selectedTeam)?.members ?? [];
 	$: filteredTeams = teams.filter(
 		(team) =>
@@ -20,29 +22,19 @@
 			team.name.toLowerCase().includes(search.toLowerCase())
 	);
 
-	const handleTeamMembersSelection = async (event: Event) => {
-		event.preventDefault();
-		const target = event.target as HTMLInputElement;
-		const value = Number(target.value);
+	const handleTeamMembersSelection = (memberId: number) => () => {
+		if (!memberId) return;
 
-		if (target.checked) {
-			console.log('esta checked');
-
-			if (selectedTeamMembers.length >= 1) {
-				console.log('Ya hay dos miembros seleccionados', selectedTeamMembers);
-				selectedTeamMembers = selectedTeamMembers.slice(1);
-			} else {
-				console.log('Agregando miembro al equipo', selectedTeamMembers);
-				selectedTeamMembers = [...selectedTeamMembers, value];
-			}
-		} else {
-			console.log('no esta checked');
-
-			console.log('Quitando miembro del equipo');
-			selectedTeamMembers = selectedTeamMembers.filter((member) => member !== value);
+		if (selectedTeamMembers.includes(memberId)) {
+			selectedTeamMembers = selectedTeamMembers.filter((id) => id !== memberId);
+			return;
 		}
-
-		await tick();
+		if (selectedTeamMembers.length >= 2) {
+			selectedTeamMembers = [...selectedTeamMembers.slice(1), memberId];
+			return;
+		} else {
+			selectedTeamMembers = [...selectedTeamMembers, memberId];
+		}
 	};
 </script>
 
@@ -79,22 +71,25 @@
 	{#if teamMembers.length > 2}
 		<div class="team-two-members-selection">
 			<h4 class="w1 tcenter">Selecciona a los campeones</h4>
+			<div class="flex">
+				{#each selectedTeamMembers as member}
+					<p>{member}</p>
+				{/each}
+			</div>
 			<div class="w1 team-two-members-selection-wrapper down">
 				{#each teamMembers as member}
-					<label class="relative">
-						<input
-							type="checkbox"
-							class="app-checkbox"
-							name="selected-team-members"
-							value={member.id}
-							on:change={handleTeamMembersSelection}
-							checked={selectedTeamMembers.includes(member.id)}
-						/>
-						<div class="inner">
-							<img class="image" src={member.image} alt={member.name} use:errorimage />
-							<span>{member.name}</span>
-						</div>
-					</label>
+					<div
+						role="presentation"
+						class="app-button flex gap-smaller"
+						on:click={handleTeamMembersSelection(member.id)}
+						class:selected={selectedTeamMembers.includes(member.id)}
+						data-this-id={member.id}
+						data-team-id={selectedTeam}
+						data-selectedMembers={selectedTeamMembers.join(',')}
+					>
+						<img class="image" src={member.image} alt={member.name} use:errorimage />
+						<span>{member.name}</span>
+					</div>
 				{/each}
 			</div>
 		</div>
@@ -102,10 +97,11 @@
 
 	{#if selectedTeamMembers.length > 0}
 		{#each selectedTeamMembers as member}
-			<p>{member}</p>
+			<input type="hidden" name="team-members[]" bind:value={member} />
 		{/each}
 
-		<input type="hidden" name="team-members[]" bind:value={selectedTeamMembers} />
+		<input type="hidden" name="team-id" bind:value={selectedTeam} />
+		<input type="hidden" name="team-memmememm" bind:value={selectedTeamMembers} />
 		<input type="hidden" name="team-wrestler-champion" bind:value={selectedTeamMembers[0]} />
 		<input type="hidden" name="team-wrestler-partner" bind:value={selectedTeamMembers[1]} />
 	{/if}
@@ -161,35 +157,33 @@
 		grid-gap: 10px;
 	}
 
-	.team-two-members-selection-wrapper label {
-		height: 100%;
-	}
-	.team-two-members-selection-wrapper label .inner {
-		width: 100%;
-		flex: 0 0 auto;
+	.team-two-members-selection-wrapper .app-button {
 		display: flex;
-		flex-direction: column;
-		align-items: center;
-		border-radius: 10px;
+		padding: 10px;
+		border-radius: 6px;
+		background-color: #eee;
+		overflow: hidden;
+		cursor: pointer;
 	}
 
-	.team-two-members-selection-wrapper label .inner img {
-		width: 100px;
-		height: 100px;
+	.team-two-members-selection-wrapper .app-button img.image {
+		width: 45px;
+		height: auto;
 		object-fit: cover;
-		border-radius: 10px;
+		border-radius: 6px;
 	}
 
-	.team-two-members-selection-wrapper label .inner span {
-		text-align: center;
-		padding: 0 15px;
-	}
-
-	.team-two-members-selection-wrapper label input[type='checkbox']:checked + .inner {
+	.team-two-members-selection-wrapper .app-button.selected {
 		border: 2px solid var(--blue);
-		color: var(--blue);
 	}
 
+	@media screen and (max-width: 960px) {
+		.team-two-members-selection-wrapper {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			grid-gap: 10px;
+		}
+	}
 	@media screen and (max-width: 768px) {
 		.team-two-members-selection-wrapper {
 			display: grid;

@@ -46,6 +46,7 @@ i.customs-icons.app-bootstrap-custom-icon.bi.bi-twitter {
 .panel .box-content {
 	padding: 15px 0;
 	padding-top: 20px;
+	height: 100%;
 }
 
 .box .title-block .box-title,
