@@ -2,7 +2,7 @@
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import type { Championship, ChampionshipReign, Wrestler } from '@prisma/client';
-	import UpsertReigns from '../../upsert-reigns.svelte';
+	import UpsertReigns from '../../components/upsert-reigns.svelte';
 
 	export let data = {
 		reign: {} as any,
@@ -14,7 +14,7 @@
 </script>
 
 <PageWrapper page="admin-championship-reigns-update-page">
-	<h1>Administrar reinados de campeonato</h1>
+	<h1 class="none">Administrar reinados de campeonato</h1>
 
 	{#if data.reign}
 		<AsyncForm

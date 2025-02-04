@@ -112,6 +112,7 @@ select {
 	outline: none;
 }
 
+input[type="checkbox"].app-checkbox,
 input[type="radio"].app-radio,
 input[type="file"].app-file {
 	position: absolute;

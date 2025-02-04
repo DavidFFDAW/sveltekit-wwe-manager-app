@@ -12,6 +12,7 @@
 	const randomId = Utils.getRandomID(name);
 
 	$: if (oninput && value) oninput(value);
+	$: valueLength = value ? value.toString().length : 0;
 </script>
 
 <div class="form-item">
@@ -26,7 +27,7 @@
 			{/if}
 		</span>
 
-		<small class="sourcesans">{value.toString().length} / {maxLength}</small>
+		<small class="sourcesans">{valueLength || 0} / {maxLength}</small>
 	</label>
 	{#if options.length > 0}
 		<datalist id={`$${name}-options`}>
@@ -45,7 +46,7 @@
 		{...$$restProps}
 		list="${options.length > 0 ? `${name}-options` : ''}"
 	/>
-	{#if value.toString().length > maxLength}
+	{#if valueLength > maxLength}
 		<p class="error-message">
 			Este valor es demasiado largo. Intenta reducirlo a un máximo de {maxLength} caracteres.
 		</p>

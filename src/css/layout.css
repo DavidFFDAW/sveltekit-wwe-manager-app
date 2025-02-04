@@ -44,6 +44,10 @@
 	display: block;
 }
 
+.none {
+	display: none;
+}
+
 .relative {
 	position: relative;
 }
@@ -241,6 +245,7 @@ body main.app-main-entrypoint .page-wrapper-content {
 body main.app-main-entrypoint-public-page .page-wrapper-content {
 	height: 100%;
 }
+
 body main.app-main-entrypoint.public-page .page.page-blog-wrapper .page-wrapper-content {
 	padding-top: 0;
 }

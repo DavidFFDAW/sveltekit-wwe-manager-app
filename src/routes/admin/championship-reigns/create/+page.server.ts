@@ -1,19 +1,15 @@
 import { ChampionshipDao } from '$lib/server/dao/championship.dao.js';
 import { PPVDao } from '$lib/server/dao/ppv.dao.js';
-import { ReignsDao } from '$lib/server/dao/reigns.dao.js';
 import { TeamsDao } from '$lib/server/dao/teams.dao';
 import { WrestlerDao } from '$lib/server/dao/wrestler.dao.js';
 import { Helpers } from '$lib/server/server.helpers.js';
 
-export const load = async ({ locals, params }) => {
+export const load = async ({ locals }) => {
 	if (!Helpers.hasPermission(locals)) throw Helpers.redirection('/');
-	const searchID = params.id;
-	if (!searchID || isNaN(Number(searchID))) throw Helpers.redirection('/admin/championship-reigns');
 
 	return {
 		ppvs: await PPVDao.getPPVNames(),
 		teams: await TeamsDao.getReignSelectableTeams(),
-		reign: await ReignsDao.getChampionshipReignByID(Number(searchID)),
 		wrestlers: await WrestlerDao.getReignSelectableWrestlers(),
 		championships: await ChampionshipDao.getChampionships({
 			select: { id: true, name: true, image: true, gender: true, tag: true }
