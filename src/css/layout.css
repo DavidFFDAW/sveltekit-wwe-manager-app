@@ -2,6 +2,14 @@
 	width: 100%;
 }
 
+.mxw1 {
+	max-width: 100%;
+}
+
+.wvh {
+	width: 100vh;
+}
+
 .h1 {
 	height: 100%;
 }
@@ -119,6 +127,10 @@
 
 .flex.nowrap {
 	flex-wrap: nowrap;
+}
+
+.flex.noalign {
+	align-items: unset;
 }
 
 .flex.acenter {

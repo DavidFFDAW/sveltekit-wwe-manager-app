@@ -2,6 +2,7 @@
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import UpsertReigns from '../components/upsert-reigns.svelte';
+	import type { UpserReignWrestler } from '../interfaces/reigns.interfaces';
 
 	export let data = {
 		wrestlers: [],
@@ -21,8 +22,9 @@
 				id: wrestler.id,
 				name: wrestler.name,
 				image: wrestler.image_name,
-				gender: wrestler.sex
-			})) as { id: number; name: string; image: string; gender: string }[]}
+				gender: wrestler.sex,
+				status: wrestler.status
+			})) as UpserReignWrestler[]}
 			championships={data.championships as {
 				id: number;
 				name: string;

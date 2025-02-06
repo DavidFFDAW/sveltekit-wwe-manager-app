@@ -21,6 +21,7 @@ export interface UpserReignWrestler {
 	name: string;
 	image: string;
 	gender: string;
+	status?: string;
 }
 
 export interface UpsertReignsTeamMember {

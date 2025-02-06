@@ -11,8 +11,9 @@
 	import TeamSelection from './team-selection.svelte';
 	import ViewButtons from './view-buttons.svelte';
 	import { errorimage } from '$lib/actions/error.image';
-	import { scrollToBottom, scrollToElement } from '$lib/utils/dom.utils';
+	import { scrollToElement } from '$lib/utils/dom.utils';
 	import Icon from '$lib/components/icons/icon.svelte';
+	import TeamSingleSelector from '$lib/components/forms/selector/team-single-selector.svelte';
 
 	export let reign: UpsertReign = {} as UpsertReign;
 	export let championships: UpserReignChampionship[] = [];
@@ -45,6 +46,8 @@
 
 	<div class="w1 championship-reign-upsert-component grid grid-two-column gap-medium responsive">
 		<!-- abstract page parts into components, please -->
+		<input type="hidden" name="reign_type" bind:value={view} />
+
 		{#if view === 'single'}
 			<Box icon="info-circle" title="Titulo">
 				{#if isUpdate}
@@ -140,25 +143,74 @@
 			</Box>
 		{/if}
 
+		{#if view === 'no-team'}
+			<Box icon="info-circle" title="Titulo">
+				{#if isUpdate}
+					<div class="championship-selected">
+						<img src={reign.Championship.image} alt={reign.Championship.name} use:errorimage />
+						<p class="w1 tcenter">{reign.Championship.name}</p>
+					</div>
+				{:else}
+					<ResourceSelector
+						list={championships.filter((championship) => championship.tag)}
+						bind:selectedItem={selectedChampionshipID}
+						name="championship-reign"
+						maxHeight={350}
+					/>
+					<div class="w1 flex end">
+						<button
+							type="button"
+							class="btn cta navigation-button"
+							on:click={() => scrollToElement('.navigate-to-teams')}
+						>
+							<Icon icon="arrow-down" />
+							Seleccionar equipo
+						</button>
+					</div>
+				{/if}
+			</Box>
+
+			<Box icon="info-circle" title="Miembros" classes="navigate-to-teams">
+				<TeamSingleSelector
+					maxMembers={2}
+					hasExtraFilters={true}
+					list={selectedChampionship
+						? wrestlers.filter((wrestler) => wrestler.gender === selectedChampionship.gender)
+						: wrestlers}
+				/>
+
+				<div class="w1 flex end">
+					<button
+						type="button"
+						class="btn cta navigation-button"
+						on:click={() => scrollToElement('#common-reign-data')}
+					>
+						<Icon icon="arrow-down" />
+						Datos comunes
+					</button>
+				</div>
+			</Box>
+		{/if}
+
 		<div class="common-reign-data-container grid-span-column" id="common-reign-data">
 			<Box icon="info-circle" title="Datos comunes">
 				<div class="w1 flex start gap-small responsive">
 					<Input
-						label="Fecha inicio"
+						label="Fecha victoria"
 						type="date"
 						placeholder="Fecha de inicio"
 						name="won_date"
 						value={reign.won_date?.toISOString().split('T')[0]}
 					/>
 					<Input
-						label="Fecha fin"
+						label="Fecha derrota"
 						type="date"
 						placeholder="Fecha de fin"
 						name="lost_date"
 						value={reign.lost_date?.toISOString().split('T')[0] ?? ''}
 					/>
 					<Input
-						label="Días"
+						label="Dias"
 						name="days"
 						type="number"
 						placeholder="Días de reinado"
@@ -166,9 +218,9 @@
 					/>
 				</div>
 
-				<div class="w1 flex start ga-small responsive">
+				<div class="w1 flex start gap-small responsive">
 					<Input
-						label="Evento"
+						label="Show o PPV"
 						name="show_won"
 						type="text"
 						placeholder="Evento en el que se ganó"

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { errorimage } from '$lib/actions/error.image.js';
+	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 
 	export let data = { reigns: [] };
@@ -51,4 +52,6 @@
 			{/each}
 		</div>
 	</section>
+
+	<ButtonCreate endpoint="/championship-reigns/create" />
 </PageWrapper>

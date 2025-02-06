@@ -40,6 +40,7 @@ i.customs-icons.app-bootstrap-custom-icon.bi.bi-twitter {
 	background-color: #fff;
 	border-radius: 10px;
 	box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+	overflow: hidden;
 }
 
 .box .box-content,
@@ -47,6 +48,7 @@ i.customs-icons.app-bootstrap-custom-icon.bi.bi-twitter {
 	padding: 15px 0;
 	padding-top: 20px;
 	height: 100%;
+	overflow: hidden;
 }
 
 .box .title-block .box-title,

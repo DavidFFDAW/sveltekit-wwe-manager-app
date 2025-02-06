@@ -1,3 +1,4 @@
+import { ReignsAdapter } from '$lib/server/adapters/reigns.adapter.js';
 import { ChampionshipDao } from '$lib/server/dao/championship.dao.js';
 import { PPVDao } from '$lib/server/dao/ppv.dao.js';
 import { ReignsDao } from '$lib/server/dao/reigns.dao.js';
@@ -28,14 +29,8 @@ export const actions = {
 			return Helpers.error('No tienes permisos suficientes para realizar esta acción');
 
 		const formData = await request.formData();
-		const debugObj = {
-			...Object.fromEntries(formData.entries()),
-			date_won: new Date(formData.get('won_date') as string),
-			date_lost: formData.get('lost_date') ? new Date(formData.get('lost_date') as string) : null,
-			members: formData.getAll('team-members[]')
-		};
-		console.log(debugObj);
-		// fs.writeFileSync('./src/logs/update-reigns.json', JSON.stringify(debugObj, null, 4));
+		const datas = ReignsAdapter.getCommonDatas(formData);
+		fs.writeFileSync('./src/logs/update-reigns.json', JSON.stringify(datas, null, 4));
 
 		const reignID = Helpers.getUpdateID(formData);
 		if (!reignID || isNaN(reignID))
