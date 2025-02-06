@@ -30,7 +30,7 @@ export const actions = {
 
 		const formData = await request.formData();
 		const datas = ReignsAdapter.getCommonDatas(formData);
-		fs.writeFileSync('./src/logs/update-reigns.json', JSON.stringify(datas, null, 4));
+		fs.writeFileSync('./src/logs/update-reign-fields.json', JSON.stringify(datas, null, 4));
 
 		const reignID = Helpers.getUpdateID(formData);
 		if (!reignID || isNaN(reignID))

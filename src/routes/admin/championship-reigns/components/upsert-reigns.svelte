@@ -14,6 +14,7 @@
 	import { scrollToElement } from '$lib/utils/dom.utils';
 	import Icon from '$lib/components/icons/icon.svelte';
 	import TeamSingleSelector from '$lib/components/forms/selector/team-single-selector.svelte';
+	import UpsertCommonDatas from './upsert-common-datas.svelte';
 
 	export let reign: UpsertReign = {} as UpsertReign;
 	export let championships: UpserReignChampionship[] = [];
@@ -46,7 +47,6 @@
 
 	<div class="w1 championship-reign-upsert-component grid grid-two-column gap-medium responsive">
 		<!-- abstract page parts into components, please -->
-		<input type="hidden" name="reign_type" bind:value={view} />
 
 		{#if view === 'single'}
 			<Box icon="info-circle" title="Titulo">
@@ -192,52 +192,7 @@
 			</Box>
 		{/if}
 
-		<div class="common-reign-data-container grid-span-column" id="common-reign-data">
-			<Box icon="info-circle" title="Datos comunes">
-				<div class="w1 flex start gap-small responsive">
-					<Input
-						label="Fecha victoria"
-						type="date"
-						placeholder="Fecha de inicio"
-						name="won_date"
-						value={reign.won_date?.toISOString().split('T')[0]}
-					/>
-					<Input
-						label="Fecha derrota"
-						type="date"
-						placeholder="Fecha de fin"
-						name="lost_date"
-						value={reign.lost_date?.toISOString().split('T')[0] ?? ''}
-					/>
-					<Input
-						label="Dias"
-						name="days"
-						type="number"
-						placeholder="Días de reinado"
-						bind:value={reign.days}
-					/>
-				</div>
-
-				<div class="w1 flex start gap-small responsive">
-					<Input
-						label="Show o PPV"
-						name="show_won"
-						type="text"
-						placeholder="Evento en el que se ganó"
-						bind:value={reign.ppv_won as string}
-						options={['RAW', 'Smackdown', 'AWL', 'Saturday Night Main Event', ...ppvs]}
-					/>
-					<Input
-						label="Forma de victoria"
-						name="victory_way"
-						type="text"
-						placeholder="Forma de victoria"
-						bind:value={reign.victory_way as string}
-						options={['Pinfall', 'Submission', 'Countout', 'Disqualification', 'Cash-in', 'Otro']}
-					/>
-				</div>
-			</Box>
-		</div>
+		<UpsertCommonDatas {reign} {ppvs} {isUpdate} />
 	</div>
 </div>
 
@@ -251,15 +206,5 @@
 	}
 	.championship-selected img {
 		max-width: 200px;
-	}
-
-	.grid-span-column {
-		grid-column: span 2;
-	}
-
-	@media screen and (max-width: 768px) {
-		.grid-span-column {
-			grid-column: span 1;
-		}
 	}
 </style>

@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { fade } from 'svelte/transition';
+	import { fade, slide } from 'svelte/transition';
 	import { errorimage } from '$lib/actions/error.image';
+	import Icon from '$lib/components/icons/icon.svelte';
 
 	interface Resource {
 		id: number;
@@ -10,21 +11,51 @@
 	}
 	export let list: Resource[] = [];
 
-	let search = '';
+	let search: string = '';
+	let firstLetter: string = '';
 	export let name: string = '';
 	export let selectedItem: number = 0;
 	export let maxHeight: number = 512;
 	export let afterSelection: (id: number) => void = () => {};
 
-	$: results = list.filter((resource) =>
-		resource.name.toLowerCase().includes(search.toLowerCase())
-	);
+	$: results = list
+		.filter((resource) => resource.name.toLowerCase().includes(search.toLowerCase()))
+		.filter((resource) => resource.name.toLowerCase().startsWith(firstLetter.toLowerCase()));
 	$: selectedName = results.find((resource) => resource.id === selectedItem)?.name;
+
+	const backspace = () => {
+		search = search.slice(0, -1);
+	};
+	const reset = () => {
+		search = '';
+		firstLetter = '';
+	};
 </script>
 
 <div class="w1 resource-selector">
-	<div class="search-container">
-		<input type="search" placeholder="Buscar recurso" bind:value={search} />
+	<div class="search-container flex column gap-5">
+		<div class="w1 flex">
+			<input type="search" placeholder="Buscar recurso" bind:value={search} />
+			<button type="button" class="backspace small" on:click={backspace}>
+				<Icon icon="backspace" />
+			</button>
+			<button type="button" on:click={reset} class="small">
+				<Icon icon="x" />
+			</button>
+		</div>
+		<div class="w1 overflow-horizontal">
+			<div class="w1 flex letters-container">
+				{#each 'abcdefghijklmnopqrstuvwxyz'.split('') as letter}
+					<button
+						type="button"
+						on:click={() => (firstLetter = letter)}
+						class="uppercase letter-btn small"
+					>
+						{letter}
+					</button>
+				{/each}
+			</div>
+		</div>
 	</div>
 
 	<div
@@ -78,6 +109,18 @@
 		padding: 10px 0;
 		border-radius: 6px;
 		gap: 10px;
+	}
+
+	button.small {
+		padding: 5px 6px;
+		border-radius: 2px;
+	}
+	.letters-container {
+		padding: 6px 0;
+	}
+	button.letter-btn.small {
+		padding: 5px 8px;
+		border-radius: 2px;
 	}
 
 	.resource-selector .search-container {
