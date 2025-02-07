@@ -22,6 +22,16 @@
 		/>
 
 		<Input
+			label="Slug"
+			name="slug"
+			type="text"
+			placeholder="Slug del luchador"
+			value={wrestler.slug}
+			maxLength={200}
+			required
+		/>
+
+		<Input
 			label="Alias"
 			name="alias"
 			type="text"
