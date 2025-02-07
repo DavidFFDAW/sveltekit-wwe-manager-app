@@ -65,6 +65,12 @@
 
 	<Box title="Datos de estados" icon="file-bar-graph">
 		<RadioList
+			label="Estado de kayfabe"
+			name="kayfabe_status"
+			options={WrestlerConstants.kayfabeStatuses}
+			bind:value={wrestler.kayfabe_status as string}
+		/>
+		<RadioList
 			label="Estado"
 			name="status"
 			options={WrestlerConstants.statuses}
