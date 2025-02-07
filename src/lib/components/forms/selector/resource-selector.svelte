@@ -11,31 +11,41 @@
 	}
 	export let list: Resource[] = [];
 
-	let search: string = '';
-	let firstLetter: string = '';
+	let filters: Record<string, string> = {
+		search: '',
+		firstLetter: '',
+		status: ''
+	};
+
 	export let name: string = '';
 	export let selectedItem: number = 0;
 	export let maxHeight: number = 512;
 	export let afterSelection: (id: number) => void = () => {};
+	const differentStatuses = [...new Set(list.map((resource) => resource.status))].sort();
+	console.log(differentStatuses);
 
 	$: results = list
-		.filter((resource) => resource.name.toLowerCase().includes(search.toLowerCase()))
-		.filter((resource) => resource.name.toLowerCase().startsWith(firstLetter.toLowerCase()));
+		.filter((resource) => resource.status?.toLowerCase().includes(filters.status.toLowerCase()))
+		.filter((resource) => resource.name.toLowerCase().includes(filters.search.toLowerCase()))
+		.filter((resource) =>
+			resource.name.toLowerCase().startsWith(filters.firstLetter.toLowerCase())
+		);
 	$: selectedName = results.find((resource) => resource.id === selectedItem)?.name;
 
 	const backspace = () => {
-		search = search.slice(0, -1);
+		filters.search = filters.search.slice(0, -1);
 	};
 	const reset = () => {
-		search = '';
-		firstLetter = '';
+		filters.search = '';
+		filters.firstLetter = '';
+		filters.status = '';
 	};
 </script>
 
 <div class="w1 resource-selector">
 	<div class="search-container flex column gap-5">
 		<div class="w1 flex">
-			<input type="search" placeholder="Buscar recurso" bind:value={search} />
+			<input type="search" placeholder="Buscar recurso" bind:value={filters.search} />
 			<button type="button" class="backspace small" on:click={backspace}>
 				<Icon icon="backspace" />
 			</button>
@@ -43,18 +53,34 @@
 				<Icon icon="x" />
 			</button>
 		</div>
-		<div class="w1 overflow-horizontal">
-			<div class="w1 flex letters-container">
+		<div class="w1 extra-filters">
+			<div class="w1 flex letters-container overflow-horizontal">
 				{#each 'abcdefghijklmnopqrstuvwxyz'.split('') as letter}
 					<button
 						type="button"
-						on:click={() => (firstLetter = letter)}
+						on:click={() => (filters.firstLetter = letter)}
 						class="uppercase letter-btn small"
+						class:active={filters.firstLetter === letter}
 					>
 						{letter}
 					</button>
 				{/each}
 			</div>
+
+			{#if differentStatuses.length > 1}
+				<div class="w1 flex statuses-container overflow-horizontal">
+					{#each differentStatuses as status}
+						<button
+							type="button"
+							on:click={() => (filters.status = status || '')}
+							class="uppercase letter-btn small"
+							class:active={filters.status === status}
+						>
+							{status}
+						</button>
+					{/each}
+				</div>
+			{/if}
 		</div>
 	</div>
 
@@ -102,6 +128,15 @@
 </div>
 
 <style>
+	.extra-filters .statuses-container {
+		display: flex;
+		justify-content: space-between;
+		gap: 10px;
+	}
+	.extra-filters .statuses-container button {
+		width: 100%;
+		min-width: 100px;
+	}
 	.resource-selector {
 		display: flex;
 		flex-direction: column;
@@ -115,12 +150,19 @@
 		padding: 5px 6px;
 		border-radius: 2px;
 	}
+	button.small.active {
+		background-color: var(--blue);
+		color: #fff;
+	}
 	.letters-container {
 		padding: 6px 0;
 	}
 	button.letter-btn.small {
 		padding: 5px 8px;
 		border-radius: 2px;
+	}
+	.letters-container button {
+		width: 100%;
 	}
 
 	.resource-selector .search-container {
