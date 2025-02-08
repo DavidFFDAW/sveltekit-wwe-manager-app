@@ -121,7 +121,7 @@
 	{#if selectedName}
 		<input
 			type="hidden"
-			name={name ? `selected-${name}-resource-name` : 'selected-editor-resource-name'}
+			name={name ? `selected-${name}-resource-name` : 'selected-resource-name'}
 			value={selectedName}
 		/>
 	{/if}
