@@ -1,6 +1,6 @@
 export const Utils = {
 	slugify: (text: string) => {
-		return text
+		const temporalText = text
 			.trim()
 			.toLowerCase()
 			.replace(/ /g, '-')
@@ -32,6 +32,9 @@ export const Utils = {
 			.replace(/[^a-z0-9-]/g, '')
 			.replace(/-+/g, '-')
 			.replace(/[()$?&`'"=!¿¡]/gi, '');
+
+		// get rid of the initial `the` from the slug
+		return temporalText.startsWith('the-') ? temporalText.replace('the-', '') : temporalText;
 	},
 	readFile: (file: File): Promise<string> => {
 		return new Promise((resolve, reject) => {
