@@ -22,7 +22,6 @@
 	export let maxHeight: number = 512;
 	export let afterSelection: (id: number) => void = () => {};
 	const differentStatuses = [...new Set(list.map((resource) => resource.status))].sort();
-	console.log(differentStatuses);
 
 	$: results = list
 		.filter((resource) => resource.status?.toLowerCase().includes(filters.status.toLowerCase()))
