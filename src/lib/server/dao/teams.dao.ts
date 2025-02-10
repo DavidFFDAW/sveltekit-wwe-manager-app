@@ -35,4 +35,11 @@ export const TeamsDao = {
             };
         });
     },
+
+    bulkUpdateGender: (gender: string, idList: number[]) => {
+        return prisma.team.updateMany({
+            where: { id: { in: idList } },
+            data: { gender },
+        });
+    },
 };
