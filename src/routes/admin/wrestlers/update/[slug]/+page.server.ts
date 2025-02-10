@@ -5,11 +5,11 @@ import { redirect } from '@sveltejs/kit';
 
 export const load = async ({ params }) => {
     const { slug } = params;
-    if (!slug || isNaN(Number(slug))) throw redirect(302, '/admin/wrestlers');
+    if (!slug) throw redirect(302, '/admin/wrestlers');
 
-    const wrestler = await prisma.wrestler.findUnique({
-        where: { id: Number(slug) },
-    });
+    const wrestler = isNaN(Number(slug))
+        ? await WrestlerDao.getWrestlerBySlug(slug)
+        : await WrestlerDao.getWrestlerById(Number(slug));
 
     return { wrestler, slug };
 };

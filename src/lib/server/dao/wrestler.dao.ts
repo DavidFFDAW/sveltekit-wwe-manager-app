@@ -28,6 +28,18 @@ export const WrestlerDao = {
         return prisma.wrestler.findMany(config);
     },
 
+    getWrestlerById(id: number) {
+        return prisma.wrestler.findUnique({
+            where: { id },
+        });
+    },
+
+    getWrestlerBySlug(slug: string) {
+        return prisma.wrestler.findUnique({
+            where: { slug },
+        });
+    },
+
     getReignSelectableWrestlers() {
         return prisma.wrestler.findMany({
             where: {
