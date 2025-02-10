@@ -161,7 +161,7 @@ model Team {
     name              String              @db.VarChar(125)
     slug              String              @db.VarChar(125)
     average           Int?                @db.Int
-    gender            String              @default("m") @db.VarChar(2)
+    gender            String              @default("m") @db.VarChar(1)
     brand             String              @db.VarChar(10)
     created_at        DateTime?           @default(now())
     updated_at        DateTime?           @updatedAt
