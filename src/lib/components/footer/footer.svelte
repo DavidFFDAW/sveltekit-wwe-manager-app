@@ -1,3 +1,7 @@
+<script>
+	import { FooterLinks } from './footer.links';
+</script>
+
 <footer class="w1 footer public-footer footer-block flex start gap-small acenter responsive">
 	<div class="footer-image-block">
 		<a href="/"><img width="144" height="144" src="/icons/versatile.png" alt="logo" /></a>
@@ -38,13 +42,11 @@
 		<div class="footer-content-item footer-item">
 			<p class="footer-title">Páginas relevantes</p>
 			<ul class="footer-pages-list list-style-none">
-				<li class="footer-list-item">
-					<a class="footer-link" href="/roster">Roster</a>
-				</li>
-				<li class="footer-list-item">
-					<!-- <a class="footer-link" href="/pages/ranking">Ranking</a> -->
-					<a class="footer-link" href="/champions">Campeones</a>
-				</li>
+				{#each FooterLinks.RELEVANT as link}
+					<li class="footer-list-item">
+						<a class="footer-link" href={link.href}>{link.text}</a>
+					</li>
+				{/each}
 				<!-- <li class="footer-list-item">
 					<a class="footer-link" href="/pages/historic">Histórico de campeones</a>
 				</li> -->

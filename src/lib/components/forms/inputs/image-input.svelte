@@ -62,3 +62,15 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	@media only screen and (max-width: 768px) {
+		.form-item.form-item-horizontal.form-item-image {
+			align-items: flex-start;
+		}
+		.form-item.form-item-horizontal.form-item-image > img {
+			width: 80px;
+			height: 80px;
+		}
+	}
+</style>

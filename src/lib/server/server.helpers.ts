@@ -45,5 +45,9 @@ export const Helpers = {
 	},
 	getUpdateID: (data: FormData) => {
 		return Number(data.get('_update_id'));
+	},
+	getToggleInput: (form: FormData, field: string): boolean => {
+		if (form.has(field)) return form.get(field) === 'on';
+		return false;
 	}
 };

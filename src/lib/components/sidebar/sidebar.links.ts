@@ -24,6 +24,12 @@ export const SidebarLinks = [
 		equals: false
 	},
 	{
+		url: '/admin/users',
+		label: 'Users',
+		icon: 'persons',
+		equals: false
+	},
+	{
 		url: '/admin/ppvs',
 		label: 'PPVs',
 		icon: 'calendar',
