@@ -1,6 +1,7 @@
 @import './resets.css';
 @import './layout.css';
 @import './typography.css';
+@import './roster.css';
 
 :root {
 	--sidebar-width: 250px;

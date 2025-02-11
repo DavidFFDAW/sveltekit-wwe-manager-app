@@ -52,5 +52,23 @@ export const Utils = {
 	getRandomID: (name: string): string => {
 		if (!name) return Math.random().toString(36).substring(7);
 		return `${name}-${Math.random().toString(36).substring(7)}`;
+	},
+	getDaysAndMonths: (days: number): string => {
+		const months = Math.floor(days / 30);
+
+		if (days >= 365) {
+			const years = Math.floor(days / 365);
+			const months = Math.floor((days - years * 365) / 30);
+			const yeardays = Math.abs(days - years * 365 - months * 30);
+
+			if (months === 0) return `${years} años y ${yeardays} días`;
+			return `${years} años, ${months} meses y ${yeardays} días`;
+		}
+
+		if (months === 0) {
+			return `${days} días`;
+		}
+
+		return `${months} meses y ${Math.abs(days - months * 30)} días`;
 	}
 };
