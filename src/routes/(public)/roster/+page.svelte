@@ -1,39 +1,26 @@
 <script>
+	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
+	import RosterCard from '$lib/components/visual/roster-card.svelte';
+
 	export let data = { wrestlers: [] };
 </script>
 
-<div class="wrestlers-list">
-	{#each data.wrestlers as wrestler}
-		<div class="single-wrestler">
-			<img src={wrestler.image_name} alt={wrestler.name} />
-			<h3>{wrestler.name}</h3>
-		</div>
-	{/each}
-</div>
+<PageWrapper page="roster-page">
+	<div class="w1 flex column astart">
+		<h1>Roster</h1>
 
-<form action="" method="get">
-	<input type="text" name="search" placeholder="Search" />
+		<form action="" method="get" class="w1 flex start gap-smaller">
+			<input type="text" name="search" placeholder="Search" />
 
-	<button type="submit">Search</button>
-</form>
+			<button type="submit">Search</button>
+		</form>
+	</div>
 
-<style>
-	.wrestlers-list {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-		gap: 20px;
-	}
-
-	.single-wrestler {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 10px;
-	}
-
-	.single-wrestler img {
-		max-width: 100%;
-		height: auto;
-		object-fit: cover;
-	}
-</style>
+	<div class="grid unconventional-grid">
+		{#each data.wrestlers as wrestler}
+			<div class="grid-item">
+				<RosterCard {wrestler} />
+			</div>
+		{/each}
+	</div>
+</PageWrapper>

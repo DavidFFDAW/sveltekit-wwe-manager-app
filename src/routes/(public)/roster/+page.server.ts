@@ -1,3 +1,4 @@
+import { WrestlerConstants } from '$lib/constants/wrestler.constants.js';
 import prisma from '$lib/server/prisma';
 
 export async function load({ url }) {
@@ -25,5 +26,10 @@ export async function load({ url }) {
 		}
 	});
 
-	return { wrestlers };
+	return {
+		wrestlers: wrestlers.map((wrestler) => ({
+			...wrestler,
+			status: WrestlerConstants.statusDict[wrestler.status] || wrestler.status
+		}))
+	};
 }
