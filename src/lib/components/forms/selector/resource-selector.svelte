@@ -24,11 +24,16 @@
 	const differentStatuses = [...new Set(list.map((resource) => resource.status))].sort();
 
 	$: results = list
-		.filter((resource) => resource.status?.toLowerCase().includes(filters.status.toLowerCase()))
 		.filter((resource) => resource.name.toLowerCase().includes(filters.search.toLowerCase()))
 		.filter((resource) =>
 			resource.name.toLowerCase().startsWith(filters.firstLetter.toLowerCase())
 		);
+	$: statusesFilter =
+		differentStatuses.length > 2
+			? results.filter((resource) =>
+					resource.status?.toLowerCase().includes(filters.status.toLowerCase())
+				)
+			: results;
 	$: selectedName = results.find((resource) => resource.id === selectedItem)?.name;
 
 	const backspace = () => {
@@ -89,7 +94,7 @@
 		class:has-selection={selectedItem !== 0}
 		transition:fade
 	>
-		{#each results as resource, index}
+		{#each statusesFilter as resource, index}
 			<div
 				class="w1 resource-item-radio-container"
 				class:selected={selectedItem === resource.id}

@@ -71,7 +71,7 @@
 					<input
 						type="checkbox"
 						class="app-checkbox app-check"
-						name="selected-team-member"
+						name="selected-team-member[]"
 						data-status={resource.status}
 						value={resource.id}
 						checked={selectedMemberIds.includes(resource.id)}

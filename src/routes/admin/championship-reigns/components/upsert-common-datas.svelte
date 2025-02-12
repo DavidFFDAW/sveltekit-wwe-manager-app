@@ -38,14 +38,17 @@
 				value={isUpdate ? reign.won_date?.toISOString().split('T')[0] : ''}
 				oninput={recalculateDays}
 			/>
-			<Input
-				label="Fecha derrota"
-				type="date"
-				placeholder="Fecha de fin"
-				name="lost_date"
-				value={isUpdate ? reign.lost_date?.toISOString().split('T')[0] : ''}
-				oninput={recalculateDays}
-			/>
+			<div class="w1 flex astart start column gap-0">
+				<Input
+					label="Fecha derrota"
+					type="date"
+					placeholder="Fecha de fin"
+					name="lost_date"
+					value={isUpdate ? reign.lost_date?.toISOString().split('T')[0] : ''}
+					oninput={recalculateDays}
+				/>
+				<small>Dejar vacío si el reinado es actual</small>
+			</div>
 			<Input
 				label="Dias"
 				name="days"

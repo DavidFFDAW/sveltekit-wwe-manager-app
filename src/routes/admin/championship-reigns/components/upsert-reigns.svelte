@@ -57,7 +57,12 @@
 					</div>
 				{:else}
 					<ResourceSelector
-						list={championships.filter((championship) => !championship.tag)}
+						list={championships
+							.filter((championship) => !championship.tag)
+							.map((championship) => ({
+								...championship,
+								status: ''
+							}))}
 						bind:selectedItem={selectedChampionshipID}
 						name="championship-reign"
 						maxHeight={350}
@@ -127,6 +132,7 @@
 			<Box icon="info-circle" title="Equipo" classes="navigate-to-teams">
 				<TeamSelection
 					{teams}
+					name="tag-team-reign"
 					selectedTeam={reign.team_id ? reign.team_id : 0}
 					bind:selectedTeamMembers
 				/>

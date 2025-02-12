@@ -10,6 +10,7 @@
 	};
 
 	let search: string = '';
+	export let name: string;
 	export let teams: Team[] = [];
 	export let selectedTeam: number = 0;
 	export let selectedTeamMembers: number[] = [];
@@ -49,11 +50,11 @@
 						<input
 							type="radio"
 							class="app-radio"
-							name="selected-team"
+							name="{name}-selected-team"
 							value={team.id}
 							bind:group={selectedTeam}
 							checked={selectedTeam === team.id}
-							on:change={() => (selectedTeamMembers = [])}
+							on:change={() => (selectedTeamMembers = team.members.map((member) => member.id))}
 						/>
 						<div class="flex gap-smaller">
 							<div class="images-container relative">
@@ -71,11 +72,6 @@
 	{#if teamMembers.length > 2}
 		<div class="team-two-members-selection">
 			<h4 class="w1 tcenter">Selecciona a los campeones</h4>
-			<div class="flex">
-				{#each selectedTeamMembers as member}
-					<p>{member}</p>
-				{/each}
-			</div>
 			<div class="w1 team-two-members-selection-wrapper down">
 				{#each teamMembers as member}
 					<div
@@ -83,9 +79,6 @@
 						class="app-button flex gap-smaller"
 						on:click={handleTeamMembersSelection(member.id)}
 						class:selected={selectedTeamMembers.includes(member.id)}
-						data-this-id={member.id}
-						data-team-id={selectedTeam}
-						data-selectedMembers={selectedTeamMembers.join(',')}
 					>
 						<img class="image" src={member.image} alt={member.name} use:errorimage />
 						<span>{member.name}</span>
@@ -95,15 +88,14 @@
 		</div>
 	{/if}
 
-	{#if selectedTeamMembers.length > 0}
+	{#if teamMembers.length > 0}
 		{#each selectedTeamMembers as member}
-			<input type="hidden" name="team-members[]" bind:value={member} />
+			<input type="hidden" name="{name}-team-members[]" bind:value={member} />
 		{/each}
 
-		<input type="hidden" name="team-id" bind:value={selectedTeam} />
-		<input type="hidden" name="team-memmememm" bind:value={selectedTeamMembers} />
-		<input type="hidden" name="team-wrestler-champion" bind:value={selectedTeamMembers[0]} />
-		<input type="hidden" name="team-wrestler-partner" bind:value={selectedTeamMembers[1]} />
+		<input type="hidden" name="{name}-team-id" bind:value={selectedTeam} />
+		<input type="hidden" name="{name}-team-wrestler-champion" bind:value={selectedTeamMembers[0]} />
+		<input type="hidden" name="{name}-team-wrestler-partner" bind:value={selectedTeamMembers[1]} />
 	{/if}
 </div>
 
