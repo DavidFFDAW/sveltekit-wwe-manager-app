@@ -11,7 +11,7 @@
 </script>
 
 <PageWrapper page="admin-user-update">
-	<AsyncForm buttonText={'Actualizar usuario'} updateId={data.user.id}>
+	<AsyncForm buttonText={'Actualizar usuario'} updateId={data.user.id} redirect="/admin/users">
 		<UpsertUsers user={data.user} />
 	</AsyncForm>
 </PageWrapper>

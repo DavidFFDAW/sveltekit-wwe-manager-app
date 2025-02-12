@@ -70,7 +70,8 @@
 		color: #fff;
 	}
 	.radio-checkbox-container-wrapper .radio-checkbox-input:checked + .radio-checkbox-inner-item {
-		background-color: #616161;
+		background-color: var(--imgur);
+		border: none;
 		color: #fff;
 	}
 

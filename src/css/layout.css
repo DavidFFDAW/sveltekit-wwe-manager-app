@@ -284,9 +284,17 @@ body main.app-main-entrypoint.admin-page {
 	display: none;
 }
 
+.grid-span-column {
+	grid-column: span 2;
+}
+
 @media only screen and (max-width: 768px) {
 	.onmobile {
 		display: block;
+	}
+
+	.grid-span-column {
+		grid-column: span 1;
 	}
 
 	.ondesktop {

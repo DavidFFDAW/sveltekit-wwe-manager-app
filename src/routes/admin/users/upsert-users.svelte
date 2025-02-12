@@ -26,33 +26,44 @@
 				{
 					label: 'Admin',
 					value: 'admin'
+				},
+				{
+					label: 'SuperAdmin',
+					value: 'superadmin'
 				}
 			]}
 			bind:value={user.type}
 		/>
 	</Box>
 
-	<Box title="Clave" icon="key">
-		<div class="w1 flex column gap-smaller">
+	<div class="w1 flex start gap-medium column responsive">
+		<Box title="Clave" icon="key">
 			<div class="w1 flex column gap-smaller">
-				<Input type="password" name="password" label="Clave" />
-				<Input type="password" name="password_confirmation" label="Confirmar clave" />
+				<div class="w1 flex column gap-smaller">
+					<Input type="password" name="password" label="Clave" />
+					<Input type="password" name="password_confirmation" label="Confirmar clave" />
+				</div>
+				<p class="w1">
+					<strong>Advertencia:</strong>
+					Al introducir un nuevo valor, modificará la contraseña/clave actual. Si no desea modificar
+					la clave, deje los campos en blanco.
+				</p>
 			</div>
-			<p class="w1">
-				<strong>Advertencia:</strong>
-				Al introducir un nuevo valor, modificará la contraseña/clave actual. Si no desea modificar la
-				clave, deje los campos en blanco.
-			</p>
-		</div>
-	</Box>
+		</Box>
 
-	<Box title="Marketing" icon="marketing">
-		<div class="w1 flex gap-smaller">
-			<ToggleInput
-				label="Recibir notificaciones"
-				name="user_marketing_notifications"
-				checked={user.newsletter_subscription}
-			/>
-		</div>
-	</Box>
+		<Box title="Marketing" icon="marketing" classes="marketing-user-data">
+			<div class="w1 flex gap-smaller">
+				<ToggleInput
+					label="Recibir notificaciones"
+					name="user_marketing_notifications"
+					checked={user.newsletter_subscription}
+				/>
+				<p class="w1">
+					<strong>Al aceptar: </strong>
+					El usuario ha aceptado recibir notificaciones de marketing, ya sea de anuncios de nuevos posts
+					en el blog o cualquier otro tipo de comunicación.
+				</p>
+			</div>
+		</Box>
+	</div>
 </div>
