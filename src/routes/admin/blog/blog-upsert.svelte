@@ -45,7 +45,7 @@
 			required
 		/>
 
-		<div class="quill-container flex column gap-5">
+		<div class="w1 quill-container flex column gap-5">
 			<QuillInput
 				label="Contenido"
 				name="content"

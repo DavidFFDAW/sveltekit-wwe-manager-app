@@ -93,6 +93,10 @@
 	gap: 5px;
 }
 
+.flex.total>* {
+	flex: 1;
+}
+
 .flex.column {
 	flex-direction: column;
 }

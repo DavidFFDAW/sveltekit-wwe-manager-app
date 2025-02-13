@@ -2,7 +2,6 @@
 	import { errorimage } from '$lib/actions/error.image';
 	import AsyncButton from '$lib/components/buttons/async-button.svelte';
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
-	import GroupedActions from '$lib/components/buttons/grouped-actions/grouped-actions.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import type { BlogPost } from '@prisma/client';
 	import BlogActions from './blog-actions.svelte';
@@ -12,6 +11,7 @@
 
 <PageWrapper page="admin-blog-page">
 	<h1>Administrar Blog</h1>
+	<a href="/admin/blog/cover-image" class="btn secondary">Administrar imagenes de portada</a>
 
 	<div class="blog-page-admin-list flex column astart gap-smaller">
 		<div class="w1 flex end">
