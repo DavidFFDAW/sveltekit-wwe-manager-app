@@ -49,6 +49,7 @@ model User {
     image                   String     @db.VarChar(255)
     type                    String     @db.VarChar(255)
     remember_token          String?    @db.VarChar(100)
+    active                  Boolean    @default(false) @db.TinyInt
     newsletter_subscription Boolean    @default(false) @db.TinyInt
     created_at              DateTime?  @default(now())
     updated_at              DateTime?  @updatedAt

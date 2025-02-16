@@ -1,6 +1,6 @@
 import { COOKIE_NAME } from '$lib/constants/app.js';
+import { UsersDao } from '$lib/server/dao/users.dao.js';
 import { JWT } from '$lib/server/jwt.helper';
-import prisma from '$lib/server/prisma';
 import { Helpers } from '$lib/server/server.helpers';
 import { redirect } from '@sveltejs/kit';
 import bcrypt from 'bcryptjs';
@@ -23,19 +23,12 @@ export const actions = {
             return Helpers.error('Por favor, ingrese su email y contraseña', 400);
 
         try {
-            const foundUser = await prisma.user.findUnique({
-                where: {
-                    email: credentials.email,
-                },
-            });
-
+            const foundUser = await UsersDao.searchUserToLogin(credentials.email);
             if (!foundUser) return Helpers.error(defaultError, 401);
 
-            // Check password
             const passwordMatch = await bcrypt.compare(credentials!.password.trim(), foundUser.password);
             if (!passwordMatch) return Helpers.error(defaultError, 400);
 
-            // Generate token
             const tokenTime = ['admin', 'editor'].includes(foundUser.type) ? 86400 * 30 * 6 : 86400 * 7;
             const jwtToken = JWT.sign(
                 {
@@ -49,7 +42,6 @@ export const actions = {
                 tokenTime,
             );
 
-            // Set cookie
             cookies.set(COOKIE_NAME, jwtToken, {
                 maxAge: tokenTime,
                 secure: process.env.NODE_ENV === 'production',
@@ -58,6 +50,7 @@ export const actions = {
                 path: '/',
             });
 
+            await UsersDao.updateLastConnectionDate(foundUser.id);
             return Helpers.success('Inicio de sesión exitoso', 200);
         } catch (err: unknown) {
             console.log(err);
