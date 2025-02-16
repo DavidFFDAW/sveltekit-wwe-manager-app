@@ -33,7 +33,7 @@
 		</article>
 
 		<article class="w1 home-article">
-			<a href="/pages" class="w1 block">
+			<a href="/roster" class="w1 block">
 				<div class="w1 article-content flex gap-medium astart responsive">
 					<img
 						src="https://i.ebayimg.com/images/g/k9wAAOSwlYxiTJ6Y/s-l1200.jpg"
@@ -55,7 +55,7 @@
 		</article>
 
 		<article class="w1 home-article">
-			<a href="/pages" class="w1 block">
+			<a href="/champions" class="w1 block">
 				<div class="w1 article-content flex gap-medium astart responsive reverse">
 					<img
 						src="https://www.wrestlinginc.com/img/gallery/wwes-gunther-explains-differences-between-wrestling-chad-gable-and-the-miz/l-intro-1700422034.jpg"
