@@ -117,7 +117,7 @@
 
 	article img {
 		width: 100%;
-		max-height: 200px;
+		/* max-height: 200px; */
 	}
 
 	.blog-content.rest-of-news .blog-list {
