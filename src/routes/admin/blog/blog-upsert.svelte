@@ -5,9 +5,9 @@
 	import QuillInput from '$lib/components/forms/inputs/quill-input.svelte';
 	import RadioList from '$lib/components/forms/inputs/radio-list.svelte';
 	import Icon from '$lib/components/icons/icon.svelte';
+	import CoverImage from '$lib/components/forms/inputs/cover-image.svelte';
 	import { Utils } from '$lib/utils/general.utils';
 	import type { BlogPost } from '@prisma/client';
-	import CoverImage from './cover-image/cover-image.svelte';
 
 	export let post: BlogPost = {} as BlogPost;
 	let slug = post.slug;

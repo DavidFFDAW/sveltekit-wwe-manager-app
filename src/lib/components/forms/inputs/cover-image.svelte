@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { fabric } from 'fabric';
-	import editorUtils from '../../image-editor/editor.utils';
+	import editorUtils from '../../../../routes/admin/image-editor/editor.utils';
 	import { Toast } from '$lib/utils/toast.helper';
 	import { droppableImages } from '$lib/actions/droppable.images';
 	import Input from '$lib/components/forms/inputs/input.svelte';
@@ -11,7 +11,7 @@
 	export let width = 800;
 	export let height = 450;
 	export let imageType = 'image/jpeg';
-	let imageQuality = 0.7;
+	export let imageQuality = 0.7;
 	let canvas: HTMLCanvasElement;
 	let fab: fabric.Canvas;
 	let blob: Blob | null;
@@ -154,8 +154,6 @@
 
 		const imgurResponse = await ImgurService.uploadImgurImage(blob as File);
 		if (imgurResponse.error) return Toast.error(imgurResponse.message);
-		console.log({ imgurResponse });
-
 		if (imgurResponse.data) value = imgurResponse.data.link;
 	};
 </script>
