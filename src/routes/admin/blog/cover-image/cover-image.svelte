@@ -8,15 +8,18 @@
 	import ImgurService from '$lib/services/imgur.service';
 	import Icon from '$lib/components/icons/icon.svelte';
 
-	const width = 800;
-	const height = 450;
+	export let width = 800;
+	export let height = 450;
+	export let imageType = 'image/jpeg';
 	let imageQuality = 0.7;
-	let imageType = 'image/jpeg';
 	let canvas: HTMLCanvasElement;
 	let fab: fabric.Canvas;
 	let blob: Blob | null;
 	let isEmpty: boolean = true;
 	export let value: string = '';
+	export let name: string = '';
+	export let templateImage = '';
+	let dataURL: string = '';
 
 	const checkIfCanvasEmpty = () => {
 		isEmpty = fab.getObjects().length === 0;
@@ -25,6 +28,11 @@
 	const removeSelectedItem = () => {
 		const activeItem = fab.getActiveObject();
 		if (activeItem) fab.remove(activeItem);
+	};
+
+	const generateDataURL = () => {
+		fab.discardActiveObject().renderAll();
+		dataURL = canvas.toDataURL(imageType, 1);
 	};
 
 	onMount(() => {
@@ -36,10 +44,12 @@
 
 		fab.on('object:added', checkIfCanvasEmpty);
 		fab.on('object:removed', checkIfCanvasEmpty);
+		fab.on('object:modified', generateDataURL);
 
 		return () => {
 			fab.off('object:added', checkIfCanvasEmpty);
 			fab.off('object:removed', checkIfCanvasEmpty);
+			fab.off('object:modified', generateDataURL);
 			fab.dispose();
 		};
 	});
@@ -53,7 +63,8 @@
 				const url = URL.createObjectURL(genBlob);
 				const a = document.createElement('a');
 				a.href = url;
-				a.download = 'image.jpg';
+				const extension = imageType.split('/')[1];
+				a.download = `image.${extension}`;
 				a.click();
 				a.remove();
 				URL.revokeObjectURL(url);
@@ -150,11 +161,18 @@
 </script>
 
 <div style="--w: {width}px; --h: {height}px;" class="w1 flex start astart gap-medium container">
-	<div class="w1 flex start astart column gap-smaller overflow-horizontal">
+	<div class="w1 flex center acenter column gap-smaller overflow-horizontal">
 		{#if blob}
 			<p>Tamaño estimado archivo: {(blob.size / 1000).toFixed(2)} KB</p>
 		{/if}
 		<div class="w1 canvas-container relative">
+			{#if !isEmpty && templateImage}
+				<img
+					class="template-image"
+					src={templateImage}
+					alt="template to know what the sizes should be"
+				/>
+			{/if}
 			{#if isEmpty}
 				<div
 					class="w1 flex center acenter overlay"
@@ -189,6 +207,10 @@
 				placeholder="image/jpeg"
 				options={['image/jpeg', 'image/png', 'image/webp']}
 			/>
+
+			{#if name}
+				<input type="hidden" {name} bind:value={dataURL} />
+			{/if}
 		</div>
 
 		<div class="w1 button-container gap-5">
@@ -221,6 +243,13 @@
 	.canvas-container {
 		width: var(--w);
 	}
+	.canvas-container .template-image {
+		position: absolute;
+		width: 100%;
+		height: auto;
+		opacity: 0.5;
+		z-index: 0;
+	}
 	.canvas-container .overlay {
 		position: absolute;
 		top: 0;
@@ -239,6 +268,7 @@
 	canvas {
 		width: 100%;
 		height: var(--h);
+		border: 1px solid #ddd;
 		background-color: transparent;
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 		border-radius: 10px;

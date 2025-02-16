@@ -6,8 +6,12 @@
 	import RadioList from '$lib/components/forms/inputs/radio-list.svelte';
 	import { WrestlerConstants } from '$lib/constants/wrestler.constants';
 	import type { Wrestler } from '@prisma/client';
+	import CoverImage from '../blog/cover-image/cover-image.svelte';
 
 	export let wrestler: Wrestler = {} as Wrestler;
+	console.log({
+		wrestler
+	});
 </script>
 
 <div class="grid two-column-grid responsive gap-medium">
@@ -105,5 +109,15 @@
 
 	<Box title="Imagenes" icon="image">
 		<ImageInput label="Imagen de luchador" name="image" image={wrestler.image_name as string} />
+	</Box>
+
+	<Box title="Bloque imagen" icon="image-fill">
+		<CoverImage
+			width={512}
+			height={512}
+			imageType="image/webp"
+			name="wrestler-image-upload"
+			templateImage="https://davidfernandezdeveloper.es/2k/images/cody-rhodes.webp"
+		/>
 	</Box>
 </div>

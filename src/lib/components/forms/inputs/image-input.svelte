@@ -6,7 +6,7 @@
 	const size = 120;
 	export let label: string;
 	export let name: string;
-	export let image = '';
+	export let image: string = '';
 	export let required = false;
 	export let placeholder = '/noimage.jpg';
 	const randomId = Utils.getRandomID(name);
@@ -39,7 +39,9 @@
 					{/if}
 				</span>
 
-				<small class="sourcesans">{image.toString().length} / 255</small>
+				{#if image && image.length > 0}
+					<small class="sourcesans">{image.length} / 255</small>
+				{/if}
 			</label>
 			<input
 				type="text"
@@ -50,7 +52,7 @@
 				{placeholder}
 				{required}
 			/>
-			{#if image.toString().length > 255}
+			{#if image && image.toString().length > 255}
 				<p class="error-message">
 					Este valor es demasiado largo. Intenta reducirlo a un máximo de 255 caracteres.
 				</p>

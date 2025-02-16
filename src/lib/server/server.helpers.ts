@@ -49,5 +49,8 @@ export const Helpers = {
 	getToggleInput: (form: FormData, field: string): boolean => {
 		if (form.has(field)) return form.get(field) === 'on';
 		return false;
+	},
+	dataHas: (data: FormData, field: string): boolean => {
+		return data.has(field) && data.get(field) !== '';
 	}
 };
