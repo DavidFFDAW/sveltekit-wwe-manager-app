@@ -117,10 +117,11 @@ select {
 	outline: none;
 }
 
-input[type="checkbox"].app-checkbox,
-input[type="radio"].app-radio,
-input[type="file"].app-file {
+input[type='checkbox'].app-checkbox,
+input[type='radio'].app-radio,
+input[type='file'].app-file {
 	position: absolute;
+	padding: 0;
 	width: 100%;
 	height: 100%;
 	top: 0;
@@ -168,14 +169,19 @@ textarea {
 	resize: vertical;
 }
 
-.radio-checkbox-container-wrapper .radio-checkbox-input:checked+.radio-checkbox-inner-item.label-item-legend {
+.radio-checkbox-container-wrapper
+	.radio-checkbox-input:checked
+	+ .radio-checkbox-inner-item.label-item-legend {
 	background-image: url(https://upload.wikimedia.org/wikipedia/en/9/93/WWE_Hall_of_Fame_Logo%2C_2019_version.png);
 	background-size: 50%;
 	background-position: center;
 	background-repeat: no-repeat;
 }
 
-.radio-checkbox-container-wrapper .radio-checkbox-input:checked+.radio-checkbox-inner-item.label-item-legend .label-item-text {
+.radio-checkbox-container-wrapper
+	.radio-checkbox-input:checked
+	+ .radio-checkbox-inner-item.label-item-legend
+	.label-item-text {
 	opacity: 0;
 }
 
@@ -192,7 +198,7 @@ aside.admin-sidebar.sidebar.shown {
 	transition: 0.3s;
 }
 
-aside.admin-sidebar.sidebar.shown+main.app-main-entrypoint {
+aside.admin-sidebar.sidebar.shown + main.app-main-entrypoint {
 	margin-left: var(--sidebar-width);
 }
 
@@ -246,11 +252,20 @@ button,
 	color: white;
 }
 
+.btn.danger {
+	background-color: var(--color-danger);
+	border: 1px solid salmon;
+}
+
 .btn.icon {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
+}
+
+.btn:disabled {
+	opacity: 0.2;
 }
 
 .resource-list.grid {
@@ -270,14 +285,14 @@ body main.app-main-entrypoint.page-public-login.public-page {
 }
 
 /* SPINNER */
-aside.sidebar.shown+main.app-main-entrypoint .spinner-overlay-layer {
+aside.sidebar.shown + main.app-main-entrypoint .spinner-overlay-layer {
 	padding-left: var(--sidebar-width);
 	overflow: hidden;
 	user-select: none;
 }
 
 /* FORM */
-aside.sidebar.shown+main.app-main-entrypoint form.app-custom-form .buttons-block {
+aside.sidebar.shown + main.app-main-entrypoint form.app-custom-form .buttons-block {
 	position: fixed;
 	margin-left: var(--sidebar-width);
 	width: calc(100% - var(--sidebar-width));
@@ -361,7 +376,7 @@ aside.sidebar.shown+main.app-main-entrypoint form.app-custom-form .buttons-block
 		font-size: 0.9em;
 	}
 
-	aside.admin-sidebar.sidebar.shown+main.app-main-entrypoint {
+	aside.admin-sidebar.sidebar.shown + main.app-main-entrypoint {
 		margin-left: 0;
 	}
 }

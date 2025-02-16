@@ -93,7 +93,7 @@
 	gap: 5px;
 }
 
-.flex.total>* {
+.flex.total > * {
 	flex: 1;
 }
 
@@ -288,10 +288,19 @@ body main.app-main-entrypoint.admin-page {
 	display: none;
 }
 
-.grid-span-column {
+.grid-span-column,
+.grid-column-span {
 	grid-column: span 2;
 }
 
+@media only screen and (max-width: 900px) {
+	.grid.admin-panel.responsive {
+		grid-template-columns: 1fr;
+	}
+	.flex.admin-panel.responsive {
+		flex-direction: column;
+	}
+}
 @media only screen and (max-width: 768px) {
 	.onmobile {
 		display: block;

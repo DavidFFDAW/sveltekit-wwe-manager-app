@@ -67,12 +67,11 @@
 		.radio-checkbox-input:checked
 		+ .radio-checkbox-inner-item
 		.label-item-text {
-		color: #fff;
+		color: #4a749b;
 	}
 	.radio-checkbox-container-wrapper .radio-checkbox-input:checked + .radio-checkbox-inner-item {
-		background-color: var(--imgur);
-		border: none;
-		color: #fff;
+		background-color: #d5e8fbac;
+		border: 1px solid #4a749b;
 	}
 
 	@media only screen and (max-width: 768px) {

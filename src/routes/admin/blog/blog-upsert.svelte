@@ -7,6 +7,7 @@
 	import Icon from '$lib/components/icons/icon.svelte';
 	import { Utils } from '$lib/utils/general.utils';
 	import type { BlogPost } from '@prisma/client';
+	import CoverImage from './cover-image/cover-image.svelte';
 
 	export let post: BlogPost = {} as BlogPost;
 	let slug = post.slug;
@@ -16,7 +17,7 @@
 	};
 </script>
 
-<div class="grid two-column-grid responsive gap-medium">
+<div class="grid two-column-grid responsive gap-medium admin-panel">
 	<Box title="Datos obligatorios" icon="info-circle">
 		<Input
 			label="Titulo"
@@ -102,4 +103,23 @@
 			value={post.deletable ? 'active' : 'inactive'}
 		/>
 	</Box>
+
+	<div class="grid-cover-image-component-item">
+		<Box title="Imagen de portada" icon="image">
+			<CoverImage bind:value={post.image as string}></CoverImage>
+		</Box>
+	</div>
 </div>
+
+<style>
+	@media only screen and (max-width: 900px) {
+		.grid-cover-image-component-item {
+			display: none;
+		}
+	}
+	@media only screen and (max-width: 1116px) {
+		.grid-cover-image-component-item {
+			grid-column: span 2;
+		}
+	}
+</style>
