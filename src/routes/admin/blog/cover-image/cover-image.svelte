@@ -143,6 +143,7 @@
 
 		const imgurResponse = await ImgurService.uploadImgurImage(blob as File);
 		if (imgurResponse.error) return Toast.error(imgurResponse.message);
+		console.log({ imgurResponse });
 
 		if (imgurResponse.data) value = imgurResponse.data.link;
 	};
