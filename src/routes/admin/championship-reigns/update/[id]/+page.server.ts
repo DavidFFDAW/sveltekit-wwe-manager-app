@@ -7,9 +7,10 @@ import { WrestlerDao } from '$lib/server/dao/wrestler.dao.js';
 import { Helpers } from '$lib/server/server.helpers.js';
 import fs from 'fs';
 
-export const load = async ({ locals, params }) => {
+export const load = async ({ locals, params, url }) => {
 	if (!Helpers.hasPermission(locals)) throw Helpers.redirection('/');
 	const searchID = params.id;
+	const newDesign = url.searchParams.has('new-design');
 	if (!searchID || isNaN(Number(searchID))) throw Helpers.redirection('/admin/championship-reigns');
 
 	return {
@@ -19,7 +20,8 @@ export const load = async ({ locals, params }) => {
 		wrestlers: await WrestlerDao.getReignSelectableWrestlers(),
 		championships: await ChampionshipDao.getChampionships({
 			select: { id: true, name: true, image: true, gender: true, tag: true }
-		})
+		}),
+		newDesign
 	};
 };
 

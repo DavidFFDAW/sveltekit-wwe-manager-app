@@ -6,7 +6,6 @@
 		UpsertReignTeams
 	} from '../interfaces/reigns.interfaces';
 	import Box from '$lib/components/box/box.svelte';
-	import Input from '$lib/components/forms/inputs/input.svelte';
 	import ResourceSelector from '$lib/components/forms/selector/resource-selector.svelte';
 	import TeamSelection from './team-selection.svelte';
 	import ViewButtons from './view-buttons.svelte';

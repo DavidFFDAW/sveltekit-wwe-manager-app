@@ -9,7 +9,7 @@
 <PageWrapper page="championship-reigns">
 	<section class="w1 flex column gap-medium">
 		<h1>Reinados de campeonato</h1>
-		<div class="w1 flex center gap-medium column">
+		<div class="w1 flex center gap-medium column box">
 			{#each data.reigns as reign}
 				<div class="w1 flex column gap-medium">
 					<h2>{reign.Championship.name}</h2>

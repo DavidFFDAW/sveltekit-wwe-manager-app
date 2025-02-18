@@ -1,11 +1,5 @@
 import type { Championship, ChampionshipReign, Wrestler } from '@prisma/client';
 
-export type UpsertReign = ChampionshipReign & {
-	Wrestler: Wrestler;
-	Partner: Wrestler;
-	Championship: Championship;
-};
-
 export type UpsertReignView = 'single' | 'team' | 'no-team';
 
 export interface UpserReignChampionship {
@@ -36,3 +30,9 @@ export interface UpsertReignTeams {
 	image: string | null;
 	members: UpsertReignsTeamMember[];
 }
+
+export type UpsertReign = ChampionshipReign & {
+	Wrestler: Wrestler;
+	Partner: Wrestler | null;
+	Championship: Championship;
+};
