@@ -1,5 +1,6 @@
 import { Utils } from '$lib/utils/general.utils';
 import { fail, json, redirect } from '@sveltejs/kit';
+import fs from 'fs';
 
 export const Helpers = {
 	success: (message: string, status: number = 200) => {
@@ -52,5 +53,8 @@ export const Helpers = {
 	},
 	dataHas: (data: FormData, field: string): boolean => {
 		return data.has(field) && data.get(field) !== '';
+	},
+	writeLog: (filename: string, data: Record<string, any>) => {
+		return fs.writeFileSync(`./src/logs/${filename}.json`, JSON.stringify(data, null, 4));
 	}
 };

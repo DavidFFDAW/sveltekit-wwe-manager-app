@@ -18,9 +18,15 @@ export const SidebarLinks = [
 		equals: false
 	},
 	{
+		url: '/admin/championships',
+		label: 'Campeonatos',
+		icon: 'trophy',
+		equals: false
+	},
+	{
 		url: '/admin/championship-reigns',
 		label: 'Reinados',
-		icon: 'trophy',
+		icon: 'trophy-fill',
 		equals: false
 	},
 	{

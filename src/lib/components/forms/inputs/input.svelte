@@ -5,7 +5,7 @@
 	export let label: string;
 	export let name: string;
 	export let type: string;
-	export let value: string | number = '';
+	export let value: string | number | undefined | null = '';
 	export let maxLength: number = 255;
 	export let options: string[] = [];
 	export let oninput: Callback | undefined = undefined;
@@ -13,6 +13,8 @@
 
 	$: if (oninput && value) oninput(value);
 	$: valueLength = value ? value.toString().length : 0;
+
+	let pattern = type === 'number' ? `[0-9]{0,${maxLength}}` : `.{0,${maxLength}}`;
 </script>
 
 <div class="form-item">
@@ -43,6 +45,7 @@
 		bind:value
 		id={`${name}-${randomId}`}
 		maxlength={maxLength}
+		{pattern}
 		{...$$restProps}
 		list="${options.length > 0 ? `${name}-options` : ''}"
 	/>

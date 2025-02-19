@@ -2,7 +2,7 @@
 	import { brands, type Brands } from '$lib/constants/app';
 	import { Utils } from '$lib/utils/general.utils';
 	const allBrands = Object.values(brands);
-	export let value: Brands = allBrands[0].name as Brands;
+	export let value: string | null = allBrands[0].name as Brands;
 	const randomId = Utils.getRandomID('brands-selector');
 </script>
 
