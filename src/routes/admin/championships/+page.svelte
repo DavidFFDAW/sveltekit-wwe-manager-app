@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { errorimage } from '$lib/actions/error.image';
+	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import ChampionshipActions from './championship-actions.svelte';
 	export let data;
@@ -10,7 +11,11 @@
 
 	<div class="grid grid-championship-column gap-small">
 		{#each data.championships as championship}
-			<div class="championship-specific-card relative" class:non-visible={!championship.active}>
+			<div
+				class="championship-specific-card relative"
+				class:non-visible={!championship.active}
+				data-championship-id={championship.id}
+			>
 				<img
 					use:errorimage={'/unknown-championship.webp'}
 					src={championship.image}
@@ -28,6 +33,8 @@
 			</div>
 		{/each}
 	</div>
+
+	<ButtonCreate endpoint="/championships/create" />
 </PageWrapper>
 
 <style>
@@ -42,7 +49,6 @@
 		border-radius: 5px;
 		background-color: #fff;
 		box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-		overflow: hidden;
 		gap: 10px;
 	}
 	.championship-specific-card.non-visible {

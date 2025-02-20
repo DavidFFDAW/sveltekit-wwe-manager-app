@@ -20,7 +20,18 @@
 		method="post"
 		icon={championship.active ? 'eye-slash' : 'eye'}
 		confirm={true}
+		color={championship.active ? 'danger' : 'success'}
 	>
-		{championship.active ? 'Desactivar' : 'Activar'} campeonato
+		{championship.active ? 'Desactivar' : 'Activar'}
+	</ActionsButton>
+
+	<ActionsButton
+		action={'deleteChampionship'}
+		method="post"
+		icon={'trash'}
+		confirm={true}
+		color={'danger'}
+	>
+		Eliminar
 	</ActionsButton>
 </GroupedActions>

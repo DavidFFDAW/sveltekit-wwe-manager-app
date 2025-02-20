@@ -18,7 +18,9 @@
 	<div class="icon-wrapper">
 		<Icon {icon} />
 	</div>
-	<slot></slot>
+	<span class="text">
+		<slot></slot>
+	</span>
 </button>
 
 <style>
@@ -61,5 +63,11 @@
 	.grouped-actions-link.warn .icon-wrapper {
 		background-color: var(--color-warn);
 		color: #deac16;
+	}
+
+	.grouped-actions-link .text {
+		flex: 1;
+		display: block;
+		text-align: start;
 	}
 </style>

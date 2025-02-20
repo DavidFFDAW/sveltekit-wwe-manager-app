@@ -93,7 +93,8 @@
 		background-color: #fff;
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 		border-radius: 0 5px 5px 5px;
-		border: 1px solid rgba(0, 0, 0, 0.4);
+		border: 1px solid rgba(0, 0, 0, 0.2);
+		border-top: none;
 		overflow: hidden;
 		z-index: 2;
 	}
@@ -107,5 +108,6 @@
 
 	.grouped-actions-wrapper-container.right .grouped-actions-container {
 		right: 0;
+		border-radius: 5px 0 5px 5px;
 	}
 </style>
