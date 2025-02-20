@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import Box from '$lib/components/box/box.svelte';
 	import Input from '$lib/components/forms/inputs/input.svelte';
 	import { Toast } from '$lib/utils/toast.helper';
@@ -9,6 +10,7 @@
 	export let ppvs: string[] = [];
 
 	const recalculateDays = () => {
+		if (!browser) return;
 		const inputWon = document.querySelector('input[name="won_date"]') as HTMLInputElement;
 		const inputLost = document.querySelector('input[name="lost_date"]') as HTMLInputElement;
 		const wonDate = new Date(inputWon.value);
