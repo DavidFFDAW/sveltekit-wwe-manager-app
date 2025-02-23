@@ -7,6 +7,8 @@
 
 <PageWrapper page="admin-championship-update-page">
 	<AsyncForm buttonText={'Crear campeonato'} redirect="/admin/championships">
-		<UpsertChampionship championshipDatas={{} as Championship} />
+		<div class="grid grid-two-column gap-smaller responsive">
+			<UpsertChampionship championshipDatas={{} as Championship} />
+		</div>
 	</AsyncForm>
 </PageWrapper>

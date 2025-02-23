@@ -7,8 +7,13 @@
 	import { WrestlerConstants } from '$lib/constants/wrestler.constants';
 	import type { Wrestler } from '@prisma/client';
 	import CoverImage from '$lib/components/forms/inputs/cover-image.svelte';
+	import { Utils } from '$lib/utils/general.utils';
 
 	export let wrestler: Wrestler = {} as Wrestler;
+	let name = wrestler.name as string;
+	let slug = wrestler.slug as string;
+	let image = wrestler.image_name as string;
+	$: slug = name ? Utils.slugify(name) : slug;
 </script>
 
 <div class="grid two-column-grid responsive gap-medium">
@@ -18,7 +23,7 @@
 			name="name"
 			type="text"
 			placeholder="Nombre del luchador"
-			value={wrestler.name}
+			bind:value={name}
 			required
 		/>
 
@@ -27,7 +32,7 @@
 			name="slug"
 			type="text"
 			placeholder="Slug del luchador"
-			value={wrestler.slug}
+			bind:value={slug}
 			maxLength={200}
 			required
 		/>
@@ -105,21 +110,19 @@
 	</Box>
 
 	<Box title="Imagenes" icon="image">
-		<ImageInput
-			label="Imagen de luchador"
-			name="image"
-			bind:image={wrestler.image_name as string}
-		/>
+		<ImageInput label="Imagen de luchador" name="image" bind:image />
 	</Box>
 
 	<Box title="Bloque imagen" icon="image-fill">
 		<CoverImage
 			width={512}
 			height={512}
-			imageQuality={1}
+			imageQuality={0.9}
 			imageType="image/webp"
 			name="wrestler-image-upload"
 			templateImage="https://davidfernandezdeveloper.es/2k/images/cody-rhodes.webp"
+			bind:imageName={slug}
+			bind:value={image}
 		/>
 	</Box>
 </div>

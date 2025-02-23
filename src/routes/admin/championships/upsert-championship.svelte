@@ -85,6 +85,7 @@
 			imageType={'image/webp'}
 			templateImage="/unknown-championship.webp"
 			bind:value={championshipDatas.image}
+			bind:imageName={slug}
 			width={500}
 			height={500}
 		/>
