@@ -1,5 +1,3 @@
-type HttpBody = FormData | Record<string, any>;
-
 const _makeRequest = async (url: string, method: string, options?: RequestInit) => {
 	const httpOptions: RequestInit = {
 		method,
@@ -13,9 +11,6 @@ const _makeRequest = async (url: string, method: string, options?: RequestInit) 
 			...httpOptions.headers
 		};
 	}
-
-	console.log('url: ', url);
-	console.log('options: ', httpOptions);
 
 	const response = await fetch(url, httpOptions);
 	return {

@@ -7,14 +7,16 @@
 	import Input from '$lib/components/forms/inputs/input.svelte';
 	import ImgurService from '$lib/services/imgur.service';
 	import Icon from '$lib/components/icons/icon.svelte';
+	import VpsService from '$lib/services/vps.service';
 
 	export let width = 800;
 	export let height = 450;
 	export let imageType = 'image/jpeg';
 	export let imageQuality = 0.7;
+	export let imageName: string = '';
 	let canvas: HTMLCanvasElement;
 	let fab: fabric.Canvas;
-	let blob: Blob | null;
+	let blob: File | null;
 	let isEmpty: boolean = true;
 	export let value: string = '';
 	export let name: string = '';
@@ -23,11 +25,6 @@
 
 	const checkIfCanvasEmpty = () => {
 		isEmpty = fab.getObjects().length === 0;
-	};
-
-	const removeSelectedItem = () => {
-		const activeItem = fab.getActiveObject();
-		if (activeItem) fab.remove(activeItem);
 	};
 
 	const generateDataURL = () => {
@@ -78,10 +75,10 @@
 		const activeObject = fab.getObjects()[0];
 		if (!activeObject) return;
 
-		activeObject.scaleToWidth(width + 50);
+		activeObject.scaleToWidth(width);
 		activeObject.set({
-			left: (width + 50 - activeObject.getScaledWidth()) / 2,
-			top: (height + 50 - activeObject.getScaledHeight()) / 2
+			left: (width - activeObject.getScaledWidth()) / 2,
+			top: (height - activeObject.getScaledHeight()) / 2
 		});
 		activeObject.setCoords();
 		fab.renderAll();
@@ -126,7 +123,12 @@
 		return new Promise((resolve) => {
 			canvas.toBlob(
 				(genblob) => {
-					blob = genblob;
+					const extension = imageType.split('/')[1];
+					const name = imageName || `image-${Date.now()}`;
+					const file = new File([genblob as Blob], `${name}.${extension}`, {
+						type: imageType
+					});
+					blob = file;
 					if (genblob) resolve(genblob);
 				},
 				imageType,
@@ -143,18 +145,31 @@
 		addImageToCanvas(file);
 	};
 
-	const uploadToImgur = async () => {
+	const confirmUpload = async () => {
 		await checkBlob();
 		if (!blob) return false;
 
-		const wantToContinue = confirm(
+		return confirm(
 			`Se va a subir la imagen con un peso aproximado de ${blob.size / 1000} KB, ¿Estás seguro?`
 		);
-		if (!wantToContinue) return false;
+	};
+
+	const uploadToImgur = async () => {
+		const uploadContinue = await confirmUpload();
+		if (!uploadContinue) return false;
 
 		const imgurResponse = await ImgurService.uploadImgurImage(blob as File);
 		if (imgurResponse.error) return Toast.error(imgurResponse.message);
 		if (imgurResponse.data) value = imgurResponse.data.link;
+	};
+
+	const uploadToVps = async () => {
+		const vpsUploadContinue = await confirmUpload();
+		if (!vpsUploadContinue) return false;
+
+		const imageUpload = await VpsService.uploadVpsImage(blob as File, dataURL);
+		if (imageUpload.error && imageUpload.message) return Toast.error(imageUpload.message);
+		if (imageUpload.data) value = imageUpload.data;
 	};
 </script>
 
@@ -213,18 +228,18 @@
 
 		<div class="w1 button-container gap-5">
 			<button type="button" class="btn danger icon" on:click={() => fab.clear()}>
-				<Icon icon="trash" /> canva
-			</button>
-			<button type="button" class="btn danger icon" on:click={removeSelectedItem}>
-				<Icon icon="trash" /> seleccionado
+				<Icon icon="trash" /> Borrar canvas
 			</button>
 			<button type="button" class="btn button icon cta" on:click={getFileFromCanvas}>
 				<Icon icon="download" />
 				Descargar
 			</button>
+			<button type="button" class="btn vps icon" on:click={uploadToVps}>
+				<Icon icon="upload" /> Subir a VPS
+			</button>
 			<button type="button" class="btn imgur icon" on:click={uploadToImgur}>
 				<Icon icon="upload" />
-				Subir
+				Subir a Imgur
 			</button>
 			<button type="button" class="w1 btn button icon check-size secondary" on:click={checkBlob}>
 				<Icon icon="filetype-jpg" />
@@ -279,9 +294,14 @@
 
 	.button-container {
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(2, 1fr);
 	}
 	.check-size {
-		grid-column: span 4;
+		grid-column: span 2;
+	}
+
+	.btn.vps {
+		background-color: var(--blue);
+		color: #fff;
 	}
 </style>
