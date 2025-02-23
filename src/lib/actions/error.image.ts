@@ -2,6 +2,7 @@ export function errorimage(node: HTMLImageElement, fallbackImage: string = '/noi
 	if (!node.src) node.src = fallbackImage;
 	node.draggable = false;
 	node.dataset.fallback = fallbackImage;
+	node.loading = 'lazy';
 
 	const handleError = () => {
 		if (node.tagName === 'IMG') {
