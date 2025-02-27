@@ -1,5 +1,6 @@
 <script lang="ts">
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
+	import Calendar from './calendar.svelte';
 
 	export let data = { ppvs: [] };
 	const format = {
@@ -11,26 +12,12 @@
 </script>
 
 <AsyncForm redirect="/">
-	<input type="text" name="search" placeholder="Search" value="wadsda" />
-	<div class="checks">
-		<label>
-			<input type="checkbox" name="status" value="active" checked />
-			Active
-		</label>
-		<label>
-			<input type="checkbox" name="status" value="inactive" checked />
-			Inactive
-		</label>
-
-		<label>
-			<input type="checkbox" name="status" value="featured" checked />
-			Featured
-		</label>
+	<div class="w1">
+		<Calendar ppvs={data.ppvs} />
 	</div>
-	<button type="submit">Search</button>
 </AsyncForm>
 
-<div class="ppvs-list resource-list grid">
+<!-- <div class="ppvs-list resource-list grid">
 	{#each data.ppvs as ppv}
 		<div class="single-ppv">
 			<img src={ppv.image} alt={ppv.name} />
@@ -40,7 +27,7 @@
 			{/if}
 		</div>
 	{/each}
-</div>
+</div> -->
 
 <style>
 	.single-ppv img {

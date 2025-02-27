@@ -45,6 +45,9 @@
 		"vite": "^5.4.11"
 	},
 	"dependencies": {
+		"@fullcalendar/core": "^6.1.15",
+		"@fullcalendar/daygrid": "^6.1.15",
+		"@fullcalendar/interaction": "^6.1.15",
 		"@prisma/client": "^6.2.1",
 		"@zerodevx/svelte-toast": "^0.9.6",
 		"bcryptjs": "^2.4.3",
