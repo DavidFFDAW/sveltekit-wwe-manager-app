@@ -4,9 +4,12 @@ import prisma from '$lib/server/prisma.js';
 import { Helpers } from '$lib/server/server.helpers.js';
 import webpush from 'web-push';
 
-export async function POST({ request }) {
-	const { title, body, url } = await request.json();
-	const payload = JSON.stringify({ title, body, url });
+export async function POST({ request, locals }) {
+	if (!Helpers.hasPermission(locals, 'admin'))
+		return Helpers.apiResponseMessage('Unauthorized', 401);
+
+	const { title, body, url, image } = await request.json();
+	const payload = JSON.stringify({ title, body, url, image: image || '' });
 
 	try {
 		const subscriptions = await prisma.subscription.findMany();

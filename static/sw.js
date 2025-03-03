@@ -34,7 +34,7 @@ self.addEventListener('push', (event) => {
 
 	self.registration.showNotification(data.title, {
 		body: data.body,
-		icon: '/icons/versatile.png',
+		icon: data.image || '/icons/versatile.png',
 		vibrate: [100, 50, 100],
 		data: { url: data.url }
 	});
