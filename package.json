@@ -17,6 +17,7 @@
 		"lint": "prettier --check . && eslint .",
 		"prisma:generate": "prisma generate",
 		"prisma:pull": "prisma db pull",
+		"prisma:push": "prisma db push",
 		"sync": "git pull && prisma generate"
 	},
 	"devDependencies": {
@@ -30,6 +31,7 @@
 		"@types/jsonwebtoken": "^9.0.7",
 		"@types/node": "^22.10.7",
 		"@types/swiper": "^6.0.0",
+		"@types/web-push": "^3.6.4",
 		"drizzle-kit": "^0.22.0",
 		"eslint": "^9.7.0",
 		"eslint-config-prettier": "^9.1.0",
@@ -57,6 +59,7 @@
 		"jsonwebtoken": "^9.0.2",
 		"mysql2": "^3.11.0",
 		"quill": "^2.0.3",
-		"svelte-quill": "^1.2.0"
+		"svelte-quill": "^1.2.0",
+		"web-push": "^3.6.7"
 	}
 }
