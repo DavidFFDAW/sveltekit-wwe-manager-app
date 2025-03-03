@@ -2,6 +2,7 @@ import { BlogAdapter } from '$lib/server/adapters/blog.adapter.js';
 import { BlogDao } from '$lib/server/dao/blog.dao.js';
 // import { BlogDao } from '$lib/server/dao/blog.dao.js';
 import { Helpers } from '$lib/server/server.helpers.js';
+import { HttpService } from '$lib/services/http.service';
 
 export const actions = {
 	default: async ({ request, locals }) => {
@@ -18,7 +19,22 @@ export const actions = {
 
 		try {
 			const createdPost = await BlogDao.createBlogPost(BlogAdapter.getTransformedObject(datas));
-			if (createdPost.id) return Helpers.success('Post creado correctamente', 201);
+			if (!createdPost) return Helpers.error('No se pudo crear el post', 500);
+
+			await HttpService.post('/api/push/send', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					title: 'Nuevo post: ' + createdPost.title,
+					body: 'Se ha creado un nuevo post en el blog. ¡No te lo pierdas!',
+					url: `/blog/${createdPost.slug}`,
+					image: createdPost.image
+				})
+			});
+
+			return Helpers.success('Post creado correctamente', 201);
 		} catch (e: unknown) {
 			if (e instanceof Error) return Helpers.error(`Error: ${e.message}`, 500);
 		}
