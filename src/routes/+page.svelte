@@ -1,6 +1,7 @@
 <script lang="ts">
 	import MainHeader from '$lib/components/headers/main-header.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
+	import Subscribe from '$lib/components/push/subscribe.svelte';
 </script>
 
 <MainHeader
@@ -10,6 +11,7 @@
 />
 <PageWrapper page="home">
 	<section class="home-content">
+		<Subscribe />
 		<article class="w1 home-article">
 			<a href="/blog" class="w1 block">
 				<div class="w1 article-content flex gap-medium astart responsive reverse">

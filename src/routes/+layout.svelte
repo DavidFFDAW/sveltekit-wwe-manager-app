@@ -5,6 +5,7 @@
 	import { page } from '$app/stores';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import Sidebar from '$lib/components/sidebar/sidebar.svelte';
+	import ServiceWorker from '$lib/components/worker/service-worker.svelte';
 
 	const getRoute = (route: string | null) => {
 		if (!route) return 'non-page';
@@ -41,5 +42,7 @@
 			classes: ['wwe-app-toast', 'custom-toast']
 		}}
 	/>
+
+	<ServiceWorker />
 	<slot />
 </main>
