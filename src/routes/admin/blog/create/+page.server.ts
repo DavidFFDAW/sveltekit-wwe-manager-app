@@ -2,10 +2,9 @@ import { BlogAdapter } from '$lib/server/adapters/blog.adapter.js';
 import { BlogDao } from '$lib/server/dao/blog.dao.js';
 // import { BlogDao } from '$lib/server/dao/blog.dao.js';
 import { Helpers } from '$lib/server/server.helpers.js';
-import { HttpService } from '$lib/services/http.service';
 
 export const actions = {
-	default: async ({ request, locals }) => {
+	default: async ({ request, locals, fetch }) => {
 		if (!Helpers.hasPermission(locals)) return Helpers.error('No tienes permisos para hacer esto.');
 		const datas = await request.formData();
 
@@ -21,7 +20,7 @@ export const actions = {
 			const createdPost = await BlogDao.createBlogPost(BlogAdapter.getTransformedObject(datas));
 			if (!createdPost) return Helpers.error('No se pudo crear el post', 500);
 
-			await HttpService.post('/api/push/send', {
+			await fetch('/api/push/send', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
