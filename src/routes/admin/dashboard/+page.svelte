@@ -1,10 +1,30 @@
-<script>
+<script lang="ts">
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
+	import type { PPV } from '@prisma/client';
+	export let data: { nextPpv: PPV };
+	console.log({ data });
 </script>
 
 <PageWrapper page="dashboard">
 	<div class="admin-page-wrapper admin-dashboard">
 		<h1>Dashboard</h1>
+		{#if data.nextPpv}
+			<header class="next-ppv-date-wrapper flex gap-medium">
+				<div class="">
+					<h2>Próximo PPV</h2>
+				</div>
+				<div class="admin-page-wrapper admin-dashboard">
+					<img src={data.nextPpv.image} alt="imagen del próximo PPV {data.nextPpv.name}" />
+					{#if data.nextPpv.game_date}
+						<p>
+							El próximo PPV es {data.nextPpv.name} y se celebrará aproximadamente el {data.nextPpv.game_date.toLocaleDateString()}
+						</p>
+					{:else}
+						<p>El próximo PPV es {data.nextPpv.name}</p>
+					{/if}
+				</div>
+			</header>
+		{/if}
 		<nav class="admin-dashboard-page-navigation down" style="margin-top: 50px;">
 			<ul class="grid three-column-grid gap-20 admin-dashboard-list responsive" role="list">
 				<li class="w1 background">
