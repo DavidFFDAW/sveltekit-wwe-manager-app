@@ -11,7 +11,6 @@
 	const events = ppvs
 		.filter((ppv) => ppv.active)
 		.map((ppv) => {
-			console.log({ ppv });
 			return {
 				title: ppv.name,
 				start: ppv.game_date as Date,

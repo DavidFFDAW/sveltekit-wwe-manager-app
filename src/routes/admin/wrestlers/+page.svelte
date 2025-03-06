@@ -2,6 +2,7 @@
 	import { errorimage } from '$lib/actions/error.image.js';
 	import AsyncButton from '$lib/components/buttons/async-button.svelte';
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
+	import ExportCsv from '$lib/components/buttons/export-csv.svelte';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import Pagination from '$lib/components/visual/pagination.svelte';
 	import { WrestlerConstants } from '$lib/constants/wrestler.constants.js';
@@ -14,6 +15,13 @@
 			<input type="search" name="search" placeholder="Search..." bind:value={data.search} />
 			<button type="submit">Search</button>
 		</div>
+
+		<ExportCsv
+			href="/api/export/csv/wrestlers"
+			downloadName="wrestlers.csv"
+			label="Exportar CSV"
+			separator=";"
+		/>
 	</form>
 
 	<div class="w1 flex end">
