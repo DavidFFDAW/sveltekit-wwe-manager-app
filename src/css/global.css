@@ -263,6 +263,18 @@ button,
 	color: white;
 }
 
+.export.export-btn-link {
+    background-color: #1dbb20;
+    color: #fff;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    font-size: 1em;
+}
+
 .btn.danger {
 	background-color: var(--color-danger);
 	border: 1px solid salmon;
