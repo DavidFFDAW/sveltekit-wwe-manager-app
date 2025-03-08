@@ -1,4 +1,12 @@
-export const SidebarLinks = [
+type SidebarLink = {
+	url: string;
+	label: string;
+	icon: string;
+	equals: boolean;
+	submenu?: SidebarLink[];
+};
+
+export const SidebarLinks: SidebarLink[] = [
 	{
 		url: '/admin/dashboard',
 		label: 'Dashboard',
@@ -9,7 +17,21 @@ export const SidebarLinks = [
 		url: '/admin/blog',
 		label: 'Blog',
 		icon: 'book',
-		equals: false
+		equals: false,
+		submenu: [
+			{
+				url: '/admin/blog',
+				label: 'Posts',
+				icon: 'file-text',
+				equals: true
+			},
+			{
+				url: '/admin/blog/create',
+				label: 'Crear post',
+				icon: 'file-plus',
+				equals: true
+			}
+		]
 	},
 	{
 		url: '/admin/wrestlers',

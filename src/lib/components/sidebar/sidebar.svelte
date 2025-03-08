@@ -19,8 +19,9 @@
 		return () => window.removeEventListener('resize', handleResize);
 	});
 
-	const afterClick = () => {
-		if (isMobile) showSidebar = false;
+	const afterClick = (ev: Event) => {
+		const target = ev.target as HTMLElement;
+		if (isMobile && !target.classList.contains('has-submenu')) showSidebar = false;
 	};
 
 	const logout = async (event: Event) => {
@@ -58,11 +59,32 @@
 
 				{#each SidebarLinks as link}
 					<li
+						class:has-submenu={link.submenu && link.submenu.length > 0}
 						class:active={link.equals ? url === '/admin/dashboard' : url.startsWith(link.url)}
 						on:click={afterClick}
 						role="presentation"
 					>
 						<a href={link.url}> {link.label}</a>
+						{#if link.submenu}
+							<ul class="w1 flex column gap-5">
+								{#each link.submenu as sublink}
+									<li
+										data-real-url={sublink.url}
+										data-suburl={sublink.url}
+										data-startWith={url.startsWith(sublink.url)}
+										data-equals={url === sublink.url}
+										data-is-eq={sublink.equals}
+										class:active={sublink.equals
+											? url === sublink.url
+											: url.startsWith(sublink.url)}
+										on:click={afterClick}
+										role="presentation"
+									>
+										<a href={sublink.url}> {sublink.label}</a>
+									</li>
+								{/each}
+							</ul>
+						{/if}
 					</li>
 				{/each}
 
@@ -108,9 +130,37 @@
 		background: #c91727;
 		background: linear-gradient(140deg, #c91727, #1f1f1f);
 	}
+	.links-container-block li.has-submenu ul li a {
+		background: #1f1f1f;
+	}
+	.links-container-block li.has-submenu ul li.active a {
+		background: #c91727;
+		background: linear-gradient(140deg, #c91727, #1f1f1f);
+	}
 
 	.sidebar-toggle-btn {
 		display: none;
+	}
+
+	.links-container-block li.has-submenu {
+		position: relative;
+	}
+	.links-container-block li.has-submenu.active > a {
+		border-radius: 10px 10px 0 10px;
+	}
+	.links-container-block li.has-submenu ul {
+		display: none;
+		padding: 8px 16px;
+		margin-left: 20px;
+		width: calc(100% - 20px);
+		background-color: rgba(0, 0, 0, 0.3);
+		border-radius: 0 0 10px 10px;
+	}
+	.links-container-block li.has-submenu:hover ul {
+		display: flex;
+	}
+	.links-container-block li.has-submenu ul li a {
+		font-size: 13px;
 	}
 
 	@media only screen and (max-width: 768px) {
@@ -144,6 +194,10 @@
 
 		aside.sidebar.hide .sidebar-toggle-btn {
 			transform: rotate(0) translateX(100%);
+		}
+
+		.links-container-block li.has-submenu > a {
+			pointer-events: none;
 		}
 	}
 </style>

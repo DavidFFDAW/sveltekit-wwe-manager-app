@@ -7,8 +7,16 @@
 			return;
 		}
 
+		if (navigator.serviceWorker.controller) {
+			console.log('Service Worker already registered');
+			return;
+		}
+
+		const registrations = await navigator.serviceWorker.getRegistrations();
+		if (registrations.length > 0) return;
+
 		navigator.serviceWorker
-			.register('/sw.js')
+			.register('/sw.js?v=0.1.0')
 			.then((reg) => {
 				console.log('Service Worker registered', reg);
 			})
