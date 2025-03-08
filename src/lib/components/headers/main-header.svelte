@@ -73,6 +73,10 @@
 		background-size: cover;
 		background-repeat: no-repeat;
 		background-position: var(--bg-position);
+		width: calc(100% + 30px);
+		margin-left: -15px;
+		margin-right: -15px;
+		margin-top: -15px;
 	}
 	header.home-page-header.main-app-header .header-image-block img {
 		width: 96px;

@@ -1,6 +1,9 @@
 <script>
+	import Seo from '$lib/components/seo/seo.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 </script>
+
+<Seo title="Aviso Legal" description="Aviso legal de la aplicacion" />
 
 <PageWrapper page={'legal-notice'}>
 	<div class="legal-pages-container">

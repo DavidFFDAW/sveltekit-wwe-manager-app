@@ -2,6 +2,7 @@
 	import { errorimage } from '$lib/actions/error.image';
 	import MainHeader from '$lib/components/headers/main-header.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
+	import Seo from '$lib/components/seo/seo.svelte';
 
 	export let data = { posts: [] };
 </script>
@@ -15,6 +16,9 @@
 	mobileBackground="https://e00-xlk-ue-marca.uecdn.es/uploads/2024/03/28/66056608b302d.jpeg"
 	titlePosition="center"
 />
+
+<Seo title="Blog" description="Ultimas noticias del universo WWE" />
+
 <PageWrapper page="blog">
 	<section class="blog-content flex column gap latest-news">
 		<h2 class="w1 tleft">Ultimas noticias</h2>

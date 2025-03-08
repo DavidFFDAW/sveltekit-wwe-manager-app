@@ -1,79 +1,70 @@
 <script lang="ts">
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import type { PPV } from '@prisma/client';
+	import PpvCounter from './ppv-counter.svelte';
 	export let data: { nextPpv: PPV };
 	console.log({ data });
 </script>
 
 <PageWrapper page="dashboard">
 	<div class="admin-page-wrapper admin-dashboard">
-		<h1>Dashboard</h1>
 		{#if data.nextPpv}
-			<header class="next-ppv-date-wrapper flex gap-medium">
-				<div class="">
-					<h2>Próximo PPV</h2>
-				</div>
-				<div class="admin-page-wrapper admin-dashboard">
-					<img src={data.nextPpv.image} alt="imagen del próximo PPV {data.nextPpv.name}" />
-					{#if data.nextPpv.game_date}
-						<p>
-							El próximo PPV es {data.nextPpv.name} y se celebrará aproximadamente el {data.nextPpv.game_date.toLocaleDateString()}
-						</p>
-					{:else}
-						<p>El próximo PPV es {data.nextPpv.name}</p>
-					{/if}
-				</div>
+			<header class="next-ppv-date-wrapper flex gap-medium ignore-main-padding">
+				<PpvCounter finalDate={data.nextPpv.game_date as Date} ppv={data.nextPpv} />
 			</header>
 		{/if}
-		<nav class="admin-dashboard-page-navigation down" style="margin-top: 50px;">
-			<ul class="grid three-column-grid gap-20 admin-dashboard-list responsive" role="list">
-				<li class="w1 background">
-					<a href="/admin/wrestlers">
-						Luchadores
-						<img
-							src="https://davidfernandezdeveloper.es/2k/images/john-cena.webp"
-							alt="se muestra a John Cena y al pasar por encima se hace más grande saliendo del recuadro"
-						/>
-					</a>
-				</li>
-				<li class="w1 background reverse">
-					<a href="/admin/blog">
-						Blog
-						<img
-							src="https://davidfernandezdeveloper.es/2k/images/the-rock.webp"
-							alt="se muestra a Roman Reigns y al pasar por encima se hace más grande saliendo del recuadro"
-						/>
-					</a>
-				</li>
-				<li class="w1 background">
-					<a href="/admin/championship-reigns">
-						Reinados
-						<img
-							src="https://davidfernandezdeveloper.es/2k/images/gunther.webp"
-							alt="se muestra a Gunther y al pasar por encima se hace más grande saliendo del recuadro"
-						/>
-					</a>
-				</li>
-				<li class="w1 background reverse">
-					<a href="/admin/ppvs">
-						PPVs
-						<img
-							src="https://davidfernandezdeveloper.es/2k/images/shawn-michaels.webp"
-							alt="se muestra a The Undertaker y al pasar por encima se hace más grande saliendo del recuadro"
-						/>
-					</a>
-				</li>
-				<li class="w1 background reverse">
-					<a href="/admin/image-editor">
-						Editor
-						<img
-							src="https://davidfernandezdeveloper.es/2k/images/kurt-angle.webp"
-							alt="se muestra a Stone Cold y al pasar por encima se hace más grande saliendo del recuadro"
-						/>
-					</a>
-				</li>
-			</ul>
-		</nav>
+		<div class="down">
+			<h1>Dashboard</h1>
+			<nav class="admin-dashboard-page-navigation down" style="margin-top: 50px;">
+				<ul class="grid three-column-grid gap-20 admin-dashboard-list responsive" role="list">
+					<li class="w1 background">
+						<a href="/admin/wrestlers">
+							Luchadores
+							<img
+								src="https://davidfernandezdeveloper.es/2k/images/john-cena.webp"
+								alt="se muestra a John Cena y al pasar por encima se hace más grande saliendo del recuadro"
+							/>
+						</a>
+					</li>
+					<li class="w1 background reverse">
+						<a href="/admin/blog">
+							Blog
+							<img
+								src="https://davidfernandezdeveloper.es/2k/images/the-rock.webp"
+								alt="se muestra a Roman Reigns y al pasar por encima se hace más grande saliendo del recuadro"
+							/>
+						</a>
+					</li>
+					<li class="w1 background">
+						<a href="/admin/championship-reigns">
+							Reinados
+							<img
+								src="https://davidfernandezdeveloper.es/2k/images/gunther.webp"
+								alt="se muestra a Gunther y al pasar por encima se hace más grande saliendo del recuadro"
+							/>
+						</a>
+					</li>
+					<li class="w1 background reverse">
+						<a href="/admin/ppvs">
+							PPVs
+							<img
+								src="https://davidfernandezdeveloper.es/2k/images/shawn-michaels.webp"
+								alt="se muestra a The Undertaker y al pasar por encima se hace más grande saliendo del recuadro"
+							/>
+						</a>
+					</li>
+					<li class="w1 background reverse">
+						<a href="/admin/image-editor">
+							Editor
+							<img
+								src="https://davidfernandezdeveloper.es/2k/images/kurt-angle.webp"
+								alt="se muestra a Stone Cold y al pasar por encima se hace más grande saliendo del recuadro"
+							/>
+						</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
 	</div>
 </PageWrapper>
 

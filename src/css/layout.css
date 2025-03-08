@@ -253,8 +253,19 @@ body main.app-main-entrypoint .page-wrapper-content {
 }
 
 /* body main.app-main-entrypoint.public-page .page-wrapper-content { */
+body main.app-main-entrypoint .ignore-main-padding {
+	width: calc(100% + 30px);
+	margin-left: -15px;
+	margin-right: -15px;
+	margin-top: -15px;
+}
+
+body main.app-main-entrypoint {
+	padding: 15px;
+}
 body main.app-main-entrypoint .page-wrapper-content {
-	padding: 15px 15px;
+	/* padding: 15px; */
+	padding: 0;
 	height: 100%;
 }
 

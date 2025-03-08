@@ -2,7 +2,9 @@
 	import { FooterLinks } from './footer.links';
 </script>
 
-<footer class="w1 footer public-footer footer-block flex start gap-small acenter responsive">
+<footer
+	class="w1 footer public-footer footer-block flex start gap-small acenter responsive ignore-main-padding"
+>
 	<div class="footer-image-block">
 		<a href="/"><img width="144" height="144" src="/icons/versatile.png" alt="logo" /></a>
 	</div>

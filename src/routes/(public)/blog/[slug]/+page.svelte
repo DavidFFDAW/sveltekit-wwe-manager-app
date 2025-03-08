@@ -3,6 +3,7 @@
 	import { errorimage } from '$lib/actions/error.image';
 	import Icon from '$lib/components/icons/icon.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
+	import Seo from '$lib/components/seo/seo.svelte';
 	import type { BlogPost } from '@prisma/client';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
@@ -34,28 +35,19 @@
 	});
 </script>
 
-<svelte:head>
-	<meta name="description" content={data.post.exceptr?.slice(0, 157) + '...'} />
-	<link rel="canonical" href={$page.url.href} />
-	<meta property="og:url" content={$page.url.href} />
-	<meta property="og:title" content={data.post.title} />
-	<meta property="og:description" content={data.post.exceptr?.slice(0, 157) + '...'} />
-	<meta property="og:image" itemprop="image" content={data.post.image} />
+<Seo
+	title={data.post.title}
+	description={data.post.exceptr?.slice(0, 155)}
+	image={data.post.image}
+	robots="index, follow"
+>
 	<meta property="og:type" content="article" />
 	<meta property="og:updated_time" content={data.post.updated_at?.getTime().toString()} />
 	<meta property="article:published_time" content={data.post.created_at?.getTime().toString()} />
 	<meta property="article:author" content="WWE Manager" />
 	<meta property="article:section" content="Blog" />
 	<meta property="article:tag" content="WWE" />
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content={data.post.title} />
-	<meta name="twitter:description" content={data.post.exceptr} />
-	<meta name="twitter:image" content={data.post.image} />
-	<meta name="twitter:site" content="@wwemanager" />
-	<meta name="twitter:creator" content="@wwemanager" />
-	<meta name="twitter:url" content="https://x.com" />
-	<meta name="twitter:domain" content="wwemanager" />
-</svelte:head>
+</Seo>
 
 <PageWrapper page="blog-post-page">
 	<div class="blog-container" class:error={!data.post}>
