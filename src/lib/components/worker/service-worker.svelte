@@ -16,7 +16,7 @@
 		if (registrations.length > 0) return;
 
 		navigator.serviceWorker
-			.register('/sw.js?v=0.1.0')
+			.register('/sw.js?v=0.1.1')
 			.then((reg) => {
 				console.log('Service Worker registered', reg);
 			})
