@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { submitForm } from './custom.enhance';
+	import { customEnhance } from './custom.enhance';
 
 	export let method: 'post' | 'get' | 'put' | 'delete' = 'post';
 	export let action: string = '';
 	export let redirect: string = '';
 	export let classes: string = 'simple-async-default-form';
 	export let updateId: string | number = '';
+	export let afterSubmit: () => void = () => {};
 </script>
 
 <form
@@ -14,7 +15,7 @@
 	class="relative app-custom-form {classes}"
 	data-method={method}
 	method={method === 'get' ? 'get' : 'post'}
-	use:enhance={submitForm}
+	use:enhance={customEnhance(afterSubmit)}
 >
 	<div class="form-inner-content">
 		{#if redirect}

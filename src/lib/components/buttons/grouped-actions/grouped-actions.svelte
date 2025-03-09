@@ -34,7 +34,7 @@
 	class="grouped-actions-wrapper-container {position} {item ? 'is-item' : 'normal-action'}"
 	class:open
 >
-	<SimpleAsyncForm bind:updateId>
+	<SimpleAsyncForm bind:updateId afterSubmit={() => (open = false)}>
 		<button
 			class="grouped-actions-button btn cta icon"
 			on:click|preventDefault={() => (open = !open)}
