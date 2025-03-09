@@ -7,6 +7,7 @@ export function errorimage(node: HTMLImageElement, fallbackImage: string = '/noi
 	const handleError = () => {
 		if (node.tagName === 'IMG') {
 			node.src = fallbackImage;
+			node.classList.add('error-image', 'fallback-error-image');
 		}
 	};
 
