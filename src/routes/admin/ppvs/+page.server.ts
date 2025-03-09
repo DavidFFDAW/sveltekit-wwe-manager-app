@@ -1,30 +1,52 @@
 import { PPVDao } from '$lib/server/dao/ppv.dao.js';
-import prisma from '$lib/server/prisma';
 import { Helpers } from '$lib/server/server.helpers.js';
 
 export async function load() {
-    return {
-        ppvs: await PPVDao.getOrderedPPVs(),
-    };
+	return {
+		ppvs: await PPVDao.getOrderedPPVs()
+	};
 }
 
 export const actions = {
-    async default({ request }) {
-        const formData = await request.formData();
-        const ppv = Object.fromEntries(formData);
-        console.log({
-            ppv,
-            statuses: formData.getAll('status'),
-        });
+	async toggleVisibility({ request, locals }) {
+		if (!Helpers.hasPermission(locals)) return Helpers.error('Unauthorized', 401);
+		const updatingId = Helpers.getUpdateID(await request.formData());
 
-        await new Promise(resolve => setTimeout(resolve, 2000));
+		try {
+			const ppv = await PPVDao.toggleVisibility(updatingId);
+			if (!ppv) return Helpers.error('PPV not found', 404);
 
-        return Helpers.error('Error al intentar crear recurso PPV', 500);
-        throw new Error('test error');
+			return Helpers.success(`${ppv.name} ahora es ${ppv.visible ? 'visible' : 'invisible'}`);
+		} catch (error) {
+			if (error instanceof Error) return Helpers.error(error.message);
+		}
+	},
+	async toggleActive({ request, locals }) {
+		if (!Helpers.hasPermission(locals)) return Helpers.error('Unauthorized', 401);
+		const updatingId = Helpers.getUpdateID(await request.formData());
 
-        return {
-            status: 303,
-            message: 'PPV created',
-        };
-    },
+		try {
+			const ppv = await PPVDao.toggleActive(updatingId);
+			if (!ppv) return Helpers.error('No se ha encontrado el PPV', 404);
+
+			return Helpers.success(
+				`${ppv.name} ahora pasa a estar ${ppv.active ? 'activo' : 'inactivo'}`
+			);
+		} catch (error) {
+			if (error instanceof Error) return Helpers.error(error.message);
+		}
+	},
+	async deletePPV({ request, locals }) {
+		if (!Helpers.hasPermission(locals)) return Helpers.error('Unauthorized', 401);
+		const deletingId = Helpers.getUpdateID(await request.formData());
+
+		try {
+			const ppv = await PPVDao.deleteById(deletingId);
+			if (!ppv) return Helpers.error('No se ha encontrado el PPV', 404);
+
+			return Helpers.success(`${ppv.name} ha sido eliminado`);
+		} catch (error) {
+			if (error instanceof Error) return Helpers.error(error.message);
+		}
+	}
 };
