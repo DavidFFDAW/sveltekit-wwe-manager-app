@@ -11,7 +11,6 @@
 />
 <PageWrapper page="home">
 	<section class="home-content">
-		<Subscribe />
 		<article class="w1 home-article">
 			<a href="/blog" class="w1 block">
 				<div class="w1 article-content flex gap-medium astart responsive reverse">

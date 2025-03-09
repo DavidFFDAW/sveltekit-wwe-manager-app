@@ -3,7 +3,6 @@
 	import type { PPV } from '@prisma/client';
 	import PpvCounter from './ppv-counter.svelte';
 	export let data: { nextPpv: PPV };
-	console.log({ data });
 </script>
 
 <PageWrapper page="dashboard">

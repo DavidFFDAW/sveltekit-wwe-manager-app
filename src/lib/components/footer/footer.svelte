@@ -76,6 +76,11 @@
 		background-color: #111010;
 		color: #fff;
 	}
+	footer.footer.footer-block.ignore-main-padding,
+	footer.footer.public-footer.footer-block.ignore-main-padding {
+		width: calc(100% + 30px);
+		margin-bottom: -15px;
+	}
 
 	footer.footer.public-footer.footer-block .footer-title {
 		position: relative;

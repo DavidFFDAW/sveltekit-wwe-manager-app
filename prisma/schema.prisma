@@ -57,6 +57,7 @@ model User {
     api_token               String?    @db.VarChar(255)
     UserRole                UserRole[]
     BlogPost                BlogPost[]
+    Subscriptions           Subscription[]
 
     @@map(name: "users")
 }
@@ -189,6 +190,7 @@ model WrestlerTeam {
 model ChampionshipReign {
     id                Int          @id @default(autoincrement())
     days              Int          @db.Int
+    defences          Int?         @db.Int
     current           Boolean      @db.TinyInt
     wrestler_id       Int          @db.Int
     Wrestler          Wrestler     @relation("wrestler", fields: [wrestler_id], references: [id])
@@ -247,9 +249,14 @@ model Subscription {
     endpoint   String    @db.VarChar(255)
     p256dh     String    @db.VarChar(255)
     auth       String    @db.VarChar(255)
+    user_id    Int       @db.Int
+    Subscriber User      @relation(fields: [user_id], references: [id])
+    user_agent String?   @db.VarChar(255)
+    device     String?   @db.VarChar(25)
     expiration DateTime? @db.DateTime
     created_at DateTime? @default(now())
     updated_at DateTime? @updatedAt
+
 
     @@map(name: "subscriptions")
 }

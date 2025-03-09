@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { errorimage } from '$lib/actions/error.image';
+	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
 	import PpvActions from './ppv-actions.svelte';
 	// import Calendar from './calendar.svelte';
 	export let data;
@@ -53,6 +54,8 @@
 			</div>
 		{/each}
 	</div>
+
+	<ButtonCreate endpoint="/ppv/create" />
 </div>
 
 <style>

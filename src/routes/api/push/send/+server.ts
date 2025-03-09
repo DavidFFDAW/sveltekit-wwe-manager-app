@@ -27,9 +27,9 @@ export async function POST({ request, locals }) {
 		});
 
 		await Promise.all(notificationsToSend);
-		return Helpers.apiResponseMessage('Push sent', 200);
+		return Helpers.apiResponseMessage('Notificaciones enviadas correctamente', 200);
 	} catch (error) {
 		console.error(error);
-		return Helpers.apiResponseMessage('Error sending push', 500);
+		return Helpers.apiResponseMessage('Error al enviar las notificaciones', 500);
 	}
 }

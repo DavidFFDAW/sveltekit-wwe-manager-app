@@ -43,15 +43,15 @@ export const actions = {
 		if (!formData.has('role')) return Helpers.error('Un usuario debe tener un rol', 400);
 
 		const hasMarketing = Helpers.getToggleInput(formData, 'user_marketing_notifications');
-		Helpers.writeLog('user-update-datas-log', submittedDatas);
-
+		const userActiveness = Helpers.getToggleInput(formData, 'user_active');
 		try {
 			const data: Prisma.UserUncheckedUpdateInput = {
 				username: submittedDatas.username as string,
 				name: submittedDatas.name as string,
 				email: submittedDatas.email as string,
 				newsletter_subscription: hasMarketing,
-				image: submittedDatas.image as string
+				image: submittedDatas.image as string,
+				active: userActiveness
 			};
 			if (!isSuperMegaAdmin) {
 				data.type = submittedDatas.role as string;

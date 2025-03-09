@@ -64,6 +64,14 @@
 					en el blog o cualquier otro tipo de comunicación.
 				</p>
 			</div>
+			<div class="w1 flex gap-smaller">
+				<ToggleInput label="Activo" name="user_active" checked={user.active} />
+				<p class="w1">
+					<strong>Importante: </strong>
+					Este campo determina si el usuario está activo o no. Si el usuario no está activo, no podrá
+					acceder a la plataforma.
+				</p>
+			</div>
 		</Box>
 	</div>
 </div>

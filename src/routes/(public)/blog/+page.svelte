@@ -3,8 +3,9 @@
 	import MainHeader from '$lib/components/headers/main-header.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import Seo from '$lib/components/seo/seo.svelte';
+	import SubscriptionBlock from './subscription-block.svelte';
 
-	export let data = { posts: [] };
+	export let data;
 </script>
 
 <MainHeader
@@ -20,6 +21,7 @@
 <Seo title="Blog" description="Ultimas noticias del universo WWE" />
 
 <PageWrapper page="blog">
+	<SubscriptionBlock user={data.user} />
 	<section class="blog-content flex column gap latest-news">
 		<h2 class="w1 tleft">Ultimas noticias</h2>
 		<div class="w1 flex center astart gap-medium blog-list responsive">
