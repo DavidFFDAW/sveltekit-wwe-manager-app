@@ -6,7 +6,6 @@
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import Sidebar from '$lib/components/sidebar/sidebar.svelte';
 	import ServiceWorker from '$lib/components/worker/service-worker.svelte';
-	import Seo from '$lib/components/seo/seo.svelte';
 
 	const getRoute = (route: string | null) => {
 		if (!route) return 'non-page';
