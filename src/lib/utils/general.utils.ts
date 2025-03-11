@@ -58,5 +58,20 @@ export const Utils = {
 		const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
 		const rawData = atob(base64);
 		return new Uint8Array([...rawData].map((char) => char.charCodeAt(0)));
+	},
+	formatDate: (date: Date | null, includeHours = false): string => {
+		if (!date) return '';
+		const options: Intl.DateTimeFormatOptions = {
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric'
+		};
+		if (includeHours) {
+			options.hour = 'numeric';
+			options.minute = 'numeric';
+			options.second = 'numeric';
+		}
+
+		return date.toLocaleDateString('es-ES', options);
 	}
 };
