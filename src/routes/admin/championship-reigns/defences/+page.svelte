@@ -44,7 +44,7 @@
 </div>
 
 <AsyncForm action="updateDefences" method="post" classes="down" buttonText="Actualizar defensas">
-	<div class="reign-defences-list grid grid-two-column gap-small">
+	<div class="reign-defences-list grid grid-two-column gap-small responsive">
 		{#each parsedReigns as reign}
 			<div class="reign-defences-list-item relative">
 				<input type="checkbox" name="reigns[]" value={reign.id} class="app-checkbox" />
