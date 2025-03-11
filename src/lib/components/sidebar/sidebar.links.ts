@@ -49,7 +49,21 @@ export const SidebarLinks: SidebarLink[] = [
 		url: '/admin/championship-reigns',
 		label: 'Reinados',
 		icon: 'trophy-fill',
-		equals: false
+		equals: false,
+		submenu: [
+			{
+				url: '/admin/championship-reigns/defences',
+				label: 'Defensas',
+				icon: 'shield-fill',
+				equals: true
+			},
+			{
+				url: '/admin/championship-reigns/create',
+				label: 'Crear',
+				icon: 'trophy-fill',
+				equals: true
+			}
+		]
 	},
 	{
 		url: '/admin/users',

@@ -48,6 +48,27 @@ export const ReignsDao = {
 			orderBy: [{ Championship: { brand: 'asc' } }, { Championship: { order: 'asc' } }]
 		});
 	},
+	getCurrentChampionsDefences: () => {
+		return prisma.championshipReign.findMany({
+			where: {
+				current: true,
+				lost_date: null,
+				can_stats_count: true,
+				Championship: {
+					active: true
+				}
+			},
+			include: {
+				Wrestler: true,
+				Championship: true,
+				Partner: true,
+				Team: true
+			},
+			orderBy: {
+				won_date: 'desc'
+			}
+		});
+	},
 
 	getLastCurrentReignFromChampionship: (championship_id: number) => {
 		return prisma.championshipReign.findFirst({

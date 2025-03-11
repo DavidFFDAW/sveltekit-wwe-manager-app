@@ -27,7 +27,8 @@
 
 	$: parsedReigns = data.reigns.map((reign) => ({
 		...reign,
-		updatedAt: formatDate(reign.updated_at)
+		updatedAt: formatDate(reign.updated_at),
+		createdAt: Utils.formatDate(reign.created_at)
 	}));
 </script>
 
@@ -79,6 +80,7 @@
 						{#if reign.defences && reign.defences > 0}
 							<small>{reign.defences} defensas</small>
 						{/if}
+						<p>Creado: {reign.createdAt}</p>
 						<p>Actualizado: {reign.updatedAt}</p>
 					</div>
 				</div>

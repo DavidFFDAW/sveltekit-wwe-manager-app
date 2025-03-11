@@ -2,7 +2,7 @@ import { ReignsDao } from '$lib/server/dao/reigns.dao';
 import { Helpers } from '$lib/server/server.helpers.js';
 
 export const load = async () => {
-	return { reigns: await ReignsDao.getCurrentChampionshipReign() };
+	return { reigns: await ReignsDao.getCurrentChampionsDefences() };
 };
 
 export const actions = {
