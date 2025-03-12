@@ -239,6 +239,26 @@ button,
 	color: white;
 }
 
+.btn.btn-info {
+	background-color: #1da1f2;
+	color: white;
+}
+
+btn.btn-success {
+	background-color: #1bb76e;
+	color: white;
+}
+
+.btn.btn-warning {
+	background-color: #ff9800;
+	color: white;
+}
+
+.btn.btn-dark {
+	background-color: #343a40;
+	color: white;
+}
+
 .btn.btn-small {
 	padding: 5px 10px;
 	font-size: 14px;
@@ -264,15 +284,15 @@ button,
 }
 
 .export.export-btn-link {
-    background-color: #1dbb20;
-    color: #fff;
-    font-weight: 500;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    outline: none;
-    border: none;
-    font-size: 1em;
+	background-color: #1dbb20;
+	color: #fff;
+	font-weight: 500;
+	padding: 10px 20px;
+	border-radius: 5px;
+	cursor: pointer;
+	outline: none;
+	border: none;
+	font-size: 1em;
 }
 
 .btn.danger {
@@ -291,6 +311,7 @@ button,
 	opacity: 0.2;
 }
 
+/* GRID */
 .resource-list.grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -370,6 +391,7 @@ aside.sidebar.shown+main.app-main-entrypoint form.app-custom-form .buttons-block
 	color: #888888;
 }
 
+/* ACTIONS */
 .grouped-actions-container .grouped-actions-link:hover,
 .grouped-actions-container .grouped-actions-button:hover {
 	background-color: #f9f9f9;
@@ -392,6 +414,41 @@ aside.sidebar.shown+main.app-main-entrypoint form.app-custom-form .buttons-block
 	width: 100%;
 	display: block;
 	background-color: #ffffff;
+}
+
+
+/* TABLES */
+.overflowable-table {
+	max-height: 500px;
+	overflow-x: auto;
+	overflow-y: auto;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	border-radius: 5px;
+	overflow: hidden;
+}
+
+table th,
+table td {
+	border: 1px solid #f0f0f0;
+	padding: 5px;
+	text-align: start;
+}
+
+table th {
+	background-color: #f0f0f0;
+}
+
+table td input,
+table td select {
+	width: 100%;
+}
+
+table td button.btn {
+	padding: 5px 8px;
 }
 
 @media only screen and (max-width: 768px) {

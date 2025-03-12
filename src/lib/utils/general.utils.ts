@@ -36,7 +36,7 @@ export const Utils = {
 		// get rid of the initial `the` from the slug
 		return temporalText.startsWith('the-') ? temporalText.replace('the-', '') : temporalText;
 	},
-	readFile: (file: File): Promise<string> => {
+	readFile: (file: File, type = 'url'): Promise<string> => {
 		return new Promise((resolve, reject) => {
 			const reader = new FileReader();
 			reader.onload = (event: ProgressEvent<FileReader>) => {
@@ -46,7 +46,9 @@ export const Utils = {
 				resolve(event.target.result);
 			};
 			reader.onerror = reject;
-			reader.readAsDataURL(file);
+			if (type === 'url') reader.readAsDataURL(file);
+			if (type === 'text') reader.readAsText(file);
+			if (type === 'buffer') reader.readAsArrayBuffer(file);
 		});
 	},
 	getRandomID: (name: string): string => {
