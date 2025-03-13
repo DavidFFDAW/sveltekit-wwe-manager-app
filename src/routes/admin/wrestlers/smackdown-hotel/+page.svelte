@@ -1,10 +1,13 @@
 <script lang="ts">
+	import { droppableImages } from '$lib/actions/droppable.images';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
+	import Icon from '$lib/components/icons/icon.svelte';
 	import { Utils } from '$lib/utils/general.utils.js';
 	import ImportTable from './import-table.svelte';
 	import type { ImportationDatas } from './importation.models.js';
 
 	export let data;
+	let hasFile: boolean = false;
 	let uploadingWrestlers: ImportationDatas[] = [];
 	$: onlyNames = [...new Set(data.wrestlers.map((wrestler) => wrestler.name.toLowerCase()))];
 
@@ -14,23 +17,8 @@
 		navigator.clipboard.writeText(code.textContent);
 	};
 
-	const onFileChange = async (event: Event) => {
-		const target = event.target as HTMLInputElement;
-		if (!target.files) return;
-		const file = target.files[0];
-		if (!file) return;
-
-		const read = await Utils.readFile(file, 'text');
-		if (!read) return;
-
-		const uploadWrestlers = JSON.parse(read) as {
-			overall: number;
-			name: string;
-			label: string;
-			image: string;
-		}[];
-
-		uploadingWrestlers = uploadWrestlers
+	const setUploadingContent = (content: ImportationDatas[]) => {
+		uploadingWrestlers = content
 			.filter((wrestler) => {
 				const wrestlerName = wrestler.name.trim();
 				if (!onlyNames.includes(wrestlerName.toLowerCase())) {
@@ -39,11 +27,35 @@
 			})
 			.sort((a, b) => a.name.localeCompare(b.name));
 
-		target.value = '';
 		setTimeout(() => {
 			const button = document.querySelector('.import-button-container');
 			if (button) button.scrollIntoView({ behavior: 'smooth' });
 		}, 500);
+	};
+
+	const onDropImage = async (event: DragEvent) => {
+		const files = event.dataTransfer?.files;
+		if (!files || files.length === 0) return;
+		hasFile = files.length > 0;
+
+		const jsonContent = await Utils.readFile(files[0], 'text');
+		if (!jsonContent) return;
+
+		setUploadingContent(JSON.parse(jsonContent));
+	};
+
+	const onFileChange = async (event: Event) => {
+		event.preventDefault();
+		const target = event.target as HTMLInputElement;
+		if (!target.files) return;
+		const file = target.files[0];
+		if (!file) return;
+		hasFile = target.files.length > 0;
+
+		const jsonContent = await Utils.readFile(file, 'text');
+		if (!jsonContent) return;
+
+		setUploadingContent(JSON.parse(jsonContent));
 	};
 </script>
 
@@ -98,9 +110,17 @@
 			</small>
 		</div>
 
-		<div class="import-form relative">
-			<input type="file" accept=".json" class="app-file" on:change={onFileChange} />
-			<button class="w1 btn" type="button">Cargar JSON descargado</button>
+		<div class="import-form import-form-space relative">
+			<input
+				type="file"
+				accept=".json"
+				class="app-file"
+				on:change={onFileChange}
+				use:droppableImages={onDropImage}
+			/>
+			{#if hasFile}
+				<Icon icon="check" classes="check" />
+			{/if}
 		</div>
 
 		<AsyncForm method="post" action="importWrestlers" classes="down" showButtons={false}>
@@ -144,6 +164,15 @@
 		position: relative;
 	}
 
+	.import-form.import-form-space {
+		width: 100%;
+		min-height: 250px;
+		border: 2px dashed #ccc;
+		border-radius: 5px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 	.btn.copy {
 		position: absolute;
 		top: 10px;

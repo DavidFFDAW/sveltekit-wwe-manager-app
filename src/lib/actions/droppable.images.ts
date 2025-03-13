@@ -1,6 +1,6 @@
 export function droppableImages(
 	node: HTMLElement,
-	onDropCallback: (event: DragEvent) => void | boolean
+	onDropCallback: (event: DragEvent) => void | boolean | Promise<void | boolean>
 ) {
 	const initialClasses = node.className;
 	const preventDefault = (className: string) => (event: DragEvent) => {
