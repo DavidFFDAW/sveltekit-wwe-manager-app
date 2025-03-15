@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { errorimage } from '$lib/actions/error.image';
 	import Icon from '$lib/components/icons/icon.svelte';
-	import OverflowableTable from '$lib/components/visual/overflowable-table.svelte';
 	import { brands } from '$lib/constants/app';
 	import { WrestlerConstants } from '$lib/constants/wrestler.constants';
 	import type { ImportationDatas } from './importation.models';

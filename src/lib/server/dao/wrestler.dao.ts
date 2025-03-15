@@ -1,7 +1,6 @@
 import prisma from '../prisma';
 import type { WrestlerObject } from '../interfaces';
 import type { Prisma } from '@prisma/client';
-import type { createMany } from 'drizzle-orm';
 
 export const WrestlerDao = {
 	required: [
@@ -35,7 +34,7 @@ export const WrestlerDao = {
 			categories: form.has('categories') ? form.getAll('categories').join(',') : null
 		};
 	},
-	getWrestlers(config: {} = {}) {
+	getWrestlers(config: Prisma.WrestlerFindManyArgs | undefined = undefined) {
 		return prisma.wrestler.findMany(config);
 	},
 	getWrestlerById(id: number) {
@@ -90,6 +89,18 @@ export const WrestlerDao = {
 	createMany(wrestlers: Prisma.WrestlerCreateManyInput[]) {
 		return prisma.wrestler.createMany({
 			data: wrestlers
+		});
+	},
+	updateManyStatus(ids: number[], status: string) {
+		return prisma.wrestler.updateMany({
+			where: {
+				id: {
+					in: ids
+				}
+			},
+			data: {
+				status
+			}
 		});
 	}
 };

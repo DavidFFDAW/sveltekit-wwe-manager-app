@@ -41,5 +41,24 @@ export const actions = {
 			console.error(error);
 			return Helpers.error('Ha ocurrido un error al importar los luchadores');
 		}
+	},
+	releaseWrestlers: async ({ request, locals }) => {
+		if (!Helpers.hasPermission(locals))
+			return Helpers.error('No tienes permisos para realizar esta acción');
+
+		try {
+			const datas = await request.formData();
+			const releasingWrestlers = datas.getAll('releases[]');
+			const released = await WrestlerDao.updateManyStatus(
+				releasingWrestlers.map((id) => Number(id)),
+				'released'
+			);
+			if (!released) return Helpers.error('No se ha podido liberar los luchadores');
+
+			return Helpers.success('Luchadores liberados correctamente');
+		} catch (error) {
+			console.error(error);
+			return Helpers.error('Ha ocurrido un error al liberar los luchadores');
+		}
 	}
 };
