@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { fade } from 'svelte/transition';
 	import { errorimage } from '$lib/actions/error.image';
 	import Icon from '$lib/components/icons/icon.svelte';
 	import { brands } from '$lib/constants/app';
@@ -42,7 +43,7 @@
 		</thead>
 		<tbody>
 			{#each wrestlers as wrestler}
-				<tr>
+				<tr transition:fade>
 					<td>
 						<button type="button" class="btn btn-danger" on:click={removeWrestler(wrestler)}>
 							<Icon icon="trash" />
