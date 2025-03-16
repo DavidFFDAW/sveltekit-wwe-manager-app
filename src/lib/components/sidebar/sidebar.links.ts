@@ -66,6 +66,12 @@ export const SidebarLinks: SidebarLink[] = [
 		]
 	},
 	{
+		url: '/admin/teams',
+		label: 'Equipos',
+		icon: 'users',
+		equals: false
+	},
+	{
 		url: '/admin/users',
 		label: 'Users',
 		icon: 'persons',
