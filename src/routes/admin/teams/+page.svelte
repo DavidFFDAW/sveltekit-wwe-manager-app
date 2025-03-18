@@ -1,9 +1,11 @@
 <script>
 	import { errorimage } from '$lib/actions/error.image';
+	import Box from '$lib/components/box/box.svelte';
 	import AsyncButton from '$lib/components/buttons/async-button.svelte';
 	import ActionsButton from '$lib/components/buttons/grouped-actions/actions-button.svelte';
 	import ActionsLink from '$lib/components/buttons/grouped-actions/actions-link.svelte';
 	import GroupedActions from '$lib/components/buttons/grouped-actions/grouped-actions.svelte';
+	import Input from '$lib/components/forms/inputs/input.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 
 	export let data;
@@ -19,6 +21,42 @@
 			text="Comprobar géneros de equipos"
 			icon="gender-ambiguous"
 		/>
+	</div>
+
+	<div class="search-container">
+		<Box title="Buscador" icon="search">
+			<form action="/admin/teams" method="get" class="w1 flex column gap-smaller">
+				<div class="w1 block">
+					<Input
+						label="Busqueda por equipo o luchador"
+						type="search"
+						name="search"
+						placeholder="Nombre de equipo o luchador miembro de equipo"
+					/>
+				</div>
+
+				<div class="w1 status-selector flex gap-smaller">
+					<div class="status-input-container flex">
+						<input type="radio" id="team-status-all" name="status" value="all" checked />
+						<label for="team-status-all">Todos</label>
+					</div>
+
+					<div class="status-input-container flex">
+						<input type="radio" id="team-status-active" name="status" value="active" />
+						<label for="team-status-active">Solo activos</label>
+					</div>
+
+					<div class="status-input-container flex">
+						<input type="radio" id="team-status-inactive" name="status" value="inactive" />
+						<label for="team-status-inactive">Solo inactivos</label>
+					</div>
+				</div>
+
+				<div class="w1 flex end">
+					<button type="submit" class="btn cta">Buscar</button>
+				</div>
+			</form>
+		</Box>
 	</div>
 
 	<div class="page-list-container">
