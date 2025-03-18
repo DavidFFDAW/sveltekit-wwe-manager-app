@@ -10,21 +10,14 @@
 	export let position: 'left' | 'right' = 'left';
 	export let updateId: string | number = 0;
 
-	function closeDropdown(event: KeyboardEvent) {
-		event.preventDefault();
-		if (event.key === 'Escape') open = false;
-	}
-
 	function clickOutside(event: MouseEvent) {
 		if (!(event.target as HTMLElement).closest('.grouped-actions-wrapper-container')) open = false;
 	}
 
 	onMount(() => {
-		document.body.addEventListener('keydown', closeDropdown);
 		document.body.addEventListener('click', clickOutside);
 
 		return () => {
-			document.body.removeEventListener('keydown', closeDropdown);
 			document.body.removeEventListener('click', clickOutside);
 		};
 	});
