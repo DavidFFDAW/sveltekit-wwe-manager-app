@@ -1,8 +1,31 @@
 import { TeamsDao } from '$lib/server/dao/teams.dao.js';
 import { Helpers } from '$lib/server/server.helpers.js';
+import type { Prisma } from '@prisma/client';
 
-export async function load() {
-	return { teams: await TeamsDao.getTeams() };
+export async function load({ url }) {
+	const search = url.searchParams;
+	const params = {
+		name: search.get('search') || '',
+		status: search.get('status') || null
+	};
+
+	const where: Prisma.TeamWhereInput = {
+		OR: [
+			{ name: { contains: params.name } },
+			{
+				WrestlerTeam: {
+					some: {
+						Wrestler: {
+							name: { contains: params.name }
+						}
+					}
+				}
+			}
+		],
+		active: params.status ? params.status === 'active' : undefined
+	};
+
+	return { params: params, teams: await TeamsDao.getAdminTeams(where) };
 }
 
 export const actions = {

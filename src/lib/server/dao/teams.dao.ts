@@ -1,8 +1,10 @@
+import type { Prisma } from '@prisma/client';
 import prisma from '../prisma';
 
 export const TeamsDao = {
-	getTeams: () => {
+	getAdminTeams: (where: Prisma.TeamWhereInput) => {
 		return prisma.team.findMany({
+			where: where,
 			include: {
 				WrestlerTeam: {
 					include: {
@@ -13,6 +15,22 @@ export const TeamsDao = {
 			}
 		});
 	},
+
+	getReignBySlug: (slug: string) => {
+		return prisma.team.findFirst({
+			where: {
+				OR: [{ slug: slug }, { id: Number(slug) }]
+			},
+			include: {
+				WrestlerTeam: {
+					include: {
+						Wrestler: true
+					}
+				}
+			}
+		});
+	},
+
 	getReignSelectableTeams: async () => {
 		const teams = await prisma.team.findMany({
 			include: {

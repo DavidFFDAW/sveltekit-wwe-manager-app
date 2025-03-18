@@ -46,9 +46,8 @@
 	<meta property="twitter:url" content="{website}{page.url.pathname.toString()}" />
 
 	<meta name="theme-color" content="#000000" />
-	<!-- Personaliza el color en móviles -->
-	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<!-- Hace la web progresiva (PWA) -->
+	<meta name="mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 	<meta name="format-detection" content="telephone=no" />
 

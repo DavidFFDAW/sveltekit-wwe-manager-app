@@ -1,14 +1,13 @@
-<script>
+<script lang="ts">
 	import { errorimage } from '$lib/actions/error.image';
-	import Box from '$lib/components/box/box.svelte';
 	import AsyncButton from '$lib/components/buttons/async-button.svelte';
-	import ActionsButton from '$lib/components/buttons/grouped-actions/actions-button.svelte';
-	import ActionsLink from '$lib/components/buttons/grouped-actions/actions-link.svelte';
-	import GroupedActions from '$lib/components/buttons/grouped-actions/grouped-actions.svelte';
-	import Input from '$lib/components/forms/inputs/input.svelte';
+	import Radio from '$lib/components/forms/inputs/radio.svelte';
+	import SearchForm from '$lib/components/forms/search-form.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
+	import TeamActions from './team-actions.svelte';
 
 	export let data;
+	let selectedStatus: string = data.params.status || 'all';
 	const maximumScrollableItems = 2;
 </script>
 
@@ -24,102 +23,66 @@
 	</div>
 
 	<div class="search-container">
-		<Box title="Buscador" icon="search">
-			<form action="/admin/teams" method="get" class="w1 flex column gap-smaller">
-				<div class="w1 block">
-					<Input
-						label="Busqueda por equipo o luchador"
+		<SearchForm>
+			<div class="w1 block">
+				<div class="form-item">
+					<label class="label" for="search">Busqueda por equipo o luchador</label>
+					<input
 						type="search"
+						id="search"
 						name="search"
+						maxlength="255"
 						placeholder="Nombre de equipo o luchador miembro de equipo"
+						value={data.params.name}
 					/>
 				</div>
+			</div>
 
-				<div class="w1 status-selector flex gap-smaller">
-					<div class="status-input-container flex">
-						<input type="radio" id="team-status-all" name="status" value="all" checked />
-						<label for="team-status-all">Todos</label>
-					</div>
-
-					<div class="status-input-container flex">
-						<input type="radio" id="team-status-active" name="status" value="active" />
-						<label for="team-status-active">Solo activos</label>
-					</div>
-
-					<div class="status-input-container flex">
-						<input type="radio" id="team-status-inactive" name="status" value="inactive" />
-						<label for="team-status-inactive">Solo inactivos</label>
-					</div>
-				</div>
-
-				<div class="w1 flex end">
-					<button type="submit" class="btn cta">Buscar</button>
-				</div>
-			</form>
-		</Box>
+			<div class="w1 status-selector flex gap-smaller">
+				<Radio bind:group={selectedStatus} name="status" value="all" label="Todos" />
+				<Radio bind:group={selectedStatus} name="status" value="active" label="Solo activos" />
+				<Radio bind:group={selectedStatus} name="status" value="inactive" label="Solo inactivos" />
+			</div>
+		</SearchForm>
 	</div>
 
-	<div class="page-list-container">
-		<ul class="grid grid-three-column gap-medium responsive">
-			{#each data.teams as team}
-				<li>
-					<div class="block box relative team-box shadow {team.active ? 'active' : 'inactive'}">
-						<div class="whole-content">
-							<div class="images-slider">
-								<div
-									class="images-container"
-									class:scrollable={team.WrestlerTeam.length > maximumScrollableItems}
-								>
-									{#each team.WrestlerTeam as wt}
-										<img
-											use:errorimage={'/vacant.webp'}
-											src={wt.Wrestler.image_name}
-											alt={wt.Wrestler.name}
-										/>
-									{/each}
+	<input type="text" />
+
+	<div class="page-list-container grid grid-three-column gap-medium responsive">
+		{#each data.teams as team}
+			<div class="block box relative team-box shadow {team.active ? 'active' : 'inactive'}">
+				<div class="whole-content">
+					<div class="images-slider">
+						<div
+							class="images-container"
+							class:scrollable={team.WrestlerTeam.length > maximumScrollableItems}
+						>
+							{#each team.WrestlerTeam as wt}
+								<div class="flex column image-name-container">
+									<img
+										use:errorimage={'/vacant.webp'}
+										src={wt.Wrestler.image_name}
+										alt={wt.Wrestler.name}
+									/>
+									<small>{wt.Wrestler.name}</small>
 								</div>
-							</div>
-							<div class="name-block w1 flex center acenter column nogap">
-								<h3 class="w1 block tcenter">{team.name}</h3>
-								{#if team.ChampionshipReign.length > 0}
-									<small>Han tenido {team.ChampionshipReign.length} reinados como campeones</small>
-								{/if}
-							</div>
-						</div>
-
-						<div class="absolute top right">
-							<GroupedActions updateId={team.id} item={true} position="right" text="Acciones">
-								<ActionsLink href={`/admin/teams/update/${team.id}`} icon="pencil" color="warn">
-									Editar
-								</ActionsLink>
-
-								<ActionsButton
-									action={'toggleVisibility'}
-									method="post"
-									icon={team.active ? 'eye-slash' : 'eye'}
-									color={team.active ? 'warn' : 'info'}
-									confirm={false}
-								>
-									{team.active ? 'Desactivar' : 'Activar'} equipo
-								</ActionsButton>
-
-								{#if team.ChampionshipReign.length <= 0}
-									<ActionsButton
-										action={'deleteTeam'}
-										method="post"
-										icon="trash"
-										color="danger"
-										confirm={true}
-									>
-										Eliminar equipo
-									</ActionsButton>
-								{/if}
-							</GroupedActions>
+							{/each}
 						</div>
 					</div>
-				</li>
-			{/each}
-		</ul>
+
+					<div class="name-block w1 flex center acenter column nogap">
+						<h3 class="w1 block tcenter">{team.name}</h3>
+						{#if team.ChampionshipReign.length > 0}
+							<small>Han tenido {team.ChampionshipReign.length} reinados como campeones</small>
+						{/if}
+					</div>
+				</div>
+
+				<div class="absolute top right">
+					<TeamActions {team} />
+				</div>
+			</div>
+		{/each}
 	</div>
 </PageWrapper>
 
