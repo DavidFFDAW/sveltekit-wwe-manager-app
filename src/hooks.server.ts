@@ -47,7 +47,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 		if (!hasUser) {
 			throw redirect(302, `/login?next=${event.url.pathname}`);
 		}
-		if (userRole !== 'admin') {
+		if (!userRole) throw redirect(302, '/');
+
+		if (!['admin', 'superadmin'].includes(userRole)) {
 			throw redirect(302, '/');
 		}
 	}
