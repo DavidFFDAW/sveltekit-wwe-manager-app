@@ -66,6 +66,10 @@ export const TeamsDao = {
 		});
 	},
 
+	createTeam(team: Prisma.TeamCreateInput) {
+		return prisma.team.create({ data: team });
+	},
+
 	bulkUpdateGender: (gender: string, idList: number[]) => {
 		return prisma.team.updateMany({
 			where: { id: { in: idList } },
@@ -74,5 +78,18 @@ export const TeamsDao = {
 	},
 	toggleActive: (id: number) => {
 		return prisma.$executeRaw`UPDATE teams SET active = !active WHERE id = ${id}`;
+	},
+	deleteTeam: async (uuid: number) => {
+		await prisma.wrestlerTeam.deleteMany({
+			where: {
+				team_id: uuid
+			}
+		});
+
+		return prisma.team.delete({
+			where: {
+				id: uuid
+			}
+		});
 	}
 };
