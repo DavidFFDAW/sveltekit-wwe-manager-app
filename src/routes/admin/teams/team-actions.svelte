@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ActionsAsync from '$lib/components/buttons/grouped-actions/actions-async.svelte';
 	import ActionsButton from '$lib/components/buttons/grouped-actions/actions-button.svelte';
 	import ActionsLink from '$lib/components/buttons/grouped-actions/actions-link.svelte';
 	import GroupedActions from '$lib/components/buttons/grouped-actions/grouped-actions.svelte';
@@ -23,8 +24,17 @@
 	</ActionsButton>
 
 	{#if team.ChampionshipReign.length <= 0}
-		<ActionsButton action={'deleteTeam'} method="post" icon="trash" color="danger" confirm={true}>
+		<ActionsAsync
+			confirmate={true}
+			href={`/api/teams/delete/${team.id}`}
+			method="delete"
+			icon="trash"
+			color="danger"
+		>
 			Eliminar equipo
-		</ActionsButton>
+		</ActionsAsync>
+		<!-- <ActionsButton action={'deleteTeam'} method="post" icon="trash" color="danger" confirm={true}>
+			Eliminar equipo
+		</ActionsButton> -->
 	{/if}
 </GroupedActions>

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { errorimage } from '$lib/actions/error.image';
-	import AsyncButton from '$lib/components/buttons/async-button.svelte';
+	import ActionsAsync from '$lib/components/buttons/grouped-actions/actions-async.svelte';
+	import ActionsLink from '$lib/components/buttons/grouped-actions/actions-link.svelte';
+	import GroupedActions from '$lib/components/buttons/grouped-actions/grouped-actions.svelte';
 	import Radio from '$lib/components/forms/inputs/radio.svelte';
 	import SearchForm from '$lib/components/forms/search-form.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
@@ -13,13 +15,15 @@
 
 <PageWrapper page="admin-teams">
 	<div class="w1 flex end">
-		<AsyncButton
-			url="/api/teams/gender/refresh"
-			method="post"
-			classes="btn cta"
-			text="Comprobar géneros de equipos"
-			icon="gender-ambiguous"
-		/>
+		<GroupedActions text="Acciones de equipos" position="right">
+			<ActionsLink href="/admin/teams/create" icon="plus" color="success">Crear equipo</ActionsLink>
+			<ActionsLink href="/admin/teams/random" icon="dice-5-fill" color="info">
+				Equipo aleatorio
+			</ActionsLink>
+			<ActionsAsync href="/api/teams/gender/refresh" method="post" icon="gender-ambiguous">
+				Regenerar géneros
+			</ActionsAsync>
+		</GroupedActions>
 	</div>
 
 	<div class="search-container">
@@ -38,15 +42,13 @@
 				</div>
 			</div>
 
-			<div class="w1 status-selector flex gap-smaller">
+			<div class="w1 status-selector flex gap-smaller overflow-horizontal">
 				<Radio bind:group={selectedStatus} name="status" value="all" label="Todos" />
 				<Radio bind:group={selectedStatus} name="status" value="active" label="Solo activos" />
 				<Radio bind:group={selectedStatus} name="status" value="inactive" label="Solo inactivos" />
 			</div>
 		</SearchForm>
 	</div>
-
-	<input type="text" />
 
 	<div class="page-list-container grid grid-three-column gap-medium responsive">
 		{#each data.teams as team}
