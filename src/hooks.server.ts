@@ -1,5 +1,5 @@
 import { JWT } from '$lib/server/jwt.helper';
-import { redirect, type Handle } from '@sveltejs/kit';
+import { json, redirect, type Handle } from '@sveltejs/kit';
 import type { UserLoginPayload } from './@types/UserLoginPayload';
 import { COOKIE_NAME } from '$lib/constants/app';
 import { UsersDao } from '$lib/server/dao/users.dao';
@@ -15,7 +15,36 @@ const getUserFromPayloadToLocals = (payload: UserLoginPayload) => {
 	};
 };
 
-export const handle: Handle = async ({ event, resolve }) => {
+const handleApiRoute: Handle = async ({ event, resolve }) => {
+	const headers = event.request.headers;
+	const sessionToken = headers.get('authorization') || event.cookies.get(COOKIE_NAME) || '';
+	const unauthorized = json({ message: 'Unauthorized' }, { status: 401 });
+
+	const isTokenValid = JWT.verify(sessionToken) as UserLoginPayload;
+	if (isTokenValid) {
+		event.locals.user = getUserFromPayloadToLocals(isTokenValid);
+	}
+
+	const hasUser = Boolean(event.locals.user?.uuid);
+	const userRole = event.locals.user?.role;
+
+	if (!hasUser) return unauthorized;
+	if (!userRole) return unauthorized;
+	if (!['admin', 'superadmin'].includes(userRole)) return unauthorized;
+
+	const response = await resolve(event);
+	response.headers.set('content-type', 'application/json; charset=utf-8');
+
+	return response;
+};
+
+export const handle: Handle = async (handleParams) => {
+	const { event, resolve } = handleParams;
+	const isApiRequestedRoute =
+		event.url.pathname === '/api' || event.url.pathname.startsWith('/api');
+
+	if (isApiRequestedRoute) return handleApiRoute(handleParams);
+
 	const sessionToken = event.cookies.get(COOKIE_NAME) || '';
 	const lastConnectionLogged = event.cookies.get('last_connection_logged');
 
@@ -52,6 +81,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 		if (!['admin', 'superadmin'].includes(userRole)) {
 			throw redirect(302, '/');
 		}
+	}
+
+	if (isApiRequestedRoute) {
+		const unauthorized = json({ message: 'Unauthorized' }, { status: 401 });
+		if (!hasUser) return unauthorized;
+		if (!userRole) return unauthorized;
+		if (!['admin', 'superadmin'].includes(userRole)) return unauthorized;
 	}
 
 	const response = await resolve(event);
