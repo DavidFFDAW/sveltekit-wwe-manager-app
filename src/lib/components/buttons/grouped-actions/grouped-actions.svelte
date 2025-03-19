@@ -83,6 +83,7 @@
 		position: absolute;
 		top: 100%;
 		width: auto;
+		min-width: calc(100% + 120px);
 		background-color: #fff;
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 		border-radius: 0 5px 5px 5px;
@@ -92,7 +93,7 @@
 		z-index: 2;
 	}
 	.grouped-actions-container.left {
-		width: calc(100% + 150px);
+		min-width: calc(100% + 150px);
 	}
 
 	.grouped-actions-wrapper-container.left .grouped-actions-container {
