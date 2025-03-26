@@ -1,9 +1,23 @@
 import { PPVUtils } from '$lib/utils/ppv.utils';
+import type { Prisma } from '@prisma/client';
 import prisma from '../prisma';
 
 export const PPVDao = {
 	getPPVs: () => {
 		return prisma.pPV.findMany();
+	},
+	getFilterPPVs: (filter: Prisma.PPVWhereInput) => {
+		return prisma.pPV.findMany({
+			where: filter
+		});
+	},
+	getActivePPVs: () => {
+		return prisma.pPV.findMany({
+			where: {
+				active: true,
+				visible: true
+			}
+		});
 	},
 	getOrderedPPVs: async (year: number = new Date().getFullYear()) => {
 		const ppvs = await prisma.pPV.findMany();

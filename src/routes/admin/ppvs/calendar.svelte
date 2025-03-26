@@ -7,16 +7,15 @@
 
 	let calendar;
 	let selectedDate: string;
-	export let ppvs: PPV[] = [];
-	const events = ppvs
-		.filter((ppv) => ppv.active)
-		.map((ppv) => {
-			return {
-				title: ppv.name,
-				start: ppv.game_date as Date,
-				image: ppv.image as string
-			};
-		});
+	export let ppvs: PPV[];
+	$: events = ppvs.map((ppv) => {
+		return {
+			start: ppv.game_date?.toString() as string,
+			end: ppv.game_date?.toString() as string,
+			title: ppv.name,
+			image: ppv.image as string
+		};
+	});
 
 	onMount(() => {
 		const calendarHTMLElement = document.getElementById('calendar');
@@ -25,12 +24,15 @@
 		calendar = new Calendar(calendarHTMLElement, {
 			plugins: [dayGridPlugin, interactionPlugin],
 			initialView: 'dayGridMonth',
+			dayMaxEvents: 1,
 			events: events,
 			dateClick: (info: any) => {
 				selectedDate = info.dateStr;
 				console.log('Fecha seleccionada:', selectedDate);
 			},
 			eventContent: (eventInfo: any) => {
+				console.log(`Evento: ${eventInfo.event.title}`);
+
 				if (eventInfo.event.extendedProps.image) {
 					return {
 						html: `<img src="${eventInfo.event.extendedProps.image}" class="ppv-item-image-special-event">`

@@ -4,7 +4,7 @@
 	type Callback = (value: string | number) => void;
 	export let label: string;
 	export let name: string;
-	export let type: string;
+	export let type: string = 'text';
 	export let value: string | number | undefined | null = '';
 	export let maxLength: number = 255;
 	export let options: string[] = [];

@@ -69,6 +69,7 @@
 			action="createRandomTeam"
 			method="post"
 			redirect="/admin/teams?search={encodeURI(teamName)}"
+			buttonText="Crear equipo"
 		>
 			<Box title="Equipo" icon="collection">
 				<div class="wrestler-team-members-overview">

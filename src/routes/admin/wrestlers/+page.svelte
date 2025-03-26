@@ -1,9 +1,12 @@
 <script lang="ts">
 	import { errorimage } from '$lib/actions/error.image.js';
-	import AsyncButton from '$lib/components/buttons/async-button.svelte';
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
-	import ExportCsv from '$lib/components/buttons/export-csv.svelte';
+	import ActionsAsync from '$lib/components/buttons/grouped-actions/actions-async.svelte';
+	import ActionsCsv from '$lib/components/buttons/grouped-actions/actions-csv.svelte';
+	import ActionsLink from '$lib/components/buttons/grouped-actions/actions-link.svelte';
+	import GroupedActions from '$lib/components/buttons/grouped-actions/grouped-actions.svelte';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
+	import RadioList from '$lib/components/forms/inputs/radio-list.svelte';
 	import Pagination from '$lib/components/visual/pagination.svelte';
 	import { WrestlerConstants } from '$lib/constants/wrestler.constants.js';
 	export let data = { wrestlers: [], search: '', total: 0, page: 1 };
@@ -15,23 +18,24 @@
 			<input type="search" name="search" placeholder="Search..." bind:value={data.search} />
 			<button type="submit">Search</button>
 		</div>
-
-		<ExportCsv
-			href="/api/export/csv/wrestlers"
-			downloadName="wrestlers.csv"
-			label="Exportar CSV"
-			separator=";"
-		/>
 	</form>
 
 	<div class="w1 flex end">
-		<AsyncButton
-			url="/api/wrestler/slug/refresh"
-			method="post"
-			classes="btn cta"
-			text="Regenerar slugs de luchadores"
-			icon="arrow-clockwise"
-		/>
+		<GroupedActions text="Acciones de luchadores" position="right">
+			<ActionsLink href="/admin/wrestlers/create" icon="plus" color="success">
+				Crear luchador
+			</ActionsLink>
+			<ActionsCsv
+				href="/api/export/csv/wrestlers?separator=;"
+				downloadName="wrestlers-{Date.now()}.csv"
+				icon="file-earmark-arrow-down"
+			>
+				Exportar CSV
+			</ActionsCsv>
+			<ActionsAsync href="/api/wrestler/slug/refresh" method="post" icon="arrow-clockwise">
+				Regenerar slugs de luchadores
+			</ActionsAsync>
+		</GroupedActions>
 	</div>
 
 	<div class="w1 flex between gap-small responsive down">

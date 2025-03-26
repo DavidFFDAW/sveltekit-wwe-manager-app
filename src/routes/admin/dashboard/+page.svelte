@@ -101,7 +101,7 @@
 						</a>
 					</li>
 					<li class="w1 background ppv-item">
-						<a href="/admin/ppv">
+						<a href="/admin/ppvs">
 							<span>Eventos y shows</span>
 						</a>
 					</li>
@@ -116,6 +116,12 @@
 		/* --dashboard-item-bg: url('https://cdn.pixabay.com/photo/2016/11/18/22/58/stars-1837306_640.jpg'); */
 		/* --dashboard-item-bg: url('https://cdn.pixabay.com/photo/2016/11/18/22/58/stars-1837306_640.jpg'); */
 		--dashboard-item-bg: url('https://media.istockphoto.com/id/1665661357/vector/bright-stadium-lights-vector-design.jpg?s=612x612&w=0&k=20&c=fPARi4dhnmIQprMY4_EneLckTQBVfns1Z1dnwl7CbE8=');
+	}
+	ul.admin-dashboard-list {
+		gap: 40px 20px;
+	}
+	ul.admin-dashboard-list li a {
+		justify-content: center;
 	}
 	ul.admin-dashboard-list li {
 		height: 200px;
@@ -154,15 +160,6 @@
 		padding: 0.5rem 1rem;
 	}
 
-	ul.admin-dashboard-list li:nth-child(odd) a {
-		justify-content: flex-end;
-		text-align: right;
-	}
-
-	ul.admin-dashboard-list li:nth-child(even) a {
-		justify-content: flex-start;
-	}
-
 	ul.admin-dashboard-list li img {
 		position: absolute;
 		bottom: 0;
@@ -175,35 +172,48 @@
 		z-index: 1;
 	}
 
-	ul.admin-dashboard-list li:nth-child(odd) a img {
-		left: 0;
-		object-position: left;
-	}
-
-	ul.admin-dashboard-list li:nth-child(even) a img {
-		right: 0;
-		object-position: left;
-	}
-
 	ul.admin-dashboard-list li:hover img {
-		transform: scale(1.1);
+		transform: scale(1.05);
 	}
-	ul.admin-dashboard-list li a::after {
-		content: '';
-		position: absolute;
-		top: calc(50% + 15px);
-		width: 0;
-		height: 4px;
-		background-color: #bf9bf0;
-		border-radius: 8px;
-		transition: width 0.3s;
+	ul.admin-dashboard-list li a span {
+		position: relative;
+		border-bottom: 4px solid transparent;
 	}
 
-	ul.admin-dashboard-list li a:hover::after {
+	ul.admin-dashboard-list li a:hover span {
+		border-bottom: 4px solid #c91727;
+	}
+	ul.admin-dashboard-list li a:hover span::after {
 		width: 60px;
 	}
 
+	@media screen and (max-width: 1250px) {
+		.admin-dashboard-list {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
 	@media screen and (max-width: 768px) {
+		.admin-dashboard-list {
+			grid-template-columns: repeat(1, 1fr);
+		}
+		ul.admin-dashboard-list li:nth-child(odd) a {
+			justify-content: flex-end;
+			text-align: right;
+		}
+
+		ul.admin-dashboard-list li:nth-child(even) a {
+			justify-content: flex-start;
+		}
+
+		ul.admin-dashboard-list li:nth-child(odd) a img {
+			left: 0;
+			object-position: left;
+		}
+
+		ul.admin-dashboard-list li:nth-child(even) a img {
+			right: 0;
+			object-position: left;
+		}
 		ul.admin-dashboard-list li img {
 			width: 220px;
 		}

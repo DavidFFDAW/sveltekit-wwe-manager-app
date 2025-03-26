@@ -7,9 +7,9 @@
 </script>
 
 <GroupedActions text="Acciones" position="right" item={true} updateId={ppv.id}>
-	<ActionsLink icon="plus-circle" href={`/admin/ppv/create`} color="info">Nuevo PPV</ActionsLink>
+	<ActionsLink icon="plus-circle" href={`/admin/ppvs/create`} color="info">Nuevo PPV</ActionsLink>
 
-	<ActionsLink icon="pencil" href={`/admin/ppv/update/${ppv.id}`} color="warn">
+	<ActionsLink icon="pencil" href={`/admin/ppvs/update/${ppv.id}`} color="warn">
 		Editar PPV
 	</ActionsLink>
 

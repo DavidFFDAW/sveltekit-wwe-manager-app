@@ -7,7 +7,7 @@
 
 <div class="toggle-container form-item form-input-toggle-switch">
 	{#if label}
-		<span class="toggle-label tcenter label">{label}</span>
+		<span class="toggle-label tcenter label form-label">{label}</span>
 	{/if}
 
 	<label class="toggle">

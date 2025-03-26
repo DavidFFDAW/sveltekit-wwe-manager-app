@@ -1,35 +1,34 @@
 <script lang="ts">
-	import { invalidateAll } from '$app/navigation';
 	import Icon from '$lib/components/icons/icon.svelte';
 	import { HttpService } from '$lib/services/http.service';
 	import { Toast } from '$lib/utils/toast.helper';
 
 	export let href: string;
 	export let icon: string;
+	export let downloadName: string;
 	export let color: 'success' | 'info' | 'danger' | 'warn' = 'info';
-	export let method: 'get' | 'post' | 'put' | 'delete' = 'post';
-	export let confirmate: string | boolean = false;
-	const defaultConfirmMessage = '¿Estás seguro de que deseas continuar?';
-
 	let loading: boolean = false;
+
 	async function customSubmit(event: Event) {
 		event.preventDefault();
 		if (loading) return;
-
-		const confirmMessage = typeof confirmate === 'string' ? confirmate : defaultConfirmMessage;
-		const proceed = confirmate ? confirm(confirmMessage) : true;
-		if (!proceed) return;
 		loading = true;
 
 		try {
-			const response = await HttpService[method](href);
-			const statusMessage = response.ok
-				? 'Se ha completado la operación'
-				: 'Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.';
-			const message = response.response.message || statusMessage;
+			const response = await HttpService.get(href);
 			const toaster = response.ok ? Toast.success : Toast.error;
-			if (response.ok) invalidateAll();
-			toaster(message);
+			if (!response.ok) toaster('Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.');
+
+			const csvContent = response.response.csv;
+			const blob = new Blob([csvContent], { type: 'text/csv' });
+			const urlBlob = URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = urlBlob;
+			a.download = downloadName;
+			a.click();
+
+			URL.revokeObjectURL(urlBlob);
+			a.remove();
 		} catch (error) {
 			console.error(error);
 		} finally {
