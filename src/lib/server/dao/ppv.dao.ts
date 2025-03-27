@@ -64,6 +64,11 @@ export const PPVDao = {
 			}
 		});
 	},
+	createPPV: (data: Prisma.PPVCreateInput) => {
+		return prisma.pPV.create({
+			data
+		});
+	},
 	toggleVisibility: async (id: number) => {
 		await prisma.$executeRaw`UPDATE ppv SET visible = !visible WHERE id = ${id}`;
 
@@ -78,6 +83,10 @@ export const PPVDao = {
 		return prisma.pPV.findUnique({
 			where: { id }
 		});
+	},
+
+	updateAllPPVYearDate: async (year: number) => {
+		await prisma.$executeRaw`UPDATE ppv SET game_date = DATE_ADD(game_date, INTERVAL 1 YEAR) WHERE active = 1 AND visible = 1 AND YEAR(game_date) < ${year}`;
 	},
 
 	deleteById: (id: number) => {

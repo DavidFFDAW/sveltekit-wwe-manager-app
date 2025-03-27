@@ -2,6 +2,7 @@ import { MAIL_API_ADMIN, MAIL_API_KEY, MAIL_API_URL } from '$env/static/private'
 import { Utils } from '$lib/utils/general.utils';
 import { fail, json, redirect } from '@sveltejs/kit';
 import fs from 'fs';
+import { Api as ApiHelpers } from './api.helpers';
 
 interface EmailOptions {
 	emails: string | string[];
@@ -12,6 +13,7 @@ interface EmailOptions {
 	variables: { [key: string]: string };
 }
 
+export const Api = ApiHelpers;
 export const Helpers = {
 	success: (message: string, status: number = 200) => {
 		return {
