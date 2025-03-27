@@ -96,6 +96,7 @@ i.customs-icons.app-bootstrap-custom-icon.bi.bi-twitter {
 	font-weight: 500;
 	text-transform: uppercase;
 	font-family: 'dreadnotus', sans-serif;
+	cursor: pointer;
 }
 
 .form-item .label.form-label.required-label {
@@ -456,6 +457,7 @@ table td button.btn {
 	display: block;
 	font-family: 'Poppins', sans-serif;
 	text-align: center;
+	cursor: pointer;
 }
 
 .radio-checkbox-container-wrapper .radio-checkbox-input {
@@ -486,6 +488,29 @@ table td button.btn {
 .radio-checkbox-container-wrapper .radio-checkbox-input:checked+.radio-checkbox-inner-item {
 	background-color: #d5e8fbac;
 	border: 1px solid #4a749b;
+}
+
+.calendar.full-calendar .ppv-item-image-special-event {
+	background-color: #000;
+	border-radius: 5px;
+	padding: 5px;
+}
+
+.calendar.full-calendar .fc-toolbar-title {
+	display: none;
+}
+
+.calendar.full-calendar .fc-header-toolbar.fc-toolbar {
+	margin-bottom: 5px;
+}
+
+.calendar.full-calendar .fc-header-toolbar.fc-toolbar .fc-button,
+.calendar.full-calendar .fc-header-toolbar.fc-toolbar .fc-button-primary,
+.calendar.full-calendar .fc-header-toolbar.fc-toolbar .fc-button-primary:disabled {
+	padding: 5px 10px;
+	background: transparent;
+	border: 1px solid #ccc;
+	color: #000;
 }
 
 @media only screen and (max-width: 768px) {

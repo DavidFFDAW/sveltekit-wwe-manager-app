@@ -18,6 +18,10 @@
 	height: 100vh;
 }
 
+.pointer {
+	cursor: pointer;
+}
+
 .tcenter {
 	text-align: center;
 }
