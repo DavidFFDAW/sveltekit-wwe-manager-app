@@ -496,8 +496,13 @@ table td button.btn {
 	padding: 5px;
 }
 
+.calendar.full-calendar .fc-day.fc-daygrid-day.selected-day {
+	background-color: var(--blue) !important;
+	color: #000 !important;
+}
+
 .calendar.full-calendar .fc-toolbar-title {
-	display: none;
+	font-size: 13px;
 }
 
 .calendar.full-calendar .fc-header-toolbar.fc-toolbar {

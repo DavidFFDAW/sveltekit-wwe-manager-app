@@ -23,6 +23,19 @@
 			url: `/admin/ppvs/${ppv.id}`
 		}));
 
+	function highlightSelectedDate(dateStr: string) {
+		// Limpiar clases anteriores
+		document
+			.querySelectorAll('.fc-daygrid-day.selected-day')
+			.forEach((el) => el.classList.remove('selected-day'));
+
+		// Buscar el día por su data-date y aplicar clase
+		const cell = document.querySelector(`.fc-daygrid-day[data-date="${dateStr}"]`);
+		if (cell) {
+			cell.classList.add('selected-day');
+		}
+	}
+
 	onMount(() => {
 		if (!calendarHTMLElement) return;
 
@@ -41,11 +54,10 @@
 			locale: 'es',
 			showNonCurrentDates: false,
 			dayMaxEventRows: 1,
+			initialDate: selectedDate || new Date().toISOString().split('T')[0],
 			dateClick: (info: any) => {
-				const events = calendar.getEvents();
-				const dateEvents = events.filter((event) => event.startStr === info.dateStr);
-				if (dateEvents.length > 0) return;
 				selectedDate = info.dateStr;
+				highlightSelectedDate(info.dateStr);
 			},
 			eventContent: (eventInfo: any) => {
 				if (eventInfo.event.extendedProps.image) {
@@ -57,6 +69,7 @@
 		});
 
 		calendar.render();
+		highlightSelectedDate(selectedDate);
 	});
 </script>
 

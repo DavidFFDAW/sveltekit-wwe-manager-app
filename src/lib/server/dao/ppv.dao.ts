@@ -89,6 +89,13 @@ export const PPVDao = {
 		await prisma.$executeRaw`UPDATE ppv SET game_date = DATE_ADD(game_date, INTERVAL 1 YEAR) WHERE active = 1 AND visible = 1 AND YEAR(game_date) < ${year}`;
 	},
 
+	updatePPV: (id: number, data: Prisma.PPVUpdateInput) => {
+		return prisma.pPV.update({
+			where: { id },
+			data
+		});
+	},
+
 	deleteById: (id: number) => {
 		return prisma.pPV.delete({
 			where: { id }
