@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ActionsAsync from '$lib/components/buttons/grouped-actions/actions-async.svelte';
 	import ActionsButton from '$lib/components/buttons/grouped-actions/actions-button.svelte';
 	import ActionsLink from '$lib/components/buttons/grouped-actions/actions-link.svelte';
 	import GroupedActions from '$lib/components/buttons/grouped-actions/grouped-actions.svelte';
