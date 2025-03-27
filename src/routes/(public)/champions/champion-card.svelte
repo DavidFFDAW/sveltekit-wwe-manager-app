@@ -17,14 +17,26 @@
 			<!-- <BrandImage brand={reign.Championship.brand} /> -->
 		</div>
 
-		<img
-			width={128}
-			height={128}
-			src={reign.Wrestler.image_name}
-			use:errorimage={'/vacant.webp'}
-			alt={reign.Wrestler.name}
-			class="total-image roster-lazy-image image-container"
-		/>
+		<div class="w1 h1 wrestlers-images-container relative">
+			<img
+				width={reign.Championship.tag ? 80 : 128}
+				height={reign.Championship.tag ? 80 : 128}
+				src={reign.Wrestler.image_name}
+				use:errorimage={'/vacant.webp'}
+				alt={reign.Wrestler.name}
+				class="total-image roster-lazy-image image-container"
+			/>
+			{#if reign.Championship.tag && reign.partner}
+				<img
+					width={80}
+					height={80}
+					src={reign.Partner.image_name}
+					use:errorimage={'/vacant.webp'}
+					alt={reign.Partner.name}
+					class="total-image roster-lazy-image image-container partner-image"
+				/>
+			{/if}
+		</div>
 
 		<div class="championship-image-container">
 			<img
@@ -60,3 +72,12 @@
 		/>
 	</div>
 </div>
+
+<style>
+	.partner-image {
+		position: absolute;
+		top: 0;
+		right: -50px;
+		object-position: right;
+	}
+</style>
