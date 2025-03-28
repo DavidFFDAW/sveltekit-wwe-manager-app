@@ -339,10 +339,15 @@ aside.sidebar.shown+main.app-main-entrypoint .spinner-overlay-layer {
 
 /* FORM */
 aside.sidebar.shown+main.app-main-entrypoint form.app-custom-form .buttons-block {
-	position: fixed;
+    position: fixed;
 	margin-left: var(--sidebar-width);
 	width: calc(100% - var(--sidebar-width));
 }
+aside.sidebar.shown+main.app-main-entrypoint .sidebar-margin {
+    margin-left: var(--sidebar-width);
+	width: calc(100% - var(--sidebar-width));
+}
+
 
 /* LEGAL PAGES */
 .legal-pages-container {
