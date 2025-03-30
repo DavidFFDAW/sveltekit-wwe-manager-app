@@ -36,6 +36,10 @@ i.customs-icons.app-bootstrap-custom-icon {
 i.customs-icons.app-bootstrap-custom-icon.bi.bi-twitter {
 	color: #1da1f2;
 }
+i.customs-icons.app-bootstrap-custom-icon.bi.icon-big {
+	font-size: 1.3rem;
+	font-weight: 700;
+}
 
 .box,
 .panel {
@@ -164,7 +168,6 @@ input:placeholder-shown {
 	border-color: #ccc;
 }
 
-
 .ql-container.ql-snow {
 	height: auto;
 }
@@ -187,14 +190,19 @@ textarea {
 	resize: vertical;
 }
 
-.radio-checkbox-container-wrapper .radio-checkbox-input:checked+.radio-checkbox-inner-item.label-item-legend {
+.radio-checkbox-container-wrapper
+	.radio-checkbox-input:checked
+	+ .radio-checkbox-inner-item.label-item-legend {
 	background-image: url(https://upload.wikimedia.org/wikipedia/en/9/93/WWE_Hall_of_Fame_Logo%2C_2019_version.png);
 	background-size: 50%;
 	background-position: center;
 	background-repeat: no-repeat;
 }
 
-.radio-checkbox-container-wrapper .radio-checkbox-input:checked+.radio-checkbox-inner-item.label-item-legend .label-item-text {
+.radio-checkbox-container-wrapper
+	.radio-checkbox-input:checked
+	+ .radio-checkbox-inner-item.label-item-legend
+	.label-item-text {
 	opacity: 0;
 }
 
@@ -211,7 +219,7 @@ aside.admin-sidebar.sidebar.shown {
 	transition: 0.3s;
 }
 
-aside.admin-sidebar.sidebar.shown+main.app-main-entrypoint {
+aside.admin-sidebar.sidebar.shown + main.app-main-entrypoint {
 	margin-left: var(--sidebar-width);
 }
 
@@ -331,23 +339,22 @@ body main.app-main-entrypoint.page-public-login.public-page {
 }
 
 /* SPINNER */
-aside.sidebar.shown+main.app-main-entrypoint .spinner-overlay-layer {
+aside.sidebar.shown + main.app-main-entrypoint .spinner-overlay-layer {
 	padding-left: var(--sidebar-width);
 	overflow: hidden;
 	user-select: none;
 }
 
 /* FORM */
-aside.sidebar.shown+main.app-main-entrypoint form.app-custom-form .buttons-block {
-    position: fixed;
+aside.sidebar.shown + main.app-main-entrypoint form.app-custom-form .buttons-block {
+	position: fixed;
 	margin-left: var(--sidebar-width);
 	width: calc(100% - var(--sidebar-width));
 }
-aside.sidebar.shown+main.app-main-entrypoint .sidebar-margin {
-    margin-left: var(--sidebar-width);
+aside.sidebar.shown + main.app-main-entrypoint .sidebar-margin {
+	margin-left: var(--sidebar-width);
 	width: calc(100% - var(--sidebar-width));
 }
-
 
 /* LEGAL PAGES */
 .legal-pages-container {
@@ -423,7 +430,6 @@ aside.sidebar.shown+main.app-main-entrypoint .sidebar-margin {
 	background-color: #ffffff;
 }
 
-
 /* TABLES */
 .overflowable-table {
 	max-height: 500px;
@@ -486,11 +492,14 @@ table td button.btn {
 	cursor: pointer;
 }
 
-.radio-checkbox-container-wrapper .radio-checkbox-input:checked+.radio-checkbox-inner-item .label-item-text {
+.radio-checkbox-container-wrapper
+	.radio-checkbox-input:checked
+	+ .radio-checkbox-inner-item
+	.label-item-text {
 	color: #4a749b;
 }
 
-.radio-checkbox-container-wrapper .radio-checkbox-input:checked+.radio-checkbox-inner-item {
+.radio-checkbox-container-wrapper .radio-checkbox-input:checked + .radio-checkbox-inner-item {
 	background-color: #d5e8fbac;
 	border: 1px solid #4a749b;
 }
@@ -528,7 +537,7 @@ table td button.btn {
 		font-size: 0.9em;
 	}
 
-	aside.admin-sidebar.sidebar.shown+main.app-main-entrypoint {
+	aside.admin-sidebar.sidebar.shown + main.app-main-entrypoint {
 		margin-left: 0;
 	}
 }

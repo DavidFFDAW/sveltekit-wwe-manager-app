@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Box from '$lib/components/box/box.svelte';
+	import WrestlersSelector from '$lib/components/forms/selector/specific/wrestlers-selector.svelte';
 	import type { ReignUpsertProps } from '../interfaces/reigns.interfaces';
 
 	let step = $state(1);
@@ -22,13 +23,17 @@
 <div class="w1 multistep-form-container-external">
 	<div class="w1 multistep-form" style="--maxStep: {maxSteps}; --currentStep: {step}">
 		<div class="w1 multitep-form-step" data-step="1">
-			<Box title="Selección de paso 1" icon="info-circle">
+			<Box title="Selecciona el titulo" icon="info-circle">
 				<p>Contenido del paso 1</p>
 			</Box>
 		</div>
 		<div class="w1 multitep-form-step" data-step="2">
-			<Box title="Selección de paso 2" icon="info-circle">
-				<p>Contenido del paso 2</p>
+			<Box title="Selecciona el luchador" icon="info-circle">
+				<WrestlersSelector
+					list={props.wrestlers}
+					name="wrestler"
+					selectedItem={props.reign.wrestler_id}
+				/>
 			</Box>
 		</div>
 		<div class="w1 multitep-form-step" data-step="3">
@@ -38,7 +43,7 @@
 		</div>
 	</div>
 
-	<div class="w1 flex between gap-small multistep-form-buttons-container sidebar-margin">
+	<div class="w1 flex between gap-small multistep-form-buttons-container sidebar-msargin">
 		<button type="button" class="btn secondary" onclick={previousStep} disabled={step === 0}>
 			Anterior
 		</button>
@@ -65,9 +70,6 @@
 
 	.multistep-form-container-external .multistep-form-buttons-container {
 		width: 100%;
-		position: fixed;
-		bottom: 0;
-		left: 0;
 		padding: 5px 10px;
 	}
 
