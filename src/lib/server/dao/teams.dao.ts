@@ -1,7 +1,12 @@
-import type { Prisma } from '@prisma/client';
+import type { Prisma, Wrestler } from '@prisma/client';
 import prisma from '../prisma';
 
 export const TeamsDao = {
+	getTeamGenderBasedOnWrestlers: (wrestlers: Wrestler[]) => {
+		if (wrestlers.every((wrt) => wrt.sex.toLowerCase() === 'f')) return 'f';
+		if (wrestlers.every((wrt) => wrt.sex.toLowerCase() === 'm')) return 'm';
+		return 'x';
+	},
 	getAdminTeams: (where: Prisma.TeamWhereInput) => {
 		return prisma.team.findMany({
 			where: where,
@@ -16,8 +21,8 @@ export const TeamsDao = {
 		});
 	},
 
-	getReignBySlug: (slug: string) => {
-		return prisma.team.findFirst({
+	getReignBySlug: async (slug: string) => {
+		const team = await prisma.team.findFirst({
 			where: {
 				OR: [{ slug: slug }, { id: Number(slug) }]
 			},
@@ -29,6 +34,12 @@ export const TeamsDao = {
 				}
 			}
 		});
+
+		if (!team) return null;
+		return {
+			...team,
+			members: team.WrestlerTeam.map((wrestler) => wrestler.Wrestler) as Wrestler[]
+		};
 	},
 
 	getReignSelectableTeams: async () => {
@@ -65,11 +76,28 @@ export const TeamsDao = {
 			};
 		});
 	},
+	getTeamMembersIdByTeamId: async (id: number) => {
+		const team = await prisma.team.findUnique({
+			where: {
+				id
+			},
+			include: {
+				WrestlerTeam: true
+			}
+		});
 
+		if (!team) return [];
+		return team.WrestlerTeam.map((wrestler) => wrestler.wrestler_id) as number[];
+	},
 	createTeam(team: Prisma.TeamCreateInput) {
 		return prisma.team.create({ data: team });
 	},
-
+	updateTeam(id: number, team: Prisma.TeamUpdateInput) {
+		return prisma.team.update({
+			data: team,
+			where: { id }
+		});
+	},
 	bulkUpdateGender: (gender: string, idList: number[]) => {
 		return prisma.team.updateMany({
 			where: { id: { in: idList } },

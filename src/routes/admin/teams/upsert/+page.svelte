@@ -6,8 +6,8 @@
 	export let data;
 </script>
 
-<PageWrapper page="blog-update-blog-post">
+<PageWrapper page="teams-upsert-create">
 	<AsyncForm method="post" redirect="/admin/teams" buttonText="Crear equipo">
-		<UpsertTeam />
+		<UpsertTeam wrestlers={data.wrestlers} />
 	</AsyncForm>
 </PageWrapper>

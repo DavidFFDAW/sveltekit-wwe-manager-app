@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { errorimage } from '$lib/actions/error.image';
+	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
 	import ActionsAsync from '$lib/components/buttons/grouped-actions/actions-async.svelte';
 	import ActionsLink from '$lib/components/buttons/grouped-actions/actions-link.svelte';
 	import GroupedActions from '$lib/components/buttons/grouped-actions/grouped-actions.svelte';
@@ -16,7 +17,7 @@
 <PageWrapper page="admin-teams">
 	<div class="w1 flex end">
 		<GroupedActions text="Acciones de equipos" position="right">
-			<ActionsLink href="/admin/teams/create" icon="plus" color="success">Crear equipo</ActionsLink>
+			<ActionsLink href="/admin/teams/upsert" icon="plus" color="success">Crear equipo</ActionsLink>
 			<ActionsLink href="/admin/teams/random" icon="dice-5-fill" color="info">
 				Equipo aleatorio
 			</ActionsLink>
@@ -86,6 +87,8 @@
 			</div>
 		{/each}
 	</div>
+
+	<ButtonCreate endpoint="teams/upsert" />
 </PageWrapper>
 
 <style>

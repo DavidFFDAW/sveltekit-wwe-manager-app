@@ -3,6 +3,7 @@
 	import { Utils } from '$lib/utils/general.utils';
 	const allBrands = Object.values(brands);
 	export let value: string | null = allBrands[0].name as Brands;
+	$: value = value ? value.toLowerCase() : '';
 	const randomId = Utils.getRandomID('brands-selector');
 </script>
 

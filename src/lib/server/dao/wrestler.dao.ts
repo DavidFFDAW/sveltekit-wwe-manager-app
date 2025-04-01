@@ -63,6 +63,15 @@ export const WrestlerDao = {
 			}
 		});
 	},
+	getManyWrestlersById(ids: number[]) {
+		return prisma.wrestler.findMany({
+			where: {
+				id: {
+					in: ids
+				}
+			}
+		});
+	},
 	updateWrestler(wrestler: WrestlerObject, id: number) {
 		return prisma.wrestler.update({
 			data: wrestler,

@@ -11,10 +11,10 @@
 		<AsyncForm
 			method="put"
 			redirect="/admin/teams"
-			buttonText="Guardar cambios"
+			buttonText="Actualizar equipo"
 			updateId={data.team.id}
 		>
-			<UpsertTeam team={data.team} />
+			<UpsertTeam team={data.team} wrestlers={data.wrestlers} />
 		</AsyncForm>
 	{/if}
 </PageWrapper>

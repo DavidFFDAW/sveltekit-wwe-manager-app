@@ -9,7 +9,7 @@
 </script>
 
 <GroupedActions updateId={team.id} item={true} position="right" text="Acciones">
-	<ActionsLink href={`/admin/teams/update/${team.id}`} icon="pencil" color="warn">
+	<ActionsLink href={`/admin/teams/upsert/${team.id}`} icon="pencil" color="warn">
 		Editar
 	</ActionsLink>
 

@@ -59,6 +59,10 @@ export const Helpers = {
 	getUpdateID: (data: FormData) => {
 		return Number(data.get('_update_id'));
 	},
+	getUrlSlug: (params: Record<string, string | number>, field: string) => {
+		if (!params[field]) return null;
+		return Number(params[field]);
+	},
 	getToggleInput: (form: FormData, field: string): boolean => {
 		if (form.has(field)) return form.get(field) === 'on';
 		return false;
