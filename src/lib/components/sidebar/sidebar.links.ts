@@ -88,5 +88,11 @@ export const SidebarLinks: SidebarLink[] = [
 		label: 'Editar imagen',
 		icon: 'image',
 		equals: false
+	},
+	{
+		url: '/admin/cronjobs',
+		label: 'Cronjobs',
+		icon: 'clock',
+		equals: false
 	}
 ];

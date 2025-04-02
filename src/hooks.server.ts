@@ -19,6 +19,7 @@ const handleApiRoute: Handle = async ({ event, resolve }) => {
 	const headers = event.request.headers;
 	const sessionToken = headers.get('authorization') || event.cookies.get(COOKIE_NAME) || '';
 	const unauthorized = json({ message: 'Unauthorized' }, { status: 401 });
+	const isCronjob = event.url.pathname.startsWith('/api/cronjobs/');
 
 	const isTokenValid = JWT.verify(sessionToken) as UserLoginPayload;
 	if (isTokenValid) {
@@ -28,9 +29,11 @@ const handleApiRoute: Handle = async ({ event, resolve }) => {
 	const hasUser = Boolean(event.locals.user?.uuid);
 	const userRole = event.locals.user?.role;
 
-	if (!hasUser) return unauthorized;
-	if (!userRole) return unauthorized;
-	if (!['admin', 'superadmin'].includes(userRole)) return unauthorized;
+	if (!isCronjob) {
+		if (!hasUser) return unauthorized;
+		if (!userRole) return unauthorized;
+		if (!['admin', 'superadmin'].includes(userRole)) return unauthorized;
+	}
 
 	const response = await resolve(event);
 	response.headers.set('content-type', 'application/json; charset=utf-8');

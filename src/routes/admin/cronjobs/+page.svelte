@@ -10,22 +10,39 @@
 	{#if data.cronjobs.length > 0}
 		<div class="admin-cronjobs-container-list w1 flex column astart gap-medium">
 			{#each data.cronjobs as cronjob}
-				<div class="admin-cronjob-item w1">
+				<div class="admin-cronjob-item w1 cronjob-status-{cronjob.active ? 'active' : 'inactive'}">
 					<div class="w1 flex astart gap-small">
-						<p
-							class="admin-cronjob-activeness-status cronjob-status-{cronjob.active
-								? 'active'
-								: 'inactive'}"
-						>
+						<p class="admin-cronjob-activeness-status">
 							<Icon icon={cronjob.active ? 'check-circle-fill' : 'x-circle-fill'} />
 						</p>
 
 						<div class="w1 cronjob-content">
 							<h3 class="admin-cronjob-item-name">{cronjob.name}</h3>
 							<p class="admin-cronjob-item-status">{cronjob.description}</p>
+
 							{#if cronjob.last_executed}
-								<p class="admin-cronjob-item-last-run">{cronjob.last_executed.toLocaleString()}</p>
+								<p class="admin-cronjob-item-last-run">
+									Ultima ejecución:
+									<small>
+										{cronjob.last_executed.toLocaleDateString('es-ES', {
+											year: 'numeric',
+											month: '2-digit',
+											day: '2-digit',
+											hour: '2-digit',
+											minute: '2-digit'
+										})}
+									</small>
+								</p>
 							{/if}
+
+							<div class="w1 flex end gap-small down">
+								<a
+									href={`/admin/cronjobs/upsert/${cronjob.slug}`}
+									class="admin-cronjob-item-button btn btn-dark"
+								>
+									<Icon icon="pencil" /> Editar
+								</a>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -53,11 +70,14 @@
 		width: 100%;
 		max-width: 400px;
 	}
+	.admin-cronjob-item.cronjob-status-inactive {
+		opacity: 0.8;
+	}
 	.admin-cronjob-item .admin-cronjob-activeness-status {
 		font-size: 1.5rem;
 		color: var(--blue);
 	}
-	.admin-cronjob-item .admin-cronjob-activeness-status.cronjob-status-inactive {
+	.admin-cronjob-item.cronjob-status-inactive .admin-cronjob-activeness-status {
 		color: var(--color-text);
 		opacity: 0.5;
 	}

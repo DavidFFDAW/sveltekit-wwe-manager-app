@@ -103,6 +103,19 @@ export const ReignsDao = {
 		});
 	},
 
+	updateCurrentChampionshipReignDays: () => {
+		return prisma.championshipReign.updateMany({
+			data: {
+				days: {
+					increment: 1
+				}
+			},
+			where: {
+				AND: [{ lost_date: null }, { current: true }, { won_date: { lte: new Date() } }]
+			}
+		});
+	},
+
 	updateDefencesFor: (reigns: number[]) => {
 		return prisma.championshipReign.updateMany({
 			where: {

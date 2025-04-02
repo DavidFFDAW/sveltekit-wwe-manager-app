@@ -75,5 +75,10 @@ export const Utils = {
 		}
 
 		return date.toLocaleDateString('es-ES', options);
+	},
+	getLocalDate: (date: Date = new Date()): Date => {
+		const offset = date.getTimezoneOffset() * 60 * 1000;
+		const localDate = new Date(date.getTime() - offset);
+		return localDate;
 	}
 };

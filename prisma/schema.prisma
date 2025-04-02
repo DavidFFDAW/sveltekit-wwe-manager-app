@@ -264,8 +264,9 @@ model Cronjobs {
     id            Int       @id @default(autoincrement())
     name          String    @db.VarChar(50)
     description   String?   @db.VarChar(255)
+    slug          String    @unique @db.VarChar(50)
     frequency     String?   @db.VarChar(50)
-    url           String    @db.VarChar(255)
+    url           String    @unique @db.VarChar(255)
     last_executed DateTime? @db.DateTime
     active        Boolean   @default(true) @db.TinyInt
 
