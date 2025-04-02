@@ -40,21 +40,21 @@ model Championship {
 }
 
 model User {
-    id                      Int        @id @default(autoincrement())
-    name                    String     @db.VarChar(255)
-    username                String     @db.VarChar(255)
-    email                   String     @unique @db.VarChar(255)
-    email_verified_at       DateTime?  @db.DateTime
-    password                String     @db.VarChar(255)
-    last_connection         DateTime?  @db.DateTime
-    image                   String     @db.VarChar(255)
-    type                    String     @db.VarChar(255)
-    remember_token          String?    @db.VarChar(100)
-    active                  Boolean    @default(false) @db.TinyInt
-    newsletter_subscription Boolean    @default(false) @db.TinyInt
-    created_at              DateTime?  @default(now())
-    updated_at              DateTime?  @updatedAt
-    api_token               String?    @db.VarChar(255)
+    id                      Int            @id @default(autoincrement())
+    name                    String         @db.VarChar(255)
+    username                String         @db.VarChar(255)
+    email                   String         @unique @db.VarChar(255)
+    email_verified_at       DateTime?      @db.DateTime
+    password                String         @db.VarChar(255)
+    last_connection         DateTime?      @db.DateTime
+    image                   String         @db.VarChar(255)
+    type                    String         @db.VarChar(255)
+    remember_token          String?        @db.VarChar(100)
+    active                  Boolean        @default(false) @db.TinyInt
+    newsletter_subscription Boolean        @default(false) @db.TinyInt
+    created_at              DateTime?      @default(now())
+    updated_at              DateTime?      @updatedAt
+    api_token               String?        @db.VarChar(255)
     UserRole                UserRole[]
     BlogPost                BlogPost[]
     Subscriptions           Subscription[]
@@ -257,6 +257,17 @@ model Subscription {
     created_at DateTime? @default(now())
     updated_at DateTime? @updatedAt
 
-
     @@map(name: "subscriptions")
+}
+
+model Cronjobs {
+    id            Int       @id @default(autoincrement())
+    name          String    @db.VarChar(50)
+    description   String?   @db.VarChar(255)
+    frequency     String?   @db.VarChar(50)
+    url           String    @db.VarChar(255)
+    last_executed DateTime? @db.DateTime
+    active        Boolean   @default(true) @db.TinyInt
+
+    @@map("cronjobs")
 }

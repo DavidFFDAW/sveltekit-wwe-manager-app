@@ -406,4 +406,12 @@ body main.app-main-entrypoint.admin-page {
 	.flex.responsive-nowrap {
 		flex-wrap: nowrap;
 	}
+
+	body main.app-main-entrypoint.admin-page {
+		padding-top: 45px;
+	}
+
+	body main.app-main-entrypoint.page-admin-dashboard {
+		padding-top: 0px;
+	}
 }
