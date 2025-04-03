@@ -1,6 +1,11 @@
 export const COOKIE_NAME = 'wwe-manager-session';
 export type Brands = 'raw' | 'smackdown' | 'awl';
-export const brands = {
+type BrandConstant = {
+	title: string;
+	name: Brands;
+	image: string;
+};
+export const brands: Record<string, BrandConstant> = {
 	raw: {
 		title: 'Raw',
 		name: 'raw',

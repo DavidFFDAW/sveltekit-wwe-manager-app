@@ -1,3 +1,5 @@
+import { brands } from './../constants/app';
+
 export const Utils = {
 	slugify: (text: string) => {
 		const temporalText = text
@@ -80,5 +82,10 @@ export const Utils = {
 		const offset = date.getTimezoneOffset() * 60 * 1000;
 		const localDate = new Date(date.getTime() - offset);
 		return localDate;
+	},
+	getBrandImage: (brand: string): string => {
+		const searchBrand = brand.toLowerCase().replace(/ /g, '-');
+		const foundBrand = brands[searchBrand];
+		return foundBrand ? foundBrand.image : '';
 	}
 };

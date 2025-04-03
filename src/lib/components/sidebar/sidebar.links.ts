@@ -94,5 +94,17 @@ export const SidebarLinks: SidebarLink[] = [
 		label: 'Cronjobs',
 		icon: 'clock',
 		equals: false
+	},
+	{
+		url: '/admin/subscriptions',
+		label: 'Suscripciones',
+		icon: 'credit-card',
+		equals: false
+	},
+	{
+		url: '/admin/push',
+		label: 'Push',
+		icon: 'send',
+		equals: false
 	}
 ];

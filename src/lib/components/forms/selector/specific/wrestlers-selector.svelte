@@ -77,7 +77,7 @@
 	>
 		{#each filteredList as resource, index}
 			<div
-				class="w1 resource-item-radio-container"
+				class="w1 resource-item-radio-container wrestler-item-{resource.brand}"
 				class:selected={selectedItem === resource.id}
 				style="order: {index + 1}"
 			>
@@ -97,11 +97,14 @@
 							alt={resource.name}
 							use:errorimage={'/vacant.webp'}
 						/>
-						<div class="info-block">
+						<div class="realative info-block flex astart column nogap">
 							<span>{resource.name}</span>
 							{#if resource.status}
-								<p>{resource.status}</p>
+								<small>Estado: {resource.status}</small>
 							{/if}
+							<small>Media: {resource.overall}</small>
+
+							<div class="brand-block brand-{resource.brand}"></div>
 						</div>
 					</div>
 				</label>
@@ -170,16 +173,6 @@
 		background-color: var(--blue);
 		color: #fff;
 	}
-	.letters-container {
-		padding: 6px 0;
-	}
-	button.letter-btn.small {
-		padding: 5px 8px;
-		border-radius: 2px;
-	}
-	.letters-container button {
-		width: 100%;
-	}
 
 	.resource-selector .resource-selector-list-container {
 		display: grid;
@@ -240,6 +233,44 @@
 		background-color: #f0f0f0;
 		border: 2px solid var(--blue);
 		animation: pulse 1s linear infinite;
+	}
+
+	.resource-item-radio-container.wrestler-item-raw .resource-item-radio-inner {
+		background: linear-gradient(-45deg, var(--raw) 0%, transparent 50%);
+	}
+
+	.resource-item-radio-container.wrestler-item-smackdown .resource-item-radio-inner {
+		background: linear-gradient(-45deg, var(--smackdown) 0%, transparent 50%);
+	}
+
+	.resource-item-radio-container.wrestler-item-awl .resource-item-radio-inner {
+		background: linear-gradient(-45deg, var(--awl) 0%, transparent 50%);
+	}
+
+	.brand-block {
+		position: absolute;
+		width: 60px;
+		height: auto;
+		top: 50%;
+		right: 5px;
+		padding: 25px;
+		transform: translateY(-50%);
+		background-size: contain;
+		background-repeat: no-repeat;
+		background-position: center center;
+		opacity: 0.6;
+	}
+
+	.brand-block.brand-raw {
+		background-image: url('/brands/raw.webp');
+	}
+
+	.brand-block.brand-smackdown {
+		background-image: url('/brands/smackdown.webp');
+	}
+
+	.brand-block.brand-awl {
+		background-image: url('/brands/awl.webp');
 	}
 
 	@keyframes pulse {

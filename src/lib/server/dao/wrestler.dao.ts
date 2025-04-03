@@ -37,6 +37,12 @@ export const WrestlerDao = {
 	getWrestlers(config: Prisma.WrestlerFindManyArgs | undefined = undefined) {
 		return prisma.wrestler.findMany(config);
 	},
+	filter(config: Prisma.WrestlerWhereInput = {}) {
+		return prisma.wrestler.findMany({
+			where: config,
+			orderBy: { slug: 'asc' }
+		});
+	},
 	getWrestlerById(id: number) {
 		return prisma.wrestler.findUnique({
 			where: { id }
