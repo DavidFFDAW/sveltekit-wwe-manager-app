@@ -20,14 +20,14 @@ export const actions = {
 		if (error) return Helpers.error(message, 400);
 
 		const slug = Helpers.slugify(data.get('slug') as string);
-		const savingUrl = `${url.origin}/api/cronjobs/${slug}`;
 		const updateId = Helpers.getUpdateID(data);
 
 		try {
 			const updatedCronJob = await cronjobs.update(updateId, {
 				name: data.get('name') as string,
 				slug: slug,
-				url: savingUrl,
+				endpoint: `/api/cronjobs/${slug}`,
+				host: url.origin,
 				description: data.get('description') as string,
 				active: Helpers.getToggleInput(data, 'active'),
 				frequency: data.get('frequency') as string

@@ -266,7 +266,8 @@ model Cronjobs {
     description   String?   @db.VarChar(255)
     slug          String    @unique @db.VarChar(50)
     frequency     String?   @db.VarChar(50)
-    url           String    @unique @db.VarChar(255)
+    host          String    @db.VarChar(255)
+    endpoint      String    @unique @db.VarChar(255)
     last_executed DateTime? @db.DateTime
     active        Boolean   @default(true) @db.TinyInt
 

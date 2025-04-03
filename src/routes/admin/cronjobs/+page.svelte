@@ -1,5 +1,7 @@
 <script lang="ts">
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
+	import ActionsAsync from '$lib/components/buttons/grouped-actions/actions-async.svelte';
+	import GroupedActions from '$lib/components/buttons/grouped-actions/grouped-actions.svelte';
 	import Icon from '$lib/components/icons/icon.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	export let data;
@@ -7,6 +9,14 @@
 
 <PageWrapper page="admin-cronjobs">
 	<h1 class="admin-cronjobs-title">Cronjobs</h1>
+	<div class="w1 flex end">
+		<GroupedActions text="Acciones de cronjob" position="right">
+			<ActionsAsync href="/api/cronjob/refresh-host" method="post" icon="clock">
+				Actualizar hosts
+			</ActionsAsync>
+		</GroupedActions>
+	</div>
+
 	{#if data.cronjobs.length > 0}
 		<div class="admin-cronjobs-container-list w1 flex column astart gap-medium">
 			{#each data.cronjobs as cronjob}

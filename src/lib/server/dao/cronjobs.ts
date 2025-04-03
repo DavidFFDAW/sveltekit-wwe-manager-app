@@ -20,6 +20,12 @@ export const cronjobs = {
 			data
 		});
 	},
+	updateMany: (data: Prisma.CronjobsUpdateManyMutationInput) => {
+		return prisma.cronjobs.updateMany({
+			data,
+		});
+	},
+
 	updateExecutionDate: (slug: string) => {
 		const localDate = Utils.getLocalDate();
 		return prisma.cronjobs.update({
