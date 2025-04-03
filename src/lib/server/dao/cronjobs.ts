@@ -11,6 +11,11 @@ export const cronjobs = {
 			where: { slug }
 		});
 	},
+	getActiveCrons: () => {
+		return prisma.cronjobs.findMany({
+			where: { active: true }
+		});
+	},
 	create: (data: Prisma.CronjobsCreateInput) => {
 		return prisma.cronjobs.create({ data });
 	},
@@ -22,16 +27,23 @@ export const cronjobs = {
 	},
 	updateMany: (data: Prisma.CronjobsUpdateManyMutationInput) => {
 		return prisma.cronjobs.updateMany({
-			data,
+			data
 		});
 	},
-
 	updateExecutionDate: (slug: string) => {
 		const localDate = Utils.getLocalDate();
 		return prisma.cronjobs.update({
 			where: {
 				slug: slug
 			},
+			data: {
+				last_executed: localDate
+			}
+		});
+	},
+	updateManyExecutionDate: () => {
+		const localDate = Utils.getLocalDate();
+		return prisma.cronjobs.updateMany({
 			data: {
 				last_executed: localDate
 			}

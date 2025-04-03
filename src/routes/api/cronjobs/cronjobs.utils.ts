@@ -14,6 +14,17 @@ export const cronjobsUtils = {
 
 		return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected));
 	},
+	getAuthHeaders: (headers: Headers) => {
+		const timestamp = headers.get('x-timestamp');
+		const signature = headers.get('x-signature');
+		const slug = headers.get('x-cron-slug');
+		const bearer = headers.get('Authorization')?.split(' ')[1];
+		if (!timestamp || !signature || !slug) {
+			throw new Error('Missing or invalid headers');
+		}
+
+		return { timestamp, signature, slug, bearer };
+	},
 	executeCronjob: executeCronBySlug
 };
 

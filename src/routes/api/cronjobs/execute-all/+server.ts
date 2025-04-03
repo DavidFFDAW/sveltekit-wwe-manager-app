@@ -2,12 +2,10 @@ import { Api } from '$lib/server/server.helpers.js';
 import cronjobs from '$lib/server/dao/cronjobs.js';
 import cronjobsUtils from '../cronjobs.utils.js';
 
-export async function POST({ request, params }) {
+export async function POST({ request }) {
 	const headers = request.headers;
 	try {
-		const parameterSlug = params.slug;
 		const { timestamp, signature, slug } = cronjobsUtils.getAuthHeaders(headers);
-		if (parameterSlug !== slug) return Api.error('Invalid slug', 403);
 
 		const parsedTimestamp = parseInt(timestamp, 10);
 		if (!cronjobsUtils.isTimestampValid(parsedTimestamp))
@@ -15,12 +13,16 @@ export async function POST({ request, params }) {
 		if (!cronjobsUtils.isSignatureValid(slug, parsedTimestamp, signature))
 			return Api.error('Invalid signature', 403);
 
-		const cronjob = await cronjobs.getBySlug(slug);
-		if (!cronjob) return Api.error('Cronjob not found', 404);
-		if (!cronjob.active) return Api.error('Cronjob is disabled', 403);
-		await cronjobsUtils.executeCronjob(slug);
+		const activeCrons = await cronjobs.getActiveCrons();
+		if (!activeCrons || activeCrons.length <= 0)
+			return Api.error('Could not find any active cronjob', 404);
 
-		return Api.success('Championship reigns updated', 200);
+		for (const job of activeCrons) {
+			await cronjobsUtils.executeCronjob(job.slug, false);
+		}
+		await cronjobs.updateManyExecutionDate();
+
+		return Api.success('All active cronjobs executed', 200);
 	} catch (error) {
 		console.error(error);
 		return Api.error('Error updating championship reigns', 500);

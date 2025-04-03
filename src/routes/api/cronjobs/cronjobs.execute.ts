@@ -5,9 +5,9 @@ const cronMap: Record<string, () => Promise<any>> = {
 	'update-reigns': ReignsDao.updateCurrentChampionshipReignDays
 };
 
-export async function executeCronBySlug(slug: string) {
+export async function executeCronBySlug(slug: string, updateDate = true) {
 	const fn = cronMap[slug];
 	if (!fn) throw new Error(`Cronjob "${slug}" no está definido.`);
 	await fn();
-	await cronjobs.updateExecutionDate(slug);
+	if (updateDate) await cronjobs.updateExecutionDate(slug);
 }
