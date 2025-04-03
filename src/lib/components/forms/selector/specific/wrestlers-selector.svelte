@@ -15,6 +15,7 @@
 	let showFilters: boolean = false;
 	export let name: string = '';
 	export let selectedItem: number = 0;
+	export let itemWidth: number = 200;
 	export let maxHeight: number = 512;
 	export let afterSelection: ((id: number) => void) | null = null;
 
@@ -69,7 +70,7 @@
 	</div>
 
 	<div
-		style="--maxheight: {maxHeight}px;"
+		style="--maxheight: {maxHeight}px; --itemwidth: {itemWidth}px;"
 		class="resource-selector-list-container"
 		class:has-selection={selectedItem !== 0}
 		class:has-filters={showFilters}
@@ -176,7 +177,7 @@
 
 	.resource-selector .resource-selector-list-container {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(var(--itemwidth), 1fr));
 		padding: 5px 10px;
 		max-height: var(--maxheight);
 		overflow-x: hidden;
@@ -271,6 +272,12 @@
 
 	.brand-block.brand-awl {
 		background-image: url('/brands/awl.webp');
+	}
+
+	@media (max-width: 768px) {
+		.resource-selector .resource-selector-list-container {
+			grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+		}
 	}
 
 	@keyframes pulse {

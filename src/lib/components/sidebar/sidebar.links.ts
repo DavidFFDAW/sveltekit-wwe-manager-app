@@ -106,5 +106,11 @@ export const SidebarLinks: SidebarLink[] = [
 		label: 'Push',
 		icon: 'send',
 		equals: false
+	},
+	{
+		url: '/admin/injuries',
+		label: 'Lesiones',
+		icon: 'band-aid',
+		equals: false
 	}
 ];

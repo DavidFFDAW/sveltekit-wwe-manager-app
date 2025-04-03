@@ -117,5 +117,11 @@ export const WrestlerDao = {
 				status
 			}
 		});
+	},
+	update(ids: number, data: Prisma.WrestlerUpdateInput) {
+		return prisma.wrestler.update({
+			where: { id: ids },
+			data
+		});
 	}
 };

@@ -106,6 +106,7 @@ model Wrestler {
     ChampionshipReign ChampionshipReign[] @relation("wrestler")
     Partner           ChampionshipReign[] @relation("partner")
     Tweets            Tweets[]
+    Injuries          Injuries[]
 
     @@map(name: "wrestler")
 }
@@ -272,4 +273,18 @@ model Cronjobs {
     active        Boolean   @default(true) @db.TinyInt
 
     @@map("cronjobs")
+}
+
+model Injuries {
+    id          Int       @id @default(autoincrement())
+    wrestler_id Int       @db.Int
+    Wrestler    Wrestler  @relation(fields: [wrestler_id], references: [id])
+    injury      String    @db.VarChar(255)
+    severity    String    @db.VarChar(50)
+    start_date  DateTime? @db.DateTime
+    end_date    DateTime  @db.DateTime
+    created_at  DateTime? @default(now())
+    updated_at  DateTime? @updatedAt
+
+    @@map(name: "injuries")
 }

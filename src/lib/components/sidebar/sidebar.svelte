@@ -52,7 +52,7 @@
 		</div>
 
 		<div class="w1 links-container-block flex center">
-			<ul class="w1 flex column gap-smaller">
+			<ul class="w1 flex column gap-smaller link-items-list">
 				<li on:click={afterClick} role="presentation">
 					<a href="/">Home</a>
 				</li>
@@ -161,6 +161,14 @@
 	}
 	.links-container-block li.has-submenu ul li a {
 		font-size: 13px;
+	}
+
+	.link-items-list {
+		/* --image: 144px;
+		--gap: 15px;
+		--padding: 10px; */
+		max-height: calc(100vh - (144px + 15px + 15px));
+		overflow-y: auto;
 	}
 
 	@media only screen and (max-width: 768px) {

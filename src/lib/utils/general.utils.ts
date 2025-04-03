@@ -38,6 +38,19 @@ export const Utils = {
 		// get rid of the initial `the` from the slug
 		return temporalText.startsWith('the-') ? temporalText.replace('the-', '') : temporalText;
 	},
+	deAccentize: (text: string) => {
+		return text
+			.replace(/[ÀÁÂÃÄÅ]/g, 'a')
+			.replace(/[àáâãäå]/g, 'a')
+			.replace(/[ÈÉÊË]/g, 'e')
+			.replace(/[èéêë]/g, 'e')
+			.replace(/[ÌÍÎÏ]/g, 'i')
+			.replace(/[ìíîï]/g, 'i')
+			.replace(/[ÒÓÔÕÖ]/g, 'o')
+			.replace(/[òóôõö]/g, 'o')
+			.replace(/[ÙÚÛÜ]/g, 'u')
+			.replace(/[ùúûü]/g, 'u');
+	},
 	readFile: (file: File, type = 'url'): Promise<string> => {
 		return new Promise((resolve, reject) => {
 			const reader = new FileReader();
@@ -78,9 +91,11 @@ export const Utils = {
 
 		return date.toLocaleDateString('es-ES', options);
 	},
-	getLocalDate: (date: Date = new Date()): Date => {
-		const offset = date.getTimezoneOffset() * 60 * 1000;
-		const localDate = new Date(date.getTime() - offset);
+	getLocalDate: (date: Date | string = new Date()): Date => {
+		const dateObj = typeof date === 'string' ? new Date(date) : date;
+		const realDate = Boolean(dateObj) ? dateObj : new Date();
+		const offset = realDate.getTimezoneOffset() * 60 * 1000;
+		const localDate = new Date(realDate.getTime() - offset);
 		return localDate;
 	},
 	getBrandImage: (brand: string): string => {

@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { errorimage } from '$lib/actions/error.image.js';
 	import Box from '$lib/components/box/box.svelte';
 	import WrestlersSelector from '$lib/components/forms/selector/specific/wrestlers-selector.svelte';
 	// import AdminHeader from '$lib/components/headers/admin-header.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
+	import Image from '$lib/components/visual/image.svelte';
 	import type { Wrestler } from '@prisma/client';
 	import { fade } from 'svelte/transition';
 
@@ -38,13 +38,12 @@
 							<p class="wrestler-status">{selectedWrestler.status}</p>
 						</div>
 						<div class="w1 wrestler-image-container">
-							<img
+							<Image
 								width={80}
 								height={80}
 								src={selectedWrestler.image_name as string}
 								alt={selectedWrestler.name}
 								class="wrestler-image"
-								use:errorimage={'/vacant.webp'}
 							/>
 						</div>
 						<div class="w1 flex end gap-small down">
@@ -57,6 +56,7 @@
 						list={data.wrestlers}
 						name="draft-wrestlers"
 						maxHeight={450}
+						itemWidth={300}
 						bind:selectedItem={bindableSelected}
 					/>
 				</div>
@@ -72,12 +72,11 @@
 						<label class="w1 block">
 							<input type="checkbox" name="draft-wrestlers" value={wrestler.id} />
 							<div class="resource-item-radio-inner h1">
-								<img
+								<Image
 									class="h1"
 									data-image-src={wrestler.image_name as string}
 									src={wrestler.image_name as string}
 									alt={wrestler.name}
-									use:errorimage={'/vacant.webp'}
 								/>
 								<div class="realative info-block flex astart column nogap">
 									<span>{wrestler.name}</span>
@@ -98,12 +97,11 @@
 						<label class="w1 block">
 							<input type="checkbox" name="draft-wrestlers" value={wrestler.id} />
 							<div class="resource-item-radio-inner h1">
-								<img
+								<Image
 									class="h1"
 									data-image-src={wrestler.image_name as string}
 									src={wrestler.image_name as string}
 									alt={wrestler.name}
-									use:errorimage={'/vacant.webp'}
 								/>
 								<div class="realative info-block flex astart column nogap">
 									<span>{wrestler.name}</span>

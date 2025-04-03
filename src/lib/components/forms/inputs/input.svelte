@@ -23,7 +23,7 @@
 		for={`${name}-${randomId}`}
 	>
 		<span>
-			{label}
+			{Utils.deAccentize(label)}
 			{#if $$restProps.required}
 				<span class="required-label">*</span>
 			{/if}
