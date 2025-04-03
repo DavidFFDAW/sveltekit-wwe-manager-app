@@ -85,6 +85,7 @@
 					{/each}
 				</div>
 			{/if}
+			<p>Seleccionado: {selectedName}</p>
 		</div>
 	</div>
 

@@ -78,6 +78,12 @@ export const SidebarLinks: SidebarLink[] = [
 		equals: false
 	},
 	{
+		url: '/admin/draft',
+		label: 'Draft',
+		icon: 'persons',
+		equals: false
+	},
+	{
 		url: '/admin/ppvs',
 		label: 'PPVs',
 		icon: 'calendar',

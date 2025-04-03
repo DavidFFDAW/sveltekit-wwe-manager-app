@@ -2,6 +2,7 @@
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import type { PPV } from '@prisma/client';
 	import PpvCounter from './ppv-counter.svelte';
+	import { DashboardLinks } from './dashboard.links';
 	export let data: { nextPpv: PPV };
 </script>
 
@@ -16,95 +17,18 @@
 			<h1>Dashboard</h1>
 			<nav class="admin-dashboard-page-navigation down" style="margin-top: 50px;">
 				<ul class="grid three-column-grid gap-20 admin-dashboard-list responsive" role="list">
-					<li class="w1 background">
-						<a href="/admin/wrestlers">
-							<span>Luchadores</span>
-							<img
-								src="https://davidfernandezdeveloper.es/2k/images/john-cena.webp"
-								alt="se muestra a John Cena y al pasar por encima se hace más grande saliendo del recuadro"
-								draggable="false"
-								aria-hidden="true"
-								loading="lazy"
-							/>
-						</a>
-					</li>
-					<li class="w1 background">
-						<a href="/admin/blog">
-							<span>Blog</span>
-							<img
-								src="https://davidfernandezdeveloper.es/2k/images/the-rock.webp"
-								alt="se muestra a Roman Reigns y al pasar por encima se hace más grande saliendo del recuadro"
-								draggable="false"
-								aria-hidden="true"
-								loading="lazy"
-							/>
-						</a>
-					</li>
-					<li class="w1 background">
-						<a href="/admin/championship-reigns">
-							<span>Cinturones</span>
-							<img
-								src="https://davidfernandezdeveloper.es/2k/images/randy-orton.webp"
-								alt="se muestra a Ric Flair y al pasar por encima se hace más grande saliendo del recuadro"
-								draggable="false"
-								aria-hidden="true"
-								loading="lazy"
-							/>
-						</a>
-					</li>
-					<li class="w1 background reverse">
-						<a href="/admin/championship-reigns">
-							<span>Reinados</span>
-							<img
-								src="https://davidfernandezdeveloper.es/2k/images/gunther.webp"
-								alt="se muestra a Gunther y al pasar por encima se hace más grande saliendo del recuadro"
-								draggable="false"
-								aria-hidden="true"
-								loading="lazy"
-							/>
-						</a>
-					</li>
-					<li class="w1 background reverse">
-						<a href="/admin/teams">
-							<span>Equipos</span>
-							<img
-								src="https://davidfernandezdeveloper.es/2k/images/bret-hart.webp"
-								alt="se muestra a Bret Hart y al pasar por encima se hace más grande saliendo del recuadro"
-								draggable="false"
-								aria-hidden="true"
-								loading="lazy"
-							/>
-						</a>
-					</li>
-					<li class="w1 background reverse">
-						<a href="/admin/users">
-							<span>Usuarios</span>
-							<img
-								src="https://davidfernandezdeveloper.es/2k/images/shawn-michaels.webp"
-								alt="se muestra a Shawn Michaels y al pasar por encima se hace más grande saliendo del recuadro"
-								draggable="false"
-								aria-hidden="true"
-								loading="lazy"
-							/>
-						</a>
-					</li>
-					<li class="w1 background">
-						<a href="/admin/image-editor">
-							<span>Editor de imagenes</span>
-							<img
-								src="https://davidfernandezdeveloper.es/2k/images/kurt-angle.webp"
-								alt="se muestra a Kurt Angle y al pasar por encima se hace más grande saliendo del recuadro"
-								draggable="false"
-								aria-hidden="true"
-								loading="lazy"
-							/>
-						</a>
-					</li>
-					<li class="w1 background ppv-item">
-						<a href="/admin/ppvs">
-							<span>Eventos y shows</span>
-						</a>
-					</li>
+					{#each DashboardLinks as link}
+						<li
+							class="w1 background"
+							style="background-image: url('{link.background ||
+								'https://media.istockphoto.com/id/1665661357/vector/bright-stadium-lights-vector-design.jpg?s=612x612&w=0&k=20&c=fPARi4dhnmIQprMY4_EneLckTQBVfns1Z1dnwl7CbE8='}')"
+						>
+							<a href={link.url}>
+								<span>{link.label}</span>
+								<img src={link.image} alt="" draggable="false" aria-hidden="true" loading="lazy" />
+							</a>
+						</li>
+					{/each}
 				</ul>
 			</nav>
 		</div>
@@ -133,9 +57,6 @@
 		background-size: cover;
 		background-position: center;
 		background-repeat: no-repeat;
-	}
-	ul.admin-dashboard-list li.ppv-item {
-		background-image: url('https://www.wwe.com/f/styles/gallery_img_l/public/all/2024/01/131_RR_01272024GD_37295--a0647e43afa91c64976613f63e4c387c.jpg');
 	}
 
 	ul.admin-dashboard-list li a {
