@@ -1,11 +1,20 @@
 <script lang="ts">
 	import Dialog from '$lib/components/dialog/dialog.svelte';
+	import DateInput from '$lib/components/forms/date/date-input.svelte';
+	import RangeDateInput from '$lib/components/forms/date/range-date-input.svelte';
 	import Input from '$lib/components/forms/inputs/input.svelte';
 	import WrestlersSelector from '$lib/components/forms/selector/specific/wrestlers-selector.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import { fade } from 'svelte/transition';
 
 	export let data;
+	let injuryData = {
+		injury: '',
+		startDate: '',
+		endDate: '',
+		wrestlerId: 0,
+		rangeDates: ['', '']
+	};
 	let showUpsertDialog: boolean = false;
 </script>
 
@@ -21,46 +30,53 @@
 				<img src="/noimage.jpg" alt="Wrestler Name" width={80} height={80} class="wrestler-image" />
 			</div>
 			<div class="w1 flex end gap-small down">
-				<button type="button" class="btn btn-dark" on:click={() => (showUpsertDialog = true)}>
+				<button
+					type="button"
+					class="btn btn-dark"
+					on:click={() => (showUpsertDialog = !showUpsertDialog)}
+				>
 					Crear lesión
 				</button>
 			</div>
 		</div>
 	</div>
 
-	<Dialog opened={showUpsertDialog}>
+	<Dialog bind:opened={showUpsertDialog}>
 		<form method="post" class="w1 flex column gap-medium">
-			<WrestlersSelector
-				list={data.wrestlers}
-				name="injured-wrestler"
-				maxHeight={300}
-				itemWidth={300}
-			/>
-
-			<Input
-				type="text"
-				name="injury-name"
-				label="Nombre de la lesión"
-				placeholder="Nombre de la lesión"
-				required={true}
-			/>
-
-			<div class="w1 flex start acenter">
-				<Input
-					type="date"
-					name="start-date"
-					label="Inicio"
-					placeholder="2025-01-01"
-					required={false}
+			<div class="w1 flex between astart gap-small">
+				<WrestlersSelector
+					list={data.wrestlers}
+					name="injured-wrestler"
+					bind:selectedItem={injuryData.wrestlerId}
+					maxHeight={300}
+					itemWidth={300}
 				/>
-
-				<Input
-					type="date"
-					name="end-date"
-					label="Finalización"
-					placeholder="2025-01-01"
-					required={true}
-				/>
+				<div class="w1 flex column gap-small">
+					<Input
+						type="text"
+						name="injury-name"
+						label="Nombre de la lesión"
+						placeholder="Nombre de la lesión"
+						required={true}
+						bind:value={injuryData.injury}
+					/>
+					<div class="w1 flex-1 flex gap-small astart responsive">
+						<RangeDateInput
+							name="injury-dates"
+							label="Inicio"
+							required={false}
+							bind:startDate={injuryData.startDate}
+							bind:endDate={injuryData.endDate}
+						/>
+						<!-- <DateInput
+							name="end-date"
+							label="Finalización"
+							required={true}
+							bind:value={injuryData.endDate}
+							bind:min={injuryData.startDate}
+						/> -->
+					</div>
+				</div>
 			</div>
 
 			<div class="w1 flex end gap-small down">
@@ -72,17 +88,3 @@
 		</form>
 	</Dialog>
 </PageWrapper>
-
-<style>
-	dialog {
-		width: 400px;
-		height: 200px;
-		border-radius: 8px;
-		padding: 20px;
-	}
-
-	dialog[open] {
-		opacity: 1;
-		transition: opacity 0.3s ease-in-out;
-	}
-</style>

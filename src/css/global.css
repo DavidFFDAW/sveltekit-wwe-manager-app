@@ -532,6 +532,16 @@ table td button.btn {
 	color: #000;
 }
 
+.custom-flatpicker-container .flatpickr-calendar.rangeMode {
+    width: 100%;
+}
+.custom-flatpicker-container .flatpickr-input[readonly] {
+    display: none;
+}
+.custom-flatpicker-container .flatpickr-calendar.rangeMode .flatpickr-innerContainer {
+    justify-content: center;
+}
+
 @media only screen and (max-width: 768px) {
 	.form-item .form-label {
 		font-size: 0.9em;

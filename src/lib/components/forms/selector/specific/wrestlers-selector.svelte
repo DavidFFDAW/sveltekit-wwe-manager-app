@@ -18,6 +18,7 @@
 	export let itemWidth: number = 200;
 	export let maxHeight: number = 512;
 	export let afterSelection: ((id: number) => void) | null = null;
+	$: selectedName = list.find((item) => item.id === selectedItem)?.name || 'Ninguno';
 
 	const getFilteredList = () => {
 		return list.filter((item) => {
@@ -68,6 +69,7 @@
 			</div>
 		{/if}
 	</div>
+	<p>Seleccionado: {selectedName}</p>
 
 	<div
 		style="--maxheight: {maxHeight}px; --itemwidth: {itemWidth}px;"
