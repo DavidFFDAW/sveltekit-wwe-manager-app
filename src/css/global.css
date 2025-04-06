@@ -437,33 +437,6 @@ aside.sidebar.shown + main.app-main-entrypoint .sidebar-margin {
 	overflow-y: auto;
 }
 
-table {
-	width: 100%;
-	border-collapse: collapse;
-	border-radius: 5px;
-	overflow: hidden;
-}
-
-table th,
-table td {
-	border: 1px solid #f0f0f0;
-	padding: 5px;
-	text-align: start;
-}
-
-table th {
-	background-color: #f0f0f0;
-}
-
-table td input,
-table td select {
-	width: 100%;
-}
-
-table td button.btn {
-	padding: 5px 8px;
-}
-
 .radio-checkbox-container-wrapper label.form-label {
 	display: block;
 	font-family: 'Poppins', sans-serif;
@@ -533,13 +506,103 @@ table td button.btn {
 }
 
 .custom-flatpicker-container .flatpickr-calendar.rangeMode {
-    width: 100%;
+	width: 100%;
 }
 .custom-flatpicker-container .flatpickr-input[readonly] {
-    display: none;
+	display: none;
+	/* display: block; */
 }
 .custom-flatpicker-container .flatpickr-calendar.rangeMode .flatpickr-innerContainer {
-    justify-content: center;
+	justify-content: center;
+}
+
+/* TABLE */
+table.custom-table {
+	width: 100%;
+	border-collapse: collapse;
+	border-radius: 5px;
+	overflow: hidden;
+}
+.responsive-table table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.95rem;
+}
+
+thead {
+	background-color: #333;
+	font-weight: bold;
+	color: white;
+}
+
+tbody {
+	background-color: #fff;
+}
+tbody td {
+	color: #333;
+	font-size: 0.9rem;
+	border: 1px solid #e5e7eb;
+}
+tbody td:first-child {
+	border-left: none;
+}
+tbody td:last-child {
+	border-right: none;
+}
+
+th,
+td {
+	padding: 0.75rem;
+	text-align: left;
+	border-bottom: 1px solid #e5e7eb;
+}
+
+tbody tr:hover {
+	background-color: #f3f4f6;
+}
+
+/* 🟡 Modo tarjeta para móviles */
+@media (max-width: 768px) {
+	.responsive-table table,
+	.responsive-table thead,
+	.responsive-table tbody,
+	.responsive-table th,
+	.responsive-table td,
+	.responsive-table tr {
+		display: block;
+		width: 100%;
+	}
+
+	.responsive-table thead {
+		display: none;
+	}
+
+	.responsive-table tr {
+		margin-bottom: 1rem;
+		border: 1px solid #e5e7eb;
+		border-radius: 8px;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+		padding: 0.75rem;
+		background-color: white;
+	}
+
+	.responsive-table td {
+		display: flex;
+		justify-content: space-between;
+		padding: 0.5rem 0;
+		border: none;
+		border-bottom: 1px solid #eee;
+	}
+
+	.responsive-table td:last-child {
+		border-bottom: none;
+	}
+
+	.responsive-table td::before {
+		content: attr(data-label);
+		font-weight: bold;
+		color: #6b7280; /* gris medio */
+	}
 }
 
 @media only screen and (max-width: 768px) {

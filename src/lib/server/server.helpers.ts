@@ -42,6 +42,16 @@ export const Helpers = {
 	redirection: (url: string, status: number = 302) => {
 		return redirect(status, url);
 	},
+	getDateRange: (formData: FormData, name: string = 'resource-dates') => {
+		const startDate = formData.get(`${name}-range-start-date`) as string | null;
+		const endDate = formData.get(`${name}-range-end-date`) as string | null;
+		console.log('getDateRange', { startDate, endDate });
+
+		return {
+			start: startDate ? Utils.getLocalDate(startDate) : null,
+			end: endDate ? Utils.getLocalDate(endDate) : null
+		};
+	},
 	getSelectorItem(data: FormData, field?: string) {
 		const number = field
 			? data.get(`selected-${field}-resource-id`)

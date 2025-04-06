@@ -10,6 +10,7 @@ export const injuries = {
 	getAll: (filter: Prisma.InjuriesWhereInput = {}) => {
 		return prisma.injuries.findMany({
 			where: filter,
+			include: { Wrestler: true },
 			orderBy: { end_date: 'desc' }
 		});
 	},

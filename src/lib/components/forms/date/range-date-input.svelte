@@ -3,6 +3,7 @@
 	import { Utils } from '$lib/utils/general.utils';
 	import type { Instance } from 'flatpickr/dist/types/instance';
 	import flatpickr from 'flatpickr';
+	import { Spanish } from 'flatpickr/dist/l10n/es.js';
 	import 'flatpickr/dist/flatpickr.min.css';
 
 	export let label;
@@ -13,33 +14,31 @@
 	export let endDate: string = '';
 	export let classes: string = '';
 	export let required: boolean = false;
+	const dateFormat = 'Y-m-d'; // Define the date format to be used
 
 	let flatpickrInput: HTMLInputElement;
 	let FlatPickr: Instance;
 	const uniqueId = Utils.getRandomID(`flatpickr-${name}`);
 
-	onMount(() => {
-		if (!flatpickrInput) return;
+	onMount(async () => {
 		FlatPickr = flatpickr(flatpickrInput, {
 			inline: true,
 			mode: 'range',
-			dateFormat: 'Y-m-d',
+			dateFormat: dateFormat, // Use the defined date format
 			allowInput: true,
 			minDate: min,
 			maxDate: max,
 			defaultDate: [startDate, endDate],
 			disableMobile: true,
 			showMonths: 2,
-			locale: {
-				firstDayOfWeek: 1 // start week on Monday
-			},
+			locale: Spanish,
 			onChange: (selectedDates) => {
 				if (selectedDates.length === 2) {
-					startDate = Utils.getDateLocale(selectedDates[0]); // Format date to YYYY-MM-DD
-					endDate = Utils.getDateLocale(selectedDates[1]); // Format date to YYYY-MM-DD
+					startDate = Utils.formatFlatpickrDate(selectedDates[0]); // Format date to YYYY-MM-DD
+					endDate = Utils.formatFlatpickrDate(selectedDates[1]); // Format date to YYYY-MM-DD
 				} else if (selectedDates.length === 1) {
 					const date = selectedDates[0];
-					startDate = Utils.getDateLocale(date); // Format date to YYYY-MM-DD
+					startDate = Utils.formatFlatpickrDate(date); // Format date to YYYY-MM-DD
 					endDate = ''; // Reset end date if only one date is selected
 				} else {
 					startDate = ''; // Reset start date if no dates are selected
@@ -72,6 +71,3 @@
 		{/if}
 	</div>
 </div>
-
-<style>
-</style>

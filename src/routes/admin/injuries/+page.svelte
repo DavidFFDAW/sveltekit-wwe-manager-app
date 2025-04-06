@@ -1,11 +1,15 @@
 <script lang="ts">
 	import Dialog from '$lib/components/dialog/dialog.svelte';
-	import DateInput from '$lib/components/forms/date/date-input.svelte';
 	import RangeDateInput from '$lib/components/forms/date/range-date-input.svelte';
 	import Input from '$lib/components/forms/inputs/input.svelte';
 	import WrestlersSelector from '$lib/components/forms/selector/specific/wrestlers-selector.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import { fade } from 'svelte/transition';
+	import ResponsiveTable from './responsive-table.svelte';
+	import { Utils } from '$lib/utils/general.utils';
+	import AsyncForm from '$lib/components/forms/async-form.svelte';
+	import GroupedActions from '$lib/components/buttons/grouped-actions/grouped-actions.svelte';
+	import ActionsLink from '$lib/components/buttons/grouped-actions/actions-link.svelte';
 
 	export let data;
 	let injuryData = {
@@ -13,37 +17,52 @@
 		startDate: '',
 		endDate: '',
 		wrestlerId: 0,
-		rangeDates: ['', '']
+		severity: ''
 	};
 	let showUpsertDialog: boolean = false;
 </script>
 
 <PageWrapper page="admin-injuries-page">
 	<h1>Injuries</h1>
-	<div class="w1 flex total between astart gap-medium responsive">
-		<div class="w1 selected-wrestler-block wrestler-technical-sheet" transition:fade>
-			<div class="w1 flex astart gap-small">
-				<p class="wrestler-name">Wrestler Name</p>
-				<p class="wrestler-status">Status</p>
-			</div>
-			<div class="w1 wrestler-image-container">
-				<img src="/noimage.jpg" alt="Wrestler Name" width={80} height={80} class="wrestler-image" />
-			</div>
-			<div class="w1 flex end gap-small down">
-				<button
-					type="button"
-					class="btn btn-dark"
-					on:click={() => (showUpsertDialog = !showUpsertDialog)}
-				>
-					Crear lesión
-				</button>
-			</div>
-		</div>
+	{#if data.injuries.length === 0}
+		<p class="w1">No hay lesiones registradas</p>
+	{:else}
+		<ResponsiveTable header={['Wrestler', 'Lesión', 'Inicio', 'Fin', 'Acciones']}>
+			{#each data.injuries as injury}
+				<tr in:fade={{ duration: 200 }} out:fade={{ duration: 200 }}>
+					<td data-label="Wrestler">{injury.Wrestler.name}</td>
+					<td data-label="Lesión">{injury.injury}</td>
+					<td data-label="Inicio">
+						{injury.start_date === null ? 'N/A' : Utils.getDateLocale(injury.start_date)}
+					</td>
+					<td data-label="Fin">{Utils.getDateLocale(injury.end_date)}</td>
+					<td data-label="Acciones">
+						<GroupedActions text="Acciones" position="right">
+							<div class="w1 flex column astart">
+								<button
+									type="button"
+									class="btn btn-dark"
+									on:click={() => (showUpsertDialog = true)}
+								>
+									Editar
+								</button>
+							</div>
+						</GroupedActions>
+					</td>
+				</tr>
+			{/each}
+		</ResponsiveTable>
+	{/if}
+
+	<div class="w1 flex end gap-small">
+		<button type="button" class="btn btn-dark" on:click={() => (showUpsertDialog = true)}>
+			Crear lesión
+		</button>
 	</div>
 
 	<Dialog bind:opened={showUpsertDialog}>
-		<form method="post" class="w1 flex column gap-medium">
-			<div class="w1 flex between astart gap-small">
+		<AsyncForm showButtons={false} method="post">
+			<div class="w1 flex between astart gap-small responsive">
 				<WrestlersSelector
 					list={data.wrestlers}
 					name="injured-wrestler"
@@ -60,14 +79,24 @@
 						required={true}
 						bind:value={injuryData.injury}
 					/>
+					<Input
+						type="text"
+						name="injury-severity"
+						label="Severidad de la lesión"
+						placeholder="Severidad de la lesión"
+						bind:value={injuryData.severity}
+						required={true}
+					/>
 					<div class="w1 flex-1 flex gap-small astart responsive">
-						<RangeDateInput
-							name="injury-dates"
-							label="Inicio"
-							required={false}
-							bind:startDate={injuryData.startDate}
-							bind:endDate={injuryData.endDate}
-						/>
+						{#if showUpsertDialog}
+							<RangeDateInput
+								name="injury-dates"
+								label="Inicio"
+								required={false}
+								bind:startDate={injuryData.startDate}
+								bind:endDate={injuryData.endDate}
+							/>
+						{/if}
 						<!-- <DateInput
 							name="end-date"
 							label="Finalización"
@@ -85,6 +114,6 @@
 				</button>
 				<button type="submit" class="btn btn-dark">Crear lesión</button>
 			</div>
-		</form>
+		</AsyncForm>
 	</Dialog>
 </PageWrapper>
