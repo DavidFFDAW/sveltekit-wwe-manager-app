@@ -36,6 +36,7 @@ i.customs-icons.app-bootstrap-custom-icon {
 i.customs-icons.app-bootstrap-custom-icon.bi.bi-twitter {
 	color: #1da1f2;
 }
+
 i.customs-icons.app-bootstrap-custom-icon.bi.icon-big {
 	font-size: 1.3rem;
 	font-weight: 700;
@@ -190,19 +191,14 @@ textarea {
 	resize: vertical;
 }
 
-.radio-checkbox-container-wrapper
-	.radio-checkbox-input:checked
-	+ .radio-checkbox-inner-item.label-item-legend {
+.radio-checkbox-container-wrapper .radio-checkbox-input:checked+.radio-checkbox-inner-item.label-item-legend {
 	background-image: url(https://upload.wikimedia.org/wikipedia/en/9/93/WWE_Hall_of_Fame_Logo%2C_2019_version.png);
 	background-size: 50%;
 	background-position: center;
 	background-repeat: no-repeat;
 }
 
-.radio-checkbox-container-wrapper
-	.radio-checkbox-input:checked
-	+ .radio-checkbox-inner-item.label-item-legend
-	.label-item-text {
+.radio-checkbox-container-wrapper .radio-checkbox-input:checked+.radio-checkbox-inner-item.label-item-legend .label-item-text {
 	opacity: 0;
 }
 
@@ -219,7 +215,7 @@ aside.admin-sidebar.sidebar.shown {
 	transition: 0.3s;
 }
 
-aside.admin-sidebar.sidebar.shown + main.app-main-entrypoint {
+aside.admin-sidebar.sidebar.shown+main.app-main-entrypoint {
 	margin-left: var(--sidebar-width);
 }
 
@@ -339,19 +335,20 @@ body main.app-main-entrypoint.page-public-login.public-page {
 }
 
 /* SPINNER */
-aside.sidebar.shown + main.app-main-entrypoint .spinner-overlay-layer {
+aside.sidebar.shown+main.app-main-entrypoint .spinner-overlay-layer {
 	padding-left: var(--sidebar-width);
 	overflow: hidden;
 	user-select: none;
 }
 
 /* FORM */
-aside.sidebar.shown + main.app-main-entrypoint form.app-custom-form .buttons-block {
+aside.sidebar.shown+main.app-main-entrypoint form.app-custom-form .buttons-block {
 	position: fixed;
 	margin-left: var(--sidebar-width);
 	width: calc(100% - var(--sidebar-width));
 }
-aside.sidebar.shown + main.app-main-entrypoint .sidebar-margin {
+
+aside.sidebar.shown+main.app-main-entrypoint .sidebar-margin {
 	margin-left: var(--sidebar-width);
 	width: calc(100% - var(--sidebar-width));
 }
@@ -465,14 +462,11 @@ aside.sidebar.shown + main.app-main-entrypoint .sidebar-margin {
 	cursor: pointer;
 }
 
-.radio-checkbox-container-wrapper
-	.radio-checkbox-input:checked
-	+ .radio-checkbox-inner-item
-	.label-item-text {
+.radio-checkbox-container-wrapper .radio-checkbox-input:checked+.radio-checkbox-inner-item .label-item-text {
 	color: #4a749b;
 }
 
-.radio-checkbox-container-wrapper .radio-checkbox-input:checked + .radio-checkbox-inner-item {
+.radio-checkbox-container-wrapper .radio-checkbox-input:checked+.radio-checkbox-inner-item {
 	background-color: #d5e8fbac;
 	border: 1px solid #4a749b;
 }
@@ -508,21 +502,86 @@ aside.sidebar.shown + main.app-main-entrypoint .sidebar-margin {
 .custom-flatpicker-container .flatpickr-calendar.rangeMode {
 	width: 100%;
 }
+
 .custom-flatpicker-container .flatpickr-input[readonly] {
 	display: none;
 	/* display: block; */
 }
+
 .custom-flatpicker-container .flatpickr-calendar.rangeMode .flatpickr-innerContainer {
 	justify-content: center;
 }
+
+
+/* GROUPED ACTIONS */
+.grouped-actions-link {
+	min-width: 200px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 5px;
+	color: white;
+	text-decoration: none;
+	color: #000;
+	cursor: pointer;
+}
+
+.grouped-actions-link.is-loading {
+	pointer-events: none;
+}
+
+.grouped-actions-link.is-loading .icon-wrapper,
+.grouped-actions-link.is-loading .text {
+	opacity: 0.5;
+}
+
+.grouped-actions-link.warn {
+	color: #b8a122;
+}
+
+.grouped-actions-link .icon-wrapper {
+	display: flex;
+	align-items: center;
+	padding: 0.5rem;
+	border-radius: 50%;
+}
+
+.grouped-actions-link.success .icon-wrapper {
+	background-color: var(--color-success);
+	color: #53655a;
+}
+
+.grouped-actions-link.info .icon-wrapper {
+	background-color: var(--color-info);
+	color: #31708f;
+}
+
+.grouped-actions-link.danger .icon-wrapper {
+	background-color: var(--color-danger);
+	color: #a94442;
+}
+
+.grouped-actions-link.warn .icon-wrapper {
+	background-color: var(--color-warn);
+	color: #deac16;
+}
+
+.grouped-actions-link .text {
+	flex: 1;
+	display: block;
+	text-align: start;
+}
+
+
+
 
 /* TABLE */
 table.custom-table {
 	width: 100%;
 	border-collapse: collapse;
 	border-radius: 5px;
-	overflow: hidden;
 }
+
 .responsive-table table {
 	width: 100%;
 	border-collapse: collapse;
@@ -535,17 +594,17 @@ thead {
 	color: white;
 }
 
-tbody {
-	background-color: #fff;
-}
 tbody td {
 	color: #333;
 	font-size: 0.9rem;
 	border: 1px solid #e5e7eb;
+	background-color: #fff;
 }
+
 tbody td:first-child {
 	border-left: none;
 }
+
 tbody td:last-child {
 	border-right: none;
 }
@@ -561,8 +620,61 @@ tbody tr:hover {
 	background-color: #f3f4f6;
 }
 
+table.custom-table tbody tr td[data-tab="actions"] .small-actions-container {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 10px;
+}
+
+table.custom-table tbody tr td[data-tab="actions"] .small-actions-container .small-btn {
+	position: relative;
+	background-color: #fff;
+	border-radius: 0;
+}
+
+table.custom-table tbody tr td[data-tab="actions"] .small-actions-container .small-actions button::after {
+	content: '';
+	width: 80%;
+	height: 1.5px;
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 50%;
+	border-radius: 15px;
+	transform: translateX(-50%);
+	background-color: #ddd;
+}
+
+
+table.custom-table tbody tr td[data-tab="actions"] .small-actions-container .small-actions button:first-child::after {
+	content: none;
+	display: none;
+}
+
+table.custom-table tbody tr td[data-tab="actions"] button:last-child {
+	border-bottom: none;
+}
+
+table.custom-table tbody tr td[data-tab="actions"] button:hover {
+	background-color: #f9f9f9;
+}
+
+table.custom-table tbody tr td[data-tab="actions"] .grouped-actions-link {
+	display: flex;
+	background-color: #fff;
+	justify-content: center;
+	align-items: center;
+	gap: 15px;
+}
+
+table.custom-table tbody tr td[data-tab="actions"] .grouped-actions-link:hover {
+	background-color: #f9f9f9;
+}
+
 /* 🟡 Modo tarjeta para móviles */
 @media (max-width: 768px) {
+
 	.responsive-table table,
 	.responsive-table thead,
 	.responsive-table tbody,
@@ -601,7 +713,8 @@ tbody tr:hover {
 	.responsive-table td::before {
 		content: attr(data-label);
 		font-weight: bold;
-		color: #6b7280; /* gris medio */
+		color: #6b7280;
+		/* gris medio */
 	}
 }
 
@@ -610,7 +723,7 @@ tbody tr:hover {
 		font-size: 0.9em;
 	}
 
-	aside.admin-sidebar.sidebar.shown + main.app-main-entrypoint {
+	aside.admin-sidebar.sidebar.shown+main.app-main-entrypoint {
 		margin-left: 0;
 	}
 }

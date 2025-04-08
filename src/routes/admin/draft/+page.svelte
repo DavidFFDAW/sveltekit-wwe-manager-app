@@ -7,6 +7,7 @@
 	import Image from '$lib/components/visual/image.svelte';
 	import type { Wrestler } from '@prisma/client';
 	import { fade } from 'svelte/transition';
+	import { ChoosingAlgorithm } from './draft.algorithm.js';
 
 	const searchParams = page.url.searchParams;
 	let brand: string = searchParams.has('brand')
@@ -14,13 +15,38 @@
 		: 'smackdown';
 
 	export let data;
+	let innerList: Wrestler[] = data.wrestlers;
 	let brandsRoster: { raw: Wrestler[]; smackdown: Wrestler[] } = { raw: [], smackdown: [] };
 	let bindableSelected: number | undefined = undefined;
 	$: selectedWrestler = data.wrestlers.find((wrestler) => wrestler.id === bindableSelected);
 
+	const updateBrandRoster = (wrestler: Wrestler, brand: string = 'smackdown') => {
+		const currentBrand = brand as keyof typeof brandsRoster;
+		const roster = brandsRoster[currentBrand];
+		brandsRoster[currentBrand] = [...roster, wrestler];
+	};
+
 	const signupWrestler = async (event: Event) => {
 		event.preventDefault();
-		console.log('Signup wrestler', selectedWrestler);
+		const currentBrand = brand as keyof typeof brandsRoster;
+		innerList = innerList.filter((wrestler) => wrestler.id !== bindableSelected);
+		updateBrandRoster(selectedWrestler as Wrestler);
+
+		const opposingBrandChoosing = ChoosingAlgorithm.getOpposingBrandSelectedWrestler(
+			selectedWrestler as Wrestler,
+			innerList
+		);
+		if (!opposingBrandChoosing) {
+			console.error('No opposing brand wrestler found');
+			return;
+		}
+		const opposingBrand = Object.keys(brandsRoster).find(
+			(key) => key !== currentBrand
+		) as keyof typeof brandsRoster;
+		brandsRoster[opposingBrand] = [...brandsRoster[opposingBrand], opposingBrandChoosing];
+		innerList = innerList.filter((wrestler) => wrestler.id !== opposingBrandChoosing?.id);
+		bindableSelected = undefined;
+		selectedWrestler = undefined;
 	};
 </script>
 
@@ -53,7 +79,7 @@
 				{/if}
 				<div class="w1 wrestler-selection-list">
 					<WrestlersSelector
-						list={data.wrestlers}
+						list={innerList}
 						name="draft-wrestlers"
 						maxHeight={450}
 						itemWidth={300}

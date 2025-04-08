@@ -10,8 +10,7 @@ export class ChoosingAlgorithm {
 
 	public static getOpposingBrandSelectedWrestler(
 		mySelection: Wrestler,
-		elegibleList: Wrestler[],
-		currentOpposingBrandRoster: Wrestler[]
+		elegibleList: Wrestler[]
 	): Wrestler | null {
 		// Si hay luchadores con overall mayor o igual a 90, se selecciona uno de ellos
 		if (mySelection.status === 'manager') {

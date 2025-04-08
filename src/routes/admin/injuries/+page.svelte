@@ -5,14 +5,17 @@
 	import WrestlersSelector from '$lib/components/forms/selector/specific/wrestlers-selector.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import { fade } from 'svelte/transition';
-	import ResponsiveTable from './responsive-table.svelte';
 	import { Utils } from '$lib/utils/general.utils';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
-	import GroupedActions from '$lib/components/buttons/grouped-actions/grouped-actions.svelte';
-	import ActionsLink from '$lib/components/buttons/grouped-actions/actions-link.svelte';
+	import ActionsAsync from '$lib/components/buttons/grouped-actions/actions-async.svelte';
+	import CustomAction from '$lib/components/buttons/grouped-actions/custom-action.svelte';
+	import type { Injuries } from '@prisma/client';
+	import ResponsiveTable from '$lib/components/visual/responsive-table.svelte';
+	import TableRow from '$lib/components/visual/table-row.svelte';
 
 	export let data;
 	let injuryData = {
+		id: 0,
 		injury: '',
 		startDate: '',
 		endDate: '',
@@ -20,6 +23,19 @@
 		severity: ''
 	};
 	let showUpsertDialog: boolean = false;
+
+	const selectEditInjury = (injury: Injuries) => {
+		injuryData = {
+			id: injury.id,
+			injury: injury.injury,
+			startDate: injury.start_date ? Utils.formatFlatpickrDate(injury.start_date) : '',
+			endDate: Utils.formatFlatpickrDate(injury.end_date),
+			wrestlerId: injury.wrestler_id,
+			severity: injury.severity
+		};
+		showUpsertDialog = true;
+	};
+	$: formAction = injuryData.id ? 'updateInjury' : 'createInjury';
 </script>
 
 <PageWrapper page="admin-injuries-page">
@@ -30,25 +46,29 @@
 		<ResponsiveTable header={['Wrestler', 'Lesión', 'Inicio', 'Fin', 'Acciones']}>
 			{#each data.injuries as injury}
 				<tr in:fade={{ duration: 200 }} out:fade={{ duration: 200 }}>
-					<td data-label="Wrestler">{injury.Wrestler.name}</td>
-					<td data-label="Lesión">{injury.injury}</td>
-					<td data-label="Inicio">
+					<TableRow label="Wrestler">{injury.Wrestler.name}</TableRow>
+					<TableRow label="Lesión">{injury.injury}</TableRow>
+					<TableRow label="Inicio">
 						{injury.start_date === null ? 'N/A' : Utils.getDateLocale(injury.start_date)}
-					</td>
-					<td data-label="Fin">{Utils.getDateLocale(injury.end_date)}</td>
-					<td data-label="Acciones">
-						<GroupedActions text="Acciones" position="right">
-							<div class="w1 flex column astart">
-								<button
-									type="button"
-									class="btn btn-dark"
-									on:click={() => (showUpsertDialog = true)}
-								>
-									Editar
-								</button>
-							</div>
-						</GroupedActions>
-					</td>
+					</TableRow>
+					<TableRow label="Fin">{Utils.getDateLocale(injury.end_date)}</TableRow>
+					<TableRow label="Acciones" actions={true}>
+						<CustomAction
+							icon="pencil"
+							color="info"
+							click={() => selectEditInjury(injury)}
+							text="Editar"
+						/>
+						<ActionsAsync
+							method="delete"
+							href={`/admin/injuries/${injury.id}`}
+							color="danger"
+							icon="trash"
+							confirmate="¿Estás seguro de que quieres eliminar esta lesión?"
+						>
+							Eliminar
+						</ActionsAsync>
+					</TableRow>
 				</tr>
 			{/each}
 		</ResponsiveTable>
@@ -61,7 +81,13 @@
 	</div>
 
 	<Dialog bind:opened={showUpsertDialog}>
-		<AsyncForm showButtons={false} method="post">
+		<AsyncForm
+			showButtons={false}
+			method="post"
+			action={formAction}
+			afterSubmit={() => (showUpsertDialog = false)}
+			updateId={injuryData.id}
+		>
 			<div class="w1 flex between astart gap-small responsive">
 				<WrestlersSelector
 					list={data.wrestlers}
@@ -112,7 +138,9 @@
 				<button type="button" class="btn btn-dark" on:click={() => (showUpsertDialog = false)}>
 					Cancelar
 				</button>
-				<button type="submit" class="btn btn-dark">Crear lesión</button>
+				<button type="submit" class="btn btn-dark">
+					{injuryData.id ? 'Actualizar lesión' : 'Crear lesión'}
+				</button>
 			</div>
 		</AsyncForm>
 	</Dialog>

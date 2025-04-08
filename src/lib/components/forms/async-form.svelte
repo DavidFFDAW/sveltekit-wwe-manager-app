@@ -16,6 +16,7 @@
 	export let showToast: boolean = true;
 	export let updateId: string | number = '';
 	export let preProcess: ((formData: FormData) => boolean) | null = null;
+	export let afterSubmit: ((response: ActionResult) => void) | null = null;
 	let loading = false;
 
 	const submitForm: SubmitFunction = ({ formData }) => {
@@ -37,6 +38,7 @@
 			}, 500);
 			const response = result as ActionResult & { data: any };
 			const hasError = result.type === 'error' || result.type === 'failure';
+			if (afterSubmit) afterSubmit(response);
 
 			if (hasError) {
 				const errorMessage =
