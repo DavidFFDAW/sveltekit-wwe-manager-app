@@ -41,9 +41,11 @@ export const cronjobs = {
 			}
 		});
 	},
-	updateManyExecutionDate: () => {
+	updateManyExecutionDate: (where: Prisma.CronjobsWhereInput = {}) => {
 		const localDate = Utils.getLocalDate();
+
 		return prisma.cronjobs.updateMany({
+			where: where,
 			data: {
 				last_executed: localDate
 			}

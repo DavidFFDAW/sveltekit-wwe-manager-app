@@ -20,7 +20,9 @@ export async function POST({ request }) {
 		for (const job of activeCrons) {
 			await cronjobsUtils.executeCronjob(job.slug, false);
 		}
-		await cronjobs.updateManyExecutionDate();
+		await cronjobs.updateManyExecutionDate({
+			active: true
+		});
 
 		return Api.success('All active cronjobs executed', 200);
 	} catch (error) {
