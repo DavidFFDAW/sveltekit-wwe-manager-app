@@ -572,7 +572,62 @@ aside.sidebar.shown+main.app-main-entrypoint .sidebar-margin {
 	text-align: start;
 }
 
+/* TEXTAREA YEET */
+.textarea-ia-container .ql-editor {
+	min-height: 120px;
+}
 
+.artificial-intelligence-container {
+	background-color: #282a36;
+	padding: 5px;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	border-radius: 0 0 8px 8px;
+}
+
+.artificial-intelligence-container textarea {
+	background-color: transparent;
+	color: #fff;
+	border-radius: 5px;
+	padding: 10px;
+	min-height: 80px;
+	font-size: 1.05rem;
+	outline: none;
+	border: none;
+}
+
+.artificial-intelligence-container textarea::placeholder {
+	color: rgb(152, 158, 168);
+}
+
+.artificial-intelligence-container button.btn.btn-submit {
+	background-color: #f8f8f2;
+	color: #282a36;
+}
+
+.artificial-intelligence-container button.btn.btn-reset {
+	background-color: #44475a;
+	color: #f8f8f2;
+}
+
+.artificial-intelligence-container .loading-spinner {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 10;
+}
+
+.artificial-intelligence-container .loading-spinner .spinner {
+	border-width: 10px;
+	border-style: solid;
+	border-color: #6272a4 #44475a #44475a #44475a;
+	border-radius: 50%;
+	width: 50px;
+	height: 50px;
+	animation: spin 1s linear infinite;
+}
 
 
 /* TABLE */

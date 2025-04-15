@@ -54,6 +54,10 @@
 			value = quill.root.innerHTML;
 		});
 	});
+
+	$: if (quill && value !== quill.root.innerHTML) {
+		quill.root.innerHTML = value;
+	}
 </script>
 
 <div class="form-item">
