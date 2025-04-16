@@ -66,7 +66,7 @@
 		const datas = new FormData();
 		datas.append(
 			'prompt',
-			`${prompt}. Escribe la respuesta directamente en HTML, lista para pegar en una página web, sin etiquetas <html> ni <body> ni <h1> y sin <scripts> o <style>. Solo contenido.`
+			`Escribe el contenido para el post de un blog de wwe. El tema será: ${prompt}. Escribe la respuesta directamente en HTML, lista para pegar en una página web, sin etiquetas <html> ni <body> ni <h1> y sin <scripts> o <style>. Solo contenido.`
 		);
 
 		loading = true;
@@ -119,27 +119,46 @@
 		<input type="hidden" {name} bind:value required />
 	</div>
 
-	<div class="artificial-intelligence-container relative">
+	<div class="artificial-intelligence-container relative flex column">
+		<p class="artificial-info">
+			Por defecto esta inteligencia artificial va a recibir instrucciones para escribir un post para
+			un blog de WWE sobre el tema concreto que le especifiques y lo devolverá en html sin utilizar
+			las etiquetas <code>"body"</code>, <code>"html"</code> ni <code>"head"</code>. Solo el
+			contenido. Tampoco incluirá el titular <code>"h1"</code> ni etiquetas <code>"script"</code> o
+			<code>"style"</code>.
+		</p>
 		{#if loading}
 			<div class="loading-spinner absolute w1 h1 top left">
 				<div class="spinner"></div>
 			</div>
 		{/if}
 
-		<textarea
-			bind:value={prompt}
-			rows="1"
-			cols="10"
-			placeholder="Pídele algo a la IA..."
-			on:keydown={pressKey}
-		></textarea>
-		<div class="buttons flex column">
-			<button type="button" class="btn btn-submit" disabled={loading} on:click={getIaResponseText}>
-				<Icon icon="send-fill" />
-			</button>
-			<button type="button" class="btn btn-reset" disabled={loading} on:click={() => (prompt = '')}>
-				<Icon icon="trash" />
-			</button>
+		<div class="w1 flex acenter start">
+			<textarea
+				bind:value={prompt}
+				rows="1"
+				cols="10"
+				placeholder="Escribe el tema concreto para generar una entrada para el blog..."
+				on:keydown={pressKey}
+			></textarea>
+			<div class="buttons flex column">
+				<button
+					type="button"
+					class="btn btn-submit"
+					disabled={loading}
+					on:click={getIaResponseText}
+				>
+					<Icon icon="send-fill" />
+				</button>
+				<button
+					type="button"
+					class="btn btn-reset"
+					disabled={loading}
+					on:click={() => (prompt = '')}
+				>
+					<Icon icon="trash" />
+				</button>
+			</div>
 		</div>
 	</div>
 </div>
