@@ -6,7 +6,6 @@
 	import ActionsLink from '$lib/components/buttons/grouped-actions/actions-link.svelte';
 	import GroupedActions from '$lib/components/buttons/grouped-actions/grouped-actions.svelte';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
-	import RadioList from '$lib/components/forms/inputs/radio-list.svelte';
 	import Pagination from '$lib/components/visual/pagination.svelte';
 	import { WrestlerConstants } from '$lib/constants/wrestler.constants.js';
 	export let data = { wrestlers: [], search: '', total: 0, page: 1 };
@@ -24,6 +23,13 @@
 		<GroupedActions text="Acciones de luchadores" position="right">
 			<ActionsLink href="/admin/wrestlers/create" icon="plus" color="success">
 				Crear luchador
+			</ActionsLink>
+			<ActionsLink
+				href="https://davidfernandezdeveloper.es/2k/api/v2/images/zip"
+				icon="file-earmark-zip"
+				color="success"
+			>
+				Descargar Zip de imágenes
 			</ActionsLink>
 			<ActionsCsv
 				href="/api/export/csv/wrestlers?separator=;"
