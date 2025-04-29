@@ -31,13 +31,13 @@ export const cronjobs = {
 		});
 	},
 	updateExecutionDate: (slug: string) => {
-		const localDate = Utils.getLocalDate();
+		// const localDate = Utils.getLocalDate();
 		return prisma.cronjobs.update({
 			where: {
 				slug: slug
 			},
 			data: {
-				last_executed: localDate
+				last_executed: new Date()
 			}
 		});
 	},

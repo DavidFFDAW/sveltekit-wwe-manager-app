@@ -2,6 +2,7 @@
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
 	import ActionsAsync from '$lib/components/buttons/grouped-actions/actions-async.svelte';
 	import GroupedActions from '$lib/components/buttons/grouped-actions/grouped-actions.svelte';
+	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import Icon from '$lib/components/icons/icon.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	export let data;
@@ -52,6 +53,26 @@
 								>
 									<Icon icon="pencil" /> Editar
 								</a>
+
+								{#if cronjob.active}
+									<AsyncForm
+										action="executeCron"
+										method="post"
+										classes="admin-cronjob-item-form"
+										showButtons={false}
+									>
+										<input type="hidden" name="id" value={cronjob.id} />
+										<input type="hidden" name="slug" value={cronjob.slug} />
+
+										<button
+											type="submit"
+											class="admin-cronjob-item-button btn btn-danger admin-cronjob-item-button btn btn-dark"
+										>
+											<Icon icon="arrow-clockwise" />
+											Ejecutar
+										</button>
+									</AsyncForm>
+								{/if}
 							</div>
 						</div>
 					</div>
