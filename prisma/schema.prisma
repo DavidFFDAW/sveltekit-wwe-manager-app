@@ -125,6 +125,7 @@ model BlogPost {
     visible        Boolean?         @default(true) @db.TinyInt
     category       String?          @db.VarChar(255)
     deletable      Boolean?         @default(false) @db.TinyInt
+    views          Int              @default(0) @db.Int
     ReportComments ReportComments[]
 
     @@map(name: "news")

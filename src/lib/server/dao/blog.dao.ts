@@ -1,3 +1,4 @@
+import type { Prisma } from '@prisma/client';
 import type { BlogObject } from '../interfaces';
 import prisma from '../prisma';
 
@@ -56,6 +57,20 @@ export const BlogDao = {
 		return prisma.blogPost.update({
 			where: { id },
 			data: { visible }
+		});
+	},
+	updatePostViews: (id: number) => {
+		return prisma.blogPost.update({
+			where: { id },
+			data: {
+				views: { increment: 1 }
+			}
+		});
+	},
+	update(id: number, data: Prisma.BlogPostUpdateInput) {
+		return prisma.blogPost.update({
+			where: { id },
+			data
 		});
 	}
 };

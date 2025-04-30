@@ -5,7 +5,7 @@ export const load = async ({ params }) => {
 	const { slug } = params;
 	const post = await BlogDao.getReadablePostBySlug(slug);
 	if (!post) return Helpers.redirection('/blog');
-
+	await BlogDao.updatePostViews(post.id);
 	return { post };
 };
 
