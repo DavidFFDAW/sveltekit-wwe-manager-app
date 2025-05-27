@@ -14,5 +14,8 @@ export const Api = {
 	},
 	response: (data: Record<string, any>, status: number = 200) => {
 		return json(data, { status });
+	},
+	json: (data: Record<string, any>, status: number = 200) => {
+		return json(data, { status });
 	}
 };
