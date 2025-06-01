@@ -1,11 +1,9 @@
 import prisma from '$lib/server/prisma.js';
 import { Api } from '$lib/server/server.helpers.js';
-import DatabaseExportUtils from '../export.core.utils.js';
+import DatabaseExportUtils from '../../../json/export.core.utils.js';
 
 export async function GET({ params }) {
-	const { model } = params;
-	console.log(`Exporting data for model: ${model}`);
-
+	const { slug: model } = params;
 	try {
 		// List allowed model names as keys of prisma
 		const allowedModels = DatabaseExportUtils.getAllowedModels();

@@ -1,6 +1,6 @@
 import prisma from '$lib/server/prisma.js';
 import { Api } from '$lib/server/server.helpers.js';
-import DatabaseExportUtils from '../export.core.utils.js';
+import DatabaseExportUtils from '../../../json/export.core.utils.js';
 
 export async function GET({ params }) {
 	const { model } = params;
@@ -17,16 +17,12 @@ export async function GET({ params }) {
 		const modelTableName = prismaModel._meta?.tableName || model;
 		console.log(`Model table name for ${model}:`, modelTableName);
 
-		const structure = await DatabaseExportUtils.getDatabaseTableInfo(modelTableName);
-		if (!structure || structure.length === 0) {
-			return Api.error('Model has no data', 404);
-		}
-
-		const createTableQuery = DatabaseExportUtils.getCreateTableQuery(modelTableName, structure);
-		console.log(`Create table query for ${model}:`, createTableQuery);
-
+		const allTableRecords = await prismaModel.findMany({
+			orderBy: { id: 'asc' }
+		});
 		const fileName = `${modelTableName}.sql`;
-		return DatabaseExportUtils.getFileSqlResponse(createTableQuery, fileName);
+		const parsedSQLContent = DatabaseExportUtils.recordsToSqlInsertStatements(allTableRecords);
+		return DatabaseExportUtils.getFileSqlResponse(parsedSQLContent, fileName);
 	} catch (error) {
 		console.log(`Error exporting data for model ${model}:`, error);
 		return Api.error('Failed to export data', 500);

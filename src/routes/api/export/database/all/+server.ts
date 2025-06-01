@@ -1,5 +1,5 @@
 import { Api } from '$lib/server/server.helpers.js';
-import DatabaseExportUtils from '../export.core.utils.js';
+import DatabaseExportUtils from '../../json/export.core.utils.js';
 
 export async function GET() {
 	const models = DatabaseExportUtils.getManuallyExportModels();
@@ -20,13 +20,11 @@ export async function GET() {
 			sqlContent += databaseCreateSQL + '\n\n';
 		}
 
-		console.log(`Exporting ${databaseTableInfo.length} tables to SQL format.`);
-		console.log(sqlContent);
-
+		sqlContent += '-- End of SQL Dump\n';
 		const fileName = `databases-export-${Date.now()}.sql`;
 		return DatabaseExportUtils.getFileSqlResponse(sqlContent, fileName);
 	} catch (error) {
-		console.log('Error in GET /api/export/json/all:', error);
+		console.log(error);
 		return Api.error('An error occurred while processing your request', 500);
 	}
 }
