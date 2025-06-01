@@ -74,6 +74,12 @@ export const DashboardLinks: DashboardLink[] = [
 		equals: false
 	},
 	{
+		url: '/admin/export',
+		label: 'Exportar datos',
+		image: 'https://davidfernandezdeveloper.es/2k/images/hulk-hogan.webp',
+		equals: false
+	},
+	{
 		url: '/admin/ppvs',
 		label: 'PPVs',
 		background:
