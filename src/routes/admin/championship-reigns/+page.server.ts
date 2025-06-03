@@ -2,6 +2,7 @@ import { ReignsDao } from '$lib/server/dao/reigns.dao';
 import { Helpers } from '$lib/server/server.helpers.js';
 
 export const load = async ({ locals }) => {
+	console.log({ locals });
 	if (!Helpers.hasPermission(locals)) throw Helpers.redirection('/');
 
 	const championshipReigns = await ReignsDao.getChampionshipReigns();

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { fade, slide } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
 	import { errorimage } from '$lib/actions/error.image';
 	import Icon from '$lib/components/icons/icon.svelte';
 
@@ -19,6 +19,7 @@
 
 	export let name: string = '';
 	export let selectedItem: number = 0;
+	export let selectedResource: Resource | null = null;
 	export let maxHeight: number = 512;
 	export let afterSelection: (id: number) => void = () => {};
 	const differentStatuses = [...new Set(list.map((resource) => resource.status))].sort();
@@ -35,6 +36,7 @@
 				)
 			: results;
 	$: selectedName = results.find((resource) => resource.id === selectedItem)?.name;
+	$: selectedResource = results.find((resource) => resource.id === selectedItem) || null;
 
 	const backspace = () => {
 		filters.search = filters.search.slice(0, -1);

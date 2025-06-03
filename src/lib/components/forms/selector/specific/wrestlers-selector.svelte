@@ -15,6 +15,7 @@
 	let showFilters: boolean = false;
 	export let name: string = '';
 	export let selectedItem: number = 0;
+	export let selectedWrestler: Wrestler | null = null;
 	export let itemWidth: number = 200;
 	export let maxHeight: number = 512;
 	export let afterSelection: ((id: number) => void) | null = null;
@@ -34,6 +35,7 @@
 
 	let filteredList = list;
 	$: filters.search, filters.status, list, (filteredList = getFilteredList());
+	$: selectedWrestler = filteredList.find((item) => item.id === selectedItem) || null;
 </script>
 
 <div class="w1 resource-selector">

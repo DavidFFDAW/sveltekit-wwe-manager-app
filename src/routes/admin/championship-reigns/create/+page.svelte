@@ -31,7 +31,7 @@
 				wrestlers={data.wrestlers.map((wrestler) => ({
 					id: wrestler.id,
 					name: wrestler.name,
-					image: wrestler.image_name,
+					image: wrestler.image_name as string,
 					gender: wrestler.sex,
 					status: wrestler.status
 				})) as UpserReignWrestler[]}

@@ -3,6 +3,7 @@ import type { Prisma } from '@prisma/client';
 import prisma from '../prisma';
 
 export const PPVDao = {
+	weeklyShows: ['Raw', 'SmackDown', 'AWL', 'Saturday Night Main Event'],
 	getPPVs: () => {
 		return prisma.pPV.findMany();
 	},
@@ -10,6 +11,12 @@ export const PPVDao = {
 		return prisma.pPV.findMany({
 			where: filter
 		});
+	},
+	getOrderedNonYear: async (filter: Prisma.PPVWhereInput = {}) => {
+		const ppvs = await prisma.pPV.findMany({
+			where: filter
+		});
+		return PPVUtils.orderPPVsByMonthAndDay(ppvs);
 	},
 	getActivePPVs: () => {
 		return prisma.pPV.findMany({
@@ -42,7 +49,7 @@ export const PPVDao = {
 			}
 		});
 	},
-	getPPVNames: async () => {
+	getPPVNames: async (filters: Prisma.PPVWhereInput = { active: true }) => {
 		return (
 			await prisma.pPV.findMany({
 				orderBy: {
@@ -51,11 +58,21 @@ export const PPVDao = {
 				select: {
 					name: true
 				},
-				where: {
-					active: true
-				}
+				where: filters
 			})
 		).map((ppv) => ppv.name) as string[];
+	},
+	getOrderedPPVNames: async (filters: Prisma.PPVWhereInput = { active: true }) => {
+		const year = new Date().getFullYear();
+		const ppvs = await prisma.pPV.findMany({
+			where: filters
+		});
+		const parsedPPVs = ppvs.map((ppv) => {
+			if (ppv.game_date) ppv.game_date.setFullYear(year);
+			return ppv;
+		});
+		const orderedPPVs = PPVUtils.orderPPVsByMonthAndDay(parsedPPVs);
+		return orderedPPVs.map((ppv) => ppv.name) as string[];
 	},
 	getPPVByID: (id: number) => {
 		return prisma.pPV.findUnique({

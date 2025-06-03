@@ -1,26 +1,35 @@
 <script lang="ts">
-	import { errorimage } from '$lib/actions/error.image';
-	import { fade } from 'svelte/transition';
+	let width = $$restProps.width || 120;
+	const appFallback: string = `/noimage.jpg`;
+	export let fallback: string = `/vacant.webp`;
+	export let alt: string = '';
+	export let type: 'wrestler' | 'championship' = 'wrestler';
 
-	export let defaultImage = '/noimage.jpg';
-	export let src: string | null | null = defaultImage;
-	export let alt: string;
-	export let width: number | string = 80;
-	export let height: number | string = 80;
-	export let classes: string = 'default-image';
+	const onError = (e: Event) => {
+		const target = e.target as HTMLImageElement;
+		if (!target) return;
+		if (target.tagName !== 'IMG') return;
+
+		if (target.src === fallback) {
+			target.src = appFallback;
+			return;
+		}
+
+		if (target.src !== fallback) {
+			const typeFallback = type === 'wrestler' ? '/vacant.webp' : '/unknown-championship.webp';
+			target.src = typeFallback || appFallback;
+		}
+	};
 </script>
 
 <img
-	src={src || defaultImage}
-	{alt}
-	{width}
-	{height}
-	class={classes}
-	draggable="false"
-	role="presentation"
-	loading="lazy"
-	transition:fade
-	use:errorimage={defaultImage}
-	aria-label={alt}
 	{...$$restProps}
+	{width}
+	height={width}
+	class="app-image default-image {$$restProps.class}"
+	data-fallback={fallback || appFallback}
+	data-app-fallback={appFallback}
+	on:error={onError}
+	loading="lazy"
+	aria-label={alt}
 />

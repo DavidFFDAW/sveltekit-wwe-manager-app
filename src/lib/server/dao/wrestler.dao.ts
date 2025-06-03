@@ -59,13 +59,6 @@ export const WrestlerDao = {
 				status: {
 					not: 'injured'
 				}
-			},
-			select: {
-				id: true,
-				name: true,
-				image_name: true,
-				sex: true,
-				status: true
 			}
 		});
 	},

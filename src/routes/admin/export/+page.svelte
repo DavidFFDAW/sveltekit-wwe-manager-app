@@ -12,9 +12,22 @@
 			</p>
 		</div>
 
-		<div class="w1 grid gap-medium">
-			<a href="/api/export/database/all" target="_blank" download>Descargar todas</a>
-			<a href="/api/export/database/table/wrestler" target="_blank" download>Descargar Wrestlers</a>
+		<div class="w1 grid buttons-grid gap-smaller">
+			<a href="/api/export/database/all" target="_blank" download class="btn icon btn-download">
+				<i class="bi bi-database"></i>
+				<span>Descargar todos</span>
+			</a>
+			{#each data.models as model}
+				<a
+					href="/api/export/database/table/{model}"
+					target="_blank"
+					download
+					class="btn icon btn-download"
+				>
+					<i class="bi bi-database"></i>
+					<span>Descargar {model}</span>
+				</a>
+			{/each}
 		</div>
 	</Box>
 
@@ -27,6 +40,10 @@
 		</div>
 
 		<div class="w1 grid buttons-grid gap-smaller">
+			<a href="/api/export/sql/all" class="btn icon btn-download" target="_blank" download>
+				<i class="bi bi-database"></i>
+				<span>Descargar todos</span>
+			</a>
 			{#each data.models as model}
 				<a
 					href="/api/export/sql/table/{model}"
@@ -44,6 +61,6 @@
 
 <style>
 	.grid.buttons-grid {
-		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 	}
 </style>

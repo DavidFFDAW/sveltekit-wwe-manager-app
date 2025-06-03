@@ -21,7 +21,7 @@ export async function GET() {
 		}
 
 		sqlContent += '-- End of SQL Dump\n';
-		const fileName = `databases-export-${Date.now()}.sql`;
+		const fileName = `all-databases-structure-export-${Date.now()}.sql`;
 		return DatabaseExportUtils.getFileSqlResponse(sqlContent, fileName);
 	} catch (error) {
 		console.log(error);
