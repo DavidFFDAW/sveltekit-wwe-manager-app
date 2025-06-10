@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { errorimage } from '$lib/actions/error.image.js';
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import Image from '$lib/components/visual/image.svelte';
@@ -13,60 +12,68 @@
 			<p>No hay reinados de campeonatos registrados.</p>
 		</div>
 	{:else}
-		<ul class="w1 championship-reigns-list">
-			{#each data.reigns as reign}
-				{@const isTag = reign.Partner && reign.Championship.tag}
-				<li class="w1 championship-reign-item">
-					<div class="championship-reign-item-image-container" class:tag-team={isTag}>
-						<Image
-							src={reign.Wrestler.image_name}
-							alt={reign.Wrestler.name}
-							width="120"
-							height="120"
-							classes="championship-image"
-						/>
+		<div class="grouped-championship-reigns">
+			{#each data.reigns as [championshipId, reigns]}
+				<h2 data-championship-id={championshipId} class="w1 tcenter">
+					{reigns[0].Championship.name}
+				</h2>
 
-						{#if reign.Partner && reign.Championship.tag}
-							<Image
-								src={reign.Partner.image_name}
-								alt={reign.Partner.name}
-								width="120"
-								height="120"
-								classes="championship-image"
-							/>
-						{/if}
-					</div>
+				<ul class="w1 championship-reigns-list">
+					{#each reigns as reign}
+						{@const isTag = reign.Partner && reign.Championship.tag}
+						<li class="w1 championship-reign-item">
+							<div class="championship-reign-item-image-container" class:tag-team={isTag}>
+								<Image
+									src={reign.Wrestler.image_name}
+									alt={reign.Wrestler.name}
+									width="120"
+									height="120"
+									classes="championship-image"
+								/>
 
-					<div class="w1 championship-reign-details-content">
-						<h3 class="w1 tcenter">{reign.team_name}</h3>
+								{#if reign.Partner && reign.Championship.tag}
+									<Image
+										src={reign.Partner.image_name}
+										alt={reign.Partner.name}
+										width="120"
+										height="120"
+										classes="championship-image"
+									/>
+								{/if}
+							</div>
 
-						<div class="championship-reign-championship-image-container">
-							<Image
-								src={reign.Championship.image}
-								alt={reign.Championship.name || 'Campeonato'}
-								width="80"
-								height="80"
-								classes="championship-image"
-								type="championship"
-							/>
-						</div>
+							<div class="w1 championship-reign-details-content">
+								<h3 class="w1 tcenter">{reign.team_name}</h3>
 
-						<p><strong>Ganado: </strong>{reign.won_date}</p>
-						{#if reign.lost_date}
-							<p><strong>Perdido: </strong>{reign.lost_date}</p>
-						{/if}
-						<p><strong>Dias: </strong>{reign.days}</p>
+								<div class="championship-reign-championship-image-container">
+									<Image
+										src={reign.Championship.image}
+										alt={reign.Championship.name || 'Campeonato'}
+										width="80"
+										height="80"
+										classes="championship-image"
+										type="championship"
+									/>
+								</div>
 
-						<div class="w1 flex end acenter gap-smaller">
-							<a href="/admin/championship-reigns/update/{reign.id}" class="btn cta icon">
-								<i class="bi bi-pencil"></i>
-								<span class="btn-text">Editar</span>
-							</a>
-						</div>
-					</div>
-				</li>
+								<p><strong>Ganado: </strong>{reign.won_date}</p>
+								{#if reign.lost_date}
+									<p><strong>Perdido: </strong>{reign.lost_date}</p>
+								{/if}
+								<p><strong>Dias: </strong>{reign.days}</p>
+
+								<div class="w1 flex end acenter gap-smaller">
+									<a href="/admin/championship-reigns/update/{reign.id}" class="btn cta icon">
+										<i class="bi bi-pencil"></i>
+										<span class="btn-text">Editar</span>
+									</a>
+								</div>
+							</div>
+						</li>
+					{/each}
+				</ul>
 			{/each}
-		</ul>
+		</div>
 	{/if}
 
 	<ButtonCreate endpoint="/championship-reigns/create" />
@@ -76,6 +83,12 @@
 	:root {
 		--background-color: #f9f9f9;
 		--box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
+
+	.grouped-championship-reigns {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
 	}
 	.championship-reigns-list {
 		display: grid;

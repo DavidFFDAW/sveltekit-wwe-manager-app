@@ -1,5 +1,6 @@
 import type { Prisma } from '@prisma/client';
 import prisma from '../prisma';
+import { getWrestlerOrTeamName, type ChampionshipReignMeta } from '$lib/utils/team.utils';
 
 export const ReignsDao = {
 	getChampionshipReigns: () => {
@@ -89,6 +90,44 @@ export const ReignsDao = {
 				won_date: 'desc'
 			}
 		});
+	},
+	getChampionshipReignsOrderedWithTeamNames: async () => {
+		const reigns = await prisma.championshipReign.findMany({
+			orderBy: [
+				{
+					won_date: 'desc'
+				},
+				{
+					Championship: {
+						brand: 'asc'
+					}
+				}
+			],
+			include: {
+				Wrestler: true,
+				Championship: true,
+				Partner: true,
+				Team: true
+			}
+		});
+		return reigns.map((reign) => ({
+			...reign,
+			team_name: reign.Championship.tag
+				? getWrestlerOrTeamName(reign as ChampionshipReignMeta)
+				: reign.Wrestler.name,
+			won_date_str: reign.won_date.toLocaleDateString('es-ES', {
+				year: 'numeric',
+				month: 'long',
+				day: '2-digit'
+			}),
+			lost_date_str: reign.lost_date
+				? reign.lost_date.toLocaleDateString('es-ES', {
+						year: 'numeric',
+						month: 'long',
+						day: '2-digit'
+					})
+				: ''
+		}));
 	},
 
 	getLastCurrentReignFromChampionship: (championship_id: number) => {
