@@ -4,9 +4,16 @@ import prisma from '../prisma';
 export const ReignsDao = {
 	getChampionshipReigns: () => {
 		return prisma.championshipReign.findMany({
-			orderBy: {
-				won_date: 'desc'
-			},
+			orderBy: [
+				{
+					won_date: 'desc'
+				},
+				{
+					Championship: {
+						brand: 'asc'
+					}
+				}
+			],
 			include: {
 				Wrestler: true,
 				Championship: true,
@@ -28,7 +35,21 @@ export const ReignsDao = {
 			}
 		});
 	},
-
+	getCurrentReigns: () => {
+		return prisma.championshipReign.findMany({
+			where: {
+				current: true,
+				lost_date: null
+			},
+			include: {
+				Wrestler: true,
+				Championship: true,
+				Partner: true,
+				Team: true
+			},
+			orderBy: [{ won_date: 'desc' }]
+		});
+	},
 	getCurrentChampionshipReign: () => {
 		return prisma.championshipReign.findMany({
 			where: {
