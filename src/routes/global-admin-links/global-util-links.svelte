@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
-	import { globalAdminLinks } from './links';
+	import { SidebarLinks } from '$lib/components/sidebar/sidebar.links';
 
 	let opened = false;
-
 	const closeOpenedLinksMenu = () => {
 		if (opened) {
 			opened = false;
@@ -14,9 +13,9 @@
 <div class="global-admin-links-app" class:opened>
 	{#if opened}
 		<ul class="links-menu" transition:slide>
-			{#each globalAdminLinks as link}
+			{#each SidebarLinks as link}
 				<li class="link-item">
-					<a href="/admin/{link.endpoint}" class="btn icon" on:click={closeOpenedLinksMenu}>
+					<a href="/admin/{link.url}" class="btn icon" on:click={closeOpenedLinksMenu}>
 						<i class="bi bi-{link.icon ? link.icon : 'gear'}"></i>
 						<span>{link.label}</span>
 					</a>

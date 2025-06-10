@@ -1,7 +1,7 @@
 export const prerender = false;
 export const ssr = true;
 
-const getPageRouteSlug = (route) => {
+const getPageRouteSlug = (route: string) => {
 	if (!route) return 'non-page';
 	if (route === '/') return 'home';
 	return route
@@ -15,9 +15,9 @@ export const load = async ({ locals, url }) => {
 	const isAdmin = storedUser ? ['admin', 'superadmin'].includes(storedUser.role) : false;
 
 	return {
-		userIsAdmin: isAdmin,
 		path: url.pathname,
-		isAdminPage: url.pathname.startsWith('/admin'),
-		pageRouteSlug: getPageRouteSlug(url.pathname)
+		userIsAdmin: isAdmin,
+		pageRouteSlug: getPageRouteSlug(url.pathname),
+		isAdminPage: url.pathname.startsWith('/admin')
 	};
 };

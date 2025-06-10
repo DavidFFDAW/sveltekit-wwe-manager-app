@@ -4,14 +4,25 @@
 	let dialog: HTMLDialogElement;
 	export let opened: boolean;
 
+	const openDialog = () => {
+		dialog.showModal();
+		document.body.classList.add('no-scroll');
+	};
+
+	const onlyCloseDialog = () => {
+		dialog.close();
+		document.body.classList.remove('no-scroll');
+	};
+
 	const closeDialog = () => {
 		dialog.close();
 		opened = false;
+		document.body.classList.remove('no-scroll');
 	};
 
 	$: {
-		if (opened) dialog.showModal();
-		if (!opened && dialog) dialog.close();
+		if (opened) openDialog();
+		if (!opened && dialog) onlyCloseDialog();
 	}
 </script>
 

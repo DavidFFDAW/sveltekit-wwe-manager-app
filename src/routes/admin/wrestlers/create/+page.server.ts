@@ -1,7 +1,6 @@
 import { WrestlerDao } from '$lib/server/dao/wrestler.dao';
 import { Helpers } from '$lib/server/server.helpers.js';
 import { ImageUploadService } from '$lib/server/services/image-upload-service.js';
-import fs from 'fs';
 
 export const actions = {
 	default: async ({ request, locals }) => {
@@ -10,18 +9,10 @@ export const actions = {
 		const { error, message } = Helpers.checkRequiredFields(formData, WrestlerDao.required);
 		if (error) return Helpers.error(message);
 
-		const objet = Object.fromEntries(formData.entries());
-		fs.writeFileSync(
-			'./src/routes/admin/wrestlers/create/test.json',
-			JSON.stringify(objet, null, 4),
-			'utf-8'
-		);
-
 		const wrestlerObject = WrestlerDao.transformToWrestlerObject(formData);
 		const slugifiedName = Helpers.slugify(wrestlerObject.name);
 		try {
 			const updatedWrestler = await WrestlerDao.createWrestler(wrestlerObject);
-
 			if (Helpers.dataHas(formData, 'wrestler-image-upload')) {
 				const imageURL = await ImageUploadService.uploadImageFromDataURL(
 					formData.get('wrestler-image-upload') as string,

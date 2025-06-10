@@ -11,5 +11,5 @@ export async function getGalleryImages() {
 	const res = await fetch('https://davidfernandezdeveloper.es/2k/api/v2/images');
 	if (res.status !== 200 || !res.ok) return [];
 	const { data } = await res.json();
-	return data.images;
+	return data.images.sort((a: GalleryImage, b: GalleryImage) => (a.date < b.date ? 1 : -1));
 }

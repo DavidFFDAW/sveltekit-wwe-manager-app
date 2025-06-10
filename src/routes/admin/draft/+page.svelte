@@ -10,7 +10,6 @@
 	import { ChoosingAlgorithm } from './draft.algorithm.js';
 	import DraftPickPreview from './draft-pick-preview.svelte';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
-	import { redirect } from '@sveltejs/kit';
 
 	const searchParams = page.url.searchParams;
 	let brand: string = searchParams.has('brand')

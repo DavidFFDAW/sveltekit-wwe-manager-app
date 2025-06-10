@@ -30,16 +30,19 @@
 	<Dialog bind:opened>
 		<div class="gallery overflow-vertical h1">
 			{#each images as image}
-				<img
-					src={image.url}
-					alt={image.name}
-					class:active={image.url === active}
-					draggable="false"
-					role="presentation"
-					data-url={image.url}
-					loading="lazy"
-					on:click={selectImage}
-				/>
+				<div class="gallery-item">
+					<img
+						src={image.url}
+						alt={image.name}
+						class:active={image.url === active}
+						draggable="false"
+						role="presentation"
+						data-url={image.url}
+						loading="lazy"
+						on:click={selectImage}
+					/>
+					<small class="sourcesans">{image.name}</small>
+				</div>
 			{/each}
 		</div>
 	</Dialog>
@@ -57,12 +60,30 @@
 		width: 100%;
 		height: auto;
 		border: 1px solid #ccc;
+		border-radius: 10px 10px 0 0;
 		cursor: pointer;
 	}
 
 	.gallery img:hover {
 		border: 1px solid #c91727;
 		background-color: #f9f9f9;
+	}
+
+	.gallery .gallery-item {
+		padding: 10px;
+		text-align: center;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	.gallery .gallery-item small {
+		display: block;
+		width: 100%;
+		background-color: #f0f0f0;
+		border: 1px solid #ccc;
+		border-top: none;
+		border-radius: 0 0 10px 10px;
+		padding: 5px;
 	}
 
 	@media (max-width: 768px) {
