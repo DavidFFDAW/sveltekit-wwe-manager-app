@@ -1,6 +1,7 @@
 import type { Prisma } from '@prisma/client';
 import prisma from '../prisma';
 import { getWrestlerOrTeamName, type ChampionshipReignMeta } from '$lib/utils/team.utils';
+import { ReignUtils } from '$lib/utils/reign.utils';
 
 export const ReignsDao = {
 	getChampionshipReigns: () => {
@@ -107,6 +108,7 @@ export const ReignsDao = {
 		});
 		return reigns.map((reign) => ({
 			...reign,
+			days_month: ReignUtils.getDaysAndMonths(reign.days),
 			team_name: reign.Championship.tag
 				? getWrestlerOrTeamName(reign as ChampionshipReignMeta)
 				: reign.Wrestler.name,

@@ -14,7 +14,11 @@
 	{:else}
 		<div class="grouped-championship-reigns">
 			{#each data.reigns as [championshipId, reigns]}
-				<h2 data-championship-id={championshipId} class="w1 tcenter">
+				<h2
+					id={`championship=${championshipId}`}
+					data-championship-id={championshipId}
+					class="w1 tcenter"
+				>
 					{reigns[0].Championship.name}
 				</h2>
 
@@ -56,10 +60,44 @@
 									/>
 								</div>
 
-								<p><strong>Ganado: </strong>{reign.won_date_str}</p>
-								<p><strong>Perdido: </strong>{reign.lost_date_str}</p>
-								<p><strong>Dias: </strong>{reign.days}</p>
-								<p><strong>Defensas: </strong>{reign.defences}</p>
+								<div class="championship-reign-statistics">
+									<div class="championship-reign-stats-item">
+										<p class="championship-reign-stats-title">Ganado</p>
+										<p class="championship-reign-stats-value">{reign.won_date_str}</p>
+									</div>
+
+									<div class="championship-reign-stats-item">
+										<p class="championship-reign-stats-title">Perdido</p>
+										<p class="championship-reign-stats-value">{reign.lost_date_str}</p>
+									</div>
+
+									<div class="championship-reign-stats-item">
+										<p class="championship-reign-stats-title">Días</p>
+										<p class="championship-reign-stats-value">{reign.days}</p>
+									</div>
+
+									<div class="championship-reign-stats-item">
+										<p class="championship-reign-stats-title">Tiempo</p>
+										<p class="championship-reign-stats-value">{reign.days_month}</p>
+									</div>
+
+									<div class="championship-reign-stats-item">
+										<p class="championship-reign-stats-title">Defensas</p>
+										<p class="championship-reign-stats-value">{reign.defences}</p>
+									</div>
+
+									<div class="championship-reign-stats-item">
+										<p class="championship-reign-stats-title">Modo victoria</p>
+										<p class="championship-reign-stats-value">
+											{reign.victory_way || 'No registrado'}
+										</p>
+									</div>
+
+									<div class="championship-reign-stats-item">
+										<p class="championship-reign-stats-title">Evento</p>
+										<p class="championship-reign-stats-value">{reign.ppv_won || 'No registrado'}</p>
+									</div>
+								</div>
 
 								<div class="w1 flex end acenter gap-smaller">
 									<a href="/admin/championship-reigns/update/{reign.id}" class="btn cta icon">
@@ -123,5 +161,37 @@
 		flex-direction: column;
 		align-items: start;
 		margin-top: 0.5rem;
+	}
+
+	.championship-reign-statistics {
+		display: flex;
+		flex-direction: column;
+		border: 1px solid #ddd;
+		border-radius: 0.5rem;
+		overflow: hidden;
+		margin-bottom: 1rem;
+	}
+	.championship-reign-statistics .championship-reign-stats-item {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		background-color: #fff;
+		border-bottom: 1px solid #ddd;
+	}
+	.championship-reign-statistics .championship-reign-stats-item:last-child {
+		border-bottom: none;
+	}
+
+	.championship-reign-statistics .championship-reign-stats-item .championship-reign-stats-title {
+		font-weight: bold;
+		color: #333;
+		border-right: 1px solid #ddd;
+	}
+
+	.championship-reign-statistics .championship-reign-stats-item .championship-reign-stats-value {
+		color: #555;
+	}
+	.championship-reign-statistics .championship-reign-stats-item .championship-reign-stats-title,
+	.championship-reign-statistics .championship-reign-stats-item .championship-reign-stats-value {
+		padding: 0.5rem;
 	}
 </style>
