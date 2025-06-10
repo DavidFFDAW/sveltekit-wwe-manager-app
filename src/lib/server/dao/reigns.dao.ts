@@ -91,18 +91,13 @@ export const ReignsDao = {
 			}
 		});
 	},
-	getChampionshipReignsOrderedWithTeamNames: async () => {
+	getChampionshipReignsOrderedWithTeamNames: async (
+		orderBy: Prisma.ChampionshipReignOrderByWithRelationInput = {
+			won_date: 'desc'
+		}
+	) => {
 		const reigns = await prisma.championshipReign.findMany({
-			orderBy: [
-				{
-					won_date: 'desc'
-				},
-				{
-					Championship: {
-						brand: 'asc'
-					}
-				}
-			],
+			orderBy: orderBy,
 			include: {
 				Wrestler: true,
 				Championship: true,

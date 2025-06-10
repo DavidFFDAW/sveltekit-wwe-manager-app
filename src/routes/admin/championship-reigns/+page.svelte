@@ -56,11 +56,10 @@
 									/>
 								</div>
 
-								<p><strong>Ganado: </strong>{reign.won_date}</p>
-								{#if reign.lost_date}
-									<p><strong>Perdido: </strong>{reign.lost_date}</p>
-								{/if}
+								<p><strong>Ganado: </strong>{reign.won_date_str}</p>
+								<p><strong>Perdido: </strong>{reign.lost_date_str}</p>
 								<p><strong>Dias: </strong>{reign.days}</p>
+								<p><strong>Defensas: </strong>{reign.defences}</p>
 
 								<div class="w1 flex end acenter gap-smaller">
 									<a href="/admin/championship-reigns/update/{reign.id}" class="btn cta icon">
