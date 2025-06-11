@@ -1,16 +1,19 @@
 <script lang="ts">
+	import { Utils } from '$lib/utils/general.utils';
 	import Dialog from '../dialog/dialog.svelte';
 	import { getGalleryImages, type GalleryImage } from './gallery.service';
 
 	let opened: boolean = false;
-	let images: GalleryImage[] = [];
+	let originalImages: GalleryImage[] = [];
+	let showingImages: GalleryImage[] = originalImages;
 	export let value: string = '';
 	let active: string = '';
 
 	const getImages = async () => {
 		const fetchedImages = await getGalleryImages();
-		images = fetchedImages;
-		if (images.length > 0) opened = true;
+		originalImages = fetchedImages;
+		showingImages = fetchedImages;
+		if (originalImages.length > 0) opened = true;
 	};
 
 	const selectImage = (event: MouseEvent) => {
@@ -22,14 +25,35 @@
 			opened = false;
 		}
 	};
+
+	const searchImages = (event: Event) => {
+		if (!originalImages.length) return;
+		if (!event.target || !(event.target instanceof HTMLInputElement)) return;
+		const input = event.target as HTMLInputElement;
+		const searchTerm = Utils.slugify(input.value);
+
+		showingImages = searchTerm
+			? originalImages.filter((image) => image.name.toLowerCase().includes(searchTerm))
+			: originalImages;
+	};
 </script>
 
 <div>
 	<button type="button" class="btn secondary" on:click={getImages}>Galeria</button>
 
 	<Dialog bind:opened>
+		<header class="filters-header">
+			<input
+				type="search"
+				class="input"
+				placeholder="Buscar imagen..."
+				bind:value
+				on:change={searchImages}
+			/>
+		</header>
+
 		<div class="gallery overflow-vertical h1">
-			{#each images as image}
+			{#each showingImages as image}
 				<div class="gallery-item">
 					<img
 						src={image.url}
