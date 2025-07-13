@@ -4,6 +4,14 @@ import { getWrestlerOrTeamName, type ChampionshipReignMeta } from '$lib/utils/te
 import { ReignUtils } from '$lib/utils/reign.utils';
 
 export const ReignsDao = {
+	reignExists: async (id: number) => {
+		const reign = await prisma.championshipReign.findUnique({
+			where: {
+				id
+			}
+		});
+		return Boolean(reign?.id);
+	},
 	getChampionshipReigns: () => {
 		return prisma.championshipReign.findMany({
 			orderBy: [
