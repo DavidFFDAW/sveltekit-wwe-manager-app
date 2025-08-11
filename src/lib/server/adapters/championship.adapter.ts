@@ -16,7 +16,7 @@ export const ChampionshipAdapter = {
 			order: Number(form.get('order')),
 			short_title: form.get('short_title') as string,
 			gender: form.get('gender') as string,
-			tag: Helpers.getToggleInput(form, 'tag')
+			tag: Helpers.getToggleInput(form, 'tag_team')
 		};
 	}
 };

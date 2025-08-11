@@ -29,6 +29,7 @@ export const actions = {
 			await ChampionshipDao.updateChampionship(id, data);
 			return Helpers.success('Campeonato actualizado');
 		} catch (error) {
+			console.log(error);
 			return Helpers.error('Error al actualizar el campeonato');
 		}
 	}
