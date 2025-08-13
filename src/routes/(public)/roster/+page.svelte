@@ -29,7 +29,9 @@
 	<div class="grid unconventional-grid">
 		{#each data.wrestlers as wrestler}
 			<div class="grid-item">
-				<RosterCard {wrestler} />
+				<a href={`/roster/${wrestler.slug}`} rel="noreferrer noopener" class="target-link">
+					<RosterCard {wrestler} />
+				</a>
 			</div>
 		{/each}
 	</div>

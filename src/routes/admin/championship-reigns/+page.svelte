@@ -1,7 +1,6 @@
 <script lang="ts">
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
-	import Image from '$lib/components/visual/image.svelte';
 	import ChampionshipReignCard from './championship-reign-card.svelte';
 	import ChampionshipsSlider from './championships-slider.svelte';
 

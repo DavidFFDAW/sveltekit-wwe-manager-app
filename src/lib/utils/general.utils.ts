@@ -1,5 +1,71 @@
 import { brands } from './../constants/app';
 
+interface CSVDatas {
+	header: string[];
+	datas: Record<string, string>[];
+}
+
+export function createCsv(data: Record<string, unknown>[], givenExceptions: string[] = []) {
+	const exceptions = [...givenExceptions, , 'created_at', 'updated_at'];
+	const header = Object.keys(data[0])
+		.filter((key) => {
+			return !exceptions.includes(key);
+		})
+		.join(',');
+
+	const rows = data
+		.map((item) => {
+			return Object.entries(item)
+				.filter(([key, _]) => {
+					return !exceptions.includes(key);
+				})
+				.map(([_, value]) => value?.toString().replace(/,/g, ' ').replace(/\n/g, ' '));
+		})
+		.join('\n');
+
+	return `${header}\n${rows}`;
+}
+
+export function readCsvContent(csv: string): CSVDatas {
+	const lines = csv
+		.split('\n')
+		.map((line) => line.trim())
+		.filter((line) => line);
+	const header = lines[0].split(',').map((col) => col.trim());
+
+	return {
+		header: header,
+		datas: lines.slice(1).map((line) => {
+			const values = line.split(',').map((value) => value.trim());
+			return header.reduce(
+				(obj, key, index) => {
+					obj[key] = values[index] || '';
+					return obj;
+				},
+				{} as Record<string, string>
+			);
+		})
+	};
+}
+
+export function getArrayFormDatas(formData: FormData, keys: string[]): Record<string, string>[] {
+	const firstData = formData.getAll(keys[0]);
+	if (!firstData || firstData.length === 0) return [];
+
+	const allDatas = keys.map((key) => formData.getAll(key) as unknown[]);
+
+	return firstData.map((_, index) => {
+		return keys.reduce(
+			(obj, key, keyIndex) => {
+				const _key = key.replace(/\[\]$/, '');
+				obj[_key] = allDatas[keyIndex][index] as string;
+				return obj;
+			},
+			{} as Record<string, string>
+		);
+	});
+}
+
 export const Utils = {
 	slugify: (text: string) => {
 		const temporalText = text
@@ -112,5 +178,8 @@ export const Utils = {
 		const searchBrand = brand.toLowerCase().replace(/ /g, '-');
 		const foundBrand = brands[searchBrand];
 		return foundBrand ? foundBrand.image : '';
-	}
+	},
+	readCsvContent,
+	createCsv,
+	getArrayFormDatas
 };
