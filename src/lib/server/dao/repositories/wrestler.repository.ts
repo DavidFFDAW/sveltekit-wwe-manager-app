@@ -13,4 +13,13 @@ export class WrestlerRepository extends Repository<
 	constructor() {
 		super('wrestler');
 	}
+
+	getNonReleasedWrestlers(args: Prisma.WrestlerFindManyArgs = {}) {
+		args.where = {
+			status: { notIn: ['released'] },
+			...args.where
+		};
+
+		return this.get(args);
+	}
 }

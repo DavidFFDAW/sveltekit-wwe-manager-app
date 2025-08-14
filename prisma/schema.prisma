@@ -289,3 +289,31 @@ model Injuries {
 
     @@map(name: "injuries")
 }
+
+model PPVCard {
+    id         Int       @id @default(autoincrement())
+    ppv_name   String    @db.VarChar(255)
+    ppv_image  String    @db.VarChar(255)
+    created_at DateTime? @default(now())
+    updated_at DateTime? @updatedAt
+    matches    Match[]
+
+    @@map(name: "ppv_card")
+}
+
+model Match {
+    id            Int       @id @default(autoincrement())
+    id_match_card Int       @db.Int // Foreign key to MatchCard
+    order         Int       @db.Int
+    stipulation   String    @db.VarChar(255)
+    championship  String?   @db.VarChar(255)
+    participants  String    @db.Text
+    winner        String?   @db.VarChar(255)
+    duration      Int?      @db.Int
+    rating        Int?      @db.Int
+    created_at    DateTime? @default(now())
+    updated_at    DateTime? @updatedAt
+    matchcard     PPVCard   @relation(fields: [id_match_card], references: [id])
+
+    @@map(name: "matchs")
+}

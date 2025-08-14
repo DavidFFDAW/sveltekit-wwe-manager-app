@@ -90,6 +90,12 @@ export const SidebarLinks: SidebarLink[] = [
 		equals: false
 	},
 	{
+		url: '/admin/matchcards',
+		label: 'Match cards',
+		icon: 'card-list',
+		equals: false
+	},
+	{
 		url: '/admin/image-editor',
 		label: 'Editar imagen',
 		icon: 'image',
