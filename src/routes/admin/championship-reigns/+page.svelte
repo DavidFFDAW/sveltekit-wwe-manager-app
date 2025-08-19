@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
+	import HttpButton from '$lib/components/buttons/http-button.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import ChampionshipReignCard from './championship-reign-card.svelte';
 	import ChampionshipsSlider from './championships-slider.svelte';
@@ -8,7 +9,10 @@
 </script>
 
 <PageWrapper page="championship-reigns">
-	<h1 class="w1">Reinados de Campeonatos</h1>
+	<header class="championship-reign-page-header">
+		<h1 class="w1">Reinados de Campeonatos</h1>
+		<HttpButton href="/api/reigns/update-days/current" icon="refresh">Actualizar días</HttpButton>
+	</header>
 	{#if data.reigns.length === 0}
 		<div class="w1 flex center">
 			<p>No hay reinados de campeonatos registrados.</p>

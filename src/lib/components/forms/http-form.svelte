@@ -10,14 +10,17 @@
 	export let method: 'post' | 'get' | 'put' | 'delete' = 'post';
 
 	const sendRequest = async (action: string, method: string, formData: FormData) => {
-		const response = await fetch(action, {
+		const options: RequestInit = {
 			method: method.toUpperCase(),
-			body: formData,
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
 			}
-		});
+		};
+		if (['post', 'put'].includes(method)) {
+			options.body = formData;
+		}
+		const response = await fetch(action, options);
 
 		return {
 			response,

@@ -1,0 +1,17 @@
+{
+    "_redirect": "/admin/wrestlers",
+    "name": "El gran Americano",
+    "slug": "el-gran-americano",
+    "alias": "Chad Gable",
+    "finisher": "Metal Plate Headbutt",
+    "overall": "84",
+    "gender": "M",
+    "kayfabe_status": "heel",
+    "status": "active",
+    "brand": "smackdown",
+    "twitter_acc": "grande american",
+    "twitter_name": "el americano",
+    "twitter-image": "https://davidfernandezdeveloper.es/2k/images/chad-gable.webp",
+    "image": "https://davidfernandezdeveloper.es/2k/images/chad-gable.webp",
+    "wrestler-image-upload": ""
+}
