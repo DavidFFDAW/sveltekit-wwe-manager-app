@@ -1,11 +1,9 @@
-import fs from 'fs';
 import { ChampionshipRepository } from '$lib/server/dao/repositories/championship.repository';
 import { MatchRepository } from '$lib/server/dao/repositories/match.repository';
 import { PpvCardRepository } from '$lib/server/dao/repositories/matchcard.repository.js';
 import { WrestlerRepository } from '$lib/server/dao/repositories/wrestler.repository.js';
 import { Helpers } from '$lib/server/server.helpers.js';
 import { Utils } from '$lib/utils/general.utils.js';
-import type { Prisma } from '@prisma/client';
 
 export const load = async ({ url }) => {
     const wrestlersRepository = new WrestlerRepository();
@@ -100,19 +98,6 @@ export const actions = {
                     }),
                 );
             }
-
-            fs.writeFileSync(
-                'src/routes/admin/matchcards/matches/upsert/matches.json',
-                JSON.stringify(
-                    {
-                        parsedDatas,
-                        creatingMatches,
-                        updatingMatches,
-                    },
-                    null,
-                    4,
-                ),
-            );
 
             return Helpers.success('Match card created/updated successfully');
         } catch (error) {
