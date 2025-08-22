@@ -2,28 +2,28 @@ import { Prisma, type Match, type PPVCard } from '@prisma/client';
 import { Repository } from './Repository';
 
 export class PpvCardRepository extends Repository<
-	PPVCard,
-	Prisma.PPVCardCreateInput,
-	Prisma.PPVCardUpdateInput,
-	Prisma.PPVCardWhereInput,
-	Prisma.PPVCardFindManyArgs
+    PPVCard,
+    Prisma.PPVCardCreateInput,
+    Prisma.PPVCardUpdateInput,
+    Prisma.PPVCardWhereInput,
+    Prisma.PPVCardFindManyArgs
 > {
-	protected requiredFields: string[] = [];
+    protected requiredFields: string[] = [];
 
-	constructor() {
-		super('PPVCard');
-	}
+    constructor() {
+        super('PPVCard');
+    }
 
-	getMatchCardWithMatches(slug: string, args: Prisma.PPVCardFindManyArgs = {}) {
-		args.include = {
-			...args.include,
-			matches: true
-		};
-		args.where = {
-			...args.where,
-			id: Number(slug)
-		};
+    getMatchCardWithMatches(slug: string, args: Prisma.PPVCardFindManyArgs = {}) {
+        args.include = {
+            ...args.include,
+            matches: true,
+        };
+        args.where = {
+            ...args.where,
+            id: Number(slug),
+        };
 
-		return this.getRow(args) as Promise<PPVCard & { matches: Match[] }>;
-	}
+        return this.getRow(args) as Promise<PPVCard & { matches: Match[] }>;
+    }
 }

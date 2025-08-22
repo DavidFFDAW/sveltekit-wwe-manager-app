@@ -18,7 +18,6 @@
 	onMount(() => {
 		if (!flatpickrInput) return;
 		FlatPickr = flatpickr(flatpickrInput, {
-			inline: true,
 			dateFormat: 'Y-m-d',
 			allowInput: true,
 			minDate: min,

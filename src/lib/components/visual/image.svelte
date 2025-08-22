@@ -1,6 +1,6 @@
 <script lang="ts">
 	let width = $$restProps.width || 120;
-	const appFallback: string = `/noimage.jpg`;
+	const appFallback: string = '/noimage.jpg';
 	export let fallback: string = `/vacant.webp`;
 	export let alt: string = '';
 	export let type: 'wrestler' | 'championship' = 'wrestler';
@@ -17,7 +17,7 @@
 
 		if (target.src !== fallback) {
 			const typeFallback = type === 'wrestler' ? '/vacant.webp' : '/unknown-championship.webp';
-			target.src = typeFallback || appFallback;
+			target.src = fallback || typeFallback;
 		}
 	};
 </script>

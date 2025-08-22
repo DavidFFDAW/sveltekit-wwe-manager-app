@@ -1,0 +1,161 @@
+{
+    "parsedDatas": [
+        {
+            "_id": 7,
+            "stipulation": "Singles match",
+            "championship": "WWE Million Dollar Championship",
+            "participants": "Karrion Kross VS LA Knight (c)",
+            "winner": "LA Knight (c)",
+            "rating": null,
+            "duration": null,
+            "order": 1,
+            "id_match_card": 2
+        },
+        {
+            "_id": 2,
+            "stipulation": "Tag Team Match",
+            "championship": "WWE Undisputed Tag Team Championship",
+            "participants": "Judgement Day (Finn Bàlor & JD McDonagh) VS Legado del Fantasma (Humberto & Garza) (c) ",
+            "winner": "Judgement Day (Finn Bàlor & JD McDonagh)",
+            "rating": null,
+            "duration": null,
+            "order": 2,
+            "id_match_card": 2
+        },
+        {
+            "_id": 8,
+            "stipulation": "Singles match",
+            "championship": "WWE United States Championship",
+            "participants": "AJ Styles VS Shawn Michaels (c) ",
+            "winner": "Shawn Michaels (c) ",
+            "rating": null,
+            "duration": null,
+            "order": 3,
+            "id_match_card": 2
+        },
+        {
+            "_id": 3,
+            "stipulation": "Singles Match",
+            "championship": "WWE Intercontinental Championship",
+            "participants": "Seth Rollins (c) VS Jey Uso",
+            "winner": "Seth Rollins (c)",
+            "rating": null,
+            "duration": null,
+            "order": 4,
+            "id_match_card": 2
+        },
+        {
+            "_id": 6,
+            "stipulation": "Triple Threat Match",
+            "championship": "AWL Women's Grand Prix Championship",
+            "participants": "Rhea Ripley (c) VS Liv Morgan VS Lyra Valkyria",
+            "winner": "Rhea Ripley (c)",
+            "rating": null,
+            "duration": null,
+            "order": 5,
+            "id_match_card": 2
+        },
+        {
+            "_id": 4,
+            "stipulation": "Singles Match",
+            "championship": null,
+            "participants": "Andrade VS Carmelo Hayes",
+            "winner": "Andrade",
+            "rating": null,
+            "duration": null,
+            "order": 6,
+            "id_match_card": 2
+        },
+        {
+            "_id": 5,
+            "stipulation": "Singles Match",
+            "championship": "WWE World Heavyweight Championship",
+            "participants": "Kane VS Bron Breakker (c)",
+            "winner": "Bron Breakker (c)",
+            "rating": null,
+            "duration": null,
+            "order": 7,
+            "id_match_card": 2
+        }
+    ],
+    "creatingMatches": [],
+    "updatingMatches": [
+        {
+            "_id": 7,
+            "stipulation": "Singles match",
+            "championship": "WWE Million Dollar Championship",
+            "participants": "Karrion Kross VS LA Knight (c)",
+            "winner": "LA Knight (c)",
+            "rating": null,
+            "duration": null,
+            "order": 1,
+            "id_match_card": 2
+        },
+        {
+            "_id": 2,
+            "stipulation": "Tag Team Match",
+            "championship": "WWE Undisputed Tag Team Championship",
+            "participants": "Judgement Day (Finn Bàlor & JD McDonagh) VS Legado del Fantasma (Humberto & Garza) (c) ",
+            "winner": "Judgement Day (Finn Bàlor & JD McDonagh)",
+            "rating": null,
+            "duration": null,
+            "order": 2,
+            "id_match_card": 2
+        },
+        {
+            "_id": 8,
+            "stipulation": "Singles match",
+            "championship": "WWE United States Championship",
+            "participants": "AJ Styles VS Shawn Michaels (c) ",
+            "winner": "Shawn Michaels (c) ",
+            "rating": null,
+            "duration": null,
+            "order": 3,
+            "id_match_card": 2
+        },
+        {
+            "_id": 3,
+            "stipulation": "Singles Match",
+            "championship": "WWE Intercontinental Championship",
+            "participants": "Seth Rollins (c) VS Jey Uso",
+            "winner": "Seth Rollins (c)",
+            "rating": null,
+            "duration": null,
+            "order": 4,
+            "id_match_card": 2
+        },
+        {
+            "_id": 6,
+            "stipulation": "Triple Threat Match",
+            "championship": "AWL Women's Grand Prix Championship",
+            "participants": "Rhea Ripley (c) VS Liv Morgan VS Lyra Valkyria",
+            "winner": "Rhea Ripley (c)",
+            "rating": null,
+            "duration": null,
+            "order": 5,
+            "id_match_card": 2
+        },
+        {
+            "_id": 4,
+            "stipulation": "Singles Match",
+            "championship": null,
+            "participants": "Andrade VS Carmelo Hayes",
+            "winner": "Andrade",
+            "rating": null,
+            "duration": null,
+            "order": 6,
+            "id_match_card": 2
+        },
+        {
+            "_id": 5,
+            "stipulation": "Singles Match",
+            "championship": "WWE World Heavyweight Championship",
+            "participants": "Kane VS Bron Breakker (c)",
+            "winner": "Bron Breakker (c)",
+            "rating": null,
+            "duration": null,
+            "order": 7,
+            "id_match_card": 2
+        }
+    ]
+}

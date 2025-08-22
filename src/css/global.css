@@ -42,6 +42,10 @@ i.customs-icons.app-bootstrap-custom-icon.bi.icon-big {
     font-weight: 700;
 }
 
+.rounded {
+    border-radius: 8px;
+}
+
 .box,
 .panel {
     padding: 15px;
@@ -240,27 +244,41 @@ button,
     outline: none;
 }
 
+button.unbutton,
+.btn.unbutton {
+    background-color: transparent;
+    color: #333;
+    border: none;
+    padding: 5px;
+    box-shadow: none;
+}
+
+.btn.danger,
 .btn.btn-danger {
     background-color: #f44336;
     color: white;
 }
 
+.btn.info,
 .btn.btn-info {
     background-color: #1da1f2;
     color: white;
 }
 
-btn.btn-success {
+.btn.success,
+.btn.btn-success {
     background-color: #1bb76e;
     color: white;
 }
 
+.btn.warn,
+.btn.warning,
 .btn.btn-warning {
     background-color: #ff9800;
     color: white;
 }
 
-.btn.btn-dark {
+.btn.dark .btn.btn-dark {
     background-color: #343a40;
     color: white;
 }
@@ -734,8 +752,71 @@ table.custom-table tbody tr td[data-tab="actions"] .grouped-actions-link:hover {
     background-color: #f9f9f9;
 }
 
+
+.action-buttons-container {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+}
+
+.action-buttons-container .btn.small.green,
+.action-buttons-container .btn.small.success {
+    background-color: #d4f8e8;
+    color: #388e3c;
+    border: 1px solid #388e3c;
+}
+
+.action-buttons-container .btn.small.danger {
+    background-color: #fcb2b8;
+    color: #ab2626;
+    border: 1px solid #d32f2f;
+}
+
+.action-buttons-container .btn.small.warn,
+.action-buttons-container .btn.small.warning {
+    background-color: #ffebd0;
+    color: #9b742f;
+    border: 1px solid #9b742f;
+}
+
+.action-buttons-container .btn.small.info {
+    background-color: #b3e5fc;
+    color: #0288d1;
+    border: 1px solid #0288d1;
+}
+
+.action-buttons-container .btn.small.light {
+    background-color: #f8f9fa;
+    color: #495057;
+    border: 1px solid #495057;
+}
+
+.action-buttons-container .btn.small.dark {
+    background-color: #6c757d;
+    color: #ffffff;
+    border: 1px solid #343a40;
+}
+
+.action-buttons-container .btn.small {
+    padding: 4px 8px;
+    font-size: 10px;
+}
+
+.action-buttons-container .btn.small span {
+    font-size: 10px;
+}
+
 /* 🟡 Modo tarjeta para móviles */
 @media (max-width: 768px) {
+
+    .action-buttons-container .btn.small,
+    .action-buttons-container .btn.small span {
+        font-size: 14px;
+    }
 
     .responsive-table table,
     .responsive-table thead,
