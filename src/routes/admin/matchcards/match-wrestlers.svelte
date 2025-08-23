@@ -1,4 +1,6 @@
 <script lang="ts">
+	import WrestlersSelector from '$lib/components/forms/selector/specific/wrestlers-selector.svelte';
+
 	let wrestler: string = '';
 	let content: string = '';
 	export let name: string;
@@ -14,6 +16,11 @@
 			content += wrestler.trim();
 			wrestler = '';
 		}
+	};
+	const removeContent = (ev: Event) => {
+		ev.preventDefault();
+		content = '';
+		wrestler = '';
 	};
 </script>
 
@@ -59,6 +66,15 @@
 					>
 						Campeón
 					</button>
+
+					<button
+						type="button"
+						class="btn btn-match-wrestlers btn-add-vs"
+						aria-label="Eliminar contenido"
+						on:click={removeContent}
+					>
+						<i class="bi bi-x-circle"></i>
+					</button>
 				</div>
 			</div>
 		</label>
@@ -86,12 +102,13 @@
 		background-color: #fff;
 		font-size: 14px;
 		border: 1px solid #ccc;
+		border-right: none;
 	}
-	.btn.btn-match-wrestlers.btn-add-wrestler {
+	.btn.btn-match-wrestlers:first-child {
 		border-radius: 0 0 0 8px;
-		border-right: 0;
 	}
-	.btn.btn-match-wrestlers.btn-add-vs {
+	.btn.btn-match-wrestlers:last-child {
 		border-radius: 0 0 8px 0;
+		border: 1px solid #ccc;
 	}
 </style>
