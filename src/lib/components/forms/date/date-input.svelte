@@ -4,6 +4,7 @@
 	import 'flatpickr/dist/flatpickr.min.css';
 	import { Utils } from '$lib/utils/general.utils';
 	import type { Instance } from 'flatpickr/dist/types/instance';
+	import { Spanish } from 'flatpickr/dist/l10n/es';
 
 	export let label;
 	export let name;
@@ -19,11 +20,15 @@
 		if (!flatpickrInput) return;
 		FlatPickr = flatpickr(flatpickrInput, {
 			dateFormat: 'Y-m-d',
+			altInput: true,
+			altFormat: 'j F Y',
 			allowInput: true,
 			minDate: min,
 			maxDate: max,
+			defaultDate: value || undefined,
 			locale: {
-				firstDayOfWeek: 1 // start week on Monday
+				...Spanish,
+				firstDayOfWeek: 1 // Start week on Monday
 			},
 			onChange: ([date]) => {
 				value = date.toISOString().split('T')[0]; // Format date to YYYY-MM-DD

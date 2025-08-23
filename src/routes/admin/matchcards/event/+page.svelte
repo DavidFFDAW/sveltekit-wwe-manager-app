@@ -3,6 +3,7 @@
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import ImageInput from '$lib/components/forms/inputs/image-input.svelte';
 	import DateInput from '$lib/components/forms/date/date-input.svelte';
+	import { Utils } from '$lib/utils/general.utils';
 
 	export let data;
 	const ppvs = data.event_card.ppvs;
@@ -10,6 +11,12 @@
 
 	let ppvName = pagedatas.event?.ppv_name || '';
 	let ppvImage = pagedatas.event?.ppv_image || '';
+	let ppvDate =
+		pagedatas.event && pagedatas.event.ppv_date
+			? Utils.formatFlatpickrDate(pagedatas.event?.ppv_date)
+			: '';
+	console.log({ ppvName, ppvImage, ppvDate });
+
 	const currentYear = new Date().getFullYear();
 </script>
 
@@ -40,6 +47,7 @@
 							name="ppv_date_done"
 							min={`${currentYear}-01-01`}
 							max={`${currentYear}-12-31`}
+							bind:value={ppvDate as string}
 						/>
 					</div>
 					<ImageInput label="Imagen de PPV" name="ppv_image" bind:image={ppvImage} />

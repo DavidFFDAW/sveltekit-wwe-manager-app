@@ -48,11 +48,16 @@ export const actions = {
             for (const [key, value] of formData.entries()) {
                 console.log(`Key: ${key}, Value: ${value}`);
             }
+            const ppv_date = formData.get('ppv_date_done') as string;
+            const ppvRealDate = Utils.getUTCDate(ppv_date);
 
             const datas = {
                 ppv_name: formData.get('ppv_name') as string,
                 ppv_image: formData.get('ppv_image') as string,
+                ppv_date: ppvRealDate,
             };
+
+            console.log('Datas to be saved:', datas);
 
             if (action === 'create') {
                 await matchCardRepository.create(datas);
