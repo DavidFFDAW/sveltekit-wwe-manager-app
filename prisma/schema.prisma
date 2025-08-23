@@ -311,7 +311,7 @@ model Match {
     participants  String    @db.Text
     winner        String?   @db.VarChar(255)
     duration      Int?      @db.Int
-    rating        Int?      @db.Int
+    rating        Float?    @db.Float
     created_at    DateTime? @default(now())
     updated_at    DateTime? @updatedAt
     matchcard     PPVCard   @relation(fields: [id_match_card], references: [id])

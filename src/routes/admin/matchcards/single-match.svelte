@@ -1,4 +1,5 @@
 <script lang="ts">
+	import StarRating from '$lib/components/forms/rating/star-rating.svelte';
 	import type { MatchItem } from './types';
 
 	export let match: MatchItem;
@@ -73,6 +74,13 @@
 				{/each}
 			</select>
 		</label>
+
+		<label class="form-item rating-label-container">
+			<span class="label">Valoración</span>
+			<div class="star-rating-container">
+				<StarRating name="match_rating[]" bind:rating={match.rating as number} />
+			</div>
+		</label>
 	</div>
 </div>
 
@@ -86,13 +94,13 @@
 		gap: 5px;
 	}
 	.form-item span.label {
-		flex-basis: 150px;
+		flex-basis: 180px;
 		font-weight: 800;
 	}
 
 	.form-item select,
 	.form-item input {
-		padding: 2px 12px;
+		padding: 2px 8px 2px 8px;
 		background-color: transparent;
 		border: none;
 		border-bottom: 1px solid #ccc;
@@ -103,5 +111,9 @@
 		border: 1px solid #1da1f2;
 		background-color: transparent;
 		color: #1da1f2;
+	}
+	.form-item.rating-label-container .star-rating-container {
+		width: 100%;
+		padding: 2px 8px;
 	}
 </style>

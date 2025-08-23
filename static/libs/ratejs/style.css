@@ -1,0 +1,44 @@
+/**
+ * Minified by jsDelivr using clean-css v5.3.3.
+ * Original file: /npm/rater-js@1.0.1/lib/style.css
+ *
+ * Do NOT use SRI with dynamically generated files! More information: https://www.jsdelivr.com/using-sri-with-dynamic-files
+ */
+.star-rating {
+    width: 0;
+    position: relative;
+    display: inline-block;
+    background-image: url(/libs/ratejs/star_0.svg);
+    background-position: 0 0;
+    background-repeat: repeat-x;
+    cursor: pointer
+}
+
+.star-rating .star-value {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: url('/libs/ratejs/star_1.svg');
+    background-repeat: repeat-x
+}
+
+.star-rating.disabled {
+    cursor: default
+}
+
+.star-rating.is-busy {
+    cursor: wait
+}
+
+.star-rating .star-value.rtl {
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+    right: 0;
+    left: auto
+}
+
+/*# sourceMappingURL=/sm/2059744bab66e5ef4bac8a3205b5405a22704c444b557ae3b7b1fa6cbcdaeb9e.map */

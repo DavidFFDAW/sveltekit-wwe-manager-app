@@ -4,6 +4,7 @@
 	let raterContainer: HTMLDivElement;
 	export let name: string;
 	export let rating: number = 0;
+	export let label: string = 'Valoracion';
 
 	onMount(() => {
 		const rater: any = 'raterJs' in window ? window.raterJs : null;
@@ -24,17 +25,30 @@
 	});
 </script>
 
-<div class="form-item">
-	<div class="flex start acenter gap-smaller">
-		<div bind:this={raterContainer} class="star-rating star-rate-container"></div>
-		<p class="rating-selected">{rating}</p>
-	</div>
+<svelte:head>
+	<script src="https://cdn.jsdelivr.net/npm/rater-js@1.0.1/index.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rater-js@1.0.1/lib/style.min.css" />
+</svelte:head>
 
-	<input type="hidden" {name} value={rating} />
+<div class="form-item">
+	<label class="label form-label {$$restProps.required ? 'required-label' : ''}">
+		<span class="label form-label">{label}</span>
+		<div class="flex start acenter gap-smaller">
+			<div bind:this={raterContainer} class="star-rating star-rate-container"></div>
+			<p class="rating-selected">{rating}</p>
+		</div>
+
+		<input type="hidden" {name} value={rating} />
+	</label>
 </div>
 
 <style>
-	.rating-selected {
+	label.label.form-label {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+	label.label.form-label .rating-selected {
 		font-size: 0.975rem;
 		font-weight: 600;
 		color: orangered;
