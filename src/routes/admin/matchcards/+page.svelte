@@ -27,7 +27,17 @@
 				/>
 				<div class="flex column start astart nogap">
 					<h2>{matchcard.ppv_name}</h2>
-					<small>Este evento tiene {matchcard.matches} combates registrados</small>
+					<small><strong>{matchcard.matches} combates</strong> registrados</small>
+					{#if matchcard.ppv_date}
+						<small>
+							{matchcard.ppv_date.toLocaleDateString('es-ES', {
+								weekday: 'long',
+								year: 'numeric',
+								month: 'long',
+								day: 'numeric'
+							})}
+						</small>
+					{/if}
 				</div>
 
 				<div class="action-buttons-container">

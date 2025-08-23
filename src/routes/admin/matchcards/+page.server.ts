@@ -10,6 +10,7 @@ export const load = async () => {
                 },
             },
         },
+        orderBy: { ppv_date: 'asc' },
     });
 
     return {
