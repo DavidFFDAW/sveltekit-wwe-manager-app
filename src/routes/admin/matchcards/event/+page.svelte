@@ -15,7 +15,6 @@
 		pagedatas.event && pagedatas.event.ppv_date
 			? Utils.formatFlatpickrDate(pagedatas.event?.ppv_date)
 			: '';
-	console.log({ ppvName, ppvImage, ppvDate });
 
 	const currentYear = new Date().getFullYear();
 </script>
