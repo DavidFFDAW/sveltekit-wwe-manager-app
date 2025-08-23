@@ -1,16 +1,15 @@
-<script>
-	import HttpButton from '$lib/components/buttons/http-button.svelte';
-	import AsyncForm from '$lib/components/forms/async-form.svelte';
-	import ToggleInput from '$lib/components/forms/inputs/toggle-input.svelte';
-	let checked = false;
+<script lang="ts">
+	import StarRating from '$lib/components/forms/rating/star-rating.svelte';
+	const handleSubmit = (event: Event) => {
+		const formData = new FormData(event.target as HTMLFormElement);
+		for (const [key, value] of formData.entries()) {
+			console.log(`${key}: ${value}`);
+		}
+	};
 </script>
 
-<AsyncForm
-	buttonText={'Actualizar campeonato'}
-	updateId={6464612731}
-	redirect="/admin/championships"
->
-	<ToggleInput label="Tag Team" name="tag_team" bind:checked />
-</AsyncForm>
-
-<HttpButton href="/api/reigns/update-days/current" icon="refresh">Actualizar días</HttpButton>
+<form action="" method="post" on:submit|preventDefault={handleSubmit}>
+	<input type="hidden" name="meme" value="some_value" />
+	<StarRating />
+	<button type="submit">Guardar</button>
+</form>
