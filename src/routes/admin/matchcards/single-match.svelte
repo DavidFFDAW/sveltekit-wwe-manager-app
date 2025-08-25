@@ -6,10 +6,14 @@
 	export let matches: MatchItem[] = [];
 
 	const recalculateOrders = (direction: 'up' | 'down') => () => {
+		const newOrder = match.order + (direction === 'up' ? -1 : 1);
+
 		matches = matches.map((innerMatch) => {
-			if (match.inner_identifier === innerMatch.inner_identifier) {
-				const order = match.order || 1;
-				return { ...match, order: order + (direction === 'up' ? -1 : 1) };
+			if (innerMatch.order === newOrder) {
+				return { ...innerMatch, order: newOrder + (direction === 'up' ? 1 : -1) };
+			}
+			if (innerMatch.inner_identifier === match.inner_identifier) {
+				return { ...innerMatch, order: newOrder };
 			}
 			return innerMatch;
 		});
