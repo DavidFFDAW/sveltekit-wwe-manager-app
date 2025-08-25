@@ -66,11 +66,6 @@
 	$: lastMatchOrder = matches.length > 0 ? Math.max(...matches.map((m) => m.order || 0)) : 1;
 </script>
 
-<svelte:head>
-	<script src="/libs/ratejs/script.js"></script>
-	<link rel="stylesheet" href="/libs/ratejs/style.css" />
-</svelte:head>
-
 <div class="matchcard-page">
 	<datalist id="wrestlers">
 		{#each pagedatas.wrestlers as wrestler}
