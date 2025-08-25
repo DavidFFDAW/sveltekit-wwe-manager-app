@@ -318,3 +318,15 @@ model Match {
 
     @@map(name: "matchs")
 }
+
+model Rivalries {
+    id           Int       @id @default(autoincrement())
+    intensity    String    @db.VarChar(20)
+    first_rival  String    @db.VarChar(255)
+    second_rival String    @db.VarChar(255)
+    brand        String    @db.VarChar(10)
+    created_at   DateTime? @default(now())
+    updated_at   DateTime? @updatedAt
+
+    @@map(name: "rivalries")
+}
