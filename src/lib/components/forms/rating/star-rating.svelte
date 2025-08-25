@@ -7,8 +7,10 @@
 
 	onMount(() => {
 		const rater: any = 'raterJs' in window ? window.raterJs : null;
-		if (!rater) return;
-		console.log({ rater, window });
+		if (!rater) {
+			console.log('No raterJs was imported on time');
+			return;
+		}
 
 		const myRater = rater({
 			element: raterContainer,
