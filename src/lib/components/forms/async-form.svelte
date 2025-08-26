@@ -15,8 +15,10 @@
 	export let classes: string = 'default-form';
 	export let showToast: boolean = true;
 	export let updateId: string | number = '';
+	export let reset: boolean = false;
 	export let preProcess: ((formData: FormData) => boolean) | null = null;
 	export let afterSubmit: ((response: ActionResult) => void) | null = null;
+	export let afterResponse: ((response: ActionResult) => void) | null = null;
 	let loading = false;
 
 	const submitForm: SubmitFunction = ({ formData }) => {
@@ -50,10 +52,10 @@
 			const hasSuccess = !hasError && /20\d/g.test(result.status.toString());
 			if (hasSuccess) {
 				const successMessage = response.data?.message || '¡Operación exitosa!';
-				await update({ reset: false });
+				await update({ reset: reset });
 				await invalidate(''); // Invalidate the current page to refresh the data
 				if (showToast) Toast.success(successMessage);
-
+				if (afterResponse) afterResponse(response);
 				if (redirectURL) goto(redirectURL);
 			}
 		};

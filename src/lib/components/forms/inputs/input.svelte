@@ -46,8 +46,8 @@
 		id={`${name}-${randomId}`}
 		maxlength={maxLength}
 		{pattern}
-		{...$$restProps}
 		list="${options.length > 0 ? `${name}-options` : ''}"
+		{...$$restProps}
 	/>
 	{#if valueLength > maxLength}
 		<p class="error-message">
