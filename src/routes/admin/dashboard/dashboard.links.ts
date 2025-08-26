@@ -74,6 +74,18 @@ export const DashboardLinks: DashboardLink[] = [
 		equals: false
 	},
 	{
+		url: '/admin/matchcards',
+		label: 'Match Cards',
+		image: 'https://davidfernandezdeveloper.es/2k/images/logan-paul.webp',
+		equals: false
+	},
+	{
+		url: '/admin/rivalries',
+		label: 'Rivalidades',
+		image: 'https://davidfernandezdeveloper.es/2k/images/finn-balor.webp',
+		equals: false
+	},
+	{
 		url: '/admin/export',
 		label: 'Exportar datos',
 		image: 'https://davidfernandezdeveloper.es/2k/images/hulk-hogan.webp',
