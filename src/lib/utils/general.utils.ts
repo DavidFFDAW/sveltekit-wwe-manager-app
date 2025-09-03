@@ -66,6 +66,24 @@ export function getArrayFormDatas(formData: FormData, keys: string[]): Record<st
 	});
 }
 
+export const getParsedFormDatas = (formData: FormData) => {
+	const keys = formData.keys();
+
+	return keys
+		.map((key) => {
+			return {
+				key: key.trim().replace(/\[\]$/, '').replace(/\s+/g, '_').toLowerCase(),
+				values: formData.getAll(key)
+			};
+		})
+		.map((o) => {
+			return {
+				[o.key]: o.values.length > 1 ? o.values : o.values[0]
+			};
+		})
+		.reduce((a, b) => ({ ...a, ...b }), {});
+};
+
 export const getRandomNumberBetween = (min: number, max: number): number => {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 };
