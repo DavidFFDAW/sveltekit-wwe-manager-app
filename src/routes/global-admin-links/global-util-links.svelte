@@ -15,7 +15,7 @@
 		<ul class="links-menu" transition:slide>
 			{#each SidebarLinks as link}
 				<li class="link-item">
-					<a href="/{link.url}" class="btn icon" on:click={closeOpenedLinksMenu}>
+					<a href={link.url} class="btn icon" on:click={closeOpenedLinksMenu}>
 						<i class="bi bi-{link.icon ? link.icon : 'gear'}"></i>
 						<span>{link.label}</span>
 					</a>

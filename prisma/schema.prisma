@@ -105,7 +105,6 @@ model Wrestler {
     WrestlerTeam      WrestlerTeam[]
     ChampionshipReign ChampionshipReign[] @relation("wrestler")
     Partner           ChampionshipReign[] @relation("partner")
-    Tweets            Tweets[]
     Injuries          Injuries[]
 
     @@map(name: "wrestler")
@@ -150,13 +149,14 @@ model Tweets {
     retweets       Int       @db.Int
     comments       Int       @db.Int
     device         String    @db.VarChar(20)
-    author_id      Int       @db.Int
-    wrestler       Wrestler  @relation(fields: [author_id], references: [id])
     created_at     DateTime? @default(now())
     updated_at     DateTime? @updatedAt
     reply_to       Int?      @db.Int
     reply_to_tweet Tweets?   @relation("reply_to", fields: [reply_to], references: [id])
     replies        Tweets[]  @relation("reply_to")
+    profile_image  String?   @db.VarChar(255)
+    profile_name   String?   @db.VarChar(100)
+    profile_handle String?   @db.VarChar(100)
 
     @@map(name: "tweets")
 }

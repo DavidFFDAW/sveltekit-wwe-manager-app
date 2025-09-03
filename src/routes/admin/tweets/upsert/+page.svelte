@@ -6,5 +6,3 @@
 
 <h1>Página upsert</h1>
 <Debug datas={data} />
-
-<style></style>
