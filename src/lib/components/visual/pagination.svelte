@@ -1,36 +1,45 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	export let itemsPerPage: number = 10;
 	export let total: number;
 	export let currentPage: number;
 
 	function getUrl(newPage: number) {
-		const currentUrl = $page.url;
+		const currentUrl = page.url;
 		currentUrl.searchParams.set('page', newPage.toString());
 		return currentUrl.toString();
 	}
 
-	let totalPages = Math.ceil(total / itemsPerPage);
+	$: totalPages = Math.ceil(total / itemsPerPage);
 </script>
 
 <nav class="pagination">
 	{#if currentPage > 1}
-		<a href={getUrl(currentPage - 1)} aria-label="Página anterior"> &laquo; </a>
+		<a href={getUrl(currentPage - 1)} aria-label="Página anterior" title="Ir a página anterior">
+			&laquo;
+		</a>
 	{/if}
 
 	<!-- Botones de las páginas -->
-	{#if totalPages > 1}
-		{#each Array.from({ length: totalPages }, (_, i) => i + 1).slice(0, 5) as page}
-			<a href={getUrl(page)} class:active={page === currentPage} aria-label={`Página ${page}`}>
-				{page}
+	{#if totalPages > 1 && total > itemsPerPage}
+		{#each Array.from({ length: totalPages }, (_, i) => i + 1).slice(0, 5) as _page}
+			<a
+				href={getUrl(_page)}
+				class:active={_page === currentPage}
+				aria-label={`Página ${_page}`}
+				title="Ir a la página {_page}"
+			>
+				{_page}
 			</a>
 		{/each}
 	{/if}
 
 	<!-- Botón de página siguiente -->
 	{#if currentPage < totalPages}
-		<a href={getUrl(currentPage + 1)} aria-label="Página siguiente"> &raquo; </a>
+		<a href={getUrl(currentPage + 1)} aria-label="Página siguiente" title="Ir a página siguiente">
+			&raquo;
+		</a>
 	{/if}
 </nav>
 

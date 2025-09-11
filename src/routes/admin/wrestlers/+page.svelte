@@ -8,7 +8,7 @@
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import Pagination from '$lib/components/visual/pagination.svelte';
 	import { WrestlerConstants } from '$lib/constants/wrestler.constants.js';
-	export let data = { wrestlers: [], search: '', total: 0, page: 1 };
+	export let data;
 </script>
 
 <div class="admin-page-wrapper admin-wrestlers padding">

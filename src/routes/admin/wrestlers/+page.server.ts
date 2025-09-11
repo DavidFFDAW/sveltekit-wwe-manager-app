@@ -1,17 +1,14 @@
+import { WrestlerRepository } from '$lib/server/dao/repositories/wrestler.repository.js';
 import { WrestlerDao } from '$lib/server/dao/wrestler.dao.js';
-import prisma from '$lib/server/prisma';
 import { Helpers } from '$lib/server/server.helpers.js';
 
 export async function load({ url }) {
+	const wrestlerRepository = new WrestlerRepository();
 	const search = url.searchParams.has('search') ? (url.searchParams.get('search') as string) : '';
 	const currentPage = url.searchParams.has('page') ? Number(url.searchParams.get('page')) : 1;
-	const offset = currentPage - 1;
-	const limit = 10;
-
-	return {
-		search,
-		page: currentPage,
-		wrestlers: await prisma.wrestler.findMany({
+	const [total, wrestlers] = await wrestlerRepository.paginate(
+		currentPage,
+		{
 			orderBy: {
 				name: 'asc'
 			},
@@ -19,18 +16,16 @@ export async function load({ url }) {
 				name: {
 					contains: search
 				}
-			},
-
-			take: limit,
-			skip: offset * limit
-		}),
-		total: await prisma.wrestler.count({
-			where: {
-				name: {
-					contains: search
-				}
 			}
-		})
+		},
+		10
+	);
+
+	return {
+		search,
+		page: currentPage,
+		wrestlers: wrestlers,
+		total: total
 	};
 }
 
