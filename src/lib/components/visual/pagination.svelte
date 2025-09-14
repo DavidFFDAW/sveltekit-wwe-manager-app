@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	export let itemsPerPage: number = 10;
 	export let total: number;
@@ -23,7 +22,7 @@
 
 	<!-- Botones de las páginas -->
 	{#if totalPages > 1 && total > itemsPerPage}
-		{#each Array.from({ length: totalPages }, (_, i) => i + 1).slice(0, 5) as _page}
+		{#each Array.from({ length: totalPages }, (_, i) => i + 1).slice(currentPage - 1, currentPage + 3) as _page}
 			<a
 				href={getUrl(_page)}
 				class:active={_page === currentPage}
@@ -65,5 +64,12 @@
 		color: white;
 		font-weight: bold;
 		border-color: #007bff;
+	}
+
+	@media only screen and (max-width: 767px) {
+		.pagination {
+			width: 100%;
+			justify-content: space-between;
+		}
 	}
 </style>

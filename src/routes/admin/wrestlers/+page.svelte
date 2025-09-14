@@ -1,24 +1,19 @@
 <script lang="ts">
-	import { errorimage } from '$lib/actions/error.image.js';
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
 	import ActionsAsync from '$lib/components/buttons/grouped-actions/actions-async.svelte';
 	import ActionsCsv from '$lib/components/buttons/grouped-actions/actions-csv.svelte';
 	import ActionsLink from '$lib/components/buttons/grouped-actions/actions-link.svelte';
 	import GroupedActions from '$lib/components/buttons/grouped-actions/grouped-actions.svelte';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
+	import Input from '$lib/components/forms/inputs/input.svelte';
+	import RadioList from '$lib/components/forms/inputs/radio-list.svelte';
 	import Pagination from '$lib/components/visual/pagination.svelte';
 	import { WrestlerConstants } from '$lib/constants/wrestler.constants.js';
+	import SingleWrestlerCard from './single-wrestler-card.svelte';
 	export let data;
 </script>
 
 <div class="admin-page-wrapper admin-wrestlers padding">
-	<form action="/admin/wrestlers" method="get">
-		<div class="flex search-wrapper">
-			<input type="search" name="search" placeholder="Search..." bind:value={data.search} />
-			<button type="submit">Search</button>
-		</div>
-	</form>
-
 	<div class="w1 flex end">
 		<GroupedActions text="Acciones de luchadores" position="right">
 			<ActionsLink href="/admin/wrestlers/create" icon="plus" color="success">
@@ -44,15 +39,43 @@
 		</GroupedActions>
 	</div>
 
-	<div class="w1 flex between gap-small responsive down">
+	<div class="w1 box p down">
+		<h2 class="w1 dreadnotus title uppercase">Filtros</h2>
+		<form action="/admin/wrestlers" method="get" class="down">
+			<div class="flex search-wrapper column gap-small">
+				<Input
+					label="Buscar por nombre"
+					name="search"
+					placeholder="Buscar por nombre"
+					bind:value={data.filters.search}
+					icon="search"
+				/>
+
+				<RadioList
+					label="Genero"
+					name="gender"
+					bind:value={data.filters.sex as string}
+					options={[{ label: 'Todos', value: '' }, ...WrestlerConstants.genders]}
+				/>
+			</div>
+			<div class="w1 flex end acenter">
+				<button type="submit" aria-label="Search" class="btn cta">
+					<i class="bi bi-search"></i>
+				</button>
+			</div>
+		</form>
+	</div>
+
+	<div class="w1 title-margin flex between gap-small responsive responsive-astart down">
 		<h1 class="uppercase">Wrestlers</h1>
 		<Pagination total={data.total} itemsPerPage={10} bind:currentPage={data.page} />
 	</div>
 
-	<div class="admin-wrestlers-list flex column gap-smaller down">
+	<div class="admin-wrestlers-list grid-display down">
 		{#if data.wrestlers.length > 0}
 			{#each data.wrestlers as wrestler}
-				<div class="w1 flex gap-medium admin-wrestler-card responsive">
+				<SingleWrestlerCard {wrestler} />
+				<!-- <div class="w1 flex gap-medium admin-wrestler-card responsive">
 					<div class="w1 flex gap-small astart responsive">
 						<img use:errorimage src={wrestler.image_name} alt={wrestler.name} width="100" />
 
@@ -88,7 +111,7 @@
 							Editar
 						</a>
 					</div>
-				</div>
+				</div> -->
 			{/each}
 		{:else}
 			<p>No wrestlers found</p>
@@ -99,8 +122,23 @@
 </div>
 
 <style>
+	.title-margin {
+		margin-top: 50px;
+	}
 	.search-wrapper {
 		margin-bottom: 1rem;
+	}
+
+	.admin-wrestlers-list.grid-display {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 0.5fr));
+		align-items: start;
+		gap: 15px;
+	}
+	@media only screen and (max-width: 600px) {
+		.admin-wrestlers-list.grid-display {
+			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		}
 	}
 
 	.search-wrapper input {
