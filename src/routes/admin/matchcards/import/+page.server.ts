@@ -16,8 +16,6 @@ export const actions = {
 			if (!json) return Helpers.error('El archivo no contiene un JSON válido', 400);
 
 			const matchcardRepository = new PpvCardRepository();
-			const matchesRepository = matchcardRepository.getMatchesRepository();
-
 			const existCardWithSameName = await matchcardRepository.getRow({
 				where: { ppv_name: json.ppv_name }
 			});
@@ -34,7 +32,14 @@ export const actions = {
 				created_at: new Date(json.created_at),
 				updated_at: new Date(json.updated_at),
 				matches: {
-					create: json.matches
+					create: json.matches.map((match: any) => {
+						const { id, id_match_card, ...rest } = match;
+						return {
+							...rest,
+							created_at: new Date(match.created_at),
+							updated_at: new Date(match.updated_at)
+						};
+					})
 				}
 			});
 			if (!createdPPV.id) return Helpers.error('No se ha podido crear el matchcard', 500);
