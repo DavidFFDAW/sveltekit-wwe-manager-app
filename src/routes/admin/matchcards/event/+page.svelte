@@ -4,6 +4,7 @@
 	import ImageInput from '$lib/components/forms/inputs/image-input.svelte';
 	import DateInput from '$lib/components/forms/date/date-input.svelte';
 	import { Utils } from '$lib/utils/general.utils';
+	import Debug from '$lib/components/visual/debug.svelte';
 
 	export let data;
 	const ppvs = data.event_card.ppvs;
@@ -18,6 +19,8 @@
 
 	const currentYear = new Date().getFullYear();
 </script>
+
+<Debug datas={data.event_card} />
 
 <div class="matchcard-event-page">
 	<AsyncForm

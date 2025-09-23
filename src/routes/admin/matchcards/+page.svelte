@@ -56,6 +56,15 @@
 						<i class="bi bi-pencil"></i>
 						<span>combates</span>
 					</a>
+					<a
+						href="/admin/matchcards/export/{matchcard.id}"
+						class="btn small info"
+						aria-label="Exportar evento"
+						download
+					>
+						<i class="bi bi-box-arrow-up-right"></i>
+						<span>exportar</span>
+					</a>
 				</div>
 			</div>
 		{/each}

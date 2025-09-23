@@ -15,6 +15,7 @@ interface EmailOptions {
 
 export const Api = ApiHelpers;
 export const Helpers = {
+	api: Api,
 	success: (message: string, status: number = 200) => {
 		return {
 			status,
@@ -93,7 +94,6 @@ export const Helpers = {
 		const emailsArray = Array.isArray(emails) ? emails : [emails];
 		const uniqueTo = [...new Set([...emailsArray, MAIL_API_ADMIN])];
 
-		console.log({ uniqueTo, subject, html, variables, body });
 		return fetch(MAIL_API_URL, {
 			mode: 'cors',
 			method: 'POST',

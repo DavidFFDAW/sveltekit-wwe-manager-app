@@ -68,6 +68,7 @@
 	data-method={method}
 	method={method === 'get' ? 'get' : 'post'}
 	use:enhance={submitForm}
+	{...$$restProps}
 >
 	<div class="form-inner-content" class:form-custom-height={showButtons}>
 		{#if redirect}
