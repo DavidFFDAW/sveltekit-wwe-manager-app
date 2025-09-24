@@ -2,34 +2,29 @@ import { PpvCardRepository } from '$lib/server/dao/repositories/matchcard.reposi
 import { Helpers } from '$lib/server/server.helpers.js';
 import { Utils } from '$lib/utils/general.utils.js';
 import { PPVRepository } from '$lib/server/dao/repositories/ppv.repository.js';
+import { redirect } from '@sveltejs/kit';
 
 export const load = async ({ url }) => {
+	const hasSlug = url.searchParams.has('slug');
+	if (!hasSlug) return redirect(302, '/admin/matchcards');
+
+	const slug = url.searchParams.get('slug') as string;
 	const ppvRepository = new PPVRepository();
+	const matchCardRepository = new PpvCardRepository();
+
 	const ppvs = await ppvRepository.get({
 		select: {
 			name: true
 		}
 	});
-
-	const hasSlug = url.searchParams.has('slug');
-	if (!hasSlug)
-		return {
-			event_card: { isUpdate: hasSlug, event: null, ppvs }
-		};
-
-	const slug = url.searchParams.get('slug') as string;
-	const matchCardRepository = new PpvCardRepository();
-	const matchCardEvent = await matchCardRepository.getRow({
+	const matchCardEvent = (await matchCardRepository.getRow({
 		where: { id: Number(slug) },
 		include: {
 			matches: true
 		}
-	});
+	})) as any;
 
-	if (!matchCardEvent)
-		return {
-			event_card: { isUpdate: hasSlug, event: null, ppvs }
-		};
+	if (!matchCardEvent) return redirect(302, '/admin/matchcards');
 
 	return {
 		event_card: {
@@ -49,9 +44,7 @@ export const actions = {
 			const action = Helpers.getAction(formData);
 			const updateId = Helpers.getUpdateID(formData);
 			const matchCardRepository = new PpvCardRepository();
-			for (const [key, value] of formData.entries()) {
-				console.log(`Key: ${key}, Value: ${value}`);
-			}
+
 			const ppv_date = formData.get('ppv_date_done') as string;
 			const ppvRealDate = Utils.getUTCDate(ppv_date);
 

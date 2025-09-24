@@ -36,6 +36,7 @@
 					</div>
 					<small>{post.slug}</small>
 					<h2>{post.title}</h2>
+					<small>{post.views} visitas</small>
 					<p class="down">{post.exceptr}</p>
 
 					<div class="w1 flex end absolute top righ">

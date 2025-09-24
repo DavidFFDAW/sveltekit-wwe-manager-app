@@ -6,7 +6,7 @@
 	import { Toast } from '$lib/utils/toast.helper';
 
 	let quill: Quill;
-	let prompt: string = '';
+	export let prompt: string = '';
 	let component: HTMLElement;
 	let loading: boolean = false;
 
