@@ -1,6 +1,7 @@
 <script lang="ts">
 	// /admin\championship-reigns\defences\update
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
+	import NumberInputControls from '$lib/components/forms/inputs/number-input-controls.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -20,16 +21,13 @@
 					<div class="box single-wrestler-reign-card flex column gap-smaller acenter">
 						<img src={reign.Wrestler.image_name} alt={reign.Wrestler.name} width="100" />
 						<h2 class="w1 tcenter title">{reign.Championship.name}</h2>
-						<label class="defense-count form-item">
-							<span class="label form-label">Defensas</span>
-							<input
-								type="number"
-								inputmode="numeric"
-								name="defenses"
-								min={0}
-								value={reign.defences}
-							/>
-						</label>
+						<NumberInputControls
+							label="Defensas"
+							name="defenses"
+							min={0}
+							value={reign.defences}
+							step={1}
+						/>
 					</div>
 				{/each}
 			</div>

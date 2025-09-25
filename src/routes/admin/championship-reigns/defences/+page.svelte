@@ -41,6 +41,11 @@
 			pierde el título en su primera defensa, no se contará ninguna defensa.
 		</small>
 	</div>
+	<div class="w1 flex end acenter">
+		<a href="/admin/championship-reigns/defences/update" class="btn small cta">
+			Actualizar días de defensas titulares
+		</a>
+	</div>
 </div>
 
 <AsyncForm action="updateDefences" method="post" classes="down" buttonText="Actualizar defensas">
