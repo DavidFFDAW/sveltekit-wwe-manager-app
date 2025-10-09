@@ -2,12 +2,8 @@ import { PpvCardRepository } from '$lib/server/dao/repositories/matchcard.reposi
 import { Helpers } from '$lib/server/server.helpers.js';
 import { Utils } from '$lib/utils/general.utils.js';
 import { PPVRepository } from '$lib/server/dao/repositories/ppv.repository.js';
-import { redirect } from '@sveltejs/kit';
 
 export const load = async ({ url }) => {
-	const hasSlug = url.searchParams.has('slug');
-	if (!hasSlug) return redirect(302, '/admin/matchcards');
-
 	const slug = url.searchParams.get('slug') as string;
 	const ppvRepository = new PPVRepository();
 	const matchCardRepository = new PpvCardRepository();
@@ -24,11 +20,9 @@ export const load = async ({ url }) => {
 		}
 	})) as any;
 
-	if (!matchCardEvent) return redirect(302, '/admin/matchcards');
-
 	return {
 		event_card: {
-			isUpdate: true,
+			isUpdate: Boolean(matchCardEvent),
 			event: matchCardEvent,
 			slug: slug,
 			ppvs: ppvs
