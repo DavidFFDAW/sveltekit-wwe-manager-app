@@ -1,13 +1,10 @@
 <script lang="ts">
 	import MainHeader from '$lib/components/headers/main-header.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
-	import Seo from '$lib/components/seo/seo.svelte';
 	import ChampionCard from './champion-card.svelte';
 
 	export let data = { reigns: [] };
 </script>
-
-<Seo title="Campeones actuales" description="Campeones actuales de la aplicacion" />
 
 <PageWrapper page="current-champions">
 	<MainHeader

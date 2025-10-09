@@ -6,7 +6,14 @@ export const load = async ({ params }) => {
 	const post = await BlogDao.getReadablePostBySlug(slug);
 	if (!post) return Helpers.redirection('/blog');
 	await BlogDao.updatePostViews(post.id);
-	return { post };
+	return {
+		post,
+		metas: {
+			title: post.title,
+			description: post.exceptr,
+			image: post.image
+		}
+	};
 };
 
 export const actions = {};

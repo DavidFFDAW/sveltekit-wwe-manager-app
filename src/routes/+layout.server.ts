@@ -23,11 +23,27 @@ const getBreadcrumbs = (pathname: string): { name: string; href: string }[] => {
 	return [{ name: 'home', href: '/' }, ...pathSegments];
 };
 
-export const load = async ({ locals, url }) => {
+const getPageTitle = (pathname: string, route: string | null): string => {
+	if (pathname === '/') return 'Home';
+	if (!route) return 'Unknown';
+
+	const cleanedRoute = route
+		.replace(/(\[.*?\]|\(.*?\)|[\[\]\(\)\+])/g, '')
+		.replace(/\/+/g, '/')
+		.replace(/\/$/, '')
+		.split('/')
+		.filter(Boolean);
+	const tr = cleanedRoute.join(' ');
+
+	return tr.charAt(0).toUpperCase() + tr.slice(1) || 'Page';
+};
+
+export const load = async ({ locals, url, route }) => {
 	const storedUser = locals.user;
 	const isAdmin = storedUser ? ['admin', 'superadmin'].includes(storedUser.role) : false;
 
 	return {
+		pagetitle: getPageTitle(url.pathname, route.id),
 		path: url.pathname,
 		userIsAdmin: isAdmin,
 		user: storedUser || null,

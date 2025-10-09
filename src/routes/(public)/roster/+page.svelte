@@ -1,13 +1,10 @@
 <script>
-	import Seo from '$lib/components/seo/seo.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import RosterCard from '$lib/components/visual/roster-card.svelte';
 	import MainHeader from '$lib/components/headers/main-header.svelte';
 
 	export let data = { wrestlers: [] };
 </script>
-
-<Seo title="Roster" description="Roster de la WWE" />
 
 <PageWrapper page="roster-page">
 	<MainHeader

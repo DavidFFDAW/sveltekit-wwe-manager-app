@@ -1,10 +1,7 @@
 <script>
-	import Seo from '$lib/components/seo/seo.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import MainHeader from '$lib/components/headers/main-header.svelte';
 </script>
-
-<Seo title="Roster de equipos" description="Roster de equipos de la WWE" />
 
 <PageWrapper page="roster-page-teams">
 	<MainHeader

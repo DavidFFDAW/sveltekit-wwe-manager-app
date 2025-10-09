@@ -1,11 +1,8 @@
 <script>
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
-	import Seo from '$lib/components/seo/seo.svelte';
 	const year = new Date().getFullYear();
 	const webName = 'WWE 2K Universo';
 </script>
-
-<Seo title="Térmimos y Condiciones" description="Términos y Condiciones de uso del sitio web" />
 
 <PageWrapper page={'legal-notice'}>
 	<div class="legal-pages-container">

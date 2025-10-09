@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import { errorimage } from '$lib/actions/error.image';
 	import Icon from '$lib/components/icons/icon.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
-	import Seo from '$lib/components/seo/seo.svelte';
 	import type { BlogPost } from '@prisma/client';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
@@ -34,20 +32,6 @@
 		return () => window.removeEventListener('scroll', checkButtonVisibility);
 	});
 </script>
-
-<Seo
-	title={data.post.title}
-	description={data.post.exceptr?.slice(0, 155)}
-	image={data.post.image}
-	robots="index, follow"
->
-	<meta property="og:type" content="article" />
-	<meta property="og:updated_time" content={data.post.updated_at?.getTime().toString()} />
-	<meta property="article:published_time" content={data.post.created_at?.getTime().toString()} />
-	<meta property="article:author" content="WWE Manager" />
-	<meta property="article:section" content="Blog" />
-	<meta property="article:tag" content="WWE" />
-</Seo>
 
 <PageWrapper page="blog-post-page">
 	<div class="blog-container" class:error={!data.post}>

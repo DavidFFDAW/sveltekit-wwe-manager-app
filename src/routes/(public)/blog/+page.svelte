@@ -2,7 +2,6 @@
 	import { errorimage } from '$lib/actions/error.image';
 	import MainHeader from '$lib/components/headers/main-header.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
-	import Seo from '$lib/components/seo/seo.svelte';
 	import SubscriptionBlock from './subscription-block.svelte';
 
 	export let data;
@@ -17,8 +16,6 @@
 	mobileBackground="https://e00-xlk-ue-marca.uecdn.es/uploads/2024/03/28/66056608b302d.jpeg"
 	titlePosition="center"
 />
-
-<Seo title="Blog" description="Ultimas noticias del universo WWE" />
 
 <PageWrapper page="blog">
 	<SubscriptionBlock user={data.user} />

@@ -2,11 +2,14 @@
 	import { DEFAULT_METAS } from '$lib/constants/metas.constants';
 
 	export let page: Record<string, any>;
+	let title: string = '';
+
 	$: metas = page.metas ? { ...DEFAULT_METAS, ...page.metas } : DEFAULT_METAS;
+	$: title = metas.title || page.pagetitle;
 </script>
 
 <svelte:head>
-	<title>{metas.title} | WWE-2K</title>
+	<title>{title} | WWE-2K</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="description" content={metas.description} />
 	<meta name="keywords" content={metas.keywords} />
@@ -17,7 +20,7 @@
 	<link rel="canonical" href={page.canonical} />
 
 	<!-- Open Graph (Facebook, LinkedIn, WhatsApp) -->
-	<meta property="og:title" content={metas.ogTitle || metas.title} />
+	<meta property="og:title" content={metas.ogTitle || title} />
 	<meta property="og:description" content={metas.ogDescription || metas.description} />
 	<meta property="og:image" content={metas.ogImage || metas.image} />
 	<meta property="og:url" content={metas.canonical} />
@@ -25,7 +28,7 @@
 	<meta property="og:locale" content="es_ES" />
 
 	<!-- Twitter Cards -->
-	<meta name="twitter:title" content={metas.twTitle || metas.title} />
+	<meta name="twitter:title" content={metas.twTitle || title} />
 	<meta name="twitter:description" content={metas.twDescription || metas.description} />
 	<meta name="twitter:image" content={metas.twImage || metas.image} />
 	<meta name="twitter:card" content="summary_large_image" />
@@ -44,7 +47,7 @@
 	{@html `  <script type="application/ld+json">{
      "@context": "https://schema.org",
      "@type": "Website",
-     "name": "${metas.title}",
+     "name": "${title}",
      "url": "${metas.canonical}",
      "logo": "${metas.image}"  }</script>`}
 </svelte:head>

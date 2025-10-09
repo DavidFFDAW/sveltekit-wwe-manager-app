@@ -1,5 +1,4 @@
 <script>
-	import Seo from '$lib/components/seo/seo.svelte';
 	import { page } from '$app/state';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
@@ -9,8 +8,6 @@
 		? page.url.searchParams.get('next')?.toString()
 		: '/admin/dashboard';
 </script>
-
-<Seo title="Login" description="Accede a tu cuenta" />
 
 <PageWrapper page="login" showFooter={false}>
 	<div class="login-container-wrapper">
