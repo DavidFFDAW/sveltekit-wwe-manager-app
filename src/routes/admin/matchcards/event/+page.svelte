@@ -45,7 +45,7 @@
 						<DateInput
 							label="Fecha de realizacion"
 							name="ppv_date_done"
-							min={`${currentYear}-01-01`}
+							min={`${currentYear - 1}-01-01`}
 							max={`${currentYear}-12-31`}
 							bind:value={ppvDate as string}
 						/>

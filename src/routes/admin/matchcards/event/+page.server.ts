@@ -48,8 +48,6 @@ export const actions = {
 				ppv_date: ppvRealDate
 			};
 
-			console.log('Datas to be saved:', datas);
-
 			if (action === 'create') {
 				await matchCardRepository.create(datas);
 			}
