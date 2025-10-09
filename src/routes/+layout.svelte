@@ -6,9 +6,13 @@
 	import Sidebar from '$lib/components/sidebar/sidebar.svelte';
 	import ServiceWorker from '$lib/components/worker/service-worker.svelte';
 	import GlobalUtilLinks from './global-admin-links/global-util-links.svelte';
+	import { page } from '$app/state';
+	import MetaTagsSeo from '$lib/components/seo/meta-tags-seo.svelte';
 
 	export let data;
 </script>
+
+<MetaTagsSeo page={page.data} />
 
 {#if data.isAdminPage}
 	<Sidebar bind:url={data.path} />

@@ -31,6 +31,7 @@ export const load = async ({ locals, url }) => {
 		path: url.pathname,
 		userIsAdmin: isAdmin,
 		user: storedUser || null,
+		canonical: (url.origin + url.pathname).replace(/\/$/g, ''),
 		breadcrumbs: getBreadcrumbs(url.pathname),
 		pageRouteSlug: getPageRouteSlug(url.pathname),
 		isAdminPage: url.pathname.startsWith('/admin')
