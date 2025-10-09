@@ -47,7 +47,6 @@ export const Helpers = {
 	getDateRange: (formData: FormData, name: string = 'resource-dates') => {
 		const startDate = formData.get(`${name}-range-start-date`) as string | null;
 		const endDate = formData.get(`${name}-range-end-date`) as string | null;
-		console.log('getDateRange', { startDate, endDate });
 
 		return {
 			start: startDate ? Utils.getLocalDate(startDate) : null,

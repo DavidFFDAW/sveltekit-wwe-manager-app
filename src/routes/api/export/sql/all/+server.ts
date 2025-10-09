@@ -10,7 +10,6 @@ export async function GET() {
 				const prisma = DatabaseExportUtils.getPrismaModel(model);
 				const tableDictionary = DatabaseExportUtils.getDatabaseMappingsDictionary();
 				const modelTableName = tableDictionary[model.toLowerCase()] || model;
-				console.log({ modelTableName });
 
 				return {
 					modelName: model,

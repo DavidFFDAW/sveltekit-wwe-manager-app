@@ -40,7 +40,6 @@
 
 	const setUploadingContent = (content: ImportationDatas[]) => {
 		getFileContent(content);
-		console.log({ uploadingWrestlers, releasingWrestlers });
 
 		setTimeout(() => {
 			const button = document.querySelector('.import-button-container');

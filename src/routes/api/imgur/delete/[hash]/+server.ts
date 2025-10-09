@@ -19,7 +19,7 @@ export async function DELETE({ request, locals, cookies, params }) {
 	if (!deleteResponse.ok)
 		return Helpers.apiResponseMessage('No se ha podido eliminar la imagen', 500);
 
-	console.log('deleteResponse', deleteResponse);
+	// console.log('deleteResponse', deleteResponse);
 
 	return Helpers.apiResponseMessage('Imagen eliminada', 200);
 }
