@@ -72,6 +72,11 @@
 		}
 		nextStep();
 	};
+
+	const tagChampionshipsID = data.championships.filter((c) => c.tag).map((c) => c.id);
+	$: isTagChampionship = selectedChampionship
+		? tagChampionshipsID.includes(selectedChampionship)
+		: false;
 </script>
 
 <PageWrapper page="admin-championship-reigns-update-page">
