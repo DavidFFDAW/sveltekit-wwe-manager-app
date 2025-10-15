@@ -6,6 +6,7 @@
 	import { goto, invalidate } from '$app/navigation';
 	import { Toast } from '$lib/utils/toast.helper';
 
+	export let form: HTMLFormElement;
 	export let method: 'post' | 'get' | 'put' | 'delete' = 'post';
 	export let action: string = '';
 	export let redirect: string = '';
@@ -63,6 +64,7 @@
 </script>
 
 <form
+	bind:this={form}
 	action={action ? `?/${action}` : ''}
 	class="relative app-custom-form w1 h1 {classes}"
 	data-method={method}

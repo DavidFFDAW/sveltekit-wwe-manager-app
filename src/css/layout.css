@@ -298,7 +298,7 @@ body main.app-main-entrypoint.public-page .page.page-blog-wrapper .page-wrapper-
 
 body main.app-main-entrypoint.admin-page {
 	height: auto;
-	min-height: 100vh;
+	min-height: 100dvh;
 }
 
 body main.app-main-entrypoint.admin-page h1 {

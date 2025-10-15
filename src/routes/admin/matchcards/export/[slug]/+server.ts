@@ -1,6 +1,5 @@
 import { PpvCardRepository } from '$lib/server/dao/repositories/matchcard.repository.js';
 import { Helpers } from '$lib/server/server.helpers.js';
-import { redirect } from '@sveltejs/kit';
 
 export const GET = async ({ params }) => {
 	const id = params.slug;
@@ -16,7 +15,7 @@ export const GET = async ({ params }) => {
 
 	if (!matchCardEvent) return Helpers.api.error('Evento no encontrado', 404);
 
-	const json = JSON.stringify(matchCardEvent);
+	const json = JSON.stringify(matchCardEvent, null, 4);
 	const filename = `matchcard-event-${matchCardEvent.ppv_name
 		.toLowerCase()
 		.replace(/\s+/g, '-')}-${matchCardEvent.id}.json`;

@@ -1,77 +1,127 @@
 <script lang="ts">
+	import { errorimage } from '$lib/actions/error.image';
+	import AsyncForm from '$lib/components/forms/async-form.svelte';
+
 	let steps = 3;
 	let currentStep = 1;
+	let form: HTMLFormElement;
+	export let data;
+
+	const tagTeamChampionships = data.championships
+		.filter((championship) => championship.tag)
+		.map((c) => c.id);
+	let selectedChampionship: number | null = null;
+	let isTag = false;
 
 	const handleStep = (action: 'add' | 'subtract') => (event: Event) => {
 		event.preventDefault();
 		if (action === 'add' && currentStep < steps) {
-			currentStep += 1;
+			const stepInputs = form.querySelectorAll(
+				`.step-${currentStep} input`
+			) as NodeListOf<HTMLInputElement>;
+			const invalidInput = Array.from(stepInputs).find((input) => !input.checkValidity());
+
+			if (!invalidInput) currentStep += 1;
+			if (invalidInput) invalidInput.reportValidity();
 		} else if (action === 'subtract' && currentStep > 1) {
 			currentStep -= 1;
 		}
 	};
+
+	$: isTag = tagTeamChampionships.includes(selectedChampionship || -1);
 </script>
 
-<section class="form-steps-container" style="--steps: {steps}; --currentStep: {currentStep}">
-	<div class="form-steps">
-		<div class="step step-1" class:active={currentStep === 1}>
-			<div class="circle">1</div>
-			<div class="label">Select Championship</div>
-		</div>
-		<div class="step step-2" class:active={currentStep === 2}>
-			<div class="circle">2</div>
-			<div class="label">Select Wrestler</div>
-		</div>
-		<div class="step step-3" class:active={currentStep === 3}>
-			<div class="circle">3</div>
-			<div class="label">Common Data</div>
-		</div>
-	</div>
+<AsyncForm bind:form method="post" showButtons={false} reset={false}>
+	<section class="step-form-container" style="--steps: {steps}; --currentStep: {currentStep}">
+		<div class="form-steps">
+			<div class="step step-1" class:active={currentStep === 1}>
+				<header class="step-header">
+					<h2 class="uppercase dreadnotus">Championship</h2>
+					<small>Select the championship for the new reign.</small>
+				</header>
 
-	<div class="buttons">
-		<button type="button" on:click={handleStep('subtract')}>Previous</button>
-		<button type="button" on:click={handleStep('add')}>Next</button>
-	</div>
-</section>
+				<div class="step-content">
+					<ul>
+						{#each data.championships as championship}
+							<li class="item {championship.brand?.toLowerCase()}">
+								<label class="radio-label form-item relative">
+									<input
+										type="radio"
+										name="championship"
+										class="app-radio"
+										value={championship.id}
+										bind:group={selectedChampionship}
+										required
+									/>
+									<div class="custom-championship inner">
+										<img
+											width="80"
+											height="80"
+											src={championship.image}
+											alt={championship.name}
+											use:errorimage={'/unknown-championship.webp'}
+										/>
+										<span>{championship.name}</span>
+									</div>
+								</label>
+							</li>
+						{/each}
+					</ul>
+				</div>
+			</div>
+
+			<div class="step step-2" class:active={currentStep === 2}>
+				<header class="step-header">
+					<h2 class="uppercase dreadnotus">Wrestler</h2>
+					<small>Select the wrestler who will hold the championship.</small>
+					{#if isTag}<small>Es de tag team</small>{/if}
+				</header>
+
+				<div class="step-content">
+					<ul>
+						{#each data.wrestlers as wrestler}
+							<li class="item {wrestler.brand?.toLowerCase()}">
+								<label class="radio-label form-item relative">
+									<input
+										type="radio"
+										name="wrestler"
+										class="app-radio"
+										value={wrestler.id}
+										required
+									/>
+									<div class="custom-wrestler inner">
+										<img
+											width="80"
+											height="80"
+											src={wrestler.image_name}
+											alt={wrestler.name}
+											use:errorimage={'/vacant.webp'}
+										/>
+										<span>{wrestler.name}</span>
+									</div>
+								</label>
+							</li>
+						{/each}
+					</ul>
+				</div>
+			</div>
+
+			<div class="step step-3" class:active={currentStep === 3}>
+				<header class="step-header">
+					<h2 class="uppercase dreadnotus">Details</h2>
+					<small>
+						Provide the details for the new championship reign such as dates and way of winning.
+					</small>
+				</header>
+			</div>
+
+			<div class="step-form-buttons">
+				<button type="button" class="btn button" on:click={handleStep('subtract')}>Atrás</button>
+				<button type="button" class="btn button cta" on:click={handleStep('add')}>Siguiente</button>
+			</div>
+		</div>
+	</section>
+</AsyncForm>
 
 <style>
-	.form-steps-container {
-		width: 100%;
-		height: calc(100dvh - 60px);
-		overflow: hidden;
-	}
-	.buttons {
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		width: calc(100% - var(--sidebar-width));
-		padding: 10px;
-		display: flex;
-		justify-content: space-between;
-		margin-left: var(--sidebar-width);
-	}
-	.form-steps {
-		width: calc(100% * var(--steps));
-		display: flex;
-		height: 100%;
-	}
-	.form-steps .step {
-		flex: 1;
-		width: 100%;
-		min-height: 100%;
-		max-height: 100dvh;
-		overflow-x: hidden;
-		overflow-y: auto;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		position: relative;
-		background-color: #fff;
-		border: 1px solid #ccc;
-		border-radius: 8px;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-		padding: 15px 10px;
-		transition: transform 0.5s ease-in-out;
-		transform: translateX(calc(-100% * (var(--currentStep) - 1)));
-	}
 </style>
