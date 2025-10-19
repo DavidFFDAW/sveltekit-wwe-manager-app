@@ -6,7 +6,7 @@
 	import { goto, invalidate } from '$app/navigation';
 	import { Toast } from '$lib/utils/toast.helper';
 
-	export let form: HTMLFormElement;
+	export let form: HTMLFormElement | null = null;
 	export let method: 'post' | 'get' | 'put' | 'delete' = 'post';
 	export let action: string = '';
 	export let redirect: string = '';
