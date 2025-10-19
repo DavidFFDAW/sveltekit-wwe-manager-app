@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
-	import { SidebarLinks } from '$lib/components/sidebar/sidebar.links';
 
 	let opened = false;
 	const closeOpenedLinksMenu = () => {
@@ -13,14 +12,46 @@
 <div class="global-admin-links-app" class:opened>
 	{#if opened}
 		<ul class="links-menu" transition:slide>
-			{#each SidebarLinks as link}
-				<li class="link-item">
-					<a href={link.url} class="btn icon" on:click={closeOpenedLinksMenu}>
-						<i class="bi bi-{link.icon ? link.icon : 'gear'}"></i>
-						<span>{link.label}</span>
-					</a>
-				</li>
-			{/each}
+			<li class="link-item">
+				<a href="/admin/blog" class="btn icon" on:click={closeOpenedLinksMenu}>
+					<i class="bi bi-people-fill"></i>
+					<span>Wrestlers</span>
+				</a>
+			</li>
+			<li class="link-item">
+				<a href="/admin/blog" class="btn icon" on:click={closeOpenedLinksMenu}>
+					<i class="bi bi-journal-text"></i>
+					<span>Blog</span>
+				</a>
+			</li>
+			<li class="link-item">
+				<a href="/admin/championships" class="btn icon" on:click={closeOpenedLinksMenu}>
+					<i class="bi bi-award-fill"></i>
+					<span>Championships</span>
+				</a>
+			</li>
+			<li class="link-item">
+				<a
+					href="/admin/championship-reigns/defences/update"
+					class="btn icon"
+					on:click={closeOpenedLinksMenu}
+				>
+					<i class="bi bi-shield-fill-check"></i>
+					<span>Defensas titulares</span>
+				</a>
+			</li>
+			<li class="link-item">
+				<a href="/admin/matchcards" class="btn icon" on:click={closeOpenedLinksMenu}>
+					<i class="bi bi-card-list"></i>
+					<span>Matchcards</span>
+				</a>
+			</li>
+			<li class="link-item">
+				<a href="/admin/ppvs" class="btn icon" on:click={closeOpenedLinksMenu}>
+					<i class="bi bi-calendar-event-fill"></i>
+					<span>PPVs</span>
+				</a>
+			</li>
 		</ul>
 	{/if}
 
@@ -69,7 +100,7 @@
 		gap: 8px;
 		padding: 10px 15px;
 		color: #333;
-		background-color: #d8e7f1;
+		background-color: #f9f9f9;
 		text-decoration: none;
 		border-radius: 0;
 	}
