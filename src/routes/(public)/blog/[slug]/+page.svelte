@@ -37,10 +37,17 @@
 	<div class="blog-container" class:error={!data.post}>
 		{#if data.post}
 			<article class="blog-post-single-container">
-				<img src={data.post.image} alt={data.post.title} use:errorimage />
+				<img
+					class="blog-post-image post-image"
+					src={data.post.image}
+					alt={data.post.title}
+					use:errorimage
+				/>
 				<div class="blog-post-content">
 					<h1>{data.post.title}</h1>
-					<p>{@html data.post.content}</p>
+					<div class="w1 blog-post post-content single-post">
+						<p>{@html data.post.content}</p>
+					</div>
 				</div>
 			</article>
 
@@ -81,7 +88,8 @@
 		margin: 0 auto;
 		border: 1px solid #ccc;
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-		border-radius: 5px;
+		border-radius: 8px;
+		overflow: hidden;
 	}
 	.blog-container.error {
 		width: 100%;
@@ -104,15 +112,26 @@
 	}
 
 	.blog-container article h1 {
-		font-size: 22px;
+		font-size: 28px;
 		font-weight: 700;
 		font-family: 'sourcesans', sans-serif;
 		text-transform: uppercase;
+		margin-bottom: 2rem;
+	}
+	.blog-container .blog-post-image.post-image {
+		width: 100%;
+		height: auto;
 	}
 
 	.blog-container.error .blog-post-error-container a {
 		color: #5125a1;
 		text-decoration: underline;
+	}
+
+	.blog-post.post-content.single-post p {
+		margin-bottom: 1rem;
+		line-height: 1.4;
+		white-space: pre-line;
 	}
 
 	@media screen and (max-width: 768px) {
