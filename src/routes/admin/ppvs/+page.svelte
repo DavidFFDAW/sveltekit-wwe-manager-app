@@ -12,7 +12,7 @@
 </div> -->
 
 <div class="ppvs-inner-list">
-	<div class="w1 flex end">
+	<div class="w1 flex end gap-small">
 		<GroupedActions text="Acciones de PPV" position="right" item={false}>
 			<ActionsAsync
 				href={'/api/ppv/year/refresh'}
@@ -24,9 +24,13 @@
 				Cambiar fechas de PPVs a {new Date().getFullYear()}
 			</ActionsAsync>
 		</GroupedActions>
+
+		<a href="/admin/ppvs/update/calendar" class="btn cta icon">
+			<i class="bi bi-calendar-event"></i> Ir a panel de cambio masivo de fechas
+		</a>
 	</div>
 
-	<div class="title">
+	<div class="title down">
 		<h2>PPVs activos</h2>
 		<PpvList ppvs={data.ppvs.filter((ppv) => ppv.active)} />
 	</div>
