@@ -7,9 +7,8 @@
 	import { PPVConstants } from '$lib/constants/ppv.constants';
 	import type { PPV } from '@prisma/client';
 	import { onMount } from 'svelte';
-	
-	import flatpickr from 'flatpickr';
 
+	import flatpickr from 'flatpickr';
 	export let ppv: PPV = {} as PPV;
 	export let ppvs: PPV[];
 	const isUpdating = Boolean(ppv.id);
@@ -28,13 +27,17 @@
 	let ppvDate = ppv.game_date ? ppv.game_date.toISOString().split('T')[0] : '';
 	$: abbreviation = isUpdating ? abbreviation : generateAbbreviation(name);
 
-	onMount(() => {
-		const ppvObject = ppvs.reduce((obj, item) => {
-			const date = item.game_date ? item.game_date.toISOString().split('T')[0] : '';
-			obj[date] = item;
-			return obj;
-		}, {} as Record<string, PPV>);
+	onMount(async () => {
+		const ppvObject = ppvs.reduce(
+			(obj, item) => {
+				const date = item.game_date ? item.game_date.toISOString().split('T')[0] : '';
+				obj[date] = item;
+				return obj;
+			},
+			{} as Record<string, PPV>
+		);
 
+		const { Spanish } = await import('flatpickr/dist/l10n/es.js');
 		flatpickr('#game_date', {
 			inline: true,
 			showMonths: 2,
@@ -43,37 +46,23 @@
 			maxDate: `${today.getFullYear() + 1}-12-31`,
 			disable: Object.keys(ppvObject).filter((date) => date !== ppvDate),
 			defaultDate: ppvDate || undefined,
-			locale: {
-				firstDayOfWeek: 1,
-				weekdays: {
-					shorthand: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
-					longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
-				},
-				months: {
-					shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-					longhand: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
-				}
-			},
+			locale: Spanish,
 			onDayCreate: (dObj, dStr, fp, dayElem) => {
 				const currentDate = dayElem.dateObj;
 				const dateKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
 
 				const event = ppvObject[dateKey];
 				if (event) {
-					dayElem.classList.add("w-event-day");
+					dayElem.classList.add('custom-flatpickr-markup');
 					dayElem.title = event.name;
 					if (event.image) {
 						dayElem.style.backgroundImage = `url(${event.image})`;
 					}
 				}
-			},
+			}
 		});
 	});
 </script>
-
-<svelte:head>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-</svelte:head>
 
 <div class="w1 grid grid-two-column gap-medium responsive">
 	<Box title="Datos" icon="info-circle">
@@ -132,26 +121,3 @@
 		</div>
 	</Box>
 </div>
-
-
-<style>
-	:global(.flatpickr-day.w-event-day) {
-		position: relative;
-		color: #fff;
-		background-color: #333 !important;
-		background-size: contain !important;
-		background-position: center !important;
-		background-repeat: no-repeat !important;
-		
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-	}
-	:global(.flatpickr-day.w-event-day:hover) {
-		background-size: cover;
-		background-position: center;
-		filter: brightness(0.8);
-		cursor: pointer;
-	}
-</style>

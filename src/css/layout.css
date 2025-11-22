@@ -97,7 +97,7 @@
 	gap: 5px;
 }
 
-.flex.total>* {
+.flex.total > * {
 	flex: 1;
 }
 
@@ -149,6 +149,9 @@
 	align-items: unset;
 }
 
+.flex.anone {
+	align-items: unset;
+}
 .flex.acenter {
 	align-items: center;
 }

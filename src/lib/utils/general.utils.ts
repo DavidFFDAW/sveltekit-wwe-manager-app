@@ -205,6 +205,20 @@ export const Utils = {
 		const foundBrand = brands[searchBrand];
 		return foundBrand ? foundBrand.image : '';
 	},
+	extractBracketGroup(formData: FormData, baseName: string): Record<string, string> {
+		const result: Record<string, string> = {};
+
+		for (const [key, value] of formData.entries()) {
+			const regex = new RegExp(`^${baseName}\\[(.+?)\\]$`);
+			const match = key.match(regex);
+			if (match) {
+				result[match[1]] = value as string;
+			}
+		}
+
+		return result;
+	},
+
 	readCsvContent,
 	createCsv,
 	getArrayFormDatas,

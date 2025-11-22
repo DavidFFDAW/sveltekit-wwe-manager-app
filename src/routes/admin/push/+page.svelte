@@ -7,7 +7,7 @@
 
 <PageWrapper page="admin-push">
 	<h1>Send Push Notification</h1>
-	<AsyncForm action="" method="post">
+	<AsyncForm action="" method="post" showButtons={false}>
 		<div class="box flex column gap-medium">
 			<Input type="text" label="Title" name="title" required />
 			<Input type="text" label="Body" name="body" required />
