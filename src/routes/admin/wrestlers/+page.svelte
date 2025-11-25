@@ -26,6 +26,9 @@
 			>
 				Descargar Zip de imágenes
 			</ActionsLink>
+			<ActionsLink href="/admin/wrestlers/bulk/update/status" icon="pencil-square" color="info">
+				Actualizar estados masivamente
+			</ActionsLink>
 			<ActionsCsv
 				href="/api/export/csv/wrestlers?separator=;"
 				downloadName="wrestlers-{Date.now()}.csv"
