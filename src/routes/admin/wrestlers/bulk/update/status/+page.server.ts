@@ -6,7 +6,13 @@ export async function load({ url }) {
 	const page = url.searchParams.get('page') ? parseInt(url.searchParams.get('page') as string) : 1;
 
 	const wrestlerRepo = new WrestlerRepository();
-	const wrestlers = await wrestlerRepo.paginate(page, {}, perPage);
+	const wrestlers = await wrestlerRepo.paginate(
+		page,
+		{
+			orderBy: { name: 'asc' }
+		},
+		perPage
+	);
 
 	return {
 		wrestlers: wrestlers[1],
