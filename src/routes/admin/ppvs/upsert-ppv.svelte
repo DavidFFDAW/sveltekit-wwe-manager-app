@@ -97,7 +97,6 @@
 			</div>
 
 			<div class="w1 grid grid-two-column gap-small">
-				<ToggleInput label="Visible" name="visible" bind:checked={ppv.visible} />
 				<ToggleInput label="Activo" name="active" bind:checked={ppv.active} />
 			</div>
 		</div>
