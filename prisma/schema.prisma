@@ -237,7 +237,6 @@ model PPV {
     type                String    @db.VarChar(150)
     image               String?   @db.VarChar(255)
     active              Boolean   @default(true) @db.TinyInt
-    visible             Boolean   @default(true) @db.TinyInt
     stadium             String?   @db.VarChar(100)
     city                String?   @db.VarChar(100)
     created_at          DateTime? @default(now())

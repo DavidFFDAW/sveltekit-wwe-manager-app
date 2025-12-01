@@ -1,7 +1,10 @@
 <script lang="ts">
+	import Box from '$lib/components/box/box.svelte';
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
 	import ActionsAsync from '$lib/components/buttons/grouped-actions/actions-async.svelte';
 	import GroupedActions from '$lib/components/buttons/grouped-actions/grouped-actions.svelte';
+	import Input from '$lib/components/forms/inputs/input.svelte';
+	import RadioList from '$lib/components/forms/inputs/radio-list.svelte';
 	import PpvList from './ppv-list.svelte';
 	// import Calendar from './calendar.svelte';
 	export let data;
@@ -30,15 +33,36 @@
 		</a>
 	</div>
 
-	<div class="title down">
-		<h2>PPVs activos</h2>
-		<PpvList ppvs={data.ppvs.filter((ppv) => ppv.active)} />
-	</div>
+	<header class="page-header down">
+		<h1 class="dreadnotus title uppercase">PPVs</h1>
+		<form action="" method="get">
+			<Box icon="filter" title="Filtros">
+				<Input label="Buscar por nombre" name="search" value={data.filters.search} />
+				<RadioList
+					label="Tipo"
+					name="type"
+					value={data.filters.type as string}
+					options={[
+						{ label: 'Todos', value: 'all' },
+						{ label: 'Activos', value: 'active' },
+						{ label: 'Inactivos', value: 'inactive' },
+						{ label: 'Sin fecha asignada', value: 'no-date' },
+						{ label: 'Por anunciar', value: 'to-be-announced' }
+					]}
+				/>
 
-	<div class="title down">
-		<h2>PPVs inactivos</h2>
-		<PpvList ppvs={data.ppvs.filter((ppv) => !ppv.active)} />
-	</div>
+				<div class="w1 flex end">
+					<button type="submit" class="btn cta icon">
+						<i class="bi bi-funnel-fill"></i> Aplicar filtros
+					</button>
+				</div></Box
+			>
+		</form>
+	</header>
+
+	<section class="w1 ppv-list-container down">
+		<PpvList ppvs={data.ppvs} />
+	</section>
 
 	<ButtonCreate endpoint="/ppvs/create" />
 </div>

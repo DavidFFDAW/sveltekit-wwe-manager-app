@@ -8,7 +8,7 @@
 
 <div class="ppvs-list resource-list grid">
 	{#each ppvs as ppv}
-		<div class="ppv-card card relative {ppv.visible ? 'active' : 'inactive'}">
+		<div class="ppv-card card relative {ppv.active ? 'active' : 'inactive'}">
 			<img
 				class="ppv-image"
 				width="200"
@@ -36,7 +36,6 @@
 					{/if}
 					<div class="w1 div flex end ppv-status">
 						<span>{ppv.active ? 'Activo' : 'Inactivo'}</span>
-						<span>{ppv.visible ? 'Visible' : 'Oculto'}</span>
 					</div>
 					<div class="ppv-city">
 						<p>{ppv.city}</p>

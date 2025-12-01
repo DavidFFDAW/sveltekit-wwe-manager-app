@@ -15,16 +15,6 @@
 	</ActionsLink>
 
 	<ActionsButton
-		action={'toggleVisibility'}
-		method="post"
-		icon={ppv.visible ? 'eye-slash' : 'eye'}
-		confirm={false}
-		color={ppv.visible ? 'warn' : 'info'}
-	>
-		{ppv.visible ? 'Ocultar' : 'Mostrar'} PPV
-	</ActionsButton>
-
-	<ActionsButton
 		action={'toggleActive'}
 		method="post"
 		icon={ppv.active ? 'toggle-on' : 'toggle-off'}
