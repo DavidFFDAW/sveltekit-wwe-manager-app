@@ -97,7 +97,7 @@
 	gap: 5px;
 }
 
-.flex.total > * {
+.flex.total>* {
 	flex: 1;
 }
 
@@ -152,6 +152,7 @@
 .flex.anone {
 	align-items: unset;
 }
+
 .flex.acenter {
 	align-items: center;
 }
@@ -239,6 +240,14 @@
 
 .down {
 	margin-top: 20px;
+}
+
+.mt-up-small {
+	margin-top: 10px;
+}
+
+.mt-down-small {
+	margin-bottom: 10px;
 }
 
 .overflow-vertical {

@@ -2,6 +2,7 @@
 import { PrismaClient } from '@prisma/client';
 import prisma from '$lib/server/prisma';
 import type { EntityWithId } from '../../../../@types/Entity';
+import type { PaginationDatas } from '$lib/types/app.types';
 
 export class Repository<
 	T extends EntityWithId,
@@ -72,6 +73,32 @@ export class Repository<
 				skip
 			})
 		]);
+	}
+
+	async paginateN(
+		page: number,
+		args?: FindManyArgs,
+		take: number = 15
+	): Promise<PaginationDatas<T>> {
+		const prepage = page < 1 ? 1 : page;
+		const skip = (prepage - 1) * take;
+
+		const [totals, filtereds] = await Promise.all([
+			this.model.count(args),
+			this.model.findMany({
+				...args,
+				take,
+				skip
+			})
+		]);
+
+		return {
+			list: filtereds,
+			perPage: take,
+			totalItems: totals,
+			currentPage: prepage,
+			pages: Math.ceil(totals / take)
+		};
 	}
 
 	unique(where: WhereUniqueInput): Promise<T | null> {

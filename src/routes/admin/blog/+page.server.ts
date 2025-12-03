@@ -1,10 +1,34 @@
 import { BlogDao } from '$lib/server/dao/blog.dao';
+import { BlogRepository } from '$lib/server/dao/repositories/blog.repository.js';
 import { Helpers } from '$lib/server/server.helpers';
 
-export const load = async ({ locals }) => {
+export const load = async ({ locals, url }) => {
 	if (!locals.user) throw Helpers.redirection('/admin/dashboard');
+	const params = url.searchParams;
+
+	const searchTitle = params.get('search') || '';
+	const publishedFilter = params.get('published') || 'published';
+	const page = parseInt(params.get('page') || '1', 10);
+
+	const blogRepo = new BlogRepository();
+	const paginatedDatas = await blogRepo.paginateN(
+		page,
+		{
+			where: {
+				title: { contains: searchTitle },
+				visible: publishedFilter === 'published'
+			},
+			orderBy: { created_at: 'desc' }
+		},
+		20
+	);
+
 	return {
-		posts: await BlogDao.getOrderedPosts()
+		blogPagination: paginatedDatas,
+		filters: {
+			searchTitle,
+			publishedFilter
+		}
 	};
 };
 

@@ -9,7 +9,7 @@
 </script>
 
 <svelte:head>
-	<title>{title} | WWE-2K</title>
+	<title>WWE-2K | {title}</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="description" content={metas.description} />
 	<meta name="keywords" content={metas.keywords} />

@@ -7,8 +7,6 @@
 
 	let { data } = $props();
 	let selectedIds: number[] = $state([]);
-	let selectedStatus = $state('active');
-	const pages = Array.from({ length: data.pages }, (_, i) => i + 1);
 </script>
 
 <section class="wrestlers-bulk-status-update-page">
@@ -22,7 +20,7 @@
 	</header>
 
 	<div class="w1 wrestlers-list-container down">
-		<SimplePagination {pages} current={data.page} />
+		<SimplePagination pages={data.pages} current={data.page} />
 
 		{#if data.wrestlers.length > 0}
 			<AsyncForm method="post" reset={true} showButtons={false}>
@@ -77,7 +75,7 @@
 
 <style>
 	.grid.wrestlers-grid {
-		grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 		gap: 1rem;
 	}
 	.wrestler-card {

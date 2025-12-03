@@ -8,6 +8,7 @@ export async function load({ url }) {
 	const search = url.searchParams.has('search') ? (url.searchParams.get('search') as string) : '';
 	const currentPage = url.searchParams.has('page') ? Number(url.searchParams.get('page')) : 1;
 	const genderFilter = url.searchParams.has('gender') ? url.searchParams.get('gender') : '';
+	const statusFilter = url.searchParams.has('status') ? url.searchParams.get('status') : '';
 
 	const filters: Prisma.WrestlerWhereInput = {};
 	if (genderFilter) {
@@ -15,6 +16,9 @@ export async function load({ url }) {
 	}
 	if (search) {
 		filters.name = { contains: search };
+	}
+	if (statusFilter) {
+		filters.status = statusFilter;
 	}
 
 	const [total, wrestlers] = await wrestlerRepository.paginate(
@@ -31,6 +35,7 @@ export async function load({ url }) {
 	return {
 		filters: {
 			sex: genderFilter,
+			status: statusFilter,
 			search: search
 		},
 		page: currentPage,

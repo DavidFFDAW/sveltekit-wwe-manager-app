@@ -60,6 +60,13 @@
 					bind:value={data.filters.sex as string}
 					options={[{ label: 'Todos', value: '' }, ...WrestlerConstants.genders]}
 				/>
+
+				<RadioList
+					label="Estado"
+					name="status"
+					bind:value={data.filters.status as string}
+					options={[{ label: 'Todos', value: '' }, ...WrestlerConstants.statuses]}
+				/>
 			</div>
 			<div class="w1 flex end acenter">
 				<button type="submit" aria-label="Search" class="btn cta">
