@@ -1,4 +1,3 @@
-import { BlogDao } from '$lib/server/dao/blog.dao';
 import { BlogRepository } from '$lib/server/dao/repositories/blog.repository.js';
 import { Helpers } from '$lib/server/server.helpers';
 
@@ -39,11 +38,12 @@ export const actions = {
 		const updatingID = Helpers.getUpdateID(datas);
 		if (!updatingID) return Helpers.error('ID not found');
 
-		const post = await BlogDao.getPostById(updatingID);
+		const repository = new BlogRepository();
+		const post = await repository.getSingleById(updatingID);
 		if (!post) return Helpers.error('Post not found');
 
 		try {
-			await BlogDao.updatePublish(updatingID, !post.visible);
+			await repository.updateById(updatingID, { visible: !post.visible });
 			return Helpers.success(
 				`Se ha cambiado el estado del post a: (${!post.visible ? 'publicado' : 'no publicado'})`
 			);
@@ -58,7 +58,7 @@ export const actions = {
 		if (!updatingID) return Helpers.error('No se encontró el ID');
 
 		const postsRepository = new BlogRepository();
-		const singlePost = await postsRepository.getRow({ where: { id: updatingID } });
+		const singlePost = await postsRepository.getSingleById(updatingID);
 		if (!singlePost) return Helpers.error('No se encontró el post');
 
 		try {

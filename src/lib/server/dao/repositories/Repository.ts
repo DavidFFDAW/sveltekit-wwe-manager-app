@@ -61,6 +61,12 @@ export class Repository<
 		});
 	}
 
+	getSingleById(id: number): Promise<T | null> {
+		return this.model.findUnique({
+			where: { id }
+		});
+	}
+
 	paginate(page: number, args?: FindManyArgs, take: number = 15): Promise<[number, T[]]> {
 		const prepage = page < 1 ? 1 : page;
 		const skip = (prepage - 1) * take;
