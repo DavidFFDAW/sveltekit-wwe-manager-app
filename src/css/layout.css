@@ -314,8 +314,20 @@ body main.app-main-entrypoint.admin-page {
 }
 
 body main.app-main-entrypoint.admin-page h1 {
+	position: relative;
 	font-family: 'dreadnotus', sans-serif;
 	text-transform: uppercase;
+}
+
+body main.app-main-entrypoint.admin-page h1::after {
+	content: '';
+	position: absolute;
+	bottom: -2px;
+	left: 0;
+	width: 80px;
+	height: 4px;
+	background-color: #c91727;
+	border-radius: 2px;
 }
 
 body main.app-main-entrypoint.admin-page {
@@ -429,5 +441,14 @@ body main.app-main-entrypoint.admin-page {
 
 	body main.app-main-entrypoint.page-admin-dashboard {
 		padding-top: 0px;
+	}
+
+	body main.app-main-entrypoint.admin-page h1 {
+		text-align: center;
+	}
+
+	body main.app-main-entrypoint.admin-page h1::after {
+		left: 50%;
+		transform: translateX(-50%);
 	}
 }

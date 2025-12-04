@@ -36,6 +36,12 @@ export const actions = {
 	toggleVisibility: async ({ request, locals }) => {
 		if (!Helpers.hasPermission(locals)) return Helpers.error('Permission denied');
 		const datas = await request.formData();
+
+		console.log('aaaaaaaaaaaaaaaaaa');
+		for (const pair of datas.entries()) {
+			console.log(`${pair[0]}: ${pair[1]}`);
+		}
+
 		const updatingID = Helpers.getUpdateID(datas);
 		if (!updatingID) return Helpers.error('ID not found');
 

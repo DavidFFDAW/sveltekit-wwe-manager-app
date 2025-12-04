@@ -1,24 +1,22 @@
 <script lang="ts">
-	import { errorimage } from '$lib/actions/error.image';
 	import AsyncButton from '$lib/components/buttons/async-button.svelte';
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
-	import BlogActions from './blog-actions.svelte';
 	import Input from '$lib/components/forms/inputs/input.svelte';
 	import RadioList from '$lib/components/forms/inputs/radio-list.svelte';
-	import type { BlogPost } from '@prisma/client';
 	import SimplePagination from '$lib/components/visual/simple-pagination.svelte';
 	import type { PaginationDatas } from '$lib/types/app.types';
+	import type { BlogPost } from '@prisma/client';
+	import BlogCard from './blog-card.svelte';
 
 	export let data: {
 		blogPagination: PaginationDatas<BlogPost>;
 		filters: Record<string, any>;
 	};
-	const posts = data.blogPagination.list;
 </script>
 
 <PageWrapper page="admin-blog-page">
-	<h1>Administrar Blog</h1>
+	<h1>Blog</h1>
 	<!-- <a href="/admin/blog/cover-image" class="btn secondary">Administrar imagenes de portada</a> -->
 	<header class="blog-page-header">
 		<div class="w1 flex end mt-down-small">
@@ -60,29 +58,10 @@
 
 	<div class="blog-page-admin-list flex column astart gap-smaller">
 		<SimplePagination pages={data.blogPagination.pages} current={data.blogPagination.currentPage} />
-		<div class="w1">
-			{#each posts as post}
-				<div
-					class="blog-post-card flex astart relative responsive"
-					class:visible={post.visible}
-					data-id={post.id}
-				>
-					<div class="image-container">
-						<img src={post.image} alt={post.title} use:errorimage />
-					</div>
-					<div class="blog-card-inner">
-						<h2>{post.title}</h2>
-						<small>{post.slug}</small>
-						<small>{post.views} visitas</small>
-						<p class="down">{post.exceptr}</p>
-					</div>
 
-					<div class="w1 flex end absolute top right blog-card-actions-container">
-						<BlogActions {post} />
-					</div>
-				</div>
-			{/each}
-		</div>
+		{#each data.blogPagination.list as post}
+			<BlogCard {post} />
+		{/each}
 	</div>
 
 	<ButtonCreate endpoint="/blog/create" />
