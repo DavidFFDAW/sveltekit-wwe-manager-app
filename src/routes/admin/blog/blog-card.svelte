@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
 	import { errorimage } from '$lib/actions/error.image';
 	import SimpleAsyncForm from '$lib/components/forms/simple-async-form.svelte';
 	import { Utils } from '$lib/utils/general.utils';
 	import type { BlogPost } from '@prisma/client';
 	import { fade } from 'svelte/transition';
+
 	let { post }: { post: BlogPost } = $props();
 </script>
 
@@ -29,11 +29,10 @@
 	</div>
 
 	<SimpleAsyncForm classes="w1 blog-post-card-actions" updateId={post.id} method="post">
-		<input type="hidden" name="_update_id" value={post.id} />
 		<footer class="blog-post-card-actions actions-buttons">
 			<button class="btn small info rounded icon icon-gap-5" formaction="?/toggleVisibility">
 				<i class="bi bi-{post.visible ? 'eye-slash' : 'eye'}"></i>
-				{post.visible ? 'Despublicar' : 'Publicar'} post
+				<span>{post.visible ? 'Despublicar' : 'Publicar'} post </span>
 			</button>
 
 			<button
@@ -43,7 +42,7 @@
 				data-confirm-message="¿Estás seguro de que deseas eliminar este post? Esta acción no se puede deshacer."
 			>
 				<i class="bi bi-trash3-fill"></i>
-				Eliminar post
+				<span>Eliminar este post</span>
 			</button>
 
 			<a href={`/admin/blog/update/${post.id}`} class="btn small warn rounded icon icon-gap-5">
