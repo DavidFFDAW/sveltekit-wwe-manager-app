@@ -50,5 +50,22 @@ export const actions = {
 
 		await BlogDao.updatePublish(updatingID, !post.visible);
 		return Helpers.success('Post updated');
+	},
+	delete: async ({ request, locals }) => {
+		if (!Helpers.hasPermission(locals)) return Helpers.error('Permission denied');
+		const datas = await request.formData();
+		const updatingID = Helpers.getUpdateID(datas);
+		if (!updatingID) return Helpers.error('No se encontró el ID');
+
+		const postsRepository = new BlogRepository();
+		const singlePost = await postsRepository.getRow({ where: { id: updatingID } });
+		if (!singlePost) return Helpers.error('No se encontró el post');
+
+		try {
+			await postsRepository.delete({ id: updatingID });
+			return Helpers.success('Post eliminado correctamente');
+		} catch (error) {
+			return Helpers.error('Error al eliminar el post');
+		}
 	}
 };

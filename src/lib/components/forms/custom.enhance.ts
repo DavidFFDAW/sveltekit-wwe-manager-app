@@ -7,15 +7,9 @@ export const customEnhance = (afterSubmit: (args: any) => void) => {
 		const buttonInitiator = document.activeElement as HTMLButtonElement;
 		if (buttonInitiator instanceof HTMLButtonElement) buttonInitiator.disabled = true;
 		const shouldAskConfirmation = buttonInitiator.dataset.confirm === 'true';
-		const shouldContinue = shouldAskConfirmation
-			? confirm('¿Estás seguro de que deseas hacer esto?')
-			: true;
-
-		console.log({
-			buttonInitiator,
-			shouldAskConfirmation,
-			shouldContinue
-		});
+		const confirmMessage =
+			buttonInitiator.dataset.confirmMessage || '¿Estás seguro de que deseas hacer esto?';
+		const shouldContinue = shouldAskConfirmation ? confirm(confirmMessage) : true;
 
 		if (!shouldContinue) {
 			buttonInitiator.disabled = false;
