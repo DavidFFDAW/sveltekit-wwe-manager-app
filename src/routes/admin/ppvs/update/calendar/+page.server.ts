@@ -1,6 +1,5 @@
 import { PPVRepository } from '$lib/server/dao/repositories/ppv.repository';
 import { Helpers } from '$lib/server/server.helpers.js';
-import { Utils } from '$lib/utils/general.utils.js';
 
 export type PPVCalendarEntry = {
 	id: number;
@@ -13,7 +12,7 @@ export type PPVCalendarEntry = {
 export async function load({ request }) {
 	const ppvRepo = new PPVRepository();
 	const ppvs = await ppvRepo.get({
-		where: { active: true, visible: true },
+		where: { active: true },
 		orderBy: { game_date: 'asc' }
 	});
 

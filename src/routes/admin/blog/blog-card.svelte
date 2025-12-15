@@ -8,11 +8,7 @@
 	let { post }: { post: BlogPost } = $props();
 </script>
 
-<div
-	class="wwe-post-card post-card post-{post.id}"
-	class:post-unpublished={!post.visible}
-	transition:fade
->
+<div class="wwe-post-card post-card post-{post.id} post-{post.status}" transition:fade>
 	<div class="post-card-inner">
 		<img src={post.image} alt={post.title} width="150" height="150" use:errorimage />
 		<div class="post-card-datas">
@@ -144,6 +140,7 @@
 	.wwe-post-card.post-card .blog-post-card-actions > * {
 		flex-shrink: 0;
 	}
+	.wwe-post-card.post-card.post-draft .post-card-inner,
 	.wwe-post-card.post-card.post-unpublished .post-card-inner {
 		filter: grayscale(100%);
 		opacity: 0.5;

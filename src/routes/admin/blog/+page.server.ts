@@ -6,7 +6,9 @@ export const load = async ({ locals, url }) => {
 	const params = url.searchParams;
 
 	const searchTitle = params.get('search') || '';
-	const publishedFilter = params.get('published') || 'published';
+	const validStatuses = ['published', 'unpublished', 'draft'];
+	const publishStatus = params.get('status') || 'published';
+	const publishedFilter = validStatuses.includes(publishStatus) ? publishStatus : 'published';
 	const page = parseInt(params.get('page') || '1', 10);
 
 	const blogRepo = new BlogRepository();
@@ -15,7 +17,7 @@ export const load = async ({ locals, url }) => {
 		{
 			where: {
 				title: { contains: searchTitle },
-				visible: publishedFilter === 'published'
+				status: publishedFilter
 			},
 			orderBy: { created_at: 'desc' }
 		},
@@ -47,7 +49,8 @@ export const actions = {
 			return Helpers.success(
 				`Se ha cambiado el estado del post a: (${!post.visible ? 'publicado' : 'no publicado'})`
 			);
-		} catch (error) {
+		} catch (error: any) {
+			console.error(error);
 			return Helpers.error('Error al cambiar el estado de publicación del post');
 		}
 	},
@@ -64,7 +67,8 @@ export const actions = {
 		try {
 			await postsRepository.delete({ id: updatingID });
 			return Helpers.success('Post eliminado correctamente');
-		} catch (error) {
+		} catch (error: any) {
+			console.error(error);
 			return Helpers.error('Error al eliminar el post');
 		}
 	}

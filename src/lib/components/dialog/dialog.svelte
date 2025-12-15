@@ -3,6 +3,7 @@
 
 	let dialog: HTMLDialogElement;
 	export let opened: boolean;
+	export let title: string = '';
 
 	const openDialog = () => {
 		dialog.showModal();
@@ -26,9 +27,19 @@
 	}
 </script>
 
-<dialog class="app-general-dialog" bind:this={dialog}>
+<dialog
+	class="app-general-dialog {$$restProps.class}"
+	bind:this={dialog}
+	class:has-title={Boolean(title)}
+>
 	<header class="app-general-dialog-header" class:has-header={$$slots.header}>
 		<slot name="header"></slot>
+		{#if title}
+			<div class="header-container">
+				<h2>{title}</h2>
+			</div>
+		{/if}
+
 		<button on:click={closeDialog} type="button" class="app-general-dialog-close">
 			<Icon icon="x" />
 		</button>
@@ -57,6 +68,13 @@
 
 	.app-general-dialog::backdrop {
 		background-color: rgba(0, 0, 0, 0.6);
+	}
+	.app-general-dialog.has-title .app-general-dialog-header {
+		justify-content: space-between;
+		align-items: center;
+	}
+	.app-general-dialog.has-title .app-general-dialog-header .header-container {
+		padding: 0 1rem;
 	}
 
 	.app-general-dialog header.app-general-dialog-header {

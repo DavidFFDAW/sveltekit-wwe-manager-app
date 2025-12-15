@@ -153,8 +153,8 @@ input[type='file'].app-file {
 	cursor: pointer;
 }
 
-input[type='radio'].app-radio:checked+.inner,
-input[type='checkbox'].app-checkbox:checked+.inner {
+input[type='radio'].app-radio:checked + .inner,
+input[type='checkbox'].app-checkbox:checked + .inner {
 	border-color: #0070f3;
 	box-shadow: 0 4px 8px rgba(0, 112, 243, 0.2);
 	background-color: #e6f0ff;
@@ -207,14 +207,19 @@ textarea {
 	resize: vertical;
 }
 
-.radio-checkbox-container-wrapper .radio-checkbox-input:checked+.radio-checkbox-inner-item.label-item-legend {
+.radio-checkbox-container-wrapper
+	.radio-checkbox-input:checked
+	+ .radio-checkbox-inner-item.label-item-legend {
 	background-image: url(https://upload.wikimedia.org/wikipedia/en/9/93/WWE_Hall_of_Fame_Logo%2C_2019_version.png);
 	background-size: 50%;
 	background-position: center;
 	background-repeat: no-repeat;
 }
 
-.radio-checkbox-container-wrapper .radio-checkbox-input:checked+.radio-checkbox-inner-item.label-item-legend .label-item-text {
+.radio-checkbox-container-wrapper
+	.radio-checkbox-input:checked
+	+ .radio-checkbox-inner-item.label-item-legend
+	.label-item-text {
 	opacity: 0;
 }
 
@@ -231,7 +236,7 @@ aside.admin-sidebar.sidebar.shown {
 	transition: 0.3s;
 }
 
-aside.admin-sidebar.sidebar.shown+main.app-main-entrypoint {
+aside.admin-sidebar.sidebar.shown + main.app-main-entrypoint {
 	margin-left: var(--sidebar-width);
 }
 
@@ -389,21 +394,21 @@ body main.app-main-entrypoint.page-public-login.public-page {
 }
 
 /* SPINNER */
-aside.sidebar.shown+main.app-main-entrypoint .spinner-overlay-layer {
+aside.sidebar.shown + main.app-main-entrypoint .spinner-overlay-layer {
 	padding-left: var(--sidebar-width);
 	overflow: hidden;
 	user-select: none;
 }
 
 /* FORM */
-aside.sidebar.shown+main.app-main-entrypoint form.app-custom-form .buttons-block {
+aside.sidebar.shown + main.app-main-entrypoint form.app-custom-form .buttons-block {
 	position: fixed;
 	margin-left: var(--sidebar-width);
 	margin-left: var(--sidebar-width);
 	width: calc(100% - var(--sidebar-width));
 }
 
-aside.sidebar.shown+main.app-main-entrypoint .sidebar-margin {
+aside.sidebar.shown + main.app-main-entrypoint .sidebar-margin {
 	margin-left: var(--sidebar-width);
 	width: calc(100% - var(--sidebar-width));
 }
@@ -517,11 +522,14 @@ aside.sidebar.shown+main.app-main-entrypoint .sidebar-margin {
 	cursor: pointer;
 }
 
-.radio-checkbox-container-wrapper .radio-checkbox-input:checked+.radio-checkbox-inner-item .label-item-text {
+.radio-checkbox-container-wrapper
+	.radio-checkbox-input:checked
+	+ .radio-checkbox-inner-item
+	.label-item-text {
 	color: #4a749b;
 }
 
-.radio-checkbox-container-wrapper .radio-checkbox-input:checked+.radio-checkbox-inner-item {
+.radio-checkbox-container-wrapper .radio-checkbox-input:checked + .radio-checkbox-inner-item {
 	background-color: #d5e8fbac;
 	border: 1px solid #4a749b;
 }
@@ -627,7 +635,8 @@ aside.sidebar.shown+main.app-main-entrypoint .sidebar-margin {
 }
 
 /* TEXTAREA YEET */
-.textarea-ia-container .ql-editor {
+.textarea-ia-container .ql-editor,
+.quill-editor-wrapper-container .ql-editor {
 	min-height: 120px;
 }
 
@@ -748,7 +757,13 @@ table.custom-table tbody tr td[data-tab='actions'] .small-actions-container .sma
 	border-radius: 0;
 }
 
-table.custom-table tbody tr td[data-tab='actions'] .small-actions-container .small-actions button::after {
+table.custom-table
+	tbody
+	tr
+	td[data-tab='actions']
+	.small-actions-container
+	.small-actions
+	button::after {
 	content: '';
 	width: 80%;
 	height: 1.5px;
@@ -761,7 +776,13 @@ table.custom-table tbody tr td[data-tab='actions'] .small-actions-container .sma
 	background-color: #ddd;
 }
 
-table.custom-table tbody tr td[data-tab='actions'] .small-actions-container .small-actions button:first-child::after {
+table.custom-table
+	tbody
+	tr
+	td[data-tab='actions']
+	.small-actions-container
+	.small-actions
+	button:first-child::after {
 	content: none;
 	display: none;
 }
@@ -843,9 +864,12 @@ table.custom-table tbody tr td[data-tab='actions'] .grouped-actions-link:hover {
 	font-size: 10px;
 }
 
+dialog.app-general-dialog.auto-adjust-height {
+	height: fit-content;
+}
+
 /* 🟡 Modo tarjeta para móviles */
 @media (max-width: 768px) {
-
 	.action-buttons-container .btn.small,
 	.action-buttons-container .btn.small span {
 		font-size: 14px;
@@ -997,7 +1021,7 @@ table.custom-table tbody tr td[data-tab='actions'] .grouped-actions-link:hover {
 		font-size: 0.9em;
 	}
 
-	aside.admin-sidebar.sidebar.shown+main.app-main-entrypoint {
+	aside.admin-sidebar.sidebar.shown + main.app-main-entrypoint {
 		margin-left: 0;
 	}
 

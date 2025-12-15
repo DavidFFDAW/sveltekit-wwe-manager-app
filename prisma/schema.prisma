@@ -122,6 +122,7 @@ model BlogPost {
     updated_at     DateTime?        @updatedAt
     exceptr        String?          @db.Text
     visible        Boolean?         @default(true) @db.TinyInt
+    status         String           @db.VarChar(50) @default("draft")
     category       String?          @db.VarChar(255)
     deletable      Boolean?         @default(false) @db.TinyInt
     views          Int              @default(0) @db.Int

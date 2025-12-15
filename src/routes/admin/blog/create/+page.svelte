@@ -6,6 +6,6 @@
 
 <PageWrapper page="blog-new-blog-post">
 	<AsyncForm redirect="/admin/blog" method="post" buttonText="Crear Post">
-		<BlogUpsert />
+		<BlogUpsert post={{}} />
 	</AsyncForm>
 </PageWrapper>

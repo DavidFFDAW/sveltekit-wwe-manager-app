@@ -5,14 +5,9 @@
 	import Input from '$lib/components/forms/inputs/input.svelte';
 	import RadioList from '$lib/components/forms/inputs/radio-list.svelte';
 	import SimplePagination from '$lib/components/visual/simple-pagination.svelte';
-	import type { PaginationDatas } from '$lib/types/app.types';
-	import type { BlogPost } from '@prisma/client';
 	import BlogCard from './blog-card.svelte';
 
-	export let data: {
-		blogPagination: PaginationDatas<BlogPost>;
-		filters: Record<string, any>;
-	};
+	export let data;
 </script>
 
 <PageWrapper page="admin-blog-page">
@@ -40,12 +35,13 @@
 				/>
 
 				<RadioList
-					name="published"
+					name="status"
 					label="Filtrar por estado"
 					value={data.filters.publishedFilter}
 					options={[
 						{ label: 'Publicados', value: 'published' },
-						{ label: 'No publicados', value: 'unpublished' }
+						{ label: 'No publicados', value: 'unpublished' },
+						{ label: 'Borradores', value: 'draft' }
 					]}
 				/>
 

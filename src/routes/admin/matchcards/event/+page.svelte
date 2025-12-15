@@ -4,7 +4,6 @@
 	import ImageInput from '$lib/components/forms/inputs/image-input.svelte';
 	import DateInput from '$lib/components/forms/date/date-input.svelte';
 	import { Utils } from '$lib/utils/general.utils';
-	import type { Match } from '@prisma/client';
 
 	export let data;
 	const ppvs = data.event_card.ppvs;
@@ -46,7 +45,7 @@
 							label="Fecha de realizacion"
 							name="ppv_date_done"
 							min={`${currentYear - 1}-01-01`}
-							max={`${currentYear}-12-31`}
+							max={`${currentYear + 1}-12-31`}
 							bind:value={ppvDate as string}
 						/>
 					</div>

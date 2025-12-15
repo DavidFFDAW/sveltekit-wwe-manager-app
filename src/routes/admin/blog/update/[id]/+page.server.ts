@@ -1,12 +1,13 @@
-import { BlogAdapter } from '$lib/server/adapters/blog.adapter';
-import { BlogDao } from '$lib/server/dao/blog.dao.js';
+import { BlogRepository } from '$lib/server/dao/repositories/blog.repository.js';
 import { Helpers } from '$lib/server/server.helpers.js';
 
 export const load = async ({ locals, params }) => {
 	if (!locals.user) throw Helpers.redirection('/admin/blog');
 	const postId = Number(params.id);
 	if (!params.id || isNaN(postId)) throw Helpers.redirection('/admin/blog');
-	const post = await BlogDao.getPostById(postId);
+
+	const repository = new BlogRepository();
+	const post = await repository.getSingleById(postId);
 	if (!post) throw Helpers.redirection('/admin/blog');
 
 	return { post };
@@ -20,17 +21,16 @@ export const actions = {
 
 		if (!locals.user?.uuid) return Helpers.error('No se pudo obtener el usuario', 500);
 		datas.set('author', locals.user.uuid.toString());
-		datas.set('visible', datas.get('is_published') === 'published' ? 'true' : 'false');
+		datas.set('visible', datas.get('status') === 'published' ? 'true' : 'false');
 		datas.set('deletable', datas.get('auto_delete') === 'active' ? 'true' : 'false');
 
-		const { error, message } = Helpers.checkRequiredFields(datas, BlogAdapter.required);
-		if (error) return Helpers.error(message, 400);
-
 		try {
-			const updatedPost = await BlogDao.updateBlogPost(
-				postId,
-				BlogAdapter.getTransformedObject(datas)
-			);
+			const repository = new BlogRepository();
+			const { error, message } = Helpers.checkRequiredFields(datas, repository.getRequiredFields());
+			if (error) return Helpers.error(message, 400);
+
+			const transformedDatas = repository.getTransformedObject(datas);
+			const updatedPost = await repository.updateById(postId, transformedDatas);
 			if (updatedPost.id) return Helpers.success('Post actualizado correctamente', 200);
 		} catch (e: unknown) {
 			if (e instanceof Error) return Helpers.error(`Error: ${e.message}`, 500);

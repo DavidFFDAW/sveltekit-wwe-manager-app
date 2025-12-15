@@ -1,11 +1,13 @@
-import { BlogDao } from '$lib/server/dao/blog.dao.js';
+import { BlogRepository } from '$lib/server/dao/repositories/blog.repository';
 import { Helpers } from '$lib/server/server.helpers.js';
 
 export const load = async ({ params }) => {
 	const { slug } = params;
-	const post = await BlogDao.getReadablePostBySlug(slug);
+	const repository = new BlogRepository();
+	const post = await repository.getReadablePostBySlug(slug);
 	if (!post) return Helpers.redirection('/blog');
-	await BlogDao.updatePostViews(post.id);
+	await repository.updateById(post.id, { views: post.views + 1 });
+
 	return {
 		post,
 		metas: {

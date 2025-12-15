@@ -4,7 +4,7 @@ import prisma from '$lib/server/prisma';
 import type { EntityWithId } from '../../../../@types/Entity';
 import type { PaginationDatas } from '$lib/types/app.types';
 
-export class Repository<
+export abstract class Repository<
 	T extends EntityWithId,
 	CreateInput,
 	UpdateInput,
@@ -24,6 +24,14 @@ export class Repository<
 		} else {
 			throw new Error(`Model ${String(modelName)} not found in Prisma client.`);
 		}
+	}
+
+	conn() {
+		return this.prisma;
+	}
+
+	getTableNameFromModelName(): string {
+		return this.model.name.replace(/([A-Z])/g, '_$1').toLowerCase();
 	}
 
 	select(select: Record<string, boolean>, args?: FindManyArgs): Promise<T[]> {

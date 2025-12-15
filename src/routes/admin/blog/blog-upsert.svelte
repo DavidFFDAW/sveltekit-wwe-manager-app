@@ -2,19 +2,27 @@
 	import Box from '$lib/components/box/box.svelte';
 	import ImageInput from '$lib/components/forms/inputs/image-input.svelte';
 	import Input from '$lib/components/forms/inputs/input.svelte';
+	import QuillInput from '$lib/components/forms/inputs/quill-input.svelte';
 	import RadioList from '$lib/components/forms/inputs/radio-list.svelte';
 	import Icon from '$lib/components/icons/icon.svelte';
-	import CoverImage from '$lib/components/forms/inputs/cover-image.svelte';
 	import { Utils } from '$lib/utils/general.utils';
 	import type { BlogPost } from '@prisma/client';
-	import IaTextarea from '$lib/components/forms/inputs/ia-textarea.svelte';
+	import { onMount } from 'svelte';
 
-	export let post: BlogPost = {} as BlogPost;
-	let slug = post.slug;
+	let {
+		post = {},
+		iaPopupOpened = $bindable(false)
+	}: { post: Partial<BlogPost>; iaPopupOpened?: boolean } = $props();
 
-	const slugify = (value: string | number) => {
-		slug = Utils.slugify(value.toString());
-	};
+	let title = $state(post.title || '');
+	let CoverImageComponent: any = $state(null);
+	let slug = $derived(Utils.slugify(title));
+
+	onMount(() => {
+		import('$lib/components/forms/inputs/cover-image.svelte').then((module) => {
+			CoverImageComponent = module.default;
+		});
+	});
 </script>
 
 <div class="grid two-column-grid responsive gap-medium admin-panel">
@@ -24,44 +32,50 @@
 			name="title"
 			type="text"
 			placeholder="Titulo del post"
-			bind:value={post.title}
-			oninput={slugify}
+			bind:value={title}
 			required
 		/>
 
-		<Input
-			label="Slug"
-			name="slug"
-			type="text"
-			placeholder="Slug del post"
-			bind:value={slug}
-			required
-		/>
+		<Input label="Slug" name="slug" type="text" placeholder="Slug del post" value={slug} required />
 
 		<ImageInput
 			label="Imagen"
 			name="image"
 			placeholder="Imagen del post"
-			image={post.image as string}
-			required
+			image={(post.image as string) || ''}
 		/>
 
 		<div class="w1 quill-container flex column gap-5">
-			<IaTextarea
+			<QuillInput
+				label="Contenido"
+				name="content"
+				placeholder="Contenido del resumen"
+				value={(post.content as string) || ''}
+				required
+			/>
+			<!-- <IaTextarea
 				label="Contenido"
 				name="content"
 				placeholder="Contenido del post"
-				value={post.content}
+				bind:value={post.content}
 				required
-			/>
-			<a
-				href="https://chatgpt.com/c/9b2d8a04-cd8a-4fb1-9e0f-f76bc23a0479"
-				target="_blank"
-				class="w1 block btn cta icon"
-			>
-				<Icon icon="robot" />
-				Generar artículo con ChatGPT
-			</a>
+			/> -->
+
+			<div class="w1 total flex acenter gap-medium">
+				<a
+					href="https://chatgpt.com/c/9b2d8a04-cd8a-4fb1-9e0f-f76bc23a0479"
+					target="_blank"
+					class="w1 block btn secondary icon"
+				>
+					<Icon icon="openai" />
+					Generar artículo con ChatGPT
+				</a>
+
+				<button type="button" onclick={() => (iaPopupOpened = true)} class="btn cta icon block">
+					<i class="bi bi-robot"></i>
+					<span>Generar contenido para artículo con IA</span>
+				</button>
+			</div>
 		</div>
 
 		<Input
@@ -79,18 +93,19 @@
 			<textarea
 				name="excerpt"
 				placeholder="Descripción del post"
-				bind:value={post.exceptr as string}
+				value={(post.exceptr as string) || ''}
 			></textarea>
 		</div>
 
 		<RadioList
 			label="Estado"
-			name="is_published"
+			name="post_status"
 			options={[
 				{ label: 'Publicado', value: 'published' },
+				{ label: 'No publicado', value: 'unpublished' },
 				{ label: 'Borrador', value: 'draft' }
 			]}
-			value={post.visible ? 'published' : 'draft'}
+			value={post.status || 'draft'}
 		/>
 
 		<RadioList
@@ -106,7 +121,9 @@
 
 	<div class="grid-cover-image-component-item">
 		<Box title="Imagen de portada" icon="image">
-			<CoverImage bind:value={post.image as string}></CoverImage>
+			{#if CoverImageComponent}
+				<CoverImageComponent value={(post.image as string) || ''} />
+			{/if}
 		</Box>
 	</div>
 </div>

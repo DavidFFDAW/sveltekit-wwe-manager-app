@@ -1,6 +1,5 @@
 <script lang="ts">
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
-	import Debug from '$lib/components/visual/debug.svelte';
 	import Image from '$lib/components/visual/image.svelte';
 
 	export let data;
@@ -11,6 +10,23 @@
 		<h1>Eventos con cartelera</h1>
 		<small>Consuta aquí los combates de cada evento registrado</small>
 	</header>
+
+	<div class="box filters-box">
+		<form action="" method="get" class="flex acenter gap-smaller">
+			{#each data.uniqueYears as year}
+				<button
+					type="submit"
+					name="year"
+					value={year}
+					class="btn info rounded"
+					class:active={data.selectedYear === year}
+					disabled={data.selectedYear === year}
+				>
+					{year}
+				</button>
+			{/each}
+		</form>
+	</div>
 
 	<section class="w1 down eventcard-events-list flex column gap-small">
 		{#each data.matchcards as matchcard}
@@ -72,3 +88,15 @@
 
 	<ButtonCreate endpoint="matchcards/event" />
 </div>
+
+<style>
+	.filters-box {
+		margin: 20px 0;
+	}
+	.filters-box button.active {
+		pointer-events: none;
+		background-color: #007bff;
+		color: white;
+		opacity: 0.4;
+	}
+</style>
