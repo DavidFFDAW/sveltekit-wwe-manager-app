@@ -1,14 +1,15 @@
 import { BlogRepository } from '$lib/server/dao/repositories/blog.repository.js';
 import { Helpers } from '$lib/server/server.helpers';
 
+const allowed_statuses = ['published', 'unpublished', 'draft'];
+
 export const load = async ({ locals, url }) => {
 	if (!locals.user) throw Helpers.redirection('/admin/dashboard');
 	const params = url.searchParams;
 
 	const searchTitle = params.get('search') || '';
-	const validStatuses = ['published', 'unpublished', 'draft'];
 	const publishStatus = params.get('status') || 'published';
-	const publishedFilter = validStatuses.includes(publishStatus) ? publishStatus : 'published';
+	const publishedFilter = allowed_statuses.includes(publishStatus) ? publishStatus : 'published';
 	const page = parseInt(params.get('page') || '1', 10);
 
 	const blogRepo = new BlogRepository();
@@ -28,24 +29,29 @@ export const load = async ({ locals, url }) => {
 		blogPagination: paginatedDatas,
 		filters: {
 			searchTitle,
-			publishedFilter
+			status: publishedFilter
 		}
 	};
 };
 
 export const actions = {
-	toggleVisibility: async ({ request, locals }) => {
+	changeStatus: async ({ request, locals }) => {
 		if (!Helpers.hasPermission(locals)) return Helpers.error('Permission denied');
 		const datas = await request.formData();
 		const updatingID = Helpers.getUpdateID(datas);
 		if (!updatingID) return Helpers.error('ID not found');
 
-		const repository = new BlogRepository();
-		const post = await repository.getSingleById(updatingID);
-		if (!post) return Helpers.error('Post not found');
+		const status = datas.get('status');
+		if (typeof status !== 'string' || !allowed_statuses.includes(status)) {
+			return Helpers.error('Invalid status value');
+		}
 
 		try {
-			await repository.updateById(updatingID, { visible: !post.visible });
+			const repository = new BlogRepository();
+			const post = await repository.getSingleById(updatingID);
+			if (!post) return Helpers.error('Post not found');
+
+			await repository.updateById(updatingID, { status });
 			return Helpers.success(
 				`Se ha cambiado el estado del post a: (${!post.visible ? 'publicado' : 'no publicado'})`
 			);

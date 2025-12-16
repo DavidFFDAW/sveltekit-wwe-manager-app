@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { errorimage } from '$lib/actions/error.image';
+	import ButtonAccordion from '$lib/components/buttons/button-accordion.svelte';
 	import SimpleAsyncForm from '$lib/components/forms/simple-async-form.svelte';
 	import { Utils } from '$lib/utils/general.utils';
 	import type { BlogPost } from '@prisma/client';
@@ -26,9 +27,37 @@
 
 	<SimpleAsyncForm classes="w1 blog-post-card-actions" updateId={post.id} method="post">
 		<footer class="blog-post-card-actions actions-buttons">
-			<button class="btn small info rounded icon icon-gap-5" formaction="?/toggleVisibility">
-				<i class="bi bi-{post.visible ? 'eye-slash' : 'eye'}"></i>
-				<span>{post.visible ? 'Despublicar' : 'Publicar'} post </span>
+			<button
+				class="btn small rounded info icon icon-gap-5"
+				formaction="?/changeStatus"
+				value="draft"
+				name="status"
+				disabled={post.status === 'draft'}
+			>
+				<i class="bi bi-file-earmark-text-fill"></i>
+				<span>Mover a borradores</span>
+			</button>
+
+			<button
+				class="btn small rounded warn icon icon-gap-5"
+				formaction="?/changeStatus"
+				value="unpublished"
+				name="status"
+				disabled={post.status === 'unpublished'}
+			>
+				<i class="bi bi-eye-slash-fill"></i>
+				<span>Mover a no publicado</span>
+			</button>
+
+			<button
+				class="btn small rounded success icon icon-gap-5"
+				disabled={post.status === 'published'}
+				formaction="?/changeStatus"
+				value="published"
+				name="status"
+			>
+				<i class="bi bi-check-circle-fill"></i>
+				<span>Mover a publicado</span>
 			</button>
 
 			<button

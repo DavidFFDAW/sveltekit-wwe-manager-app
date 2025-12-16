@@ -25,7 +25,7 @@
 		</div>
 
 		<div class="app-header box">
-			<form method="get" class="w1 flex astart column gap-small">
+			<form method="get" class="w1 flex astart column gap-small filters-box">
 				<Input
 					type="text"
 					name="search"
@@ -34,16 +34,43 @@
 					value={data.filters.searchTitle}
 				/>
 
-				<RadioList
-					name="status"
-					label="Filtrar por estado"
-					value={data.filters.publishedFilter}
-					options={[
-						{ label: 'Publicados', value: 'published' },
-						{ label: 'No publicados', value: 'unpublished' },
-						{ label: 'Borradores', value: 'draft' }
-					]}
-				/>
+				<div class="flex gap-5">
+					<button
+						type="submit"
+						name="status"
+						value="published"
+						class="btn small rounded filter icon icon-gap-5"
+						class:active={data.filters.status === 'published'}
+						aria-label="Buscar publicados"
+					>
+						<i class="bi bi-file-post"></i>
+						<span>Publicados</span>
+					</button>
+
+					<button
+						type="submit"
+						name="status"
+						value="unpublished"
+						class="btn rounded small filter icon icon-gap-5"
+						class:active={data.filters.status === 'unpublished'}
+						aria-label="Buscar no publicados"
+					>
+						<i class="bi bi-eye-slash-fill"></i>
+						<span>No publicados</span>
+					</button>
+
+					<button
+						type="submit"
+						name="status"
+						value="draft"
+						class="btn rounded small filter icon icon-gap-5"
+						class:active={data.filters.status === 'draft'}
+						aria-label="Buscar borradores"
+					>
+						<i class="bi bi-journal-text"></i>
+						<span>Borradores</span>
+					</button>
+				</div>
 
 				<div class="w1 flex end acenter">
 					<button type="submit" class="btn cta">Buscar</button>
@@ -62,57 +89,3 @@
 
 	<ButtonCreate endpoint="/blog/create" />
 </PageWrapper>
-
-<style>
-	.blog-post-card {
-		padding: 1rem;
-		border: 1px solid #ccc;
-		background-color: #ffffff;
-		border-radius: 5px;
-		margin-bottom: 1rem;
-		display: flex;
-		gap: 10px;
-	}
-	.blog-post-card .image-container {
-		width: 200px;
-		flex-shrink: 0;
-		overflow: hidden;
-		border-radius: 5px;
-	}
-	.blog-post-card .blog-card-inner {
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-start;
-		align-items: flex-start;
-		gap: 0.5rem;
-	}
-
-	.blog-post-card {
-		filter: grayscale(100%) opacity(0.5);
-	}
-	.blog-post-card.visible {
-		filter: none;
-	}
-
-	.blog-post-card .image-container {
-		height: 200px;
-		overflow: hidden;
-	}
-
-	.blog-post-card .image-container img {
-		width: 100%;
-		height: 100%;
-		max-width: 100%;
-		object-fit: cover;
-	}
-
-	@media only screen and (max-width: 768px) {
-		.blog-post-card .image-container {
-			width: 100%;
-			height: 160px;
-		}
-		.blog-post-card .image-container img {
-			image-rendering: crisp-edges;
-		}
-	}
-</style>

@@ -9,6 +9,7 @@ export class BlogRepository extends Repository<
 	Prisma.BlogPostFindManyArgs
 > {
 	protected requiredFields: string[] = [];
+	public allowedStatuses: string[] = ['draft', 'published', 'unpublished'];
 
 	constructor() {
 		super('blogPost');
@@ -65,5 +66,9 @@ export class BlogRepository extends Repository<
 
 	public getRequiredFields(): string[] {
 		return ['title', 'slug', 'content', 'author', 'excerpt'];
+	}
+
+	public isStatusAllowed(status: string): boolean {
+		return this.allowedStatuses.includes(status);
 	}
 }
