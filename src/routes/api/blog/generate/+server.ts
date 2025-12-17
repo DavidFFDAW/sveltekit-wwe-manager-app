@@ -10,12 +10,15 @@ export async function POST({ locals, request }) {
 	const prompt = formData.get('prompt') as string;
 	if (!prompt) return Api.error('No se ha proporcionado un prompt', 400);
 
-	const model = 'gemini-2.0-flash';
+	const model = 'gemini-2.5-flash-lite';
 	const response = await fetch(
-		`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`,
+		`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
 		{
 			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
+			headers: {
+				'Content-Type': 'application/json',
+				'X-goog-api-key': GEMINI_API_KEY
+			},
 			body: JSON.stringify({
 				contents: [
 					{
@@ -25,15 +28,14 @@ export async function POST({ locals, request }) {
 			})
 		}
 	);
+	const responseJson = await response.json();
 	if (!response.ok) {
 		console.error('Error trying to generate post', { response });
-		return Api.error('Error al generar el contenido', 500);
+		return Api.error('Error al generar el contenido: ' + responseJson.error.status, 500);
 	}
 
-	const data = await response.json();
-	console.log('Content generated:', { data });
-	const content = data.candidates[0].content;
-	if (!content) return Api.error('Error al generar el contenido', 500);
+	const content = responseJson.candidates[0];
+	if (content.length <= 0) return Api.error('No se ha generado contenido', 500);
 
 	const text = content.parts.map((part: { text: string }) => part.text).join('');
 	if (!text) return Api.error('Error al generar el contenido', 500);
