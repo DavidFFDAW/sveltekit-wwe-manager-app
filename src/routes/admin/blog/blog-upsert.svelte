@@ -157,3 +157,50 @@
 >
 	<BlogIaForm bind:content onaftersubmit={() => (iaPopupOpened = false)} />
 </Dialog>
+
+<div class="blog-upsert-dialog-buttons-container">
+	<button
+		type="button"
+		onclick={() => (iaPopupOpened = true)}
+		aria-label="Generar contenido del post con IA"
+		class="blog-upsert-dialog-buttons-item btn cta"
+	>
+		<i class="bi bi-openai"></i>
+	</button>
+
+	<button
+		type="button"
+		aria-label="Abrir panel de gestión de imágenes"
+		class="blog-upsert-dialog-buttons-item btn secondary"
+	>
+		<i class="bi bi-image"></i>
+	</button>
+</div>
+
+<style>
+	.blog-upsert-dialog-buttons-container {
+		max-width: 60px;
+		position: fixed;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 6px;
+		right: 0;
+		bottom: 60px;
+		z-index: 50;
+		padding: 5px;
+		background-color: #fff;
+		border-radius: 6px 0 0 6px;
+		box-shadow: 0 0px 18px rgba(0, 0, 0, 0.2);
+	}
+
+	.blog-upsert-dialog-buttons-container .blog-upsert-dialog-buttons-item {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 6px 10px;
+		font-size: 16px;
+	}
+</style>
