@@ -25,9 +25,13 @@ export async function POST({ locals, request }) {
 			})
 		}
 	);
-	if (!response.ok) return Api.error('Error al generar el contenido', 500);
+	if (!response.ok) {
+		console.error('Error trying to generate post', { response });
+		return Api.error('Error al generar el contenido', 500);
+	}
 
 	const data = await response.json();
+	console.log('Content generated:', { data });
 	const content = data.candidates[0].content;
 	if (!content) return Api.error('Error al generar el contenido', 500);
 
