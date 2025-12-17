@@ -311,8 +311,9 @@ button.unbutton,
 .btn.filter,
 .btn.btn-filter {
 	background-color: #c91727;
-	background: linear-gradient(45deg, #c91727 5%, #1f1f1f);
+	background: linear-gradient(45deg, #c91726d6 5%, #1f1f1f);
 	color: #fff;
+	opacity: 0.8;
 }
 
 .btn.filter.active,
@@ -320,6 +321,7 @@ button.unbutton,
 	background-color: #c91727;
 	background: #c91727;
 	color: #fff;
+	opacity: 1;
 }
 
 .btn.small,
@@ -859,6 +861,7 @@ table.custom-table tbody tr td[data-tab='actions'] .grouped-actions-link:hover {
 }
 
 dialog.app-general-dialog.auto-adjust-height {
+	max-width: 600px;
 	height: fit-content;
 }
 

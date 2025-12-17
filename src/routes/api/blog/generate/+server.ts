@@ -25,7 +25,6 @@ export async function POST({ locals, request }) {
 			})
 		}
 	);
-
 	if (!response.ok) return Api.error('Error al generar el contenido', 500);
 
 	const data = await response.json();

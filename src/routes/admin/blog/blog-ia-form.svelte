@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { HttpService } from '$lib/services/http.service';
 	import { Toast } from '$lib/utils/toast.helper';
 
 	let prompt = $state('');
 	let loading = $state(false);
-	let { content = $bindable('') }: { content: string } = $props();
+	let { content = $bindable(''), onaftersubmit }: { content: string; onaftersubmit?: () => void } =
+		$props();
 
 	const handleSubmit = async (ev: Event) => {
 		ev.preventDefault();
@@ -11,28 +13,25 @@
 		if (loading) return;
 
 		const datas = new FormData();
-		datas.append(
+		datas.set(
 			'prompt',
 			`Escribe el contenido para el post de un blog de wwe. El tema será: ${prompt}. Escribe la respuesta directamente en HTML, lista para pegar en una página web, sin etiquetas <html> ni <body> ni <h1> y sin <scripts> o <style>. Solo contenido.`
 		);
 
 		loading = true;
 		try {
-			const response = await fetch('/api/blog/generate', {
-				method: 'POST',
+			const response = await HttpService.post('/api/blog/generate', {
 				body: datas
 			});
-			const data = await response.json();
-			const message = data.message || 'Error al obtener la respuesta de la IA.';
+			const message = response.response?.message || 'Error al obtener la respuesta de la IA.';
 			if (!response.ok) return Toast.error(message);
-
-			const text = data.text.replace('```html', '').replace('```', '');
-			content = text;
-		} catch (error) {
+			content = response.response.text.replace('```html', '').replace('```', '');
+		} catch (error: any) {
 			console.error(error);
 		} finally {
 			prompt = '';
 			loading = false;
+			if (onaftersubmit) onaftersubmit();
 		}
 	};
 </script>

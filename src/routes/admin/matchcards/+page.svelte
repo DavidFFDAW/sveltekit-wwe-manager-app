@@ -7,8 +7,8 @@
 
 <div class="matchcards-page">
 	<header class="page-header">
-		<h1>Eventos con cartelera</h1>
-		<small>Consuta aquí los combates de cada evento registrado</small>
+		<h1>Cartelera de eventos</h1>
+		<small>Consulta aquí los combates de cada evento registrado</small>
 	</header>
 
 	<div class="box filters-box">
@@ -18,7 +18,7 @@
 					type="submit"
 					name="year"
 					value={year}
-					class="btn info rounded"
+					class="btn filter rounded"
 					class:active={data.selectedYear === year}
 					disabled={data.selectedYear === year}
 				>
@@ -28,62 +28,66 @@
 		</form>
 	</div>
 
-	<section class="w1 down eventcard-events-list flex column gap-small">
-		{#each data.matchcards as matchcard}
-			<div
-				class="w1 matchcard relative box flex start astart gap-smaller responsive"
-				data-href="/admin/matchcards/upsert?slug={matchcard.id}"
-			>
-				<Image
-					src={matchcard.ppv_image}
-					class="responsive-w1 w1-responsive rounded"
-					fallback="/noimage.jpg"
-					alt={matchcard.ppv_name}
-					width="120"
-				/>
-				<div class="flex column start astart nogap">
-					<h2>{matchcard.ppv_name}</h2>
-					<small><strong>{matchcard.matches} combates</strong> registrados</small>
-					{#if matchcard.ppv_date}
-						<small>
-							{matchcard.ppv_date.toLocaleDateString('es-ES', {
-								weekday: 'long',
-								year: 'numeric',
-								month: 'long',
-								day: 'numeric'
-							})}
-						</small>
-					{/if}
-				</div>
+	<section class="w1 down eventcard-events-list">
+		<h2 class="w1">Eventos del año: {data.selectedYear}</h2>
 
-				<div class="action-buttons-container">
-					<a
-						href="/admin/matchcards/event?slug={matchcard.id}"
-						class="btn small warn"
-						aria-label="Editar"
-					>
-						<i class="bi bi-pencil"></i>
-					</a>
-					<a
-						href="/admin/matchcards/matches/upsert?slug={matchcard.id}"
-						class="btn small warn"
-						aria-label="Editar combates"
-					>
-						<i class="bi bi-pencil"></i>
-						<span>combates</span>
-					</a>
-					<a
-						href="/admin/matchcards/export/{matchcard.id}"
-						class="btn small info"
-						aria-label="Exportar evento"
-						download
-					>
-						<i class="bi bi-box-arrow-up-right"></i>
-						<span>exportar</span>
-					</a>
+		<div class="w1 ppv-match-card-list flex column gap-small">
+			{#each data.matchcards as matchcard}
+				<div
+					class="w1 matchcard relative box flex start astart gap-smaller responsive"
+					data-href="/admin/matchcards/upsert?slug={matchcard.id}"
+				>
+					<Image
+						src={matchcard.ppv_image}
+						class="responsive-w1 w1-responsive rounded"
+						fallback="/noimage.jpg"
+						alt={matchcard.ppv_name}
+						width="120"
+					/>
+					<div class="flex column start astart nogap">
+						<h2>{matchcard.ppv_name}</h2>
+						<small><strong>{matchcard.matches} combates</strong> registrados</small>
+						{#if matchcard.ppv_date}
+							<small>
+								{matchcard.ppv_date.toLocaleDateString('es-ES', {
+									weekday: 'long',
+									year: 'numeric',
+									month: 'long',
+									day: 'numeric'
+								})}
+							</small>
+						{/if}
+					</div>
+
+					<div class="action-buttons-container">
+						<a
+							href="/admin/matchcards/event?slug={matchcard.id}"
+							class="btn small warn"
+							aria-label="Editar"
+						>
+							<i class="bi bi-pencil"></i>
+						</a>
+						<a
+							href="/admin/matchcards/matches/upsert?slug={matchcard.id}"
+							class="btn small warn"
+							aria-label="Editar combates"
+						>
+							<i class="bi bi-pencil"></i>
+							<span>combates</span>
+						</a>
+						<a
+							href="/admin/matchcards/export/{matchcard.id}"
+							class="btn small info"
+							aria-label="Exportar evento"
+							download
+						>
+							<i class="bi bi-box-arrow-up-right"></i>
+							<span>exportar</span>
+						</a>
+					</div>
 				</div>
-			</div>
-		{/each}
+			{/each}
+		</div>
 	</section>
 
 	<ButtonCreate endpoint="matchcards/event" />
@@ -92,11 +96,5 @@
 <style>
 	.filters-box {
 		margin: 20px 0;
-	}
-	.filters-box button.active {
-		pointer-events: none;
-		background-color: #007bff;
-		color: white;
-		opacity: 0.4;
 	}
 </style>

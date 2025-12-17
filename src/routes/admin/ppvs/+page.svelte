@@ -38,25 +38,70 @@
 		<form action="" method="get">
 			<Box icon="filter" title="Filtros">
 				<Input label="Buscar por nombre" name="search" value={data.filters.search} />
-				<RadioList
-					label="Tipo"
-					name="type"
-					value={data.filters.type as string}
-					options={[
-						{ label: 'Todos', value: 'all' },
-						{ label: 'Activos', value: 'active' },
-						{ label: 'Inactivos', value: 'inactive' },
-						{ label: 'Sin fecha asignada', value: 'no-date' },
-						{ label: 'Por anunciar', value: 'to-be-announced' }
-					]}
-				/>
+
+				<div class="w1 flex start wrap acenter gap-smaller">
+					<button
+						type="submit"
+						name="type"
+						value="all"
+						class="btn filter rounded icon icon-gap-5"
+						class:active={data.filters.type === 'all'}
+					>
+						<i class="bi bi-collection"></i>
+						<span>Todos</span>
+					</button>
+
+					<button
+						type="submit"
+						name="type"
+						value="active"
+						class="btn filter rounded icon icon-gap-5"
+						class:active={data.filters.type === 'active'}
+					>
+						<i class="bi bi-bookmark-check-fill"></i>
+						<span>Activos</span>
+					</button>
+
+					<button
+						type="submit"
+						name="type"
+						value="inactive"
+						class="btn filter rounded icon icon-gap-5"
+						class:active={data.filters.type === 'inactive'}
+					>
+						<i class="bi bi-bookmark-x-fill"></i>
+						<span>Inactivos</span>
+					</button>
+
+					<button
+						type="submit"
+						name="type"
+						value="no-date"
+						class="btn filter rounded icon icon-gap-5"
+						class:active={data.filters.type === 'no-date'}
+					>
+						<i class="bi bi-calendar-x"></i>
+						<span>Sin fecha asignada</span>
+					</button>
+
+					<button
+						type="submit"
+						name="type"
+						value="to-be-announced"
+						class="btn filter rounded icon icon-gap-5"
+						class:active={data.filters.type === 'to-be-announced'}
+					>
+						<i class="bi bi-calendar-event"></i>
+						<span>Por anunciar</span>
+					</button>
+				</div>
 
 				<div class="w1 flex end">
 					<button type="submit" class="btn cta icon">
 						<i class="bi bi-funnel-fill"></i> Aplicar filtros
 					</button>
-				</div></Box
-			>
+				</div>
+			</Box>
 		</form>
 	</header>
 
