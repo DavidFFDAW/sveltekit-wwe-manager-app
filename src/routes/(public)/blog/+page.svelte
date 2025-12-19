@@ -120,7 +120,9 @@
 
 	article img {
 		width: 100%;
-		/* max-height: 200px; */
+        height: 250px;
+		max-height: 250px;
+        object-fit: cover;
 	}
 
 	.blog-content.rest-of-news .blog-list {
