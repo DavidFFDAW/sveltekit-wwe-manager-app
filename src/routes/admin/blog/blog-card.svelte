@@ -11,7 +11,13 @@
 
 <div class="wwe-post-card post-card post-{post.id} post-{post.status}" transition:fade>
 	<div class="post-card-inner">
-		<img src={post.image} alt={post.title} width="150" height="150" use:errorimage />
+		<div class="image-container">
+			<img src={post.image} alt={post.title} width="150" height="150" use:errorimage />
+			<a href={`/blog/${post.slug}`} target="_blank" class="w1 btn info icon">
+				<i class="bi bi-file-earmark-text-fill"></i>
+				<span>Ver post</span>
+			</a>
+		</div>
 		<div class="post-card-datas">
 			<header class="post-card-title">
 				<h2>{post.title}</h2>
@@ -27,38 +33,41 @@
 
 	<SimpleAsyncForm classes="w1 blog-post-card-actions" updateId={post.id} method="post">
 		<footer class="blog-post-card-actions actions-buttons">
-			<button
-				class="btn small rounded info icon icon-gap-5"
-				formaction="?/changeStatus"
-				value="draft"
-				name="status"
-				disabled={post.status === 'draft'}
-			>
-				<i class="bi bi-file-earmark-text-fill"></i>
-				<span>Mover a borradores</span>
-			</button>
+			{#if post.status !== 'draft'}
+				<button
+					class="btn small rounded info icon icon-gap-5"
+					formaction="?/changeStatus"
+					value="draft"
+					name="status"
+				>
+					<i class="bi bi-file-earmark-text-fill"></i>
+					<span>Mover a borradores</span>
+				</button>
+			{/if}
 
-			<button
-				class="btn small rounded warn icon icon-gap-5"
-				formaction="?/changeStatus"
-				value="unpublished"
-				name="status"
-				disabled={post.status === 'unpublished'}
-			>
-				<i class="bi bi-eye-slash-fill"></i>
-				<span>Mover a no publicado</span>
-			</button>
+			{#if post.status !== 'unpublished'}
+				<button
+					class="btn small rounded warn icon icon-gap-5"
+					formaction="?/changeStatus"
+					value="unpublished"
+					name="status"
+				>
+					<i class="bi bi-eye-slash-fill"></i>
+					<span>Mover a no publicado</span>
+				</button>
+			{/if}
 
-			<button
-				class="btn small rounded success icon icon-gap-5"
-				disabled={post.status === 'published'}
-				formaction="?/changeStatus"
-				value="published"
-				name="status"
-			>
-				<i class="bi bi-check-circle-fill"></i>
-				<span>Mover a publicado</span>
-			</button>
+			{#if post.status !== 'published'}
+				<button
+					class="btn small rounded success icon icon-gap-5"
+					formaction="?/changeStatus"
+					value="published"
+					name="status"
+				>
+					<i class="bi bi-check-circle-fill"></i>
+					<span>Mover a publicado</span>
+				</button>
+			{/if}
 
 			<button
 				class="btn small danger rounded icon icon-gap-5"
@@ -96,7 +105,8 @@
 		gap: 16px;
 	}
 	.wwe-post-card.post-card .post-card-inner img {
-		width: 150px;
+		width: 250px;
+		max-width: 250px;
 		height: 150px;
 		object-fit: cover;
 		border-radius: 5px;
@@ -175,7 +185,19 @@
 		opacity: 0.5;
 	}
 
+	.wwe-post-card.post-card .post-card-inner .image-container a.btn {
+		border-radius: 0 0 10px 10px;
+	}
+	.wwe-post-card.post-card .post-card-inner .image-container img {
+		width: 100%;
+		max-width: 100%;
+		border-radius: 10px 10px 0 0;
+	}
+
 	@media only screen and (max-width: 768px) {
+		.wwe-post-card.post-card .post-card-inner .image-container {
+			width: 100%;
+		}
 		.wwe-post-card.post-card .post-card-inner {
 			align-items: flex-start;
 			flex-direction: column;
@@ -183,7 +205,7 @@
 		.wwe-post-card.post-card .post-card-inner img {
 			width: 100%;
 			height: auto;
-			max-height: 150px;
+			max-height: 200px;
 		}
 		.wwe-post-card.post-card .post-card-inner .post-card-datas {
 			max-width: 100%;

@@ -21,8 +21,6 @@ export const actions = {
 
 		if (!locals.user?.uuid) return Helpers.error('No se pudo obtener el usuario', 500);
 		datas.set('author', locals.user.uuid.toString());
-		datas.set('visible', datas.get('status') === 'published' ? 'true' : 'false');
-		datas.set('deletable', datas.get('auto_delete') === 'active' ? 'true' : 'false');
 
 		try {
 			const repository = new BlogRepository();

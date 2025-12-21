@@ -9,9 +9,14 @@ export class PPVRepository extends Repository<
 	Prisma.PPVFindManyArgs
 > {
 	protected requiredFields: string[] = [];
+	private readonly weeklyShows: string[] = ['Raw', 'SmackDown', 'AWL', 'Thursday Night Main Event'];
 
 	constructor() {
 		super('pPV');
+	}
+
+	getWeeklyShows(): string[] {
+		return this.weeklyShows;
 	}
 
 	updatePpvDate(id: number, newDate: Date | null): Promise<PPV> {

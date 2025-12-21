@@ -49,6 +49,11 @@ export class BlogRepository extends Repository<
 			? new Date(form.get('published_at') as string)
 			: new Date();
 
+		const haAutodelete = form.get('auto_delete') === 'active';
+		const status = form.has('post_status') ? (form.get('post_status') as string) : 'draft';
+		const f_status = this.isStatusAllowed(status) ? status : 'draft';
+		const visible = f_status === 'published';
+
 		return {
 			title: form.get('title') as string,
 			slug: form.get('slug') as string,
@@ -56,10 +61,10 @@ export class BlogRepository extends Repository<
 			content: form.get('content') as string,
 			admin: { connect: { id: Number(form.get('author')) } },
 			exceptr: form.get('excerpt') as string,
-			visible: form.has('visible') ? form.get('visible') === 'true' : false,
-			status: form.has('status') ? (form.get('status') as string) : 'draft',
+			visible: visible,
+			status: f_status,
 			category: form.has('category') ? (form.get('category') as string) : undefined,
-			deletable: form.has('deletable') ? form.get('deletable') === 'true' : false,
+			deletable: haAutodelete,
 			created_at: datePublished
 		};
 	}

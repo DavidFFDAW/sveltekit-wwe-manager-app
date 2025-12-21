@@ -11,6 +11,7 @@
 	import type { BlogPost } from '@prisma/client';
 	import { onMount } from 'svelte';
 	import BlogIaForm from './blog-ia-form.svelte';
+	import DateInput from '$lib/components/forms/date/date-input.svelte';
 
 	let {
 		post = {}
@@ -22,9 +23,11 @@
 	let iaPopupOpened = $state(false);
 	let title = $state(post.title || '');
 	let content = $state(post.content || '');
+	let date: Date = $state(post.created_at || new Date());
 	let slug = $derived(Utils.slugify(title));
 	let isUpdate = $derived(Boolean(post && post.id));
 	let CoverImageComponent: any = $state(null);
+	const currentYear = new Date().getFullYear();
 
 	onMount(() => {
 		import('$lib/components/forms/inputs/cover-image.svelte').then((module) => {
@@ -99,11 +102,12 @@
 				</div>
 			</div>
 
-			<Input
+			<DateInput
 				label="Fecha de publicacion"
 				name="published_at"
-				type="date"
-				value={post.created_at ? post.created_at.toISOString().split('T')[0] : ''}
+				min={`${currentYear - 2}-01-01`}
+				max={`${currentYear + 1}-12-31`}
+				value={date.toISOString().split('T')[0]}
 				required
 			/>
 		</Box>
