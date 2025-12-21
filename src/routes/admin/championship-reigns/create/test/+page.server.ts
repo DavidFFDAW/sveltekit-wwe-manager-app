@@ -9,8 +9,7 @@ export const load = async ({ locals }) => {
 	const championships = new ChampionshipRepository();
 	const wrestlersRepo = new WrestlerRepository();
 	const ppvs = await PPVDao.getOrderedPPVNames({
-		active: true,
-		visible: true
+		active: true
 	});
 
 	return {

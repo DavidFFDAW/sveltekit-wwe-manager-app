@@ -1,5 +1,6 @@
 import { PPVDao } from '$lib/server/dao/ppv.dao.js';
 import { ChampionshipRepository } from '$lib/server/dao/repositories/championship.repository.js';
+import { PPVRepository } from '$lib/server/dao/repositories/ppv.repository.js';
 import { TeamsDao } from '$lib/server/dao/teams.dao';
 import { WrestlerDao } from '$lib/server/dao/wrestler.dao.js';
 import { Helpers } from '$lib/server/server.helpers.js';
@@ -7,13 +8,18 @@ import { Helpers } from '$lib/server/server.helpers.js';
 export const load = async ({ locals }) => {
 	if (!Helpers.hasPermission(locals)) throw Helpers.redirection('/');
 	const championships = new ChampionshipRepository();
-	const ppvs = await PPVDao.getOrderedPPVNames({
-		active: true,
-		visible: true
+	const ppvRepository = new PPVRepository();
+	const ppvs = await ppvRepository.get({
+		where: {
+			active: true
+		},
+		orderBy: {
+			game_date: 'asc'
+		}
 	});
 
 	return {
-		ppvs: [...PPVDao.weeklyShows, ...ppvs],
+		ppvs: [...ppvRepository.getWeeklyShows(), ...ppvs.map((p) => p.name)],
 		teams: await TeamsDao.getReignSelectableTeams(),
 		wrestlers: await WrestlerDao.filter({
 			status: {
