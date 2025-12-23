@@ -218,7 +218,9 @@ export const Utils = {
 
 		return result;
 	},
-
+	arrayIdToMap<T extends { id: number | string }>(items: T[]) {
+		return new Map(items.map(i => [i.id, i] as const));
+	},
 	readCsvContent,
 	createCsv,
 	getArrayFormDatas,
