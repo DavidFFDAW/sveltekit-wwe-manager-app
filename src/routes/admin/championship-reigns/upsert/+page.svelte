@@ -24,7 +24,7 @@
 			<div class="step" data-step-number="1" data-step="championship">
 				<div class="step-inner">
 					<header class="step-header">
-						<h2 class="step-title">1. Campeonato</h2>
+						<h2 class="step-title">Elige un campeonato</h2>
 					</header>
 
 					<ul class="championships-list flex column gap-medium astart">
@@ -54,10 +54,10 @@
 					</ul>
 				</div>
 				<div class="buttons">
-					<button type="button" class="btn small secondary">Atras</button>
+					<button type="button" class="btn secondary">Atras</button>
 					<button
 						type="button"
-						class="btn small cta"
+						class="btn cta"
 						onclick={() => currentStep++}
 						disabled={!selectedChampionshipId}
 					>
@@ -79,12 +79,8 @@
 					{/if}
 				</div>
 				<div class="buttons">
-					<button type="button" class="btn small secondary" onclick={() => currentStep--}
-						>Atras</button
-					>
-					<button type="button" class="btn small cta" onclick={() => currentStep++}
-						>Siguiente</button
-					>
+					<button type="button" class="btn secondary" onclick={() => currentStep--}>Atras</button>
+					<button type="button" class="btn cta" onclick={() => currentStep++}>Siguiente</button>
 				</div>
 			</div>
 
@@ -106,10 +102,8 @@
 					{/if}
 				</div>
 				<div class="buttons">
-					<button type="button" class="btn small secondary" onclick={() => currentStep--}
-						>Atras</button
-					>
-					<button type="submit" class="btn small cta">
+					<button type="button" class="btn secondary" onclick={() => currentStep--}>Atras</button>
+					<button type="submit" class="btn cta">
 						{data.isUpdate ? 'Actualizar Reinado' : 'Crear Reinado'}
 					</button>
 				</div>
@@ -153,11 +147,33 @@
 		max-height: calc(100dvh - 80px - 40px);
 		overflow-y: auto;
 	}
+
+	.steps-container .step-header h2 {
+		width: 100%;
+		position: relative;
+		text-align: center;
+		margin-bottom: 25px;
+	}
+	.steps-container .step-header h2::after {
+		content: '';
+		position: absolute;
+		top: calc(100% + 4px);
+		left: 50%;
+		transform: translateX(-50%);
+		background-color: #000;
+		border-radius: 50px;
+		width: 25%;
+		color: #fff;
+		height: 4px;
+		opacity: 0.12;
+	}
 	.steps-container .step .buttons {
 		position: absolute;
-		bottom: 20px;
-		left: 20px;
-		right: 20px;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		padding: 10px;
+		border-top: 1px solid #bdbdbd;
 		display: flex;
 		justify-content: space-between;
 	}
