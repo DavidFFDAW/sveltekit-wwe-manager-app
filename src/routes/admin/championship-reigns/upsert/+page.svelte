@@ -1,6 +1,7 @@
 <script lang="ts">
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import Image from '$lib/components/visual/image.svelte';
+	import { onMount } from 'svelte';
 
 	const maxSteps = 3;
 	let { data } = $props();
@@ -9,6 +10,14 @@
 	let selectedChampionship = $derived(
 		data.championships.find((c: any) => c.id === selectedChampionshipId)
 	);
+
+	onMount(() => {
+		setTimeout(() => {
+			if (data.isUpdate) {
+				currentStep = maxSteps - 1;
+			}
+		}, 1000);
+	});
 </script>
 
 <div class="reigns-upsert-page" style="--total-steps: {maxSteps}; --current-step: {currentStep}">
@@ -22,11 +31,11 @@
 	>
 		<div class="steps-container">
 			<div class="step" data-step-number="1" data-step="championship">
-				<div class="step-inner">
-					<header class="step-header">
-						<h2 class="step-title">Elige un campeonato</h2>
-					</header>
+				<header class="step-header">
+					<h2 class="step-title">Elige un campeonato</h2>
+				</header>
 
+				<div class="step-inner">
 					<ul class="championships-list flex column gap-medium astart">
 						{#each data.championships as championship}
 							<li class="w1 block">
@@ -66,11 +75,11 @@
 				</div>
 			</div>
 			<div class="step" data-step-number="2" data-step="wrestler">
-				<div class="step-inner">
-					<header class="step-header">
-						<h2 class="step-title">2. Luchador</h2>
-					</header>
+				<header class="step-header">
+					<h2 class="step-title">{selectedChampionship?.tag ? 'Equipo' : 'Luchador'}</h2>
+				</header>
 
+				<div class="step-inner">
 					{#if selectedChampionship}
 						<p>Seleccionaste el campeonato: <strong>{selectedChampionship.name}</strong></p>
 						<!-- Aquí iría el formulario para seleccionar el luchador y las fechas -->
@@ -85,11 +94,11 @@
 			</div>
 
 			<div class="step" data-step-number="3" data-step="reign-datas">
-				<div class="step-inner">
-					<header class="step-header">
-						<h2 class="step-title">3. Datos del Reinado</h2>
-					</header>
+				<header class="step-header">
+					<h2 class="step-title">Datos</h2>
+				</header>
 
+				<div class="step-inner">
 					{#if selectedChampionship}
 						<p>
 							Estás creando un reinado para el campeonato: <strong
@@ -142,9 +151,15 @@
 		border-radius: 12px;
 		border: 1px solid #ddd;
 	}
+	.steps-container .step-header {
+		position: relative;
+		background-color: #fff;
+		max-height: 40px;
+	}
 	.steps-container .step .step-inner {
-		height: calc(100dvh - 80px - 40px);
-		max-height: calc(100dvh - 80px - 40px);
+		height: calc(100dvh - 80px - 40px - 40px - 20px);
+		max-height: calc(100dvh - 80px - 40px - 40px - 20px);
+		margin-top: 20px;
 		overflow-y: auto;
 	}
 
@@ -152,7 +167,7 @@
 		width: 100%;
 		position: relative;
 		text-align: center;
-		margin-bottom: 25px;
+		max-height: 40px;
 	}
 	.steps-container .step-header h2::after {
 		content: '';
@@ -166,6 +181,24 @@
 		color: #fff;
 		height: 4px;
 		opacity: 0.12;
+	}
+
+	.steps-container .step ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+	.steps-container .step label input.app-radio + .inner {
+		display: flex;
+		align-items: center;
+		flex-direction: row;
+		gap: 8px;
+		padding: 10px;
+		border: 2px solid #ddd;
+		border-radius: 8px;
 	}
 	.steps-container .step .buttons {
 		position: absolute;
