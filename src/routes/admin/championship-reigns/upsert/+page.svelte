@@ -2,6 +2,7 @@
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import Image from '$lib/components/visual/image.svelte';
 	import { onMount } from 'svelte';
+	import PagedList from './paged-list.svelte';
 
 	const maxSteps = 3;
 	let { data } = $props();
@@ -10,6 +11,8 @@
 	let selectedChampionship = $derived(
 		data.championships.find((c: any) => c.id === selectedChampionshipId)
 	);
+
+	let selectedWrestlerId = $state(data.reign?.wrestler_id || null);
 
 	onMount(() => {
 		setTimeout(() => {
@@ -36,31 +39,11 @@
 				</header>
 
 				<div class="step-inner">
-					<ul class="championships-list flex column gap-medium astart">
-						{#each data.championships as championship}
-							<li class="w1 block">
-								<label class="relative">
-									<input
-										type="radio"
-										name="championship_id"
-										class="app-radio"
-										value={championship.id}
-										bind:group={selectedChampionshipId}
-										checked={selectedChampionshipId === championship.id}
-									/>
-									<div class="inner flex acenter gap-5">
-										<Image
-											src={championship.image}
-											alt={championship.name as string}
-											class="championship-image"
-											width={25}
-										/>
-										<span class="championship-name">{championship.name}</span>
-									</div>
-								</label>
-							</li>
-						{/each}
-					</ul>
+					<PagedList
+						list={data.championships}
+						bind:selected={selectedChampionshipId}
+						name="championship_id"
+					/>
 				</div>
 				<div class="buttons">
 					<button type="button" class="btn secondary">Atras</button>
@@ -80,13 +63,17 @@
 				</header>
 
 				<div class="step-inner">
-					{#if selectedChampionship}
-						<p>Seleccionaste el campeonato: <strong>{selectedChampionship.name}</strong></p>
-						<!-- Aquí iría el formulario para seleccionar el luchador y las fechas -->
+					{#if selectedChampionship && selectedChampionship.tag}
+						<p>Selecciona el equipo que va a tener el reinado.</p>
 					{:else}
-						<p>Por favor, selecciona un campeonato en el paso anterior.</p>
+						<PagedList
+							list={data.wrestlers}
+							bind:selected={selectedWrestlerId}
+							name="wrestler_id"
+						/>
 					{/if}
 				</div>
+
 				<div class="buttons">
 					<button type="button" class="btn secondary" onclick={() => currentStep--}>Atras</button>
 					<button type="button" class="btn cta" onclick={() => currentStep++}>Siguiente</button>
@@ -160,6 +147,7 @@
 		height: calc(100dvh - 80px - 40px - 40px - 20px);
 		max-height: calc(100dvh - 80px - 40px - 40px - 20px);
 		margin-top: 20px;
+		padding: 5px;
 		overflow-y: auto;
 	}
 

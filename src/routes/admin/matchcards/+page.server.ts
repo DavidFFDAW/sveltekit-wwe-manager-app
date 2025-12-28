@@ -2,7 +2,7 @@ import { PpvCardRepository } from '$lib/server/dao/repositories/matchcard.reposi
 
 export const load = async ({ url }) => {
 	const searchParams = url.searchParams;
-	const yearFilter = searchParams.get('year');
+	const yearFilter = searchParams.has('year') ? searchParams.get('year') : new Date().getFullYear();
 	const whereSentence = yearFilter
 		? {
 				ppv_date: {

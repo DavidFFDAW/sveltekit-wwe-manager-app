@@ -59,7 +59,7 @@
 						{/if}
 					</div>
 
-					<div class="action-buttons-container">
+					<footer class="action-buttons-container">
 						<a
 							href="/admin/matchcards/event?slug={matchcard.id}"
 							class="btn small warn"
@@ -84,7 +84,7 @@
 							<i class="bi bi-box-arrow-up-right"></i>
 							<span>exportar</span>
 						</a>
-					</div>
+					</footer>
 				</div>
 			{/each}
 		</div>

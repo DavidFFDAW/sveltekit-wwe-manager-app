@@ -27,6 +27,10 @@ export async function load({ url }) {
 		};
 	});
 
+	const wrestlers = await wrestlersRepo.get({
+		orderBy: { name: 'asc' }
+	});
+
 	return {
 		reign,
 		isUpdate: Boolean(reignId) && reign !== null,
@@ -34,9 +38,10 @@ export async function load({ url }) {
 			where: { active: true },
 			orderBy: { name: 'asc' }
 		}),
-		wrestlers: await wrestlersRepo.get({
-			orderBy: { name: 'asc' }
-		}),
+		wrestlers: wrestlers.map((w) => ({
+			...w,
+			image: w.image_name
+		})),
 		finalParsedTeams
 	};
 }
