@@ -8,6 +8,7 @@
 	import type { MatchItem } from '../../types';
 
 	export let data;
+	let currentNightTab = 1;
 	let showCreateMatch = false;
 	const pagedatas = data.match_card;
 	// let matches: (Match & { inner_identifier?: number })[] = pagedatas.matches;
@@ -35,6 +36,7 @@
 				stipulation: formData.get('match_stipulation') as string,
 				championship: formData.get('match_championship') as string,
 				participants: formData.get('match_participants') as string,
+				night: 1,
 				winner: null,
 				inner_identifier: identifier,
 				rating: null
@@ -50,7 +52,6 @@
 
 	const deleteMatchItem = async (match: MatchItem) => {
 		if (!confirm('¿Estás seguro de que deseas eliminar este combate?')) return;
-
 		matches = matches.filter((m) => m.inner_identifier !== match.inner_identifier);
 
 		if (match.id && match.id > 0) {
@@ -146,10 +147,34 @@
 		<div class="w1 flex column gap-medium">
 			{#if matches.length > 0}
 				<div class="w1 ppv-matches-container flex column gap-medium astart">
+					<header class="w1 flex total night-tabs tcenter">
+						<label class="relative">
+							<input
+								type="radio"
+								name="night-tab"
+								class="nights-radio app-radio dark"
+								bind:group={currentNightTab}
+								value={1}
+							/>
+							<div class="inner btn secondary rounded small">Noche 1</div>
+						</label>
+						<label class="relative">
+							<input
+								type="radio"
+								name="night-tab"
+								class="nights-radio app-radio dark"
+								bind:group={currentNightTab}
+								value={2}
+							/>
+							<div class="inner btn secondary rounded small">Noche 2</div>
+						</label>
+					</header>
+
 					{#each matches as match}
 						<div
 							class="w1 match box relative"
 							style="order: {match.order}"
+							class:hidden={match.night !== currentNightTab}
 							data-identifier={match.inner_identifier}
 						>
 							<h3>
@@ -200,6 +225,10 @@
 		margin-left: var(--sidebar-width);
 		border-radius: 0 0 10px 10px;
 		z-index: 10;
+	}
+
+	.match.box.relative.hidden {
+		display: none;
 	}
 
 	@media only screen and (max-width: 768px) {

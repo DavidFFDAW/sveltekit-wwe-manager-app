@@ -79,6 +79,15 @@
 			</select>
 		</label>
 
+		<label class="form-item">
+			<span class="label">Noche</span>
+			<select class="input" name="match_night[]" bind:value={match.night}>
+				{#each [1, 2] as option}
+					<option value={option}>{option}</option>
+				{/each}
+			</select>
+		</label>
+
 		<label class="form-item rating-label-container">
 			<span class="label">Valoración</span>
 			<div class="star-rating-container">
@@ -119,5 +128,11 @@
 	.form-item.rating-label-container .star-rating-container {
 		width: 100%;
 		padding: 2px 8px;
+	}
+
+	.item-nights .nights-radio:checked + .inner {
+		border-color: #000000;
+		background-color: #000000;
+		color: white;
 	}
 </style>

@@ -63,6 +63,7 @@ export const actions = {
                 'match_championship[]',
                 'match_participants[]',
                 'match_winner[]',
+                'match_night[]',
                 'match_rating[]',
                 'match_order[]',
             ]).map(match => {
@@ -72,6 +73,7 @@ export const actions = {
                     championship: match.match_championship || null,
                     participants: match.match_participants,
                     winner: match.match_winner || null,
+                    night: match.match_night ? Number(match.match_night) : 1,
                     rating: match.match_rating ? Number(match.match_rating) : null,
                     duration: null,
                     order: match.match_order ? Number(match.match_order) : 1,
