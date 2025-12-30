@@ -4,7 +4,7 @@
 	const perpage = 20;
 	let page = $state(1);
 	let letter = $state('');
-	let { list, selected = $bindable(null), name } = $props();
+	let { type = 'championship', list, selected = $bindable(null), name } = $props();
 
 	let start = $derived((page - 1) * perpage);
 	let pages = $derived(Array.from({ length: Math.ceil(list.length / perpage) }, (_, i) => i + 1));
@@ -16,14 +16,23 @@
 			: list
 	);
 	let pagedList = $derived(filteredList.slice(start, start + perpage));
-
-	$inspect({ pagedList, filteredList, list, letter, page, start, pages });
 </script>
 
 <div class="w1 custom-app-box sortable-list list-with-pagination">
 	<header>
 		<input type="search" placeholder="Buscar..." class="input" />
 		<div class="w1 letters-pagination flex gap-5 acenter">
+			<label class="relative">
+				<input
+					type="radio"
+					name="letter"
+					class="app-radio"
+					value=""
+					checked={letter === ''}
+					bind:group={letter}
+				/>
+				<div class="inner btn small">Todos</div>
+			</label>
 			{#each 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('') as l}
 				<label class="relative">
 					<input
@@ -40,6 +49,20 @@
 				</label>
 			{/each}
 		</div>
+		{#if pages.length > 1}
+			<div class="real-pagination">
+				{#each pages as p}
+					<button
+						type="button"
+						class="btn small secondary"
+						class:cta={p === page}
+						onclick={() => (page = p)}
+					>
+						{p}
+					</button>
+				{/each}
+			</div>
+		{/if}
 	</header>
 
 	<div class="list-container">
@@ -60,11 +83,11 @@
 								src={item.image}
 								alt={item.name as string}
 								class="championship-image"
-								data-type-image="championship"
-								type="championship"
-								fallback="/unknown-championship.webp"
-								width={100}
-								height={50}
+								data-type-image={type}
+								type={type === 'championship' ? 'championship' : 'wrestler'}
+								fallback={`/${type === 'championship' ? 'unknown-championship' : 'vacant'}.webp`}
+								width={type === 'championship' ? 100 : 60}
+								height={type === 'championship' ? 50 : 30}
 							/>
 							<span class="championship-name">{item.name}</span>
 						</div>
@@ -108,5 +131,19 @@
 		border-color: #000;
 		background-color: #f0f0f0;
 		box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3);
+	}
+
+	.letters-pagination label input[type='radio']:checked + .inner {
+		border-color: #000;
+		background-color: #000;
+		color: #fff;
+	}
+
+	.real-pagination {
+		display: flex;
+		gap: 5px;
+		max-width: 100%;
+		overflow-x: auto;
+		padding: 5px 0;
 	}
 </style>

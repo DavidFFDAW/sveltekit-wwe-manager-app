@@ -28,6 +28,7 @@ export async function load({ url }) {
 	});
 
 	const wrestlers = await wrestlersRepo.get({
+        where: { status: { not: 'released' } },
 		orderBy: { name: 'asc' }
 	});
 

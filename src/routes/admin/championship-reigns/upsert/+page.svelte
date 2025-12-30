@@ -1,8 +1,12 @@
 <script lang="ts">
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
-	import Image from '$lib/components/visual/image.svelte';
-	import { onMount } from 'svelte';
+	import { onMount, setContext } from 'svelte';
 	import PagedList from './paged-list.svelte';
+	import StepChampionship from './steps/step-championship.svelte';
+	import './page.css';
+	import StepWrestlers from './steps/step-wrestlers.svelte';
+	import DateInput from '$lib/components/forms/date/date-input.svelte';
+	import Input from '$lib/components/forms/inputs/input.svelte';
 
 	const maxSteps = 3;
 	let { data } = $props();
@@ -11,7 +15,6 @@
 	let selectedChampionship = $derived(
 		data.championships.find((c: any) => c.id === selectedChampionshipId)
 	);
-
 	let selectedWrestlerId = $state(data.reign?.wrestler_id || null);
 
 	onMount(() => {
@@ -33,52 +36,17 @@
 		showButtons={false}
 	>
 		<div class="steps-container">
-			<div class="step" data-step-number="1" data-step="championship">
-				<header class="step-header">
-					<h2 class="step-title">Elige un campeonato</h2>
-				</header>
+			<StepChampionship list={data.championships} bind:currentStep bind:selectedChampionshipId />
 
-				<div class="step-inner">
-					<PagedList
-						list={data.championships}
-						bind:selected={selectedChampionshipId}
-						name="championship_id"
-					/>
+			{#if selectedChampionship && !selectedChampionship.tag}
+				<StepWrestlers list={data.wrestlers} bind:currentStep bind:selectedWrestlerId />
+			{:else}
+				<div class="step" data-step-number="2" data-step="teams">
+					<header class="step-header">
+						<h2 class="step-title">Elige un equipo</h2>
+					</header>
 				</div>
-				<div class="buttons">
-					<button type="button" class="btn secondary">Atras</button>
-					<button
-						type="button"
-						class="btn cta"
-						onclick={() => currentStep++}
-						disabled={!selectedChampionshipId}
-					>
-						Siguiente
-					</button>
-				</div>
-			</div>
-			<div class="step" data-step-number="2" data-step="wrestler">
-				<header class="step-header">
-					<h2 class="step-title">{selectedChampionship?.tag ? 'Equipo' : 'Luchador'}</h2>
-				</header>
-
-				<div class="step-inner">
-					{#if selectedChampionship && selectedChampionship.tag}
-						<p>Selecciona el equipo que va a tener el reinado.</p>
-					{:else}
-						<PagedList
-							list={data.wrestlers}
-							bind:selected={selectedWrestlerId}
-							name="wrestler_id"
-						/>
-					{/if}
-				</div>
-
-				<div class="buttons">
-					<button type="button" class="btn secondary" onclick={() => currentStep--}>Atras</button>
-					<button type="button" class="btn cta" onclick={() => currentStep++}>Siguiente</button>
-				</div>
-			</div>
+			{/if}
 
 			<div class="step" data-step-number="3" data-step="reign-datas">
 				<header class="step-header">
@@ -86,17 +54,47 @@
 				</header>
 
 				<div class="step-inner">
-					{#if selectedChampionship}
-						<p>
-							Estás creando un reinado para el campeonato: <strong
-								>{selectedChampionship.name}</strong
-							>
-						</p>
-						<!-- Aquí iría el formulario para los datos del reinado -->
-					{:else}
-						<p>Por favor, selecciona un campeonato en el primer paso.</p>
-					{/if}
+					<DateInput
+						label="Fecha de inicio"
+						name="start_date"
+						value={data.reign?.won_date.toString().substring(0, 10) || ''}
+						required={true}
+					/>
+					<DateInput
+						label="Fecha de finalización"
+						name="end_date"
+						value={data.reign?.lost_date?.toString().substring(0, 10) || ''}
+						required={false}
+					/>
+
+					<Input
+						type="number"
+						label="Días"
+						name="days"
+						value={data.reign?.days || ''}
+						placeholder="Días que duró el reinado"
+						required={false}
+					/>
+
+					<Input
+						type="text"
+						label="Evento donde ganó el campeonato"
+						name="won_event"
+						value={data.reign?.ppv_won || ''}
+						placeholder="Evento donde ganó el campeonato"
+						required={false}
+					/>
+
+					<Input
+						type="text"
+						label="Forma en que se ganó el campeonato"
+						name="victory_way"
+						value={data.reign?.victory_way || ''}
+						placeholder="Forma en que se ganó el campeonato"
+						required={false}
+					/>
 				</div>
+
 				<div class="buttons">
 					<button type="button" class="btn secondary" onclick={() => currentStep--}>Atras</button>
 					<button type="submit" class="btn cta">
@@ -107,95 +105,3 @@
 		</div>
 	</AsyncForm>
 </div>
-
-<style>
-	:global(.app-main-entrypoint.page-admin-championship-reigns-upsert.admin-page) {
-		padding: 0 20px;
-	}
-	.reigns-upsert-page {
-		max-width: 600px;
-		margin: 0 auto;
-		overflow: hidden;
-	}
-
-	.steps-container {
-		width: calc(100% * var(--total-steps));
-		display: flex;
-		transition: transform 0.3s ease-in-out;
-		transform: translateX(calc(-100% / var(--total-steps) * var(--current-step)));
-		min-height: 100dvh;
-		max-height: 100dvh;
-		padding: 20px 0;
-	}
-
-	.steps-container .step {
-		position: relative;
-		width: calc(100% / var(--total-steps));
-		max-height: calc(100% - 40px);
-		padding: 20px;
-		background-color: #fff;
-		box-sizing: border-box;
-		border-radius: 12px;
-		border: 1px solid #ddd;
-	}
-	.steps-container .step-header {
-		position: relative;
-		background-color: #fff;
-		max-height: 40px;
-	}
-	.steps-container .step .step-inner {
-		height: calc(100dvh - 80px - 40px - 40px - 20px);
-		max-height: calc(100dvh - 80px - 40px - 40px - 20px);
-		margin-top: 20px;
-		padding: 5px;
-		overflow-y: auto;
-	}
-
-	.steps-container .step-header h2 {
-		width: 100%;
-		position: relative;
-		text-align: center;
-		max-height: 40px;
-	}
-	.steps-container .step-header h2::after {
-		content: '';
-		position: absolute;
-		top: calc(100% + 4px);
-		left: 50%;
-		transform: translateX(-50%);
-		background-color: #000;
-		border-radius: 50px;
-		width: 25%;
-		color: #fff;
-		height: 4px;
-		opacity: 0.12;
-	}
-
-	.steps-container .step ul {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 6px;
-	}
-	.steps-container .step label input.app-radio + .inner {
-		display: flex;
-		align-items: center;
-		flex-direction: row;
-		gap: 8px;
-		padding: 10px;
-		border: 2px solid #ddd;
-		border-radius: 8px;
-	}
-	.steps-container .step .buttons {
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		padding: 10px;
-		border-top: 1px solid #bdbdbd;
-		display: flex;
-		justify-content: space-between;
-	}
-</style>
