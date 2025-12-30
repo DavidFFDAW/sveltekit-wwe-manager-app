@@ -13,14 +13,11 @@
 		if (loading) return;
 
 		const datas = new FormData();
-		datas.set(
-			'prompt',
-			`Escribe el contenido para el post de un blog de wwe. El tema será: ${prompt}. Escribe la respuesta directamente en HTML, lista para pegar en una página web, sin etiquetas <html> ni <body> ni <h1> y sin <scripts> o <style>. Solo contenido.`
-		);
+		datas.set('prompt', `${prompt}`);
 
 		loading = true;
 		try {
-			const response = await HttpService.post('/api/blog/generate', {
+			const response = await HttpService.post('/api/blog/generate/groq', {
 				body: datas
 			});
 			const message = response.response?.message || 'Error al obtener la respuesta de la IA.';
