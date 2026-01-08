@@ -1,12 +1,11 @@
 <script lang="ts">
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
-	import { onMount, setContext } from 'svelte';
-	import PagedList from './paged-list.svelte';
+	import { onMount } from 'svelte';
 	import StepChampionship from './steps/step-championship.svelte';
-	import './page.css';
 	import StepWrestlers from './steps/step-wrestlers.svelte';
 	import DateInput from '$lib/components/forms/date/date-input.svelte';
 	import Input from '$lib/components/forms/inputs/input.svelte';
+	import './page.css';
 
 	const maxSteps = 3;
 	let { data } = $props();
