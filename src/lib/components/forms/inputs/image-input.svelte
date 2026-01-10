@@ -2,6 +2,7 @@
 	import Gallery from '$lib/components/gallery/gallery.svelte';
 	import Imgur from '$lib/components/modules/imgur/imgur.svelte';
 	import { Utils } from '$lib/utils/general.utils';
+	import GoogleImageSearch from './google-image-search.svelte';
 
 	const size = 120;
 	export let label: string;
@@ -61,6 +62,7 @@
 		<div class="w1 flex gap-smaller">
 			<Gallery bind:value={image} />
 			<Imgur bind:value={image} />
+			<GoogleImageSearch bind:value={image} />
 		</div>
 	</div>
 </div>
