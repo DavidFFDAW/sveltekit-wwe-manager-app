@@ -52,13 +52,13 @@
 		}
 	};
 
-	$inspect({
-		files,
-		preview,
-		hasGallery,
-		currentTab,
-		currentGoogleTab
-	});
+	// $inspect({
+	// 	files,
+	// 	preview,
+	// 	hasGallery,
+	// 	currentTab,
+	// 	currentGoogleTab
+	// });
 </script>
 
 <button type="button" class="btn icon secondary" onclick={togglePopup}>
