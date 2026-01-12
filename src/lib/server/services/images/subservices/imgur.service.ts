@@ -3,7 +3,8 @@ import { IMAGE_API_URL } from '$env/static/private';
 import { HttpService } from '$lib/services/http.service';
 
 export const GalleryImageService: ImageServiceInterface = {
-	getImages: async () => {
+	getImages: async (data: ImageServiceDataProp) => {
+		const { cookies } = data;
 		const response = await HttpService.get(`${IMAGE_API_URL}images`);
 		if (!response.ok) return [];
 

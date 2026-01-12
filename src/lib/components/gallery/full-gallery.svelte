@@ -1,16 +1,31 @@
 <script lang="ts">
+	import type { ImageResponse } from '$lib/server/services/images/types';
+	import { HttpService } from '$lib/services/http.service';
 	import { fade } from 'svelte/transition';
+	import SpinnerLogo from '../spinner/spinner-logo.svelte';
+
 	let opened = $state<boolean>(false);
-	let originalImages = $state<any[]>([
-		'https://image.api.playstation.com/vulcan/ap/rnd/202406/0500/8f15268257b878597757fcc5f2c9545840867bc71fc863b1.png',
-		'https://image.api.playstation.com/vulcan/ap/rnd/202406/0500/8f15268257b878597757fcc5f2c9545840867bc71fc863b1.png'
+	let loading = $state<boolean>(false);
+	let imagesCache = $state<Record<string, ImageResponse[]>>({
+		gallery: [],
+		imgur: []
+	});
+	let originalImages = $state<ImageResponse[]>([
+		{
+			name: 'Imagen 1',
+			url: 'https://image.api.playstation.com/vulcan/ap/rnd/202406/0500/8f15268257b878597757fcc5f2c9545840867bc71fc863b1.png'
+		},
+		{
+			name: 'Imagen 2',
+			url: 'https://image.api.playstation.com/vulcan/ap/rnd/202406/0500/8f15268257b878597757fcc5f2c9545840867bc71fc863b1.png'
+		}
 	]);
 	let search = $state<string>('');
 	let currentTab = $state<string>('gallery');
-	let currentGoogleTab = $state<string>('iframe');
+	let googleState = $state<{ tab: string; search: string }>({ tab: 'api', search: '' });
 	let hasGallery = $derived(
 		['gallery', 'imgur'].includes(currentTab) ||
-			(currentTab === 'google' && currentGoogleTab !== 'iframe')
+			(currentTab === 'google' && googleState.tab !== 'iframe')
 	);
 	let { value = $bindable<string>('') } = $props();
 	let files = $state<FileList | null>(null);
@@ -52,13 +67,42 @@
 		}
 	};
 
-	// $inspect({
-	// 	files,
-	// 	preview,
-	// 	hasGallery,
-	// 	currentTab,
-	// 	currentGoogleTab
-	// });
+	const getImages = async (clickedTab: string) => {
+		if (currentTab === clickedTab) return;
+		currentTab = clickedTab;
+
+		if (imagesCache[currentTab] && imagesCache[currentTab].length > 0) {
+			originalImages = imagesCache[currentTab];
+			return;
+		}
+
+		loading = true;
+		try {
+			const response = await HttpService.get(`/api/images?provider=${currentTab}`);
+			console.log({ response, images: response.response?.images });
+
+			if (!response.ok) {
+				throw new Error('Error al obtener las imágenes');
+			}
+
+			if (response.ok && response.response) {
+				originalImages = response.response.images;
+				imagesCache[currentTab] = response.response.images;
+			}
+		} catch (error) {
+			console.error('Error al obtener las imágenes:', error);
+		} finally {
+			loading = false;
+		}
+	};
+
+	$inspect({
+		files,
+		preview,
+		hasGallery,
+		currentTab,
+		googleTab: googleState.tab
+	});
 </script>
 
 <button type="button" class="btn icon secondary" onclick={togglePopup}>
@@ -87,49 +131,25 @@
 					type="button"
 					class="relative full-gallery-tab gallery"
 					class:active={currentTab === 'gallery'}
+					onclick={() => getImages('gallery')}
 				>
-					<label>
-						<input
-							type="radio"
-							class="app-radio"
-							name="full-gallery-tab"
-							value="gallery"
-							bind:group={currentTab}
-						/>
-						<span>Galería</span>
-					</label>
+					<span>Galería</span>
 				</button>
 				<button
 					type="button"
 					class="relative full-gallery-tab imgur"
 					class:active={currentTab === 'imgur'}
+					onclick={() => getImages('imgur')}
 				>
-					<label>
-						<input
-							type="radio"
-							class="app-radio"
-							name="full-gallery-tab"
-							value="imgur"
-							bind:group={currentTab}
-						/>
-						<span>Imgur</span>
-					</label>
+					<span>Imgur</span>
 				</button>
 				<button
 					type="button"
 					class="relative full-gallery-tab google"
 					class:active={currentTab === 'google'}
+					onclick={() => (currentTab = 'google')}
 				>
-					<label>
-						<input
-							type="radio"
-							class="app-radio"
-							name="full-gallery-tab"
-							value="google"
-							bind:group={currentTab}
-						/>
-						<span>Google</span>
-					</label>
+					<span>Google</span>
 				</button>
 			</nav>
 
@@ -137,24 +157,8 @@
 				<nav class="popup-full-gallery-tabs">
 					<button
 						type="button"
-						class="relative full-gallery-tab iframe"
-						class:active={currentGoogleTab === 'iframe'}
-					>
-						<label>
-							<input
-								type="radio"
-								class="app-radio"
-								name="full-gallery-google-tab"
-								value="iframe"
-								bind:group={currentGoogleTab}
-							/>
-							<span>Iframe</span>
-						</label>
-					</button>
-					<button
-						type="button"
 						class="relative full-gallery-tab api"
-						class:active={currentGoogleTab === 'api'}
+						class:active={googleState.tab === 'api'}
 					>
 						<label>
 							<input
@@ -162,9 +166,26 @@
 								class="app-radio"
 								name="full-gallery-google-tab"
 								value="api"
-								bind:group={currentGoogleTab}
+								bind:group={googleState.tab}
 							/>
 							<span>API</span>
+						</label>
+					</button>
+
+					<button
+						type="button"
+						class="relative full-gallery-tab iframe"
+						class:active={googleState.tab === 'iframe'}
+					>
+						<label>
+							<input
+								type="radio"
+								class="app-radio"
+								name="full-gallery-google-tab"
+								value="iframe"
+								bind:group={googleState.tab}
+							/>
+							<span>Iframe</span>
 						</label>
 					</button>
 				</nav>
@@ -172,31 +193,36 @@
 		</header>
 
 		<div
-			class="popup-body full-gallery-popup-body-container tab-{currentTab} tab-google-{currentGoogleTab}"
+			class="popup-body full-gallery-popup-body-container tab-{currentTab} tab-google-{googleState.tab}"
 		>
 			<header class="searcher">
 				<input type="text" class="app-text-input" placeholder="Buscar imagen..." />
 			</header>
+
 			{#if hasGallery}
 				<div class="full-gallery-popup-list-container" transition:fade>
 					<div class="full-gallery-grid">
 						{#each originalImages as image}
 							<div class="gallery-item relative">
 								<img
-									src={image}
-									alt="Imagen de la galería"
+									src={image.url}
+									alt={`Imagen de la galería: ${image.name}`}
 									draggable="false"
 									role="presentation"
-									data-url={image}
+									data-url={image.url}
 									onclick={() => {
-										value = image;
+										value = image.url;
 										togglePopup();
 									}}
 								/>
-								<span class="img-name">{image}</span>
+								<span class="img-name">{image.name}</span>
 							</div>
 						{/each}
 					</div>
+
+					{#if loading}
+						<SpinnerLogo />
+					{/if}
 				</div>
 
 				{#if currentTab !== 'google'}
@@ -212,7 +238,7 @@
 						{/if}
 					</aside>
 				{/if}
-			{:else if currentTab === 'google' && currentGoogleTab === 'iframe'}
+			{:else if currentTab === 'google' && googleState.tab === 'iframe'}
 				<div class="full-gallery-google-iframe-container" transition:fade>
 					<iframe
 						src="https://www.google.com/search?q={encodeURIComponent(search)}&igu=1&tbm=isch"
@@ -406,6 +432,20 @@
 		outline: none;
 		border-radius: 4px;
 		height: calc(100dvh - 360px);
+	}
+
+	:global(.popup.popup-container.full-gallery-popup-container .spinner-overlay-layer) {
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		width: 90%;
+		height: calc(100dvh - 140px);
+		transform: translate(-50%, -50%);
+		background: rgba(255, 255, 255, 0.7);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 10;
 	}
 
 	@media only screen and (max-width: 768px) {
