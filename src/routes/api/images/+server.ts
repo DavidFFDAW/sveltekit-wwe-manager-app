@@ -1,12 +1,15 @@
 import { Helpers } from '$lib/server/server.helpers';
 import { ImageService } from '$lib/server/services/images/image.service.js';
 
+const VALID_IMAGE_PROVIDERS = ['gallery', 'imgur', 'google'];
+
 export async function GET({ locals, url, cookies }) {
 	if (!Helpers.hasPermission(locals))
 		return Helpers.api.error('No tienes permisos para realizar esta acción', 403);
 
 	try {
-		const provider = url.searchParams.get('provider') || 'gallery';
+		const initialProvider = url.searchParams.get('provider') || 'gallery';
+		const provider = VALID_IMAGE_PROVIDERS.includes(initialProvider) ? initialProvider : 'gallery';
 		console.log('Fetching images from provider:', provider);
 
 		const galleryDatas = {
