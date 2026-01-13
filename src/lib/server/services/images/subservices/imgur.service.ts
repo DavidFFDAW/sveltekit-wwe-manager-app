@@ -1,17 +1,32 @@
-import type { GalleryImage, ImageServiceDataProp, ImageServiceInterface } from '../types';
-import { IMAGE_API_URL } from '$env/static/private';
-import { HttpService } from '$lib/services/http.service';
+import type { ImageServiceDataProp, ImageServiceInterface } from '../types';
+import type { Cookies } from '@sveltejs/kit';
+import { ImgurServerService } from '../../imgur.server.service';
+import type { ImgurImage } from '../../../../../@types/Imgur';
 
-export const GalleryImageService: ImageServiceInterface = {
+export const getToken = async (cookies: Cookies): Promise<string> => {
+	const storedToken = cookies.get('imgur_access_token');
+	if (storedToken) return storedToken;
+	console.log({ storedToken });
+
+	const accessToken = await ImgurServerService.getAndSaveAccessToken(cookies);
+	if (!accessToken) return '';
+
+	if (accessToken instanceof Error) return '';
+	return accessToken;
+};
+
+export const ImgurImageService: ImageServiceInterface = {
 	getImages: async (data: ImageServiceDataProp) => {
 		const { cookies } = data;
-		const response = await HttpService.get(`${IMAGE_API_URL}images`);
-		if (!response.ok) return [];
+		const accessToken = await getToken(cookies);
+		if (!accessToken || accessToken === '') return [];
 
-		const images = response.response.data.images as GalleryImage[];
+		const imagesResponse = await ImgurServerService.getUserImages(accessToken);
+		const images = imagesResponse.response.data as ImgurImage[];
+
 		return images.map((img) => ({
-			name: img.name,
-			url: img.url
+			name: img.title,
+			url: img.link
 		}));
 	},
 	uploadImage: async (data: ImageServiceDataProp, file: File) => {
