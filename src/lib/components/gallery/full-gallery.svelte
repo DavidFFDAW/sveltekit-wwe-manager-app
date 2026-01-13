@@ -10,18 +10,9 @@
 		gallery: [],
 		imgur: []
 	});
-	let originalImages = $state<ImageResponse[]>([
-		{
-			name: 'Imagen 1',
-			url: 'https://image.api.playstation.com/vulcan/ap/rnd/202406/0500/8f15268257b878597757fcc5f2c9545840867bc71fc863b1.png'
-		},
-		{
-			name: 'Imagen 2',
-			url: 'https://image.api.playstation.com/vulcan/ap/rnd/202406/0500/8f15268257b878597757fcc5f2c9545840867bc71fc863b1.png'
-		}
-	]);
+	let originalImages = $state<ImageResponse[]>([]);
 	let search = $state<string>('');
-	let currentTab = $state<string>('gallery');
+	let currentTab = $state<string>('home');
 	let googleState = $state<{ tab: string; search: string }>({ tab: 'api', search: '' });
 	let hasGallery = $derived(
 		['gallery', 'imgur'].includes(currentTab) ||
