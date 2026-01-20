@@ -3,6 +3,7 @@
 	import { HttpService } from '$lib/services/http.service';
 	import { fade } from 'svelte/transition';
 	import SpinnerLogo from '../spinner/spinner-logo.svelte';
+	import { Utils } from '$lib/utils/general.utils';
 
 	let opened = $state<boolean>(false);
 	let loading = $state<boolean>(false);
@@ -20,11 +21,11 @@
 	);
 	let { value = $bindable<string>('') } = $props();
 	let files = $state<FileList | null>(null);
-	let preview = $derived.by(() => {
+	let preview = $derived.by(async () => {
 		if (!files || files.length === 0) return '';
 		const file = files[0];
-		const previewUrl = URL.createObjectURL(file);
-		return previewUrl;
+		const preview = await Utils.readFile(file, 'dataURL');
+		return preview;
 	});
 
 	const togglePopup = () => (opened = !opened);
@@ -138,7 +139,10 @@
 					type="button"
 					class="relative full-gallery-tab google"
 					class:active={currentTab === 'google'}
-					onclick={() => (currentTab = 'google')}
+					onclick={() => {
+						originalImages = [];
+						currentTab = 'google';
+					}}
 				>
 					<span>Google</span>
 				</button>
@@ -190,7 +194,7 @@
 				<input type="text" class="app-text-input" placeholder="Buscar imagen..." />
 			</header>
 
-			{#if hasGallery}
+			{#if hasGallery && originalImages.length > 0}
 				<div class="full-gallery-popup-list-container" transition:fade>
 					<div class="full-gallery-grid">
 						{#each originalImages as image}

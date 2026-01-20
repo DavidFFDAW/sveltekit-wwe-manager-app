@@ -10,9 +10,6 @@ export const actions = {
 		if (!locals.user?.uuid) return Helpers.error('No se pudo obtener el usuario', 500);
 		datas.set('author', locals.user.uuid.toString());
 
-		const { error, message } = Helpers.checkRequiredFields(datas, BlogAdapter.required);
-		if (error) return Helpers.error(message, 400);
-
 		try {
 			const repository = new BlogRepository();
 			const { error, message } = Helpers.checkRequiredFields(datas, repository.getRequiredFields());
