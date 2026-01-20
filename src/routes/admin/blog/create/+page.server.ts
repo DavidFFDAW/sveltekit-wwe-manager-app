@@ -18,18 +18,20 @@ export const actions = {
 			const createdPost = await repository.create(repository.getTransformedObject(datas));
 			if (!createdPost) return Helpers.error('No se pudo crear el post', 500);
 
-			await fetch('/api/push/send', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					title: 'Nuevo post: ' + createdPost.title,
-					body: 'Se ha creado un nuevo post en el blog. ¡No te lo pierdas!',
-					url: `/blog/${createdPost.slug}`,
-					image: createdPost.image
-				})
-			});
+			if (createdPost.status === 'published' && createdPost.visible) {
+				await fetch('/api/push/send', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						title: 'Nuevo post: ' + createdPost.title,
+						body: 'Se ha creado un nuevo post en el blog. ¡No te lo pierdas!',
+						url: `/blog/${createdPost.slug}`,
+						image: createdPost.image
+					})
+				});
+			}
 
 			return Helpers.success('Post creado correctamente', 201);
 		} catch (e: unknown) {
