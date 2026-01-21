@@ -27,20 +27,21 @@
 }
 
 html[data-theme='dark'] {
-	--bg: "#0B0D12";
-	--surface: "#121520";
-	--surface2: "#171A26";
-	--border: "#24283A";
-	--text: "#E6E8F0";
-	--muted: "#9AA1B5";
-	--brand: "#0F1118";
-	--brand2: "#1A1D2B";
-	--accent: "#E11D2E";
-	--accent2: "#D4AF37";
-	--ok: "#22C55E";
-	--warn: "#FBBF24";
-	--danger: "#EF4444";
+	--bg: #0B0D12;
+	--surface: #121520;
+	--surface2: #171A26;
+	--border: #24283A;
+	--text: #E6E8F0;
+	--muted: #9AA1B5;
+	--brand: #0F1118;
+	--brand2: #1A1D2B;
+	--accent: #E11D2E;
+	--accent2: #D4AF37;
+	--ok: #22C55E;
+	--warn: #FBBF24;
+	--danger: #EF4444;
 }
+
 
 /* ESTILOS GLOBALES RELEVANTES */
 i.customs-icons.app-bootstrap-custom-icon {

@@ -81,8 +81,17 @@
 							aria-label="Exportar evento"
 							download
 						>
-							<i class="bi bi-box-arrow-up-right"></i>
-							<span>exportar</span>
+							<i class="bi bi-file-earmark-code"></i>
+							<span>JSON</span>
+						</a>
+						<a
+							href="/admin/matchcards/export/txt?id={matchcard.id}"
+							class="btn small info"
+							aria-label="Exportar evento a csv"
+							download
+						>
+							<i class="bi bi-file-earmark-spreadsheet"></i>
+							<span>CSV</span>
 						</a>
 					</footer>
 				</div>
