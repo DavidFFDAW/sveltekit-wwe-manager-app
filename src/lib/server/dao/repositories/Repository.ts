@@ -164,4 +164,12 @@ export abstract class Repository<
 	getRequiredFields(): string[] {
 		return this.requiredFields;
 	}
+
+	getSingleByField(field: string, value: string | number) {
+		return this.model.findFirst({
+			where: {
+				[field]: value
+			}
+		});
+	}
 }

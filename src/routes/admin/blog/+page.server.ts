@@ -1,10 +1,11 @@
+import { dev } from '$app/environment';
 import { BlogRepository } from '$lib/server/dao/repositories/blog.repository.js';
 import { Helpers } from '$lib/server/server.helpers';
 
 const allowed_statuses = ['published', 'unpublished', 'draft'];
 
 export const load = async ({ locals, url }) => {
-	if (!locals.user) throw Helpers.redirection('/admin/dashboard');
+	if (!locals.user && !dev) throw Helpers.redirection('/admin/dashboard');
 	const params = url.searchParams;
 
 	const searchTitle = params.get('search') || '';

@@ -3,6 +3,7 @@ import { json, redirect, type Handle } from '@sveltejs/kit';
 import type { UserLoginPayload } from './@types/UserLoginPayload';
 import { COOKIE_NAME } from '$lib/constants/app';
 import { UsersDao } from '$lib/server/dao/users.dao';
+import { dev } from '$app/environment';
 
 const getUserFromPayloadToLocals = (payload: UserLoginPayload) => {
 	return {
@@ -16,6 +17,7 @@ const getUserFromPayloadToLocals = (payload: UserLoginPayload) => {
 };
 
 const handleApiRoute: Handle = async ({ event, resolve }) => {
+	if (dev) return await resolve(event);
 	const headers = event.request.headers;
 	const sessionToken = headers.get('authorization') || event.cookies.get(COOKIE_NAME) || '';
 	const unauthorized = json({ message: 'Unauthorized' }, { status: 401 });
@@ -43,6 +45,8 @@ const handleApiRoute: Handle = async ({ event, resolve }) => {
 
 export const handle: Handle = async (handleParams) => {
 	const { event, resolve } = handleParams;
+	if (dev) return await resolve(event);
+
 	const isApiRequestedRoute =
 		event.url.pathname === '/api' || event.url.pathname.startsWith('/api');
 
