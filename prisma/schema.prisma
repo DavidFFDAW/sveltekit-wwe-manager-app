@@ -106,6 +106,7 @@ model Wrestler {
     ChampionshipReign ChampionshipReign[] @relation("wrestler")
     Partner           ChampionshipReign[] @relation("partner")
     Injuries          Injuries[]
+    rumbles           Rumble[]
 
     @@map(name: "wrestler")
 }
@@ -330,4 +331,17 @@ model Rivalries {
     updated_at   DateTime? @updatedAt
 
     @@map(name: "rivalries")
+}
+
+model Rumble {
+    id           Int       @id @default(autoincrement())
+    winner_id    Int       @db.Int
+    winner       Wrestler  @relation(fields: [winner_id], references: [id])
+    year         String    @db.VarChar(10)
+    entry_number Int       @db.Int
+    successful   Boolean   @default(true) @db.TinyInt
+    created_at   DateTime? @default(now())
+    updated_at   DateTime? @updatedAt
+
+    @@map(name: "rumble")
 }
