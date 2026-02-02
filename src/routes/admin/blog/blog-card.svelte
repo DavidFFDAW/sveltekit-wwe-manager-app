@@ -83,6 +83,14 @@
 				<i class="bi bi-pencil"></i>
 				<span>Editar este post</span>
 			</a>
+
+			<a
+				href={`/admin/blog/${post.id}/notifications`}
+				class="btn small info rounded icon icon-gap-5"
+			>
+				<i class="bi bi-bell-fill"></i>
+				<span>Notificaciones</span>
+			</a>
 		</footer>
 	</SimpleAsyncForm>
 </div>

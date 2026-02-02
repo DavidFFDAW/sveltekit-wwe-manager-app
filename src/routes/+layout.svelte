@@ -9,7 +9,7 @@
 	import { page } from '$app/state';
 	import MetaTagsSeo from '$lib/components/seo/meta-tags-seo.svelte';
 
-	export let data;
+	let { data, children } = $props();
 </script>
 
 <MetaTagsSeo page={page.data} />
@@ -34,7 +34,7 @@
 	/>
 
 	<ServiceWorker />
-	<slot />
+	{@render children()}
 
 	{#if data.userIsAdmin && !data.isAdminPage}
 		<GlobalUtilLinks />
