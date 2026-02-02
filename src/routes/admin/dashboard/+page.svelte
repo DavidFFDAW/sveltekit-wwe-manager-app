@@ -29,6 +29,14 @@
 							</a>
 						</li>
 					{/each}
+					<li
+						class="w1 background"
+						style="background-image: url('https://i.pinimg.com/736x/46/85/06/46850696178107a751c26d4e22eb3c2e.jpg')"
+					>
+						<a href="/admin/rumble">
+							<span>Royal Rumble</span>
+						</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
