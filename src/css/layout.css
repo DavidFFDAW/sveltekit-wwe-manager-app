@@ -321,6 +321,7 @@ body main.app-main-entrypoint.admin-page h1 {
     position: relative;
     font-family: 'dreadnotus', sans-serif;
     text-transform: uppercase;
+    font-size: 2rem;
 }
 
 body main.app-main-entrypoint.admin-page h1::after {
@@ -455,6 +456,7 @@ body main.app-main-entrypoint.admin-page {
 
     body main.app-main-entrypoint.admin-page h1 {
         text-align: center;
+        font-size: 1.7rem;
     }
 
     body main.app-main-entrypoint.admin-page h1::after {
