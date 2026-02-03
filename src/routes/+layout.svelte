@@ -15,7 +15,7 @@
 <MetaTagsSeo page={page.data} />
 
 {#if data.isAdminPage}
-	<Sidebar bind:url={data.path} />
+	<Sidebar url={data.path} />
 {/if}
 
 <main
