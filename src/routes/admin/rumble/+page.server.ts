@@ -13,7 +13,7 @@ export const load = async ({ locals, url, route }) => {
 			winner: true
 		},
 		orderBy: {
-			year: 'desc'
+			year: 'asc'
 		}
 	});
 
