@@ -20,27 +20,39 @@ export const load = async ({ url }) => {
 export const actions = {
 	default: async ({ request }) => {
 		const formData = await request.formData();
-		const statuses = formData.entries().reduce(
-			(acc, [key, value]) => {
-				if (key.startsWith('status[') && key.endsWith(']')) {
-					const id = key.slice(7, -1);
+
+		try {
+			const statuses = formData.entries().reduce(
+				(acc, [key, value]) => {
 					if (!['active', 'released'].includes(value.toString())) return acc;
-					acc[value.toString()] = acc[value.toString()] || [];
-					acc[value.toString()].push(Number(id));
-				}
-				return acc;
-			},
-			{} as Record<string, number[]>
-		);
 
-		for (const [key, value] of formData.entries()) {
-			console.log({ key, value });
+					if (key.startsWith('status[') && key.endsWith(']')) {
+						const id = key.slice('status['.length, -1);
+						acc[value.toString()] = acc[value.toString()] || [];
+						acc[value.toString()].push(Number(id));
+					}
+					return acc;
+				},
+				{} as Record<string, number[]>
+			);
+
+			await repository.bulkUpdate(
+				{
+					id: { in: statuses['active'] || [] }
+				},
+				{ status: 'active' }
+			);
+			await repository.bulkUpdate(
+				{
+					id: { in: statuses['released'] || [] }
+				},
+				{ status: 'released' }
+			);
+
+			return Helpers.success('Estados de contratación actualizados');
+		} catch (error) {
+			console.error('Error updating wrestler statuses:', error);
+			return Helpers.error('Error al actualizar los estados de contratación');
 		}
-
-		console.log({
-			statuses
-		});
-
-		return Helpers.success('Estados de contratación actualizados correctamente');
 	}
 };

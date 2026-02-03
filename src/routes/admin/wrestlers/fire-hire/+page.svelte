@@ -5,12 +5,13 @@
 	import type { Wrestler } from '@prisma/client';
 
 	let { data } = $props();
+	let wrestlers = $state(data.list);
 </script>
 
 <div class="page-content down">
 	<AsyncForm method="post" showButtons={false}>
 		<ul>
-			{#each data.list as wrestler}
+			{#each wrestlers as wrestler}
 				<li class="row wrestler-item">
 					<div class="id">#{wrestler.id}</div>
 					<div class="avatar" aria-hidden="true">
@@ -40,10 +41,9 @@
 						<label class="toggle" aria-label="Cambiar estado contratación">
 							<input
 								type="checkbox"
-								name="hired"
+								name="toggle[{wrestler.id}]"
 								value="true"
-								checked={wrestler.hired}
-								onchange={handleHired(wrestler)}
+								bind:checked={wrestler.hired}
 							/>
 							<span class="slider"></span>
 						</label>
@@ -52,20 +52,36 @@
 			{/each}
 		</ul>
 
-		<button type="submit" class="btn primary fixed-button">Guardar cambios</button>
+		<div class="button-container fixed">
+			<button type="submit" class="btn primary cta">Guardar cambios</button>
+		</div>
 	</AsyncForm>
 
-	<SimplePagination current={data.wrestlers.currentPage} pages={data.wrestlers.pages} />
+	<div class="pagination-container">
+		<SimplePagination current={data.wrestlers.currentPage} pages={data.wrestlers.pages} />
+	</div>
 </div>
 
 <style>
-	.fixed-button {
-		position: fixed;
-		bottom: 20px;
-		right: 20px;
-		background: #1fbf72;
-		box-shadow: 0 8px 18px rgba(31, 191, 114, 0.35);
+	.button-container.fixed {
+		position: sticky;
+		display: flex;
+		justify-content: flex-end;
+		padding: 10px 0;
+		width: 100%;
+		max-width: 600px;
+		bottom: 0px;
+		right: 0px;
 		z-index: 10;
+	}
+	.pagination-container {
+		margin: 2rem 0 0 0;
+		overflow-x: auto;
+	}
+
+	:global(.pagination.pagination-container.flex.end) {
+		justify-content: start;
+		padding: 0 0 5px 0;
 	}
 	.page-content {
 		max-width: 600px;
@@ -76,9 +92,10 @@
 		list-style: none;
 		margin: 0;
 		padding: 0;
-		border: 1px solid #444c56;
+		border: 1px solid #ddd;
 		background: #fff;
 		border-radius: 12px;
+		box-shadow: 0 0px 12px rgba(0, 0, 0, 0.2);
 		overflow: hidden;
 	}
 	.row {
@@ -231,9 +248,7 @@
 	@media (max-width: 780px) {
 		.row {
 			grid-template-columns: 90px 54px 1fr;
-			grid-template-areas:
-				'id avatar name'
-				'gender gender status';
+			grid-template-areas: 'id avatar name status';
 			align-items: start;
 		}
 
