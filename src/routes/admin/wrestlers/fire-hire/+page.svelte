@@ -13,26 +13,27 @@
 		<ul>
 			{#each wrestlers as wrestler}
 				<li class="row wrestler-item">
-					<div class="id">#{wrestler.id}</div>
-					<div class="avatar" aria-hidden="true">
-						<img
-							width="88"
-							height="88"
-							src={wrestler.image_name}
-							use:errorimage={'/vacant.webp'}
-							alt={wrestler.name}
-						/>
-					</div>
+					<div class="w1 flex start gap-smaller">
+						<div class="avatar" aria-hidden="true">
+							<img
+								width="88"
+								height="88"
+								src={wrestler.image_name}
+								use:errorimage={'/vacant.webp'}
+								alt={wrestler.name}
+							/>
+						</div>
 
-					<div class="name">
-						<strong>{wrestler.name}</strong>
-						<span>WWE Superstar</span>
+						<div class="name">
+							<strong>{wrestler.name}</strong>
+							<span class="id">#{wrestler.id}</span>
+						</div>
 					</div>
 
 					<div class="status">
-						<span class="status-label rumble uppercase"
-							>{wrestler.hired ? 'Contratado' : 'Despedido'}</span
-						>
+						<span class="status-label rumble uppercase">
+							{wrestler.hired ? 'Contratado' : 'Despedido'}
+						</span>
 						<input
 							type="hidden"
 							name="status[{wrestler.id}]"
@@ -99,11 +100,11 @@
 		overflow: hidden;
 	}
 	.row {
-		display: grid;
-		grid-template-columns: 90px 64px 1fr 190px;
+		display: flex;
+		justify-content: space-between;
 		align-items: center;
-		gap: 12px;
 		padding: 12px 14px;
+		gap: 5px;
 	}
 	.row {
 		border-bottom: 1px solid #ddd;
@@ -242,32 +243,5 @@
 
 	.toggle input:checked + .slider::after {
 		left: 27px;
-	}
-
-	/* Responsive: apilar */
-	@media (max-width: 780px) {
-		.row {
-			grid-template-columns: 90px 54px 1fr;
-			grid-template-areas: 'id avatar name status';
-			align-items: start;
-		}
-
-		.row > .id {
-			grid-area: id;
-			padding-top: 8px;
-		}
-
-		.row > .avatar {
-			grid-area: avatar;
-		}
-
-		.row > .name {
-			grid-area: name;
-		}
-
-		.row > .status {
-			grid-area: status;
-			justify-content: flex-start;
-		}
 	}
 </style>
