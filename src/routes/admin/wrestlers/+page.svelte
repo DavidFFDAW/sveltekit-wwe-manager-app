@@ -22,6 +22,9 @@
 			<ActionsLink href="/admin/wrestlers/fire-hire" icon="person-x" color="info">
 				Contratar/Despedir luchadores
 			</ActionsLink>
+			<ActionsLink href="/admin/wrestlers/genders" icon="gender-trans" color="info">
+				Gestionar géneros de luchadores
+			</ActionsLink>
 			<ActionsLink
 				href="https://davidfernandezdeveloper.es/2k/api/v2/images/zip"
 				icon="file-earmark-zip"

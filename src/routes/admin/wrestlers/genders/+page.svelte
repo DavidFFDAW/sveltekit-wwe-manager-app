@@ -2,7 +2,6 @@
 	import { errorimage } from '$lib/actions/error.image';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import SimplePagination from '$lib/components/visual/simple-pagination.svelte';
-	import type { Wrestler } from '@prisma/client';
 
 	let { data } = $props();
 	let wrestlers = $state(data.list);
@@ -32,22 +31,22 @@
 
 					<div class="status">
 						<span class="status-label rumble uppercase">
-							{wrestler.hired ? 'Contratado' : 'Despedido'}
+							{wrestler.gender ? 'Masculino' : 'Femenino'}
 						</span>
 						<input
 							type="hidden"
-							name="status[{wrestler.id}]"
-							value={wrestler.hired ? 'active' : 'released'}
+							name="gender[{wrestler.id}]"
+							value={wrestler.gender ? 'm' : 'f'}
 						/>
 						<label class="toggle" aria-label="Cambiar estado contratación">
 							<input
 								type="checkbox"
 								name="toggle[{wrestler.id}]"
 								value="true"
-								bind:checked={wrestler.hired}
+								bind:checked={wrestler.gender}
 							/>
 							<span class="slider">
-								<i class="bi bi-{wrestler.hired ? 'check' : 'x'} icon"></i>
+								<i class="bi bi-{wrestler.gender ? 'gender-male' : 'gender-female'} icon"></i>
 							</span>
 						</label>
 					</div>
@@ -217,8 +216,8 @@
 		position: absolute;
 		inset: 0;
 		border-radius: 999px;
-		background: rgba(224, 82, 82, 0.35);
-		border: 1px solid rgba(224, 82, 82, 0.55);
+		background: rgba(255, 105, 180, 0.35);
+		border: 1px solid rgba(255, 105, 180, 0.55);
 		transition:
 			background 0.18s ease,
 			border-color 0.18s ease;
@@ -240,11 +239,15 @@
 	}
 	.slider i.icon {
 		position: absolute;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		top: 50%;
-		left: 0;
-		width: 16px;
-		height: 16px;
-		transform: translate(50%, -50%);
+		left: 3px;
+		width: 24px;
+		height: 24px;
+		font-size: 10px;
+		transform: translateY(-50%);
 		color: rgba(0, 0, 0, 0.8);
 		border-radius: 50%;
 		transition: left 0.18s ease;
@@ -253,14 +256,12 @@
 
 	/* Checked = contratado (verde) */
 	.toggle input:checked + .slider {
-		background: rgba(31, 191, 114, 0.3);
-		border-color: rgba(31, 191, 114, 0.6);
+		background: rgba(54, 120, 207, 0.35);
+		border-color: rgba(54, 120, 207, 0.55);
 	}
 
-	.toggle input:checked + .slider::after {
-		left: 27px;
-	}
+	.toggle input:checked + .slider::after,
 	.toggle input:checked + .slider i.icon {
-		left: 23px;
+		left: 27px;
 	}
 </style>
