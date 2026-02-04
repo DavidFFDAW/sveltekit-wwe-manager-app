@@ -5,6 +5,9 @@
 
 	let { data } = $props();
 	let wrestlers = $state(data.list);
+	$effect(() => {
+		wrestlers = data.list.map((wrestler) => wrestler);
+	});
 </script>
 
 <div class="page-content down">
@@ -33,11 +36,7 @@
 						<span class="status-label rumble uppercase">
 							{wrestler.gender ? 'Masculino' : 'Femenino'}
 						</span>
-						<input
-							type="hidden"
-							name="gender[{wrestler.id}]"
-							value={wrestler.gender ? 'm' : 'f'}
-						/>
+						<input type="hidden" name="gender[{wrestler.id}]" value={wrestler.gender ? 'm' : 'f'} />
 						<label class="toggle" aria-label="Cambiar estado contratación">
 							<input
 								type="checkbox"

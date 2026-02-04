@@ -2,10 +2,12 @@
 	import { errorimage } from '$lib/actions/error.image';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import SimplePagination from '$lib/components/visual/simple-pagination.svelte';
-	import type { Wrestler } from '@prisma/client';
 
 	let { data } = $props();
 	let wrestlers = $state(data.list);
+	$effect(() => {
+		wrestlers = data.list.map((wrestler) => wrestler);
+	});
 </script>
 
 <div class="page-content down">
