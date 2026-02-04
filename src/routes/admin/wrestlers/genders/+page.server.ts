@@ -20,17 +20,18 @@ export const load = async ({ url }) => {
 export const actions = {
     default: async ({ request }) => {
         const formData = await request.formData();
+        const entries = Array.from(formData.entries());
+        if (entries.length === 0) return Helpers.error('No se enviaron datos en el formulario');
 
         try {
-            const statuses = formData.entries().reduce(
+            const statuses = entries.reduce(
                 (acc, [key, value]) => {
+                    if (!key.startsWith('gender[')) return acc;
                     if (!['m', 'f'].includes(value.toString())) return acc;
 
-                    if (key.startsWith('gender[') && key.endsWith(']')) {
-                        const id = key.slice('gender['.length, -1);
-                        acc[value.toString()] = acc[value.toString()] || [];
-                        acc[value.toString()].push(Number(id));
-                    }
+                    const id = key.slice('gender['.length, -1);
+                    acc[value.toString()] = acc[value.toString()] || [];
+                    acc[value.toString()].push(Number(id));
                     return acc;
                 },
                 {} as Record<string, number[]>,
@@ -49,10 +50,10 @@ export const actions = {
                 { sex: 'f' },
             );
 
-            return Helpers.success('Estados de contratación actualizados');
+            return Helpers.success('Géneros actualizados correctamente');
         } catch (error) {
-            console.error('Error updating wrestler statuses:', error);
-            return Helpers.error('Error al actualizar los estados de contratación');
+            console.error('Error updating wrestler genders:', error);
+            return Helpers.error('Error al actualizar los géneros');
         }
     },
 };
