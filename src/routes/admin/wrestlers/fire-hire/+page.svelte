@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { errorimage } from '$lib/actions/error.image';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
-	import SimplePagination from '$lib/components/visual/simple-pagination.svelte';
 
 	let { data } = $props();
 	let wrestlers = $state(data.list);
@@ -304,5 +303,11 @@
 	}
 	.toggle input:checked + .slider i.icon {
 		left: 23px;
+	}
+
+	@media only screen and (max-width: 768px) {
+		.button-container.fixed {
+			padding-left: 10px;
+		}
 	}
 </style>

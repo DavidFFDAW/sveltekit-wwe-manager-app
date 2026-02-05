@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { errorimage } from '$lib/actions/error.image';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
-	import SimplePagination from '$lib/components/visual/simple-pagination.svelte';
 
 	let { data } = $props();
 	let wrestlers = $state(data.list);
@@ -55,7 +54,7 @@
 
 		<div class="button-container fixed">
 			<div class="button-content">
-				<p>Pagina {data.wrestlers.currentPage} de {data.wrestlers.pages}</p>
+				<small>Pagina {data.wrestlers.currentPage} de {data.wrestlers.pages}</small>
 				<div class="pagination-buttons">
 					<a
 						href="{data.path}?page={data.wrestlers.currentPage - 1}"
@@ -302,5 +301,13 @@
 	.toggle input:checked + .slider::after,
 	.toggle input:checked + .slider i.icon {
 		left: 27px;
+	}
+	@media only screen and (max-width: 768px) {
+		.button-container.fixed {
+			padding: 10px;
+		}
+		.button-container.fixed .button-content {
+			padding: 0;
+		}
 	}
 </style>
