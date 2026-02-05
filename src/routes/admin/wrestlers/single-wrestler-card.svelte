@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { errorimage } from '$lib/actions/error.image';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import Image from '$lib/components/visual/image.svelte';
 	import { WrestlerConstants } from '$lib/constants/wrestler.constants';
@@ -11,11 +12,11 @@
 	<AsyncForm action="" method="post" showButtons={false} reset={true} updateId={wrestler.id}>
 		<div class="w1 relative box wrestler-single-card brand-{wrestler.brand.toLowerCase()}">
 			<div class="image-container flex center acenter relative">
-				<Image
-					type="wrestler"
+				<img
 					draggable="false"
 					src={wrestler.image_name as string}
 					alt={wrestler.name as string}
+					use:errorimage={'/vacant.webp'}
 					width="200"
 				/>
 				<p class="badge overall-badge">

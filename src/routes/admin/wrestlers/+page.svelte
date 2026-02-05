@@ -4,16 +4,16 @@
 	import ActionsCsv from '$lib/components/buttons/grouped-actions/actions-csv.svelte';
 	import ActionsLink from '$lib/components/buttons/grouped-actions/actions-link.svelte';
 	import GroupedActions from '$lib/components/buttons/grouped-actions/grouped-actions.svelte';
-	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import Input from '$lib/components/forms/inputs/input.svelte';
 	import RadioList from '$lib/components/forms/inputs/radio-list.svelte';
 	import Pagination from '$lib/components/visual/pagination.svelte';
 	import { WrestlerConstants } from '$lib/constants/wrestler.constants.js';
 	import SingleWrestlerCard from './single-wrestler-card.svelte';
-	export let data;
+
+	let { data } = $props();
 </script>
 
-<div class="admin-page-wrapper admin-wrestlers padding">
+<div class="admin-page-wrapper admin-wrestlers">
 	<div class="w1 flex end">
 		<GroupedActions text="Acciones de luchadores" position="right">
 			<ActionsLink href="/admin/wrestlers/create" icon="plus" color="success">
