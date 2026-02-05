@@ -38,7 +38,7 @@ const getPageTitle = (pathname: string, route: string | null): string => {
 	return tr.charAt(0).toUpperCase() + tr.slice(1) || 'Page';
 };
 
-export const load = async ({ locals, url, route }) => {
+export const load = async ({ locals, url, route, request }) => {
 	const storedUser = locals.user;
 	const isAdmin = storedUser ? ['admin', 'superadmin'].includes(storedUser.role) : false;
 
@@ -48,6 +48,7 @@ export const load = async ({ locals, url, route }) => {
 		userIsAdmin: isAdmin,
 		user: storedUser || null,
 		canonical: (url.origin + url.pathname).replace(/\/$/g, ''),
+		referer: request.headers.get('referer') || null,
 		breadcrumbs: getBreadcrumbs(url.pathname),
 		pageRouteSlug: getPageRouteSlug(url.pathname),
 		isAdminPage: url.pathname.startsWith('/admin')

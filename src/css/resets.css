@@ -15,6 +15,7 @@
 body {
 	overflow-x: hidden;
 }
+
 body.no-scroll {
 	overflow: hidden;
 }
@@ -89,6 +90,13 @@ a {
 	text-decoration: none;
 	color: inherit;
 	font-size: inherit;
+}
+
+a.disabled,
+a[disabled] {
+	pointer-events: none;
+	cursor: default;
+	opacity: 0.6;
 }
 
 /* SCROLL BAR CUSTOM STYLES */
