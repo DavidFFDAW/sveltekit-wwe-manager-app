@@ -7,7 +7,7 @@
 	} = $props();
 </script>
 
-<div class="step" data-step-number="1" data-step="championship">
+<div class="step-championship">
 	<header class="step-header">
 		<h2 class="step-title">Elige un campeonato</h2>
 	</header>

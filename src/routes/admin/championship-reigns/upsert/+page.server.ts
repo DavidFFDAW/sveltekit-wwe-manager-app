@@ -28,21 +28,26 @@ export async function load({ url }) {
 	});
 
 	const wrestlers = await wrestlersRepo.get({
-        where: { status: { not: 'released' } },
+		select: { id: true, name: true, image_name: true, status: true, sex: true },
+		where: { status: { not: 'released' } },
+		orderBy: { name: 'asc' }
+	});
+	const championships = await championshipRepo.get({
+		select: { id: true, name: true, image: true, brand: true, gender: true, tag: true },
+		where: { active: true },
 		orderBy: { name: 'asc' }
 	});
 
 	return {
 		reign,
 		isUpdate: Boolean(reignId) && reign !== null,
-		championships: await championshipRepo.get({
-			where: { active: true },
-			orderBy: { name: 'asc' }
-		}),
+		championships: championships,
+		championshipsMap: new Map(championships.map((c) => [c.id, c])),
 		wrestlers: wrestlers.map((w) => ({
 			...w,
 			image: w.image_name
 		})),
+		wrestlersMap: new Map(wrestlers.map((w) => [w.id, w])),
 		finalParsedTeams
 	};
 }

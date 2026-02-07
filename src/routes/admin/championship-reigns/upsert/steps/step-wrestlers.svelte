@@ -3,7 +3,7 @@
 	let { list, currentStep = $bindable(), selectedWrestlerId = $bindable() } = $props();
 </script>
 
-<div class="step" data-step-number="2" data-step="wrestlers">
+<div class="step-wrestlers">
 	<header class="step-header">
 		<h2 class="step-title">Elige un luchador</h2>
 	</header>

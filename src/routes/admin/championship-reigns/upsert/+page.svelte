@@ -7,14 +7,28 @@
 	import Input from '$lib/components/forms/inputs/input.svelte';
 	import './page.css';
 
-	const maxSteps = 3;
 	let { data } = $props();
 	let currentStep = $state(0);
 	let selectedChampionshipId = $state(data.reign?.championship_id || null);
-	let selectedChampionship = $derived(
-		data.championships.find((c: any) => c.id === selectedChampionshipId)
-	);
+	let selectedChampionship = $derived(data.championshipsMap.get(selectedChampionshipId || 0));
+	let isTagTeam = $derived(selectedChampionship?.tag || false);
 	let selectedWrestlerId = $state(data.reign?.wrestler_id || null);
+	let selectedTeamId = $state(data.reign?.team_id || null);
+	let selectedTeam = $derived(
+		data.finalParsedTeams.find((team) => team.id === selectedTeamId) || null
+	);
+	let maxSteps = $derived(isTagTeam ? 4 : 3);
+
+	$inspect({
+		selectedChampionshipId,
+		selectedChampionship,
+		selectedWrestlerId,
+		selectedTeamId,
+		selectedTeam,
+		isTagTeam,
+		finalParsedTeams: data.finalParsedTeams,
+		members: selectedTeam?.members || []
+	});
 
 	onMount(() => {
 		setTimeout(() => {
@@ -35,19 +49,71 @@
 		showButtons={false}
 	>
 		<div class="steps-container">
-			<StepChampionship list={data.championships} bind:currentStep bind:selectedChampionshipId />
+			<input
+				type="hidden"
+				name="tag_type"
+				value={selectedChampionship?.tag ? 'team' : 'individual'}
+			/>
+			<div class="step" data-step-number="1" data-step="championship">
+				<StepChampionship list={data.championships} bind:currentStep bind:selectedChampionshipId />
+			</div>
 
-			{#if selectedChampionship && !selectedChampionship.tag}
-				<StepWrestlers list={data.wrestlers} bind:currentStep bind:selectedWrestlerId />
-			{:else}
-				<div class="step" data-step-number="2" data-step="teams">
+			<div class="step" data-step-number="2" data-step="wrestlers|teams">
+				{#if selectedChampionship && !selectedChampionship.tag}
+					<StepWrestlers list={data.wrestlers} bind:currentStep bind:selectedWrestlerId />
+				{:else}
+					<div class="step-teams">
+						<header class="step-header">
+							<h2 class="step-title">Elige un equipo</h2>
+						</header>
+
+						<div class="step-inner">
+							<ul class="list">
+								{#each data.finalParsedTeams as team}
+									<li class="list-item">
+										<label class="list-item-label relative">
+											<input
+												type="radio"
+												class="app-radio"
+												name="team_id"
+												value={team.id}
+												bind:group={selectedTeamId}
+											/>
+											<di class="inner">
+												{team.name} <small>({team.members.length})</small>
+											</di>
+										</label>
+									</li>
+								{/each}
+							</ul>
+						</div>
+
+						<div class="buttons">
+							<button type="button" class="btn secondary" onclick={() => currentStep--}>
+								Atras
+							</button>
+							<button
+								type="button"
+								class="btn cta"
+								onclick={() => currentStep++}
+								disabled={!selectedTeamId}
+							>
+								Siguiente
+							</button>
+						</div>
+					</div>
+				{/if}
+			</div>
+
+			{#if isTagTeam && selectedTeam?.members.length > 2}
+				<div class="step" data-step-number="3" data-step="reign-datas">
 					<header class="step-header">
-						<h2 class="step-title">Elige un equipo</h2>
+						<h2 class="step-title">Elige los miembros del equipo</h2>
 					</header>
 				</div>
 			{/if}
 
-			<div class="step" data-step-number="3" data-step="reign-datas">
+			<div class="step" data-step-number={data.reign?.team_id ? 4 : 3} data-step="reign-datas">
 				<header class="step-header">
 					<h2 class="step-title">Datos</h2>
 				</header>
