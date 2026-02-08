@@ -8,7 +8,7 @@
 	import './page.css';
 
 	let { data } = $props();
-	let currentStep = $state(0);
+	let currentStep = $state(1);
 	let selectedChampionshipId = $state(data.reign?.championship_id || null);
 	let selectedChampionship = $derived(data.championshipsMap.get(selectedChampionshipId || 0));
 	let isTagTeam = $derived(selectedChampionship?.tag || false);
@@ -20,13 +20,10 @@
 	let maxSteps = $derived(isTagTeam ? 4 : 3);
 
 	$inspect({
-		selectedChampionshipId,
-		selectedChampionship,
-		selectedWrestlerId,
-		selectedTeamId,
-		selectedTeam,
 		isTagTeam,
+		currentStep,
 		finalParsedTeams: data.finalParsedTeams,
+		selectedTeam: selectedTeam,
 		members: selectedTeam?.members || []
 	});
 
@@ -54,11 +51,21 @@
 				name="tag_type"
 				value={selectedChampionship?.tag ? 'team' : 'individual'}
 			/>
-			<div class="step" data-step-number="1" data-step="championship">
+			<div
+				class="step"
+				data-step-number="1"
+				data-step="championship"
+				class:active={currentStep === 1}
+			>
 				<StepChampionship list={data.championships} bind:currentStep bind:selectedChampionshipId />
 			</div>
 
-			<div class="step" data-step-number="2" data-step="wrestlers|teams">
+			<div
+				class="step"
+				data-step-number="2"
+				data-step="wrestlers|teams"
+				class:active={currentStep === 2}
+			>
 				{#if selectedChampionship && !selectedChampionship.tag}
 					<StepWrestlers list={data.wrestlers} bind:currentStep bind:selectedWrestlerId />
 				{:else}
@@ -106,14 +113,47 @@
 			</div>
 
 			{#if isTagTeam && selectedTeam?.members.length > 2}
-				<div class="step" data-step-number="3" data-step="reign-datas">
+				<div
+					class="step"
+					data-step-number="3"
+					data-step="team-members"
+					class:active={currentStep === 3}
+				>
 					<header class="step-header">
 						<h2 class="step-title">Elige los miembros del equipo</h2>
 					</header>
+
+					<div class="step-inner">
+						<ul class="list">
+							{#each selectedTeam.members as member}
+								<li class="list-item">
+									<label class="list-item-label relative">
+										<input
+											type="checkbox"
+											class="app-checkbox"
+											name="member_ids"
+											value={member.id}
+											max="2"
+										/>
+										<div class="inner">
+											<span>
+												{member.name}
+											</span>
+										</div>
+									</label>
+								</li>
+							{/each}
+						</ul>
+					</div>
 				</div>
 			{/if}
 
-			<div class="step" data-step-number={data.reign?.team_id ? 4 : 3} data-step="reign-datas">
+			<div
+				class="step"
+				data-step-number={isTagTeam ? 4 : 3}
+				data-step="reign-datas"
+				class:active={currentStep === (isTagTeam ? 4 : 3)}
+			>
 				<header class="step-header">
 					<h2 class="step-title">Datos</h2>
 				</header>
