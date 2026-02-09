@@ -18,6 +18,7 @@
 		data.finalParsedTeams.find((team) => team.id === selectedTeamId) || null
 	);
 	let maxSteps = $derived(isTagTeam ? 4 : 3);
+	let members = $state([]);
 
 	$inspect({
 		isTagTeam,
@@ -126,19 +127,28 @@
 					<div class="step-inner">
 						<ul class="list">
 							{#each selectedTeam.members as member}
-								<li class="list-item">
+								<li class="list-item team-wrestler-member">
 									<label class="list-item-label relative">
 										<input
 											type="checkbox"
 											class="app-checkbox"
 											name="member_ids"
 											value={member.id}
+											bind:group={members}
 											max="2"
 										/>
-										<div class="inner">
-											<span>
-												{member.name}
-											</span>
+										<div
+											class="inner team-wrestler-member-inner team-wrestler-member-inner-{member.brand.toLowerCase()}"
+										>
+											<img
+												width="80"
+												src={member.image_name}
+												alt={member.name}
+												class="team-wrestler-member-avatar"
+											/>
+											<div class="team-wrestler-member-info">
+												<p class="team-wrestler-member-title">{member.name}</p>
+											</div>
 										</div>
 									</label>
 								</li>
