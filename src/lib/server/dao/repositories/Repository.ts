@@ -119,6 +119,13 @@ export abstract class Repository<
 		return this.model.findUnique({ where });
 	}
 
+	exists(where: WhereUniqueInput): Promise<boolean> {
+		return this.model.count({ where }).then((count: number) => count > 0);
+	}
+	existsById(id: number): Promise<boolean> {
+		return this.model.count({ where: { id } }).then((count: number) => count > 0);
+	}
+
 	create(data: CreateInput): Promise<T> {
 		return this.model.create({ data });
 	}

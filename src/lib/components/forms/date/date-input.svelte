@@ -40,6 +40,11 @@
 		};
 	});
 
+	const handleRemoveDate = () => {
+		value = null;
+		if (FlatPickr) FlatPickr.clear();
+	};
+
 	$: if (FlatPickr) {
 		const minDatePlusOne = new Date(min);
 		minDatePlusOne.setDate(minDatePlusOne.getDate() + 2);
@@ -57,8 +62,27 @@
 			<span class="required-label">*</span>
 		{/if}
 	</label>
-	<input type="hidden" id={name} {name} bind:this={flatpickrInput} readonly={true} {required} />
+	<div class="w1 flex end gap-5">
+		<input type="hidden" id={name} {name} bind:this={flatpickrInput} readonly={true} {required} />
+		<button
+			class="btn icon remove"
+			type="button"
+			aria-label="Clear date"
+			title="Borrar fecha"
+			onclick={handleRemoveDate}
+		>
+			<i class="bi bi-x-lg"></i>
+		</button>
+	</div>
 </div>
 
 <style>
+	.btn.remove {
+		height: 100%;
+		display: flex;
+		padding: 5px 6px;
+		border: 1px solid #ddd;
+		background-color: #fff;
+		border-radius: 4px;
+	}
 </style>

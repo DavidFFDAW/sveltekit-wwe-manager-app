@@ -17,6 +17,7 @@
 	--all: #c9b041;
 	--font-color: #2f2f2f;
 	--imgur: #1bb76e;
+	--brand-color: #c91727;
 
 	--color-success: #deffec;
 	--color-danger: #fde7e7;
@@ -42,6 +43,18 @@ html[data-theme='dark'] {
 	--danger: #EF4444;
 }
 
+.set-brand-color-raw {
+	--brand-color: var(--raw);
+}
+
+.set-brand-color-sd,
+.set-brand-color-smackdown {
+	--brand-color: var(--smackdown);
+}
+
+.set-brand-color-awl {
+	--brand-color: var(--awl);
+}
 
 /* ESTILOS GLOBALES RELEVANTES */
 i.customs-icons.app-bootstrap-custom-icon {

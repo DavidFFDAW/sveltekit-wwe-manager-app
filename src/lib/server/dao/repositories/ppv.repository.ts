@@ -19,6 +19,15 @@ export class PPVRepository extends Repository<
 		return this.weeklyShows;
 	}
 
+	getActiveNames(): Promise<string[]> {
+		return this.prisma.pPV
+			.findMany({
+				where: { active: true },
+				select: { name: true }
+			})
+			.then((results) => [...this.getWeeklyShows(), ...results.map((r) => r.name)]);
+	}
+
 	updatePpvDate(id: number, newDate: Date | null): Promise<PPV> {
 		return this.updateById(id, { game_date: newDate });
 	}
