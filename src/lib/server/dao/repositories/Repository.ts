@@ -96,9 +96,10 @@ export abstract class Repository<
 	): Promise<PaginationDatas<T>> {
 		const prepage = page < 1 ? 1 : page;
 		const skip = (prepage - 1) * take;
+		const { select, ...restArgs } = (args as Record<string, unknown>) || {};
 
 		const [totals, filtereds] = await Promise.all([
-			this.model.count(args),
+			this.model.count(restArgs),
 			this.model.findMany({
 				...args,
 				take,
