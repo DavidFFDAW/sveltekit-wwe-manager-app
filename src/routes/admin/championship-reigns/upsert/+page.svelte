@@ -5,11 +5,12 @@
 	import DateInput from '$lib/components/forms/date/date-input.svelte';
 	import Input from '$lib/components/forms/inputs/input.svelte';
 	import { errorimage } from '$lib/actions/error.image';
+	import PagedList from './paged-list.svelte';
 	import './page.css';
 
 	let { data } = $props();
 	let currentStep = $state(1);
-	let currentTagType = $state<'team' | 'noteam'>('team');
+	let currentTagType = $state<'team' | 'manual'>('team');
 	let selectedChampionshipId = $state(data.reign?.championship_id || null);
 	let selectedChampionship = $derived(data.championshipsMap.get(selectedChampionshipId || 0));
 	let isTagTeam = $derived(selectedChampionship?.tag || false);
@@ -20,9 +21,12 @@
 		data.finalParsedTeams.find((team) => team.id === selectedTeamId) || null
 	);
 	let maxSteps = $derived(isTagTeam ? 4 : 3);
+	let lastStep = $derived(
+		isTagTeam && (currentTagType === 'manual' || selectedTeam?.members.length > 2) ? 4 : 3
+	);
 	let members = $state(data.members || []);
 	let realMembers = $derived.by(() => {
-		if (currentTagType === 'noteam')
+		if (currentTagType === 'manual')
 			return members.map((memberId: any) => data.wrestlersMap.get(memberId)).filter(Boolean);
 		if (members.length < 2 && selectedTeam?.members.length === 2)
 			return selectedTeam?.members || [];
@@ -43,6 +47,11 @@
 		if (currentStep > 1) {
 			currentStep--;
 		}
+	};
+
+	const handleTeamSelection = (type: 'manual' | 'team') => (event: Event) => {
+		currentTagType = type;
+		if (type === 'manual') nextStep();
 	};
 
 	onMount(() => {
@@ -83,7 +92,7 @@
 			>
 				<div class="step-teams">
 					<header class="step-header">
-						<h2 class="step-title">Elige un equipo</h2>
+						<h2 class="step-title">Elige un campeonato</h2>
 					</header>
 
 					<div class="step-inner">
@@ -144,6 +153,9 @@
 					<div class="step-teams">
 						<header class="step-header">
 							<h2 class="step-title">Elige un equipo</h2>
+							<button type="button" class="btn secondary" onclick={handleTeamSelection('manual')}>
+								¿No encuentras el equipo? Elige a los luchadores manualmente
+							</button>
 						</header>
 
 						<div class="step-inner">
@@ -204,7 +216,42 @@
 				{/if}
 			</div>
 
-			{#if isTagTeam && selectedTeam?.members.length > 2}
+			{#if isTagTeam && currentTagType === 'manual'}
+				<div
+					class="step"
+					data-step-number="3"
+					data-step="team-members-manual"
+					class:active={currentStep === 3}
+				>
+					<header class="step-header">
+						<h2 class="step-title">Elige los campeones</h2>
+					</header>
+
+					<div class="step-inner">
+						<PagedList
+							list={data.wrestlers}
+							multiple={true}
+							name="member_ids"
+							bind:selected={members}
+							type="wrestler"
+						/>
+					</div>
+
+					<div class="buttons">
+						<button type="button" class="btn secondary" onclick={previousStep}> Atras </button>
+						<button
+							type="button"
+							class="btn cta"
+							onclick={nextStep}
+							disabled={!members || members.length < 2}
+						>
+							Siguiente
+						</button>
+					</div>
+				</div>
+			{/if}
+
+			{#if isTagTeam && currentTagType === 'team' && selectedTeam?.members.length > 2}
 				<div
 					class="step"
 					data-step-number="3"
@@ -267,9 +314,9 @@
 
 			<div
 				class="step"
-				data-step-number={isTagTeam && selectedTeam?.members.length > 2 ? 4 : 3}
 				data-step="reign-datas"
-				class:active={currentStep === (isTagTeam && selectedTeam?.members.length > 2 ? 4 : 3)}
+				data-step-number={lastStep}
+				class:active={currentStep === lastStep}
 			>
 				<header class="step-header">
 					<h2 class="step-title">Datos</h2>
@@ -302,7 +349,7 @@
 						{/if}
 
 						{#if isTagTeam && realMembers.length > 0}
-							<div class="team-card single-card">
+							<div class="team-card single-card flow-{currentTagType}">
 								<div class="resume-team-members-container">
 									{#each realMembers as member}
 										<img
@@ -315,7 +362,11 @@
 									{/each}
 								</div>
 								<div class="team-info">
-									<p>{selectedTeam.name}</p>
+									{#if currentTagType === 'team' && selectedTeam}
+										<p>{selectedTeam.name}</p>
+									{:else}
+										<p>{realMembers.map((member: any) => member.name).join(' & ')}</p>
+									{/if}
 								</div>
 							</div>
 						{/if}
@@ -385,6 +436,7 @@
 		padding: 0.5rem;
 		border-radius: 8px;
 		border: 2px solid #ddd;
+		cursor: pointer;
 	}
 
 	.championship-card .badge.chp-tag-badge {

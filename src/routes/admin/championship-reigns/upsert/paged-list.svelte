@@ -5,7 +5,13 @@
 	let page = $state(1);
 	let letter = $state('');
 	let search = $state('');
-	let { type = 'championship', list, selected = $bindable(null), name } = $props();
+	let {
+		type = 'championship',
+		list,
+		selected = $bindable(null),
+		name,
+		multiple = false
+	} = $props();
 
 	let start = $derived((page - 1) * perpage);
 	let filteredList = $derived(
@@ -82,14 +88,24 @@
 			{#each pagedList as item}
 				<li class="w1 block" data-slug={item.slug}>
 					<label class="relative">
-						<input
-							type="radio"
-							{name}
-							class="app-radio"
-							value={item.id}
-							checked={selected === item.id}
-							bind:group={selected}
-						/>
+						{#if !multiple}
+							<input
+								type="radio"
+								{name}
+								class="app-radio"
+								value={item.id}
+								checked={selected === item.id}
+								bind:group={selected}
+							/>
+						{:else}
+							<input
+								type="checkbox"
+								{name}
+								class="app-checkbox"
+								value={item.id}
+								bind:group={selected}
+							/>
+						{/if}
 						<div class="item-selector inner flex acenter gap-5">
 							<img
 								src={item.image}
