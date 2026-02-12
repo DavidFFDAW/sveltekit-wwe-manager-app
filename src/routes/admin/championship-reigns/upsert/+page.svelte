@@ -4,11 +4,12 @@
 	import StepWrestlers from './steps/step-wrestlers.svelte';
 	import DateInput from '$lib/components/forms/date/date-input.svelte';
 	import Input from '$lib/components/forms/inputs/input.svelte';
-	import './page.css';
 	import { errorimage } from '$lib/actions/error.image';
+	import './page.css';
 
 	let { data } = $props();
 	let currentStep = $state(1);
+	let currentTagType = $state<'team' | 'noteam'>('team');
 	let selectedChampionshipId = $state(data.reign?.championship_id || null);
 	let selectedChampionship = $derived(data.championshipsMap.get(selectedChampionshipId || 0));
 	let isTagTeam = $derived(selectedChampionship?.tag || false);
@@ -19,11 +20,14 @@
 		data.finalParsedTeams.find((team) => team.id === selectedTeamId) || null
 	);
 	let maxSteps = $derived(isTagTeam ? 4 : 3);
-	let members = $state([]);
-	let realMembers = $derived(
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		selectedTeam?.members.filter((member: any) => members.includes(member.id)) || []
-	);
+	let members = $state(data.members || []);
+	let realMembers = $derived.by(() => {
+		if (currentTagType === 'noteam')
+			return members.map((memberId: any) => data.wrestlersMap.get(memberId)).filter(Boolean);
+		if (members.length < 2 && selectedTeam?.members.length === 2)
+			return selectedTeam?.members || [];
+		return selectedTeam?.members.filter((member: any) => members.includes(member.id)) || [];
+	});
 
 	$effect(() => {
 		if (members.length > 2) members = members.slice(0, 2);
@@ -65,6 +69,12 @@
 				name="tag_type"
 				value={selectedChampionship?.tag ? 'team' : 'individual'}
 			/>
+			<input
+				type="hidden"
+				name="team_original_members_length"
+				value={selectedTeam?.members.length || 0}
+			/>
+
 			<div
 				class="step"
 				data-step-number="1"
@@ -98,6 +108,9 @@
 												use:errorimage={'/unknown-championship.webp'}
 											/>
 											<p>{chp.name}</p>
+											{#if chp.tag}
+												<span class="badge chp-tag-badge">Tag Team</span>
+											{/if}
 										</div>
 									</label>
 								</li>
@@ -276,7 +289,7 @@
 							</div>
 						{/if}
 
-						{#if selectedWrestler}
+						{#if !isTagTeam && selectedWrestler}
 							<div class="championship-card single-card">
 								<img
 									src={selectedWrestler.image_name}
@@ -288,9 +301,9 @@
 							</div>
 						{/if}
 
-						{#if selectedTeam}
+						{#if isTagTeam && realMembers.length > 0}
 							<div class="team-card single-card">
-								<div class="team-members-container">
+								<div class="resume-team-members-container">
 									{#each realMembers as member}
 										<img
 											width="40"
@@ -361,6 +374,7 @@
 		gap: 5px;
 	}
 	[data-step='championship'] ul.list li.list-item .championship-card {
+		position: relative;
 		width: 100%;
 		height: 100%;
 		display: flex;
@@ -371,6 +385,17 @@
 		padding: 0.5rem;
 		border-radius: 8px;
 		border: 2px solid #ddd;
+	}
+
+	.championship-card .badge.chp-tag-badge {
+		position: absolute;
+		top: 5px;
+		right: 5px;
+		background-color: #333;
+		color: #fff;
+		font-size: 0.6rem;
+		padding: 2px 6px;
+		border-radius: 4px;
 	}
 	[data-step='championship'] ul.list li.list-item .championship-card p {
 		text-align: center;
@@ -496,6 +521,7 @@
 		padding: 8px;
 		border-radius: 8px;
 		border: 2px solid #ddd;
+		min-height: 80px;
 	}
 	.resume .single-card img {
 		padding: 4px;
@@ -503,17 +529,30 @@
 		background-color: #eee;
 		border: 1px solid #ddd;
 	}
-	.resume .single-card .team-members-container {
-		width: 100%;
+	.resume .single-card .resume-team-members-container {
 		position: relative;
-		max-width: 100px;
+		width: 135px;
+		height: 80px;
+		overflow: hidden;
+		overflow-x: auto;
+		background-color: #eee;
+		border: 1px solid #ddd;
+		border-radius: 4px;
 	}
-	.resume .single-card .team-members-container img.team-member-image {
-		width: 100%;
+	.resume .single-card .resume-team-members-container img.team-member-image {
+		position: absolute;
+		background-color: transparent;
+		border: none;
+		bottom: 0;
+		left: 0;
+		width: 80px;
 		height: 100%;
 		object-fit: cover;
-		position: relative;
-		object-position: center;
+		object-position: left;
 		z-index: 1;
+	}
+	.resume .single-card .resume-team-members-container img.team-member-image:last-child {
+		left: 50px;
+		object-position: right;
 	}
 </style>

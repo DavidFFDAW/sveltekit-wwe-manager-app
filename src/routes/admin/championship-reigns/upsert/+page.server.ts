@@ -36,15 +36,24 @@ export async function load({ url }) {
 		orderBy: { slug: 'asc' }
 	});
 	const championships = await championshipRepo.get({
-		select: { id: true, name: true, image: true, brand: true, gender: true, tag: true },
+		select: {
+			id: true,
+			name: true,
+			image: true,
+			tag: true,
+			order: true
+		},
 		where: { active: true },
-		orderBy: { name: 'asc' }
+		orderBy: [{ tag: 'desc' }, { order: 'asc' }]
 	});
+
+	const members = reign ? [reign.wrestler_id, reign.partner] : [];
 
 	return {
 		reign,
-		isUpdate: Boolean(reignId) && reign !== null,
+		members,
 		championships: championships,
+		isUpdate: Boolean(reignId) && reign !== null,
 		championshipsMap: new Map(championships.map((c) => [c.id, c])),
 		wrestlers: wrestlers.map((w) => ({
 			...w,
@@ -62,11 +71,21 @@ export const actions = {
 		if (!Helpers.hasPermission(locals))
 			return Helpers.error('No tienes permisos para realizar esta acción', 403);
 
+		const updateId = Helpers.getUpdateID(formData);
 		const championshipId = formData.get('championship_id');
 		const action = formData.get('action');
-		const type = formData.get('type');
+		const type = formData.get('tag_type');
 		const end_date = formData.get('end_date');
 		const is_active = !Boolean(end_date);
+		const wrestlerId = formData.get('wrestler_id');
+
+		const teamId = formData.get('team_id');
+		const originalMembersLength = Number(formData.get('team_original_members_length') || 0);
+		const teamMembers = formData.getAll('member_ids[]');
+		const members = teamMembers
+			.slice(0, 2)
+			.map((id) => Number(id))
+			.filter((id) => !isNaN(id));
 
 		const chpRepo = new ChampionshipRepository();
 		const championship = await chpRepo.getSingleById(Number(championshipId));
@@ -78,11 +97,15 @@ export const actions = {
 
 		console.log({
 			championshipId,
-			championship,
+			championship: championship.name,
 			end_date,
 			is_active,
 			action,
-			type
+			type,
+			wrestlerId,
+			teamId,
+			originalMembersLength,
+			members
 		});
 
 		return Helpers.error('No se ha implementado la acción de guardar el reinado aún.', 500);
