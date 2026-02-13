@@ -76,6 +76,14 @@
 							<span>combates</span>
 						</a>
 						<a
+							href="/admin/matchcards/rating?slug={matchcard.id}"
+							class="btn small success"
+							aria-label="Valoraciones"
+						>
+							<i class="bi bi-star"></i>
+							<span>valoraciones</span>
+						</a>
+						<a
 							href="/admin/matchcards/export/{matchcard.id}"
 							class="btn small info"
 							aria-label="Exportar evento"

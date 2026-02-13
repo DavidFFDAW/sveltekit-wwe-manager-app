@@ -339,6 +339,15 @@ body main.app-main-entrypoint.admin-page {
     background-color: #ebebeb;
 }
 
+body main.app-main-entrypoint.admin-page .page-header {
+    margin-bottom: 25px;
+}
+
+body main.app-main-entrypoint.admin-page .page-header h1+small {
+    display: inline-block;
+    margin-top: 5px;
+}
+
 /* body main.app-main-entrypoint.admin-page .page-wrapper-content {
 	padding: 0 0;
 } */
@@ -463,4 +472,11 @@ body main.app-main-entrypoint.admin-page {
         left: 50%;
         transform: translateX(-50%);
     }
+
+    body main.app-main-entrypoint.admin-page .page-header h1+small {
+        display: block;
+        text-align: center;
+        margin-top: 5px;
+    }
+
 }
