@@ -33,6 +33,25 @@
 		return selectedTeam?.members.filter((member: any) => members.includes(member.id)) || [];
 	});
 
+	let disabledNextStep = $derived.by(() => {
+		if (currentStep === 1) return !selectedChampionshipId;
+		if (currentStep === 2) {
+			if (isTagTeam) {
+				return !(selectedTeamId || currentTagType === 'manual');
+			} else {
+				return !selectedWrestlerId;
+			}
+		}
+		if (currentStep === 3 && isTagTeam) {
+			if (currentTagType === 'manual') {
+				return members.length !== 2;
+			} else {
+				return !selectedTeamId || (selectedTeam?.members.length > 2 && members.length !== 2);
+			}
+		}
+		return false;
+	});
+
 	$effect(() => {
 		if (members.length > 2) members = members.slice(0, 2);
 	});
@@ -53,6 +72,10 @@
 		currentTagType = type;
 		if (type === 'manual') nextStep();
 	};
+
+	$inspect({
+		disabledNextStep
+	});
 
 	onMount(() => {
 		setTimeout(() => {
