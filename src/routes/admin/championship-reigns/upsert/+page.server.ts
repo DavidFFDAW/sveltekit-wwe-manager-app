@@ -71,17 +71,17 @@ export const actions = {
 		if (!Helpers.hasPermission(locals))
 			return Helpers.error('No tienes permisos para realizar esta acción', 403);
 
-		const updateId = Helpers.getUpdateID(formData);
+		// const updateId = Helpers.getUpdateID(formData);
 		const championshipId = formData.get('championship_id');
 		const action = formData.get('action');
 		const type = formData.get('tag_type');
 		const end_date = formData.get('end_date');
-		const is_active = !Boolean(end_date);
+		const is_active = !end_date;
 		const wrestlerId = formData.get('wrestler_id');
 
 		const teamId = formData.get('team_id');
 		const originalMembersLength = Number(formData.get('team_original_members_length') || 0);
-		const teamMembers = formData.getAll('member_ids[]');
+		const teamMembers = formData.getAll('member_ids');
 		const members = teamMembers
 			.slice(0, 2)
 			.map((id) => Number(id))
@@ -105,6 +105,8 @@ export const actions = {
 			wrestlerId,
 			teamId,
 			originalMembersLength,
+			formDataMembers: formData.getAll('member_ids[]'),
+			original_members: formData.getAll('manual_member_ids'),
 			members
 		});
 

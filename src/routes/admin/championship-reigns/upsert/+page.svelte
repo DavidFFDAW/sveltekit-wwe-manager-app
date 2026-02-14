@@ -7,6 +7,7 @@
 	import { errorimage } from '$lib/actions/error.image';
 	import PagedList from './paged-list.svelte';
 	import './page.css';
+	import MembersSelector from './members-selector.svelte';
 
 	let { data } = $props();
 	let currentStep = $state(1);
@@ -73,9 +74,9 @@
 		if (type === 'manual') nextStep();
 	};
 
-	$inspect({
-		disabledNextStep
-	});
+	const handleManualMemberRemoval = (memberId: number) => () => {
+		members = members.filter((id: number | null) => id !== memberId);
+	};
 
 	onMount(() => {
 		setTimeout(() => {
@@ -176,12 +177,17 @@
 					<div class="step-teams">
 						<header class="step-header">
 							<h2 class="step-title">Elige un equipo</h2>
-							<button type="button" class="btn secondary" onclick={handleTeamSelection('manual')}>
-								¿No encuentras el equipo? Elige a los luchadores manualmente
-							</button>
 						</header>
 
 						<div class="step-inner">
+							<button
+								type="button"
+								class="w1 btn info block btn-manual-team-selection"
+								onclick={handleTeamSelection('manual')}
+							>
+								¿No encuentras el equipo? Elige a los luchadores manualmente
+							</button>
+
 							<ul class="list">
 								{#each data.finalParsedTeams as team}
 									<li class="list-item">
@@ -251,12 +257,11 @@
 					</header>
 
 					<div class="step-inner">
-						<PagedList
+						<MembersSelector
 							list={data.wrestlers}
-							multiple={true}
-							name="member_ids"
+							map={data.wrestlersMap}
+							name="manual_member_ids"
 							bind:selected={members}
-							type="wrestler"
 						/>
 					</div>
 
@@ -282,7 +287,7 @@
 					class:active={currentStep === 3}
 				>
 					<header class="step-header">
-						<h2 class="step-title">Elige los miembros del equipo</h2>
+						<h2 class="step-title">Elige los miembros</h2>
 					</header>
 
 					<div class="step-inner">
@@ -427,6 +432,10 @@
 						required={false}
 						options={['Pinfall', 'Submission', 'Countout', 'Disqualification', 'Cash-in', 'Otro']}
 					/>
+
+					{#each members as memberId}
+						<input type="hidden" name="member_ids[]" value={memberId} />
+					{/each}
 				</div>
 
 				<div class="buttons">
@@ -629,5 +638,9 @@
 	.resume .single-card .resume-team-members-container img.team-member-image:last-child {
 		left: 50px;
 		object-position: right;
+	}
+
+	.btn-manual-team-selection {
+		margin-bottom: 15px;
 	}
 </style>
