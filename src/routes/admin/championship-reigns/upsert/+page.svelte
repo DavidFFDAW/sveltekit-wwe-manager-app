@@ -1,17 +1,16 @@
 <script lang="ts">
-	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import { onMount } from 'svelte';
+	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import StepWrestlers from './steps/step-wrestlers.svelte';
 	import DateInput from '$lib/components/forms/date/date-input.svelte';
 	import Input from '$lib/components/forms/inputs/input.svelte';
 	import { errorimage } from '$lib/actions/error.image';
-	import PagedList from './paged-list.svelte';
-	import './page.css';
 	import MembersSelector from './members-selector.svelte';
+	import './page.css';
 
 	let { data } = $props();
 	let currentStep = $state(1);
-	let currentTagType = $state<'team' | 'manual'>('team');
+	let currentTagType = $state<'team' | 'manual'>(data.currentTagType || 'team');
 	let selectedChampionshipId = $state(data.reign?.championship_id || null);
 	let selectedChampionship = $derived(data.championshipsMap.get(selectedChampionshipId || 0));
 	let isTagTeam = $derived(selectedChampionship?.tag || false);
@@ -29,53 +28,68 @@
 	let realMembers = $derived.by(() => {
 		if (currentTagType === 'manual')
 			return members.map((memberId: any) => data.wrestlersMap.get(memberId)).filter(Boolean);
-		if (members.length < 2 && selectedTeam?.members.length === 2)
+		if (members.length <= 2 && selectedTeam?.members.length === 2)
 			return selectedTeam?.members || [];
 		return selectedTeam?.members.filter((member: any) => members.includes(member.id)) || [];
 	});
 
-	let disabledNextStep = $derived.by(() => {
-		if (currentStep === 1) return !selectedChampionshipId;
-		if (currentStep === 2) {
-			if (isTagTeam) {
-				return !(selectedTeamId || currentTagType === 'manual');
-			} else {
-				return !selectedWrestlerId;
-			}
-		}
-		if (currentStep === 3 && isTagTeam) {
-			if (currentTagType === 'manual') {
-				return members.length !== 2;
-			} else {
-				return !selectedTeamId || (selectedTeam?.members.length > 2 && members.length !== 2);
-			}
-		}
-		return false;
-	});
+	// let disabledNextStep = $derived.by(() => {
+	// 	if (currentStep === 1) return !selectedChampionshipId;
+	// 	if (currentStep === 2) {
+	// 		if (isTagTeam) {
+	// 			return !(selectedTeamId || currentTagType === 'manual');
+	// 		} else {
+	// 			return !selectedWrestlerId;
+	// 		}
+	// 	}
+	// 	if (currentStep === 3 && isTagTeam) {
+	// 		if (currentTagType === 'manual') {
+	// 			return members.length !== 2;
+	// 		} else {
+	// 			return !selectedTeamId || (selectedTeam?.members.length > 2 && members.length !== 2);
+	// 		}
+	// 	}
+	// 	return false;
+	// });
 
 	$effect(() => {
 		if (members.length > 2) members = members.slice(0, 2);
 	});
+	$effect(() => {
+		if (currentStep === 2 && isTagTeam) {
+			currentTagType = 'team';
+		}
+	});
 
 	const nextStep = () => {
 		if (currentStep < maxSteps) {
+			const next = currentStep + 1;
+			const state = { ...(history.state ?? {}), step: next };
+			history.pushState(state, '', location.href);
 			currentStep++;
 		}
 	};
 
 	const previousStep = () => {
 		if (currentStep > 1) {
+			const prev = currentStep - 1;
+			const state = { ...(history.state ?? {}), step: prev };
+			history.pushState(state, '', location.href);
 			currentStep--;
 		}
 	};
 
+	function handlePopState(e: PopStateEvent) {
+		e.preventDefault();
+		const s = e.state?.step ?? 1;
+		if (s >= 1 && s <= maxSteps) {
+			currentStep = s;
+		}
+	}
+
 	const handleTeamSelection = (type: 'manual' | 'team') => (event: Event) => {
 		currentTagType = type;
 		if (type === 'manual') nextStep();
-	};
-
-	const handleManualMemberRemoval = (memberId: number) => () => {
-		members = members.filter((id: number | null) => id !== memberId);
 	};
 
 	onMount(() => {
@@ -84,6 +98,15 @@
 				currentStep = maxSteps - 1;
 			}
 		}, 500);
+
+		const initial = history.state?.step ?? 1;
+		currentStep = initial;
+		history.replaceState({ ...(history.state ?? {}), step: initial }, '', location.href);
+		window.addEventListener('popstate', handlePopState);
+
+		return () => {
+			window.removeEventListener('popstate', handlePopState);
+		};
 	});
 </script>
 
@@ -100,7 +123,7 @@
 			<input
 				type="hidden"
 				name="tag_type"
-				value={selectedChampionship?.tag ? 'team' : 'individual'}
+				value={selectedChampionship?.tag ? 'tag_team' : 'individual'}
 			/>
 			<input
 				type="hidden"
@@ -199,6 +222,7 @@
 												value={team.id}
 												bind:group={selectedTeamId}
 												onchange={nextStep}
+												disabled={currentTagType === 'manual'}
 											/>
 											<div class="inner team-members-card">
 												<!-- <div class="team-members-container">
@@ -382,6 +406,7 @@
 									{#each realMembers as member}
 										<img
 											width="40"
+											data-member-id={member.id}
 											src={member.image_name}
 											alt={member.name}
 											class="team-member-image"
@@ -403,7 +428,8 @@
 					<DateInput
 						label="Fecha de inicio"
 						name="start_date"
-						value={data.reign?.won_date.toString().substring(0, 10) || ''}
+						value={data.reign?.won_date.toString().substring(0, 10) ||
+							new Date().toISOString().substring(0, 10)}
 						required={true}
 					/>
 					<DateInput
@@ -433,9 +459,10 @@
 						options={['Pinfall', 'Submission', 'Countout', 'Disqualification', 'Cash-in', 'Otro']}
 					/>
 
-					{#each members as memberId}
-						<input type="hidden" name="member_ids[]" value={memberId} />
+					{#each realMembers as member}
+						<input type="hidden" name="member_ids[]" value={member.id} />
 					{/each}
+					<input type="hidden" name="current_tag_type" value={currentTagType} />
 				</div>
 
 				<div class="buttons">

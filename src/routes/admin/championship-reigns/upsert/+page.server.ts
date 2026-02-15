@@ -4,6 +4,9 @@ import { ReignsRepository } from '$lib/server/dao/repositories/reigns.repository
 import { TeamsRepository } from '$lib/server/dao/repositories/teams.repository';
 import { WrestlerRepository } from '$lib/server/dao/repositories/wrestler.repository';
 import { Helpers } from '$lib/server/server.helpers.js';
+import type { Prisma } from '@prisma/client';
+
+type UpsertObject = Prisma.ChampionshipReignUpdateInput | Prisma.ChampionshipReignCreateInput;
 
 export async function load({ url }) {
 	const reignId = url.searchParams.get('reign');
@@ -48,6 +51,11 @@ export async function load({ url }) {
 	});
 
 	const members = reign ? [reign.wrestler_id, reign.partner] : [];
+	const currentTagType: 'team' | 'manual' = reign
+		? reign.wrestler_id && reign.partner && !reign.team_id
+			? 'manual'
+			: 'team'
+		: 'team';
 
 	return {
 		reign,
@@ -61,7 +69,8 @@ export async function load({ url }) {
 		})),
 		wrestlersMap: new Map(wrestlers.map((w) => [w.id, w])),
 		ppvs: await ppvRepo.getActiveNames(),
-		finalParsedTeams
+		finalParsedTeams,
+		currentTagType
 	};
 }
 
@@ -71,45 +80,63 @@ export const actions = {
 		if (!Helpers.hasPermission(locals))
 			return Helpers.error('No tienes permisos para realizar esta acción', 403);
 
-		// const updateId = Helpers.getUpdateID(formData);
-		const championshipId = formData.get('championship_id');
-		const action = formData.get('action');
-		const type = formData.get('tag_type');
-		const end_date = formData.get('end_date');
-		const is_active = !end_date;
-		const wrestlerId = formData.get('wrestler_id');
+		const neededDatas = ['championship_id', 'start_date'];
+		const missingData = Helpers.checkRequiredFields(formData, neededDatas);
+		if (missingData.error) return Helpers.error(missingData.message, 400);
 
-		const teamId = formData.get('team_id');
-		const originalMembersLength = Number(formData.get('team_original_members_length') || 0);
-		const teamMembers = formData.getAll('member_ids');
-		const members = teamMembers
-			.slice(0, 2)
-			.map((id) => Number(id))
-			.filter((id) => !isNaN(id));
+		const championshipId = Number(formData.get('championship_id'));
+		if (isNaN(championshipId)) return Helpers.error('El ID del campeonato debe ser un número', 400);
 
 		const chpRepo = new ChampionshipRepository();
-		const championship = await chpRepo.getSingleById(Number(championshipId));
+		const championship = await chpRepo.getSingleById(championshipId);
 		if (!championship) return Helpers.error('El campeonato seleccionado no existe', 400);
 
-		for (const [key, value] of formData.entries()) {
-			console.log(key, value);
+		const datas = {
+			championshipId: championshipId,
+			type: formData.get('tag_type'),
+			currentTagType: formData.get('current_tag_type'),
+			end_date: formData.get('end_date'),
+			won_date: formData.get('start_date'),
+			is_active: !formData.get('end_date'),
+			wrestlerId: formData.get('wrestler_id'),
+			teamId: formData.get('team_id'),
+			victory_way: formData.get('victory_way') ? formData.get('victory_way')!.toString() : null,
+			ppv_won: formData.get('ppv_won') ? formData.get('ppv_won')!.toString() : null,
+			members: (formData.getAll('member_ids[]') as string[])
+				.slice(0, 2)
+				.map((id) => Number(id))
+				.filter((id) => !isNaN(id))
+		};
+
+		const updateId = Helpers.getUpdateID(formData);
+		const action = updateId ? 'update' : 'create';
+
+		const isTagTeam = championship.tag;
+		const isManualTeam = datas.currentTagType === 'manual';
+
+		let upsertObject: UpsertObject = {
+			Championship: { connect: { id: Number(datas.championshipId) } },
+			won_date: datas.won_date ? new Date(datas.won_date as string) : new Date(),
+			lost_date: datas.end_date ? new Date(datas.end_date as string) : null,
+			victory_way: datas.victory_way,
+			ppv_won: datas.ppv_won,
+			current: datas.is_active
+		};
+
+		if (!isTagTeam) {
+			if (!datas.wrestlerId)
+				return Helpers.error('Debes seleccionar un luchador para un reinado individual', 400);
+
+			upsertObject = {
+				...upsertObject,
+				Wrestler: { connect: { id: Number(datas.wrestlerId) } },
+				Team: { disconnect: true },
+				Partner: { disconnect: true }
+			};
 		}
+		console.log({ upsertObject, isTagTeam, isManualTeam, action });
 
-		console.log({
-			championshipId,
-			championship: championship.name,
-			end_date,
-			is_active,
-			action,
-			type,
-			wrestlerId,
-			teamId,
-			originalMembersLength,
-			formDataMembers: formData.getAll('member_ids[]'),
-			original_members: formData.getAll('manual_member_ids'),
-			members
-		});
-
+		return Helpers.error('No se ha implementado la acción de guardar el reinado aún.', 500);
 		return Helpers.error('No se ha implementado la acción de guardar el reinado aún.', 500);
 	}
 };
