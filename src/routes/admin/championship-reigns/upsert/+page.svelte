@@ -99,11 +99,7 @@
 			}
 		}, 500);
 
-		const initial = history.state?.step ?? 1;
-		currentStep = initial;
-		history.replaceState({ ...(history.state ?? {}), step: initial }, '', location.href);
 		window.addEventListener('popstate', handlePopState);
-
 		return () => {
 			window.removeEventListener('popstate', handlePopState);
 		};

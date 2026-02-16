@@ -31,7 +31,11 @@
 				<ul class="w1 championship-reigns-list">
 					{#each reigns as reign}
 						{@const isTag = reign.Partner && reign.Championship.tag}
-						<li class="w1 championship-reign-item">
+						<li
+							class="w1 championship-reign-item"
+							data-championship-id={championshipId}
+							data-reign-id={reign.id}
+						>
 							<ChampionshipReignCard isTag={isTag as boolean} reign={reign as any} />
 						</li>
 					{/each}
