@@ -5,7 +5,7 @@
 	let page = $state(1);
 	let letter = $state('');
 	let search = $state('');
-	let { list, selected = $bindable(null), name, map } = $props();
+	let { list, selected = $bindable(null), name, map, nextStep } = $props();
 	let selectedWrestlers = $derived.by(() => {
 		if (!selected) return [];
 		return selected.map((id: number) => map.get(id)).filter(Boolean);
@@ -30,6 +30,10 @@
 		Array.from({ length: Math.ceil(searchedList.length / perpage) }, (_, i) => i + 1)
 	);
 	let pagedList = $derived(searchedList.slice(start, start + perpage));
+
+	const handleNextStep = () => {
+		if (selected.length == 2) nextStep();
+	};
 </script>
 
 <div class="w1 custom-app-box sortable-list list-with-pagination">
@@ -123,6 +127,7 @@
 							class="app-checkbox"
 							value={item.id}
 							bind:group={selected}
+							onchange={handleNextStep}
 						/>
 						<div class="item-selector inner flex acenter gap-5">
 							<img

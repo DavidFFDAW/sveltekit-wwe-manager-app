@@ -1,6 +1,6 @@
 <script lang="ts">
 	import PagedList from '../paged-list.svelte';
-	let { list, currentStep = $bindable(), selectedWrestlerId = $bindable() } = $props();
+	let { list, selectedWrestlerId = $bindable(), nextStep, previousStep } = $props();
 </script>
 
 <div class="step-wrestlers">
@@ -9,16 +9,17 @@
 	</header>
 
 	<div class="step-inner">
-		<PagedList type="wrestler" {list} bind:selected={selectedWrestlerId} name="wrestler_id" />
+		<PagedList
+			type="wrestler"
+			{list}
+			bind:selected={selectedWrestlerId}
+			name="wrestler_id"
+			{nextStep}
+		/>
 	</div>
 	<div class="buttons">
-		<button type="button" class="btn secondary" onclick={() => currentStep--}>Atras</button>
-		<button
-			type="button"
-			class="btn cta"
-			onclick={() => currentStep++}
-			disabled={!selectedWrestlerId}
-		>
+		<button type="button" class="btn secondary" onclick={previousStep}>Atras</button>
+		<button type="button" class="btn cta" onclick={nextStep} disabled={!selectedWrestlerId}>
 			Siguiente
 		</button>
 	</div>

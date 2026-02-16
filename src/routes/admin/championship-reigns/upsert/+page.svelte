@@ -8,8 +8,11 @@
 	import MembersSelector from './members-selector.svelte';
 	import './page.css';
 
+	const today = new Date();
+
 	let { data } = $props();
 	let currentStep = $state(1);
+	let ppvWon = $state(data.reign?.ppv_won);
 	let currentTagType = $state<'team' | 'manual'>(data.currentTagType || 'team');
 	let selectedChampionshipId = $state(data.reign?.championship_id || null);
 	let selectedChampionship = $derived(data.championshipsMap.get(selectedChampionshipId || 0));
@@ -191,7 +194,7 @@
 				class:active={currentStep === 2}
 			>
 				{#if selectedChampionship && !selectedChampionship.tag}
-					<StepWrestlers list={data.wrestlers} bind:currentStep bind:selectedWrestlerId />
+					<StepWrestlers list={data.wrestlers} bind:selectedWrestlerId {nextStep} {previousStep} />
 				{:else}
 					<div class="step-teams">
 						<header class="step-header">
@@ -282,6 +285,7 @@
 							map={data.wrestlersMap}
 							name="manual_member_ids"
 							bind:selected={members}
+							{nextStep}
 						/>
 					</div>
 
@@ -422,35 +426,47 @@
 					</div>
 
 					<DateInput
-						label="Fecha de inicio"
+						label="Fecha de victoria"
 						name="start_date"
 						value={data.reign?.won_date.toString().substring(0, 10) ||
-							new Date().toISOString().substring(0, 10)}
+							today.toISOString().split('T')[0]}
+						max={today.toISOString().split('T')[0]}
 						required={true}
 					/>
 					<DateInput
-						label="Fecha de finalización"
+						label="Fecha de derrota"
 						name="end_date"
 						value={data.reign?.lost_date?.toString().substring(0, 10) || ''}
+						max={today.toISOString().split('T')[0]}
 						required={false}
 					/>
 
-					<Input
-						type="text"
-						label="Evento donde ganó el campeonato"
-						name="won_event"
-						value={data.reign?.ppv_won || ''}
-						placeholder="Evento donde ganó el campeonato"
-						required={false}
-						options={data.ppvs}
-					/>
+					<div class="ppv-won-container form-item">
+						<span class="label form-label">Evento en que se gano</span>
+						<div class="ppv-won-list">
+							{#each data.ppvs as ppv}
+								<label class="relative">
+									<input
+										type="radio"
+										class="app-radio"
+										name="ppv_won"
+										value={ppv}
+										bind:group={ppvWon}
+									/>
+									<div class="inner">
+										<span>{ppv}</span>
+									</div>
+								</label>
+							{/each}
+						</div>
+					</div>
 
 					<Input
 						type="text"
-						label="Forma en que se ganó el campeonato"
+						label="Forma en que se gano el campeonato"
 						name="victory_way"
-						value={data.reign?.victory_way || ''}
-						placeholder="Forma en que se ganó el campeonato"
+						value={data.reign?.victory_way || 'Pinfall'}
+						placeholder="Forma en que se gano el campeonato"
 						required={false}
 						options={['Pinfall', 'Submission', 'Countout', 'Disqualification', 'Cash-in', 'Otro']}
 					/>
@@ -665,5 +681,27 @@
 
 	.btn-manual-team-selection {
 		margin-bottom: 15px;
+	}
+
+	.ppv-won-list {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+		place-items: stretch;
+		gap: 6px;
+	}
+
+	.ppv-won-list label {
+		display: block;
+		height: 100%;
+		cursor: pointer;
+	}
+	.steps-container .step .ppv-won-list input.app-radio + .inner {
+		display: block;
+		height: 100%;
+		text-align: center;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		max-width: 100%;
+		overflow: hidden;
 	}
 </style>
