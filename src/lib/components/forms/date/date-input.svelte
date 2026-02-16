@@ -6,13 +6,7 @@
 	import type { Instance } from 'flatpickr/dist/types/instance';
 	import { Spanish } from 'flatpickr/dist/l10n/es';
 
-	export let label;
-	export let name;
-	export let min: string = '';
-	export let max: string = '';
-	export let value: string | null | undefined = null;
-	export let required: boolean = false;
-
+	let { label, name, min = undefined, max = undefined, value = null, required = false } = $props();
 	let flatpickrInput: HTMLInputElement | null = null;
 	let FlatPickr: Instance;
 
@@ -44,15 +38,6 @@
 		value = null;
 		if (FlatPickr) FlatPickr.clear();
 	};
-
-	$: if (FlatPickr) {
-		const minDatePlusOne = new Date(min);
-		minDatePlusOne.setDate(minDatePlusOne.getDate() + 2);
-		const maxDate = new Date(max);
-		maxDate.setDate(maxDate.getDate() - 1);
-		FlatPickr.set('minDate', minDatePlusOne);
-		FlatPickr.set('maxDate', maxDate);
-	}
 </script>
 
 <div class="flatpicker-container form-item">
