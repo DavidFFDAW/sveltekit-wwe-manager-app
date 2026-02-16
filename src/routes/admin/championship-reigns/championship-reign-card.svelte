@@ -91,7 +91,7 @@
 			<div class="championship-reign-stats-item">
 				<p class="championship-reign-stats-title">Defensas</p>
 				{#if !update}
-					<p class="championship-reign-stats-value">{reign.defences}</p>
+					<p class="championship-reign-stats-value">{reign.defences || 0}</p>
 				{:else}
 					<label class="championship-reign-stats-title">
 						<input type="number" name="defences" value={reign.defences} />
