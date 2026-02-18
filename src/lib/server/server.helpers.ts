@@ -89,6 +89,12 @@ export const Helpers = {
 	writeLog: (filename: string, data: Record<string, any>) => {
 		return fs.writeFileSync(`./src/logs/${filename}.json`, JSON.stringify(data, null, 4));
 	},
+	getPaginationFromSearchParams: (searchParams: URLSearchParams, limit: number = 10) => {
+		const page = Number(searchParams.get('page') || '1');
+		const takeLimit = Number(searchParams.get('limit') || limit);
+		const offset = (page - 1) * takeLimit;
+		return { page, limit: takeLimit, offset };
+	},
 	sendEmail: ({ emails, html, subject, body, variables }: EmailOptions) => {
 		const emailsArray = Array.isArray(emails) ? emails : [emails];
 		const uniqueTo = [...new Set([...emailsArray, MAIL_API_ADMIN])];

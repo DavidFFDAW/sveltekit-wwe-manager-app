@@ -11,6 +11,10 @@
 <PageWrapper page="championship-reigns">
 	<header class="championship-reign-page-header">
 		<h1 class="w1">Reinados de Campeonatos</h1>
+		<a class="btn info" href="{data.path}/rankings">
+			<i class="bi bi-trophy"></i>
+			<span class="tooltip">Rankings</span>
+		</a>
 		<!-- <HttpButton href="/api/reigns/update-days/current" icon="refresh">Actualizar días</HttpButton> -->
 	</header>
 
