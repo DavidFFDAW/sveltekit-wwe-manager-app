@@ -6,7 +6,8 @@ export class ChampionshipRepository extends Repository<
 	Prisma.ChampionshipCreateInput,
 	Prisma.ChampionshipUpdateInput,
 	Prisma.ChampionshipWhereInput,
-	Prisma.ChampionshipFindManyArgs
+	Prisma.ChampionshipFindManyArgs,
+	Prisma.ChampionshipGroupByArgs
 > {
 	protected requiredFields: string[] = [];
 

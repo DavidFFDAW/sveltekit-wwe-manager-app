@@ -6,7 +6,8 @@ export class TwitterRepository extends Repository<
 	Prisma.TweetsCreateInput,
 	Prisma.TweetsUpdateInput,
 	Prisma.TweetsWhereInput,
-	Prisma.TweetsFindManyArgs
+	Prisma.TweetsFindManyArgs,
+	Prisma.TweetsGroupByArgs
 > {
 	protected requiredFields: string[] = [];
 

@@ -6,7 +6,8 @@ export class TeamsRepository extends Repository<
 	Prisma.TeamCreateInput,
 	Prisma.TeamUpdateInput,
 	Prisma.TeamWhereInput,
-	Prisma.TeamFindManyArgs
+	Prisma.TeamFindManyArgs,
+	Prisma.TeamGroupByArgs
 > {
 	protected requiredFields: string[] = [];
 

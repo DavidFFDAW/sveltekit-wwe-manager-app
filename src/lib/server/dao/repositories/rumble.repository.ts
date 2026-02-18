@@ -6,7 +6,8 @@ export class RumbleRepository extends Repository<
 	Prisma.RumbleCreateInput,
 	Prisma.RumbleUpdateInput,
 	Prisma.RumbleWhereInput,
-	Prisma.RumbleFindManyArgs
+	Prisma.RumbleFindManyArgs,
+	Prisma.RumbleGroupByArgs
 > {
 	protected requiredFields: string[] = ['year', 'entry_number', 'winner_id'];
 

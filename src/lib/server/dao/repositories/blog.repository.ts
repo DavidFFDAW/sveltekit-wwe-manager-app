@@ -6,7 +6,8 @@ export class BlogRepository extends Repository<
 	Prisma.BlogPostCreateInput,
 	Prisma.BlogPostUpdateInput,
 	Prisma.BlogPostWhereInput,
-	Prisma.BlogPostFindManyArgs
+	Prisma.BlogPostFindManyArgs,
+	Prisma.BlogPostGroupByArgs
 > {
 	protected requiredFields: string[] = [];
 	public allowedStatuses: string[] = ['draft', 'published', 'unpublished'];

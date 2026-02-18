@@ -6,7 +6,8 @@ export class UsersRepository extends Repository<
 	Prisma.UserCreateInput,
 	Prisma.UserUpdateInput,
 	Prisma.UserWhereInput,
-	Prisma.UserFindManyArgs
+	Prisma.UserFindManyArgs,
+	Prisma.UserGroupByArgs
 > {
 	protected requiredFields: string[] = [];
 

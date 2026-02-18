@@ -7,7 +7,8 @@ export class PpvCardRepository extends Repository<
 	Prisma.PPVCardCreateInput,
 	Prisma.PPVCardUpdateInput,
 	Prisma.PPVCardWhereInput,
-	Prisma.PPVCardFindManyArgs
+	Prisma.PPVCardFindManyArgs,
+	Prisma.PPVCardGroupByArgs
 > {
 	protected requiredFields: string[] = [];
 
