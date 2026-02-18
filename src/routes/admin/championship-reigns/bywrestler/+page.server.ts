@@ -3,6 +3,7 @@ import { ReignsRepository } from '$lib/server/dao/repositories/reigns.repository
 import type { ChampionshipReign } from '@prisma/client';
 import type { PaginationDatas } from '$lib/types/app.types.js';
 import { WrestlerRepository } from '$lib/server/dao/repositories/wrestler.repository.js';
+import { ReignUtils } from '$lib/utils/reign.utils.js';
 
 const minimumWrestlerDatas = {
 	id: true,
@@ -74,7 +75,10 @@ export const load = async ({ url }) => {
 	return {
 		bywrestler: {
 			wrestler,
-			reigns: list,
+			reigns: list.map((reign) => ({
+				...reign,
+				days_str: ReignUtils.getDaysAndMonths(reign.days)
+			})),
 			pagination
 		}
 	};
