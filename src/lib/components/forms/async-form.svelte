@@ -36,11 +36,16 @@
 		}
 
 		return async ({ result, update }) => {
+			console.log({ result, update });
 			setTimeout(() => {
 				loading = false;
 			}, 500);
 			const response = result as ActionResult & { data: any };
 			const hasError = result.type === 'error' || result.type === 'failure';
+			if (result.type === 'redirect') {
+				goto(result.location);
+				return;
+			}
 			if (afterSubmit) afterSubmit(response);
 
 			if (hasError) {
