@@ -22,10 +22,16 @@
 						use:errorimage={'unknown-championship.webp'}
 					/>
 					<h3 class="tcenter">{reign.Championship.name}</h3>
-					<p>Duración: {reign.days_str}</p>
-					<p>{reign.won_date_str} - {reign.lost_date_str}</p>
+					<p>{reign.days_str}</p>
+					<p class="badge absolute top right">{reign.won_date_str} - {reign.lost_date_str}</p>
 					{#if reign.Partner}
-						<p class="badge"><em>Con {reign.Partner.name}</em></p>
+						<em>Con {reign.Partner.name}</em>
+					{/if}
+
+					{#if reign.current && !reign.lost_date}
+						<div class="reign-current-indicator">
+							<i class="bi bi-lightning-charge-fill current-reign-icon"></i>
+						</div>
 					{/if}
 				</li>
 			{/each}
@@ -40,15 +46,27 @@
 	}
 	.grid.list-container .list-item.list-reign-item {
 		width: 100%;
-		min-height: 150px;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		padding: 1rem;
+		min-height: calc(150px + 45px);
+		padding: 45px 1rem 1rem 1rem;
 		border: 1px solid #ccc;
 		border-radius: 8px;
 		background-color: #fff;
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 		gap: 4px;
+	}
+
+	.reign-current-indicator {
+		--current-indicator-color: #f1c04d;
+		position: absolute;
+		left: 0;
+		top: -10px;
+		color: var(--current-indicator-color);
+		background-color: transparent;
+		font-size: 1.5rem;
+		/* padding: 0.25rem 0.5rem; */
+		/* border-radius: 8px; */
 	}
 </style>

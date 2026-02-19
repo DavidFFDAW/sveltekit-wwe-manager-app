@@ -83,7 +83,7 @@ export const load = async ({ url }) => {
 			reigns: list.map((reign) => ({
 				...reign,
 				won_date_str: Utils.toLocaleDate(reign.won_date, format),
-				lost_date_str: Utils.toLocaleDate(reign.lost_date, format),
+				lost_date_str: reign.lost_date ? Utils.toLocaleDate(reign.lost_date, format) : 'Actualidad',
 				days_str: ReignUtils.getDaysAndMonths(reign.days)
 			})),
 			pagination
