@@ -75,14 +75,15 @@ export const load = async ({ url }) => {
 	)) as PaginationDatas<ChampionshipReignWithRelations>;
 
 	if (list.length <= 0) return Helpers.redirection('/admin/championship-reigns');
+	const format: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
 
 	return {
 		bywrestler: {
 			wrestler,
 			reigns: list.map((reign) => ({
 				...reign,
-				won_date_str: Utils.dateFormat('d-m-Y', reign.won_date),
-				lost_date_str: Utils.formatDate(reign.lost_date),
+				won_date_str: Utils.toLocaleDate(reign.won_date, format),
+				lost_date_str: Utils.toLocaleDate(reign.lost_date, format),
 				days_str: ReignUtils.getDaysAndMonths(reign.days)
 			})),
 			pagination

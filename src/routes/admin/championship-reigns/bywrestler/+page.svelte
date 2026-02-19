@@ -21,7 +21,7 @@
 						class="championship-image"
 						use:errorimage={'unknown-championship.webp'}
 					/>
-					<h3>{reign.Championship.name}</h3>
+					<h3 class="tcenter">{reign.Championship.name}</h3>
 					<p>Duración: {reign.days_str}</p>
 					<p>{reign.won_date_str} - {reign.lost_date_str}</p>
 					{#if reign.Partner}
@@ -49,5 +49,6 @@
 		border-radius: 8px;
 		background-color: #fff;
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		gap: 4px;
 	}
 </style>

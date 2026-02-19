@@ -179,6 +179,19 @@ export const Utils = {
 
 		return date.toLocaleDateString('es-ES', options);
 	},
+	toLocaleDate(
+		date: Date | string | null,
+		options: Intl.DateTimeFormatOptions = {
+			year: 'numeric',
+			month: '2-digit',
+			day: '2-digit'
+		},
+		locale: string = 'es-ES'
+	): string {
+		if (!date) return '';
+		const dateObj = typeof date === 'string' ? new Date(date) : date;
+		return dateObj.toLocaleDateString(locale, options);
+	},
 	dateFormat: (format: string, date: Date | null): string => {
 		if (!date) return '';
 		const map: Record<string, string> = {

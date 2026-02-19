@@ -53,6 +53,7 @@ export const load = async ({ locals, url }) => {
 	);
 
 	const { list, ...pagination } = reignlist;
+	const format: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
 
 	return {
 		reigns_panel: {
@@ -62,9 +63,9 @@ export const load = async ({ locals, url }) => {
 				(reign) =>
 					({
 						...reign,
-						won_date_str: reign.won_date ? Utils.formatDate(reign.won_date) : 'N/A',
-						lost_date_str: reign.lost_date ? Utils.formatDate(reign.lost_date) : 'N/A',
-						days_month: reign.days ? ReignUtils.getDaysAndMonths(reign.days) : 'N/A'
+						won_date_str: reign.won_date ? Utils.toLocaleDate(reign.won_date, format) : '',
+						lost_date_str: reign.lost_date ? Utils.toLocaleDate(reign.lost_date, format) : '',
+						days_month: reign.days ? ReignUtils.getDaysAndMonths(reign.days) : ''
 					}) as any
 			),
 			pagination
