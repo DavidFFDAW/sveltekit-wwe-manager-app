@@ -113,7 +113,7 @@
 	<AsyncForm
 		action="upsert"
 		method="post"
-		redirect="/admin/championship-reigns"
+		redirect="/admin/championship-reigns?championship={selectedChampionshipId}"
 		buttonText={data.isUpdate ? 'Actualizar Reinado' : 'Crear Reinado'}
 		updateId={data.reign ? data.reign.id : ''}
 		showButtons={false}

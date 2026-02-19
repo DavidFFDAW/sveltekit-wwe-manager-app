@@ -209,8 +209,9 @@ export const actions = {
 			// console.log({ ...upsertObject, isTagTeam, isManualTeam, action });
 			// return Helpers.success(`Reinado ${action === 'create' ? 'creado' : 'actualizado'} correctamente`);
 			await upsertAction();
-			//localhost:5173/admin/championship-reigns?championship=1
-			return Helpers.redirection(`/admin/championship-reigns?championship=${datas.championshipId}`);
+			return Helpers.success(
+				`Reinado ${action === 'create' ? 'creado' : 'actualizado'} correctamente`
+			);
 		} catch (error) {
 			console.error('Error al guardar el reinado:', error);
 			return Helpers.error('No se ha implementado la acción de guardar el reinado aún.', 500);
