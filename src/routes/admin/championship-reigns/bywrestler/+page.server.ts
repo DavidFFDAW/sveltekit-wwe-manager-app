@@ -4,6 +4,7 @@ import type { ChampionshipReign } from '@prisma/client';
 import type { PaginationDatas } from '$lib/types/app.types.js';
 import { WrestlerRepository } from '$lib/server/dao/repositories/wrestler.repository.js';
 import { ReignUtils } from '$lib/utils/reign.utils.js';
+import { Utils } from '$lib/utils/general.utils.js';
 
 const minimumWrestlerDatas = {
 	id: true,
@@ -65,6 +66,9 @@ export const load = async ({ url }) => {
 			},
 			where: {
 				OR: [{ wrestler_id: Number(id) }, { partner: Number(id) }]
+			},
+			orderBy: {
+				won_date: 'asc'
 			}
 		},
 		limit
@@ -77,6 +81,8 @@ export const load = async ({ url }) => {
 			wrestler,
 			reigns: list.map((reign) => ({
 				...reign,
+				won_date_str: Utils.dateFormat('d-m-Y', reign.won_date),
+				lost_date_str: Utils.formatDate(reign.lost_date),
 				days_str: ReignUtils.getDaysAndMonths(reign.days)
 			})),
 			pagination

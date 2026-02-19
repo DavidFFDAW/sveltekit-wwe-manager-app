@@ -13,7 +13,7 @@
 	<div>
 		<ul class="grid list-container">
 			{#each data.bywrestler.reigns as reign}
-				<li class="list-item list-reign-item">
+				<li class="list-item list-reign-item relative">
 					<img
 						width="100"
 						src={reign.Championship.image}
@@ -23,6 +23,10 @@
 					/>
 					<h3>{reign.Championship.name}</h3>
 					<p>Duración: {reign.days_str}</p>
+					<p>{reign.won_date_str} - {reign.lost_date_str}</p>
+					{#if reign.Partner}
+						<p class="badge"><em>Con {reign.Partner.name}</em></p>
+					{/if}
 				</li>
 			{/each}
 		</ul>

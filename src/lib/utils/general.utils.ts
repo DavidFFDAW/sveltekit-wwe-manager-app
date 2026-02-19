@@ -179,6 +179,16 @@ export const Utils = {
 
 		return date.toLocaleDateString('es-ES', options);
 	},
+	dateFormat: (format: string, date: Date | null): string => {
+		if (!date) return '';
+		const map: Record<string, string> = {
+			Y: date.getFullYear().toString(),
+			m: String(date.getMonth() + 1).padStart(2, '0'),
+			d: String(date.getDate()).padStart(2, '0'),
+			M: date.toLocaleString('es-ES', { month: 'long' })
+		};
+		return format.replace(/Y|m|d|M/g, (matched) => map[matched] || matched);
+	},
 	formatFlatpickrDate: (date: Date) => {
 		return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 	},
@@ -219,7 +229,7 @@ export const Utils = {
 		return result;
 	},
 	arrayIdToMap<T extends { id: number | string }>(items: T[]) {
-		return new Map(items.map(i => [i.id, i] as const));
+		return new Map(items.map((i) => [i.id, i] as const));
 	},
 	readCsvContent,
 	createCsv,
