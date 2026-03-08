@@ -15,13 +15,8 @@ export class RumbleRepository extends Repository<
 		super('rumble');
 	}
 
-	getCurrentRumbles(date: Date = new Date()) {
+	getCurrentRumbles() {
 		return this.get({
-			where: {
-				year: {
-					lte: date.getFullYear()
-				}
-			},
 			orderBy: {
 				year: 'desc'
 			}
