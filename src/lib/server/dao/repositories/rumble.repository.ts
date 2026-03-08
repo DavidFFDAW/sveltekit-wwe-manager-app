@@ -15,11 +15,15 @@ export class RumbleRepository extends Repository<
 		super('rumble');
 	}
 
-	getCurrentRumbles() {
+	getCurrentRumbles(year: number = new Date().getFullYear()) {
 		return this.get({
 			orderBy: {
 				year: 'desc'
-			}
+			},
+			where: {
+				year: year
+			},
+			take: 2
 		});
 	}
 }

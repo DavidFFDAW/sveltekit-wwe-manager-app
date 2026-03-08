@@ -1,7 +1,7 @@
 import { PPVDao } from '$lib/server/dao/ppv.dao';
 import { MatchRepository } from '$lib/server/dao/repositories/match.repository';
 import { PpvCardRepository } from '$lib/server/dao/repositories/matchcard.repository';
-import { ReignsRepository } from '$lib/server/dao/repositories/reigns.repository';
+// import { ReignsRepository } from '$lib/server/dao/repositories/reigns.repository';
 import { RumbleRepository } from '$lib/server/dao/repositories/rumble.repository';
 
 export const load = async () => {
@@ -9,7 +9,7 @@ export const load = async () => {
 	const matches = new MatchRepository();
 	const matchcards = new PpvCardRepository();
 	const royalrumbles = new RumbleRepository();
-	const reigns = new ReignsRepository();
+	// const reigns = new ReignsRepository();
 
 	// const averages = await matches.groupBy({
 	// 	by: ['id_match_card'],
@@ -23,13 +23,14 @@ export const load = async () => {
 	// 	}
 	// });
 	const rumbles = await royalrumbles.getCurrentRumbles();
-	const currentReigns = await reigns.getCurrentReigns();
+	// const currentReigns = await reigns.getCurrentReigns({
+	// 	include: {
+	// 		Championship: true,
+	// 		Wrestler: true
+	// 	}
+	// });
 
-	const ppvsWithoutRatings = await matches.get({
-		distinct: ['id_match_card'],
-		where: {
-			rating: null
-		},
+	const ppvsWithoutRatings = await matches.getMatchesWithRatings({
 		select: {
 			id_match_card: true
 		}
@@ -45,7 +46,7 @@ export const load = async () => {
 
 	return {
 		rumbles,
-		currentReigns,
+		currentReigns: null,
 		nextPpv: await PPVDao.getDashboardNextPPV(),
 		missingRatings: ppvCardsWithoutRatings
 	};

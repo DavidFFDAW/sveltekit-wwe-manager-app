@@ -15,12 +15,13 @@ export class ReignsRepository extends Repository<
 		super('championshipReign');
 	}
 
-	getCurrentReigns() {
+	getCurrentReigns({ include }: { include?: Prisma.ChampionshipReignInclude } = {}) {
 		return this.get({
 			where: {
 				current: true,
 				lost_date: null
 			},
+			include,
 			orderBy: {
 				won_date: 'asc'
 			}

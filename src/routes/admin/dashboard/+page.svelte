@@ -31,7 +31,6 @@
                 {JSON.stringify(
 					{
 						rumbles: data.rumbles,
-						currentReigns: data.currentReigns,
 						missingRatings: data.missingRatings
 					},
 					null,
