@@ -21,7 +21,7 @@ export class RumbleRepository extends Repository<
 				year: 'desc'
 			},
 			where: {
-				year: year
+				year: year.toString()
 			},
 			take: 2
 		});
