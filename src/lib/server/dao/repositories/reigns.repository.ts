@@ -14,4 +14,16 @@ export class ReignsRepository extends Repository<
 	constructor() {
 		super('championshipReign');
 	}
+
+	getCurrentReigns() {
+		return this.get({
+			where: {
+				current: true,
+				lost_date: null
+			},
+			orderBy: {
+				won_date: 'asc'
+			}
+		});
+	}
 }

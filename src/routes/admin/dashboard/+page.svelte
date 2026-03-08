@@ -1,9 +1,8 @@
 <script lang="ts">
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
-	import type { PPV } from '@prisma/client';
 	import PpvCounter from './ppv-counter.svelte';
 	import { DashboardLinks } from './dashboard.links';
-	export let data: { nextPpv: PPV };
+	let { data } = $props();
 </script>
 
 <PageWrapper page="dashboard">
@@ -15,6 +14,31 @@
 		{/if}
 		<div class="down">
 			<h1>Dashboard</h1>
+
+			{#if data.missingRatings && data.missingRatings.length > 0}
+				<div class="missing-ratings-notification background">
+					<h2>Missing Ratings</h2>
+					<p>The following match cards are missing ratings:</p>
+					<ul>
+						{#each data.missingRatings as card}
+							<li>{card.ppv_name} (PPV: {card.ppv_name})</li>
+						{/each}
+					</ul>
+				</div>
+			{/if}
+
+			<pre>
+                {JSON.stringify(
+					{
+						rumbles: data.rumbles,
+						currentReigns: data.currentReigns,
+						missingRatings: data.missingRatings
+					},
+					null,
+					5
+				)}
+            </pre>
+
 			<nav class="admin-dashboard-page-navigation down" style="margin-top: 50px;">
 				<ul class="grid three-column-grid gap-20 admin-dashboard-list responsive" role="list">
 					{#each DashboardLinks as link}
