@@ -17,11 +17,24 @@ export class RumbleRepository extends Repository<
 
 	getCurrentRumbles(year: number = new Date().getFullYear()) {
 		return this.get({
-			orderBy: {
-				year: 'desc'
+			select: {
+				id: true,
+				winner: {
+					select: {
+						id: true,
+						name: true,
+						image_name: true
+					}
+				},
+				year: true,
+				entry_number: true,
+				successful: true
 			},
 			where: {
 				year: year.toString()
+			},
+			orderBy: {
+				year: 'desc'
 			},
 			take: 2
 		});

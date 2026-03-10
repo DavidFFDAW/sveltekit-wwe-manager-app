@@ -1,79 +1,134 @@
 <script lang="ts">
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import PpvCounter from './ppv-counter.svelte';
+	import RumbleWinners from './components/rumble-winners.svelte';
 	import { DashboardLinks } from './dashboard.links';
+	import { page } from '$app/state';
+
 	let { data } = $props();
+	const rumbles = data.dashboard.rumbles as any[];
+	const paramTest = page.url.searchParams.get('test');
+	let test = paramTest || (Math.random() > 0.5 ? 'a' : 'b');
+
+	const links = DashboardLinks.map((it) => {
+		if (test === 'b')
+			return {
+				...it,
+				image: null,
+				background: it.testb || it.background
+			};
+		return it;
+	});
 </script>
 
 <PageWrapper page="dashboard">
 	<div class="admin-page-wrapper admin-dashboard">
-		{#if data.nextPpv}
+		{#if data.dashboard.nextPpv}
 			<header class="next-ppv-date-wrapper flex gap-medium ignore-main-padding">
-				<PpvCounter finalDate={data.nextPpv.game_date as Date} ppv={data.nextPpv} />
+				<PpvCounter
+					finalDate={data.dashboard.nextPpv.game_date as Date}
+					ppv={data.dashboard.nextPpv}
+				/>
 			</header>
 		{/if}
 		<div class="down">
 			<h1>Dashboard</h1>
 
-			{#if data.missingRatings && data.missingRatings.length > 0}
+			{#if data.dashboard.missingRatings && data.dashboard.missingRatings.length > 0}
 				<div class="missing-ratings-notification background">
 					<h2>Missing Ratings</h2>
 					<p>The following match cards are missing ratings:</p>
 					<ul>
-						{#each data.missingRatings as card}
+						{#each data.dashboard.missingRatings as card}
 							<li>{card.ppv_name} (PPV: {card.ppv_name})</li>
 						{/each}
 					</ul>
 				</div>
 			{/if}
 
+			{#if data.dashboard.drafts.length > 0}
+				<div class="drafts-notification background">
+					<h2>Drafts</h2>
+					<p>You have {data.dashboard.drafts.length} drafts in progress:</p>
+					<ul>
+						{#each data.dashboard.drafts as draft}
+							<li>
+								<a href={`/admin/blog/${draft.slug}/edit`}>{draft.title}</a>
+							</li>
+						{/each}
+					</ul>
+				</div>
+			{/if}
+
 			<pre>
-                {JSON.stringify(
-					{
-						rumbles: data.rumbles,
-						missingRatings: data.missingRatings
-					},
-					null,
-					5
-				)}
+                {JSON.stringify(data.dashboard, null, 5)}
             </pre>
 
-			<nav class="admin-dashboard-page-navigation down" style="margin-top: 50px;">
-				<ul class="grid three-column-grid gap-20 admin-dashboard-list responsive" role="list">
-					{#each DashboardLinks as link}
+			{#if rumbles.length > 0}
+				<RumbleWinners {rumbles} />
+			{/if}
+
+			<div class="dashboard test-{test}">
+				<nav class="admin-dashboard-page-navigation down" style="margin-top: 50px;">
+					<ul class="grid three-column-grid gap-20 admin-dashboard-list responsive" role="list">
+						{#each links as link}
+							<li
+								class="w1 background"
+								style="background-image: url('{link.background ||
+									'https://media.istockphoto.com/id/1665661357/vector/bright-stadium-lights-vector-design.jpg?s=612x612&w=0&k=20&c=fPARi4dhnmIQprMY4_EneLckTQBVfns1Z1dnwl7CbE8='}')"
+							>
+								<a href={link.url}>
+									<span>{link.label}</span>
+									{#if link.image}
+										<img
+											src={link.image}
+											alt=""
+											draggable="false"
+											aria-hidden="true"
+											loading="lazy"
+										/>
+									{/if}
+								</a>
+							</li>
+						{/each}
+
 						<li
 							class="w1 background"
-							style="background-image: url('{link.background ||
-								'https://media.istockphoto.com/id/1665661357/vector/bright-stadium-lights-vector-design.jpg?s=612x612&w=0&k=20&c=fPARi4dhnmIQprMY4_EneLckTQBVfns1Z1dnwl7CbE8='}')"
+							style="background-image: url('https://i.pinimg.com/736x/46/85/06/46850696178107a751c26d4e22eb3c2e.jpg')"
 						>
-							<a href={link.url}>
-								<span>{link.label}</span>
-								<img src={link.image} alt="" draggable="false" aria-hidden="true" loading="lazy" />
+							<a href="/admin/rumble">
+								<span>Royal Rumble</span>
 							</a>
 						</li>
-					{/each}
-					<li
-						class="w1 background"
-						style="background-image: url('https://i.pinimg.com/736x/46/85/06/46850696178107a751c26d4e22eb3c2e.jpg')"
-					>
-						<a href="/admin/rumble">
-							<span>Royal Rumble</span>
-						</a>
-					</li>
-				</ul>
-			</nav>
+					</ul>
+				</nav>
+			</div>
+
+			<span class="test fixed">{test}</span>
 		</div>
 	</div>
 </PageWrapper>
 
 <style>
+	span.test.fixed {
+		position: fixed;
+		bottom: 1rem;
+		right: 0;
+		padding: 0.5rem 1rem;
+		background-color: #333;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+		color: #fff;
+		text-transform: uppercase;
+		font-size: 25px;
+		border-radius: 8px 0 0 8px;
+	}
 	:root {
 		/* --dashboard-item-bg: url('https://cdn.pixabay.com/photo/2016/11/18/22/58/stars-1837306_640.jpg'); */
 		/* --dashboard-item-bg: url('https://cdn.pixabay.com/photo/2016/11/18/22/58/stars-1837306_640.jpg'); */
 		--dashboard-item-bg: url('https://media.istockphoto.com/id/1665661357/vector/bright-stadium-lights-vector-design.jpg?s=612x612&w=0&k=20&c=fPARi4dhnmIQprMY4_EneLckTQBVfns1Z1dnwl7CbE8=');
 	}
 	ul.admin-dashboard-list {
-		gap: 40px 20px;
+		gap: 20px 20px;
 	}
 	ul.admin-dashboard-list li a {
 		justify-content: center;
@@ -88,6 +143,11 @@
 		background-size: cover;
 		background-position: center;
 		background-repeat: no-repeat;
+	}
+	.dashboard.test-b ul.admin-dashboard-list li {
+		height: auto;
+		min-height: 250px;
+		background-position: top;
 	}
 
 	ul.admin-dashboard-list li a {

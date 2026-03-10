@@ -15,13 +15,17 @@ export class MatchRepository extends Repository<
 		super('match');
 	}
 
-	public getMatchesWithRatings({ select }: { select?: Prisma.MatchSelect } = {}) {
-		return this.get({
-			distinct: ['id_match_card'],
-			where: {
-				rating: null
+	public getAverageRating() {
+		return this.groupBy({
+			by: ['id_match_card'],
+			_avg: {
+				rating: true
 			},
-			select
+			where: {
+				rating: {
+					not: null
+				}
+			}
 		});
 	}
 }

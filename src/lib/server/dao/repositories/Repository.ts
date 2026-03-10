@@ -88,6 +88,10 @@ export abstract class Repository<
 		return this.model.groupBy(args);
 	}
 
+	queryRaw(sql: string): Promise<any> {
+		return this.prisma.$queryRaw(sql as any);
+	}
+
 	paginate(page: number, args?: FindManyArgs, take: number = 15): Promise<[number, T[]]> {
 		const prepage = page < 1 ? 1 : page;
 		const skip = (prepage - 1) * take;

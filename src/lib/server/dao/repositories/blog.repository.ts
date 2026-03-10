@@ -77,4 +77,17 @@ export class BlogRepository extends Repository<
 	public isStatusAllowed(status: string): boolean {
 		return this.allowedStatuses.includes(status);
 	}
+
+	public getDrafts(args?: Prisma.BlogPostFindManyArgs): Promise<BlogPost[]> {
+		return this.model.findMany({
+			...args,
+			where: {
+				...args?.where,
+				status: 'draft'
+			},
+			orderBy: {
+				created_at: 'desc'
+			}
+		});
+	}
 }
