@@ -7,7 +7,7 @@ export const load = async () => {
 	const wrestlers = new WrestlerRepository();
 
 	const aggregation = await reigns.groupBy({
-		by: ['wrestler_id', 'partner'],
+		by: ['wrestler_id'],
 		_count: {
 			championship_id: true
 		},

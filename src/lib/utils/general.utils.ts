@@ -247,5 +247,6 @@ export const Utils = {
 	readCsvContent,
 	createCsv,
 	getArrayFormDatas,
-	getRandomNumberBetween
+	getRandomNumberBetween,
+	isNumber: (value: string) => /^-?[\d.]+(?:e-?\d+)?$/.test(value)
 };

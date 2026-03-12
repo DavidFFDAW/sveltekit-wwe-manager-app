@@ -10,15 +10,11 @@
 	const paramTest = page.url.searchParams.get('test');
 	let test = paramTest || (Math.random() > 0.5 ? 'a' : 'b');
 
-	const links = DashboardLinks.map((it) => {
-		if (test === 'b')
-			return {
-				...it,
-				image: null,
-				background: it.testb || it.background
-			};
-		return it;
-	});
+	const links = DashboardLinks.map((it) => ({
+		...it,
+		image: test === 'b' ? null : it.image,
+		background: test === 'b' ? it.testb || it.background : it.background
+	}));
 </script>
 
 <PageWrapper page="dashboard">
