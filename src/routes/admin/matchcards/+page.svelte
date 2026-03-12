@@ -1,7 +1,6 @@
 <script lang="ts">
+	import { errorimage } from '$lib/actions/error.image.js';
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
-	import Image from '$lib/components/visual/image.svelte';
-
 	export let data;
 </script>
 
@@ -34,72 +33,78 @@
 		<div class="w1 ppv-match-card-list flex column gap-small">
 			{#each data.matchcards as matchcard}
 				<div
-					class="w1 matchcard relative box flex start astart gap-smaller responsive"
+					class="w1 matchcard relative box"
 					data-href="/admin/matchcards/upsert?slug={matchcard.id}"
 				>
-					<Image
-						src={matchcard.ppv_image}
-						class="responsive-w1 w1-responsive rounded"
-						fallback="/noimage.jpg"
-						alt={matchcard.ppv_name}
-						width="120"
-					/>
-					<div class="flex column start astart nogap">
-						<h2>{matchcard.ppv_name}</h2>
-						<small><strong>{matchcard.matches} combates</strong> registrados</small>
-						{#if matchcard.ppv_date}
-							<small>
-								{matchcard.ppv_date.toLocaleDateString('es-ES', {
-									weekday: 'long',
-									year: 'numeric',
-									month: 'long',
-									day: 'numeric'
-								})}
-							</small>
-						{/if}
+					<div class="w1 flex start astart gap-smaller responsive">
+						<img
+							width="120"
+							src={matchcard.ppv_image}
+							class="responsive-w1 w1-responsive rounded"
+							use:errorimage={'/noimage.jpg'}
+							alt={matchcard.ppv_name}
+							title={matchcard.ppv_name}
+							loading="lazy"
+							draggable="false"
+						/>
+						<div class="flex column start astart nogap">
+							<h2>{matchcard.ppv_name}</h2>
+							<small><strong>{matchcard.matches} combates</strong> registrados</small>
+							{#if matchcard.ppv_date}
+								<small>
+									{matchcard.ppv_date.toLocaleDateString('es-ES', {
+										weekday: 'long',
+										year: 'numeric',
+										month: 'long',
+										day: 'numeric'
+									})}
+								</small>
+							{/if}
+						</div>
 					</div>
 
-					<footer class="action-buttons-container">
+					<footer class="custom-action-buttons-container">
 						<a
 							href="/admin/matchcards/event?slug={matchcard.id}"
-							class="btn small warn"
+							class="btn small warn rounded icon"
 							aria-label="Editar"
 						>
 							<i class="bi bi-pencil"></i>
+							<span>Editar evento</span>
 						</a>
 						<a
 							href="/admin/matchcards/matches/upsert?slug={matchcard.id}"
-							class="btn small warn"
+							class="btn small warn rounded icon"
 							aria-label="Editar combates"
 						>
 							<i class="bi bi-pencil"></i>
-							<span>combates</span>
+							<span>Editar combates</span>
 						</a>
 						<a
 							href="/admin/matchcards/rating?slug={matchcard.id}"
-							class="btn small success"
+							class="btn small success rounded icon"
 							aria-label="Valoraciones"
 						>
 							<i class="bi bi-star"></i>
-							<span>valoraciones</span>
+							<span>Editar valoraciones</span>
 						</a>
 						<a
 							href="/admin/matchcards/export/{matchcard.id}"
-							class="btn small info"
+							class="btn small info rounded icon"
 							aria-label="Exportar evento"
 							download
 						>
 							<i class="bi bi-file-earmark-code"></i>
-							<span>JSON</span>
+							<span>Exportar JSON</span>
 						</a>
 						<a
 							href="/admin/matchcards/export/txt?id={matchcard.id}"
-							class="btn small info"
+							class="btn small info rounded icon"
 							aria-label="Exportar evento a csv"
 							download
 						>
 							<i class="bi bi-file-earmark-spreadsheet"></i>
-							<span>CSV</span>
+							<span>Exportar CSV</span>
 						</a>
 					</footer>
 				</div>
@@ -113,5 +118,28 @@
 <style>
 	.filters-box {
 		margin: 20px 0;
+	}
+
+	.matchcard.box {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+	.custom-action-buttons-container {
+		width: 100%;
+		display: flex;
+		margin-top: 5px;
+		padding-top: 15px;
+		border-top: 1px solid #ccc;
+		justify-content: flex-start;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 5px;
+	}
+
+	.custom-action-buttons-container a {
+		flex-grow: 1;
+		flex-shrink: 0;
+		text-align: center;
 	}
 </style>

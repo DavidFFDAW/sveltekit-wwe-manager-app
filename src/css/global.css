@@ -851,6 +851,13 @@ table.custom-table tbody tr td[data-tab='actions'] .grouped-actions-link:hover {
 	z-index: 2;
 }
 
+.action-buttons-container.static {
+	position: static;
+	top: auto;
+	right: auto;
+	z-index: auto;
+}
+
 .action-buttons-container .btn.small.green,
 .action-buttons-container .btn.small.success {
 	background-color: #d4f8e8;
