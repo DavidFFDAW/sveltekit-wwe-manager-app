@@ -4,11 +4,15 @@
 	import RumbleWinners from './components/rumble-winners.svelte';
 	import { DashboardLinks } from './dashboard.links';
 	import { page } from '$app/state';
+	import { errorimage } from '$lib/actions/error.image';
 
 	let { data } = $props();
 	const rumbles = data.dashboard.rumbles as any[];
 	const paramTest = page.url.searchParams.get('test');
 	let test = paramTest || (Math.random() > 0.5 ? 'a' : 'b');
+
+	const missingRatings = data.dashboard.missingRatings || [];
+	const drafts = data.dashboard.drafts || [];
 
 	const links = DashboardLinks.map((it) => ({
 		...it,
@@ -27,38 +31,79 @@
 				/>
 			</header>
 		{/if}
+
 		<div class="down">
 			<h1>Dashboard</h1>
 
-			{#if data.dashboard.missingRatings && data.dashboard.missingRatings.length > 0}
-				<div class="missing-ratings-notification background">
-					<h2>Missing Ratings</h2>
-					<p>The following match cards are missing ratings:</p>
-					<ul>
-						{#each data.dashboard.missingRatings as card}
-							<li>{card.ppv_name} (PPV: {card.ppv_name})</li>
-						{/each}
-					</ul>
-				</div>
-			{/if}
+			<div class="notifications">
+				{#if missingRatings && missingRatings.length > 0}
+					<div class="missing-ratings-notification">
+						<h4>Tienes {missingRatings.length} eventos sin calificar:</h4>
 
-			{#if data.dashboard.drafts.length > 0}
-				<div class="drafts-notification background">
-					<h2>Drafts</h2>
-					<p>You have {data.dashboard.drafts.length} drafts in progress:</p>
-					<ul>
-						{#each data.dashboard.drafts as draft}
-							<li>
-								<a href={`/admin/blog/${draft.slug}/edit`}>{draft.title}</a>
-							</li>
-						{/each}
-					</ul>
-				</div>
-			{/if}
+						<ul class="w1 flex column gap-small missing-ratings-list">
+							{#each missingRatings as card}
+								<li class="missing-rating-list-item">
+									<div class="w1 flex start acenter gap-smaller">
+										<img
+											width="60"
+											height="50"
+											src={card.ppv_image}
+											title={card.ppv_name}
+											alt={card.ppv_name}
+											use:errorimage={'/noimage.jpg'}
+										/>
+										<div class="missing-rating-content">
+											<p class="missing-rating-title">{card.ppv_name}</p>
+											<small>
+												{card.ppv_date?.toLocaleDateString('es-ES', {
+													year: 'numeric',
+													month: 'long',
+													day: 'numeric'
+												})}
+											</small>
+										</div>
+									</div>
 
-			<pre>
-                {JSON.stringify(data.dashboard, null, 5)}
-            </pre>
+									<a href="/admin/matchcards/rating?ppv={card.id}" class="btn btn-check-ppv">
+										Revisar
+									</a>
+								</li>
+							{/each}
+						</ul>
+					</div>
+				{/if}
+
+				{#if drafts.length > 0}
+					<div class="missing-ratings-notification">
+						<h4>Tienes {drafts.length} borradores sin publicar:</h4>
+
+						<ul class="w1 flex column gap-small missing-ratings-list">
+							{#each drafts as draft}
+								<li class="missing-rating-list-item">
+									<div class="w1 flex start acenter gap-smaller">
+										<img
+											width="60"
+											height="50"
+											src={draft.image}
+											title={draft.title}
+											alt={draft.title}
+											use:errorimage={'/noimage.jpg'}
+										/>
+										<div class="missing-rating-content">
+											<p class="missing-rating-title">{draft.title}</p>
+											<small>
+												{draft.exceptr}
+											</small>
+										</div>
+									</div>
+
+									<a href="/admin/blog/update/{draft.id}" class="btn btn-check-ppv"> Editar </a>
+								</li>
+							{/each}
+						</ul>
+					</div>
+				{/if}
+			</div>
 
 			{#if rumbles.length > 0}
 				<RumbleWinners {rumbles} />
@@ -106,6 +151,66 @@
 </PageWrapper>
 
 <style>
+	.notifications {
+		margin-top: 30px;
+	}
+	.notifications > div {
+		margin-bottom: 30px;
+	}
+
+	.missing-ratings-notification .missing-ratings-list .missing-rating-list-item {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		background-color: #fff;
+		border-radius: 10px;
+		padding: 10px 8px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+		gap: 10px;
+	}
+	.missing-ratings-notification .missing-ratings-list .missing-rating-list-item img {
+		max-width: 100%;
+		border-radius: 5px;
+		object-fit: cover;
+	}
+
+	.missing-ratings-notification
+		.missing-ratings-list
+		.missing-rating-list-item
+		.missing-rating-title {
+		font-weight: bold;
+		text-transform: uppercase;
+	}
+	.missing-ratings-notification .missing-ratings-list .missing-rating-list-item small {
+		font-size: 0.7em;
+		color: #666;
+		line-height: 1;
+	}
+	.missing-ratings-notification .missing-ratings-list .btn-check-ppv {
+		position: relative;
+		background-color: transparent;
+		margin-right: 5px;
+		border: none;
+		color: #fff;
+		font-size: 1em;
+		text-transform: uppercase;
+		cursor: pointer;
+		z-index: 1;
+	}
+	.missing-ratings-notification .missing-ratings-list .btn-check-ppv::after {
+		content: '';
+		position: absolute;
+		background-color: #333;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		border-radius: 5px;
+		transform: skew(-8deg);
+		z-index: -1;
+	}
+
 	span.test.fixed {
 		position: fixed;
 		bottom: 1rem;
