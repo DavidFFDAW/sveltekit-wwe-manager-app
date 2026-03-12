@@ -9,7 +9,7 @@
 	let { data } = $props();
 	const rumbles = data.dashboard.rumbles as any[];
 	const paramTest = page.url.searchParams.get('test');
-	let test = paramTest || (Math.random() > 0.5 ? 'a' : 'b');
+	let test = paramTest || (Math.random() > 0.8 ? 'a' : 'b');
 
 	const missingRatings = data.dashboard.missingRatings || [];
 	const drafts = data.dashboard.drafts || [];
