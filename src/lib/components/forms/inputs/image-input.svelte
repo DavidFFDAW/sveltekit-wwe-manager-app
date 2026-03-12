@@ -18,7 +18,7 @@
 	}
 </script>
 
-<div class="form-item form-item-horizontal form-item-image">
+<div class="form-item form-item-horizontal form-item-image app-image-input">
 	<img
 		src={image || '/noimage.jpg'}
 		alt="Imagen seleccionada"
@@ -59,7 +59,7 @@
 				</p>
 			{/if}
 		</div>
-		<div class="w1 flex gap-smaller">
+		<div class="w1 flex gap-smaller image-input-action-buttons">
 			<Gallery bind:value={image} />
 			<Imgur bind:value={image} />
 			<GoogleImageSearch bind:value={image} />
@@ -69,12 +69,21 @@
 
 <style>
 	@media only screen and (max-width: 768px) {
-		.form-item.form-item-horizontal.form-item-image {
+		.form-item.form-item-horizontal.form-item-image.app-image-input {
+			flex-direction: column;
 			align-items: flex-start;
 		}
-		.form-item.form-item-horizontal.form-item-image > img {
-			width: 80px;
-			height: 80px;
+
+		.form-item.form-item-horizontal.form-item-image.app-image-input img {
+			width: 100%;
+			height: auto;
+			max-height: 150px;
+			border-radius: 8px 8px 0 0;
+			object-fit: cover;
+		}
+
+		.form-item.form-item-horizontal.form-item-image.app-image-input .image-input-action-buttons {
+			justify-content: space-between;
 		}
 	}
 </style>
