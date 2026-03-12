@@ -48,7 +48,10 @@
 							draggable="false"
 						/>
 						<div class="flex column start astart nogap">
-							<h2>{matchcard.ppv_name}</h2>
+							<h2>
+								{matchcard.ppv_name}
+								<small class="year">({matchcard.ppv_date?.getFullYear()})</small>
+							</h2>
 							<small><strong>{matchcard.matches} combates</strong> registrados</small>
 							{#if matchcard.ppv_date}
 								<small>
@@ -124,6 +127,16 @@
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
+	}
+	.matchcard.box h2 {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+	.matchcard.box h2 .year {
+		font-size: 0.8rem;
+		font-weight: light;
+		color: #7f7f7f;
 	}
 	.custom-action-buttons-container {
 		width: 100%;

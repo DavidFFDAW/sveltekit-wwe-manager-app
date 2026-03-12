@@ -10,9 +10,20 @@ export const load = async ({ url }) => {
 
 	const ppvs = await ppvRepository.get({
 		select: {
-			name: true
+			id: true,
+			name: true,
+			image: true,
+			game_date: true,
+		},
+		where: {
+			active: true,
+			type: 'ppv'
+		},
+		orderBy: {
+			game_date: 'asc'
 		}
 	});
+
 	const matchCardEvent = (await matchCardRepository.getRow({
 		where: { id: Number(slug) },
 		include: {
@@ -20,12 +31,15 @@ export const load = async ({ url }) => {
 		}
 	})) as any;
 
+	const ppvNames = ppvs.map((ppv) => ppv.name);
+
 	return {
 		event_card: {
 			isUpdate: Boolean(matchCardEvent),
 			event: matchCardEvent,
 			slug: slug,
-			ppvs: ppvs
+			ppvs: ppvNames,
+			importPPV: ppvs,
 		}
 	};
 };
