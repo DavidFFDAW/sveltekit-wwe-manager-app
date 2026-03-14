@@ -45,7 +45,6 @@ export const actions = {
 				name: formData.get('name') as string,
 				game_date: gameDate,
 				active: Helpers.getToggleInput(formData, 'active'),
-				visible: Helpers.getToggleInput(formData, 'visible'),
 				image: formData.get('image') as string,
 				stadium: formData.get('stadium') as string,
 				city: formData.get('city') as string,
