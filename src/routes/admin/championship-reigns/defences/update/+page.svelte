@@ -3,6 +3,7 @@
 	// /admin\championship-reigns\defences\update
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import NumberInputControls from '$lib/components/forms/inputs/number-input-controls.svelte';
+	import { Utils } from '$lib/utils/general.utils';
 	import { ReignUtils } from '$lib/utils/reign.utils';
 	import type { PageData } from './$types';
 
@@ -65,6 +66,9 @@
 							step={1}
 						/>
 						<p class="duration">{ReignUtils.getDaysAndMonths(reign.days)}</p>
+						{#if reign.updated_at}
+							<p class="elapsed-time">Actualizado: {Utils.getEllapsedTime(reign.updated_at)}</p>
+						{/if}
 					</div>
 				{/each}
 			</div>
@@ -118,9 +122,9 @@
 		color: #666;
 	}
 
-	@media only screen and (max-width: 767px) {
+	/* @media only screen and (max-width: 767px) {
 		.grid.wrestlers-reigns-grid {
 			grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 		}
-	}
+	} */
 </style>

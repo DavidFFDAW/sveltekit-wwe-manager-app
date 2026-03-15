@@ -54,6 +54,21 @@ export abstract class Repository<
 		return this.model.findMany(args);
 	}
 
+	toMap(args?: FindManyArgs, key: string = 'id'): Promise<Map<string | number, T>> {
+		return this.model.findMany(args).then(
+			(results: T[]) =>
+				new Map(
+					results.map((item) => {
+						const mapKey = (item as Record<string, unknown>)[key];
+						if (typeof mapKey === 'string' || typeof mapKey === 'number') {
+							return [mapKey, item] as [string | number, T];
+						}
+						return [0, item] as [number, T]; // Fallback en caso de que la clave no sea válida
+					})
+				)
+		);
+	}
+
 	getRow(args?: FindManyArgs): Promise<T> {
 		return this.model.findFirst({
 			...args,

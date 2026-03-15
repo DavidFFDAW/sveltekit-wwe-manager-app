@@ -223,6 +223,24 @@ export const Utils = {
 		const [year, month, day] = date.split('-').map(Number);
 		return new Date(Date.UTC(year, month - 1, day));
 	},
+	getEllapsedTime: (date: Date): string => {
+		if (!date) return '';
+		const today = new Date();
+		const diff = today.getTime() - date.getTime();
+		const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+		const diffHours = Math.floor(diff / (1000 * 60 * 60));
+		const diffMinutes = Math.floor(diff / (1000 * 60));
+
+		if (diffDays > 2)
+			return `el ${date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}`;
+		if (diffDays > 1) return `hace ${diffDays} días`;
+		if (diffDays === 1) return 'hace 1 día';
+		if (diffHours > 1) return `hace ${diffHours} horas`;
+		if (diffHours === 1) return 'hace 1 hora';
+		if (diffMinutes > 1) return `hace ${diffMinutes} minutos`;
+		if (diffMinutes === 1) return 'hace 1 minuto';
+		return 'hace unos minutos';
+	},
 	getBrandImage: (brand: string): string => {
 		const searchBrand = brand.toLowerCase().replace(/ /g, '-');
 		const foundBrand = brands[searchBrand];

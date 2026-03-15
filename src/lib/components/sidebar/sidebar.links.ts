@@ -58,7 +58,7 @@ export const SidebarLinks: SidebarLink[] = [
 				equals: true
 			},
 			{
-				url: '/admin/championship-reigns/defences',
+				url: '/admin/championship-reigns/defences/update',
 				label: 'Defensas',
 				icon: 'shield-fill',
 				equals: true

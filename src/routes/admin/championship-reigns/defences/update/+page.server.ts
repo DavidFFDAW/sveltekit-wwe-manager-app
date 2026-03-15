@@ -12,6 +12,7 @@ export const actions = {
 		const formData = await request.formData();
 
 		try {
+			const reignsRepo = new ReignsRepository();
 			const parsed = Utils.getArrayFormDatas(formData, ['reign-id', 'defenses']);
 			const numericParsedValues = parsed.map((item) => {
 				return {
@@ -20,7 +21,24 @@ export const actions = {
 				};
 			});
 
-			const sameDefensesGroup = numericParsedValues.reduce(
+			const currentReigns = await reignsRepo.toMap({
+				where: {
+					current: true,
+					lost_date: null,
+					can_stats_count: true,
+					Championship: {
+						active: true
+					}
+				}
+			});
+
+			const onlyChangedDefenses = numericParsedValues.filter((item) => {
+				const currentReign = currentReigns.get(item.id);
+				if (!currentReign) return false;
+				return currentReign.defences !== item.defenses;
+			});
+
+			const sameDefensesGroup = onlyChangedDefenses.reduce(
 				(acc, item) => {
 					if (!acc[item.defenses]) acc[item.defenses] = [];
 					acc[item.defenses].push(item.id);
@@ -29,7 +47,6 @@ export const actions = {
 				{} as Record<number, number[]>
 			);
 
-			const reignsRepo = new ReignsRepository();
 			const promises = Object.entries(sameDefensesGroup).map(([defenses, ids]) => {
 				return reignsRepo.bulkUpdate({ id: { in: ids } }, { defences: parseInt(defenses, 10) });
 			});
