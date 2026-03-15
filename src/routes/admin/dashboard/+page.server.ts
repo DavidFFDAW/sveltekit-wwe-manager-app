@@ -3,14 +3,11 @@ import { BlogRepository } from '$lib/server/dao/repositories/blog.repository';
 import { PpvCardRepository } from '$lib/server/dao/repositories/matchcard.repository';
 import { RumbleRepository } from '$lib/server/dao/repositories/rumble.repository';
 // import { ReignsRepository } from '$lib/server/dao/repositories/reigns.repository';
-import { MatchRepository } from '$lib/server/dao/repositories/match.repository';
 
 export const load = async () => {
 	const blog = new BlogRepository();
 	const matchcards = new PpvCardRepository();
 	const royalrumbles = new RumbleRepository();
-	const matches = new MatchRepository();
-	// const reigns = new ReignsRepository();
 
 	const rumbles = await royalrumbles.getCurrentRumbles();
 	const drafts = await blog.getDrafts({
@@ -22,22 +19,11 @@ export const load = async () => {
 			exceptr: true
 		}
 	});
-	const averageRating = await matches.getAverageRating();
-	console.log({ averageRating });
-
-	// const currentReigns = await reigns.getCurrentReigns({
-	// 	include: {
-	// 		Championship: true,
-	// 		Wrestler: true
-	// 	}
-	// });
 
 	const ppvCardsWithoutRatings = await matchcards.get({
 		where: {
 			matches: {
-				some: {
-					rating: null
-				}
+				some: { OR: [{ rating: null }, { winner: null }, { winner: '' }] }
 			},
 			ppv_date: { lte: new Date() }
 		}

@@ -78,7 +78,6 @@
 	onMount(async () => {
 		const { default: flatpickr } = await import('flatpickr');
 		const { Spanish } = await import('flatpickr/dist/l10n/es.js');
-		console.log(Spanish);
 
 		flatpickr('.flatpickr-selector', {
 			mode: 'multiple',

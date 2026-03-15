@@ -4,10 +4,11 @@
 	import RumbleWinners from './components/rumble-winners.svelte';
 	import { DashboardLinks } from './dashboard.links';
 	import { page } from '$app/state';
-	import { errorimage } from '$lib/actions/error.image';
+	import NotificationCard from './components/notification-card.svelte';
 
 	let { data } = $props();
-	const rumbles = data.dashboard.rumbles as any[];
+	// @typescript-eslint/no-explicit-any
+	const rumbles = data.dashboard.rumbles;
 	const paramTest = page.url.searchParams.get('test');
 	let test = paramTest || (Math.random() > 0.8 ? 'a' : 'b');
 
@@ -38,36 +39,17 @@
 			<div class="notifications">
 				{#if missingRatings && missingRatings.length > 0}
 					<div class="missing-ratings-notification">
-						<h4>Tienes {missingRatings.length} eventos sin calificar:</h4>
+						<h3>Tienes {missingRatings.length} eventos sin calificar o sin ganador:</h3>
 
-						<ul class="w1 flex column gap-small missing-ratings-list">
+						<ul class="w1 missing-ratings-list">
 							{#each missingRatings as card}
-								<li class="missing-rating-list-item">
-									<div class="w1 flex start acenter gap-smaller">
-										<img
-											width="60"
-											height="50"
-											src={card.ppv_image}
-											title={card.ppv_name}
-											alt={card.ppv_name}
-											use:errorimage={'/noimage.jpg'}
-										/>
-										<div class="missing-rating-content">
-											<p class="missing-rating-title">{card.ppv_name}</p>
-											<small>
-												{card.ppv_date?.toLocaleDateString('es-ES', {
-													year: 'numeric',
-													month: 'long',
-													day: 'numeric'
-												})}
-											</small>
-										</div>
-									</div>
-
-									<a href="/admin/matchcards/rating?ppv={card.id}" class="btn btn-check-ppv">
-										Revisar
-									</a>
-								</li>
+								<NotificationCard
+									id={card.id}
+									name={card.ppv_name}
+									image={card.ppv_image}
+									date={card.ppv_date}
+									url={`/admin/matchcards/rating?slug=${card.id}`}
+								/>
 							{/each}
 						</ul>
 					</div>
@@ -75,30 +57,17 @@
 
 				{#if drafts.length > 0}
 					<div class="missing-ratings-notification">
-						<h4>Tienes {drafts.length} borradores sin publicar:</h4>
+						<h3>Tienes {drafts.length} borradores sin publicar:</h3>
 
-						<ul class="w1 flex column gap-small missing-ratings-list">
+						<ul class="w1 missing-ratings-list">
 							{#each drafts as draft}
-								<li class="missing-rating-list-item">
-									<div class="w1 flex start acenter gap-smaller">
-										<img
-											width="60"
-											height="50"
-											src={draft.image}
-											title={draft.title}
-											alt={draft.title}
-											use:errorimage={'/noimage.jpg'}
-										/>
-										<div class="missing-rating-content">
-											<p class="missing-rating-title">{draft.title}</p>
-											<small>
-												{draft.exceptr}
-											</small>
-										</div>
-									</div>
-
-									<a href="/admin/blog/update/{draft.id}" class="btn btn-check-ppv"> Editar </a>
-								</li>
+								<NotificationCard
+									id={draft.id}
+									name={draft.title}
+									image={draft.image}
+									date={draft.created_at}
+									url={`/admin/blog/update/${draft.id}`}
+								/>
 							{/each}
 						</ul>
 					</div>
@@ -158,20 +127,28 @@
 		margin-bottom: 30px;
 	}
 
+	.missing-ratings-notification .missing-ratings-list {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		align-items: stretch;
+		gap: 6px;
+	}
 	.missing-ratings-notification .missing-ratings-list .missing-rating-list-item {
 		width: 100%;
 		display: flex;
 		justify-content: space-between;
-		align-items: center;
+		flex-direction: column;
+		align-items: flex-end;
 		background-color: #fff;
 		border-radius: 10px;
 		padding: 10px 8px;
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-		gap: 10px;
+		gap: 1px;
 	}
 	.missing-ratings-notification .missing-ratings-list .missing-rating-list-item img {
 		max-width: 100%;
 		border-radius: 5px;
+		border: 1px solid #333;
 		object-fit: cover;
 	}
 
