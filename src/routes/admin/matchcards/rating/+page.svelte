@@ -1,4 +1,6 @@
 <script lang="ts">
+	import NumberInputControls from '$lib/components/forms/inputs/number-input-controls.svelte';
+
 	let { data } = $props();
 	let event = data.rating.event;
 	let matches = data.rating.matches;
@@ -25,7 +27,9 @@
 			Valoración media de <strong class="rumble">{event.ppv_name}</strong>:
 			{averageRating.toFixed(2)} estrellas
 		</p>
-		<!-- <code>{JSON.stringify(event.matches, null, 2)}</code> -->
+
+		<input type="hidden" name="ppv_id" value={event.id} />
+
 		<ul class="w1 list grid matches-grid">
 			{#each matches as match}
 				<li class="w1 list-item card box flex total column astart gap-5">
@@ -48,6 +52,14 @@
 					{:else}
 						<span class="badge">Sin valorar</span>
 					{/if}
+					<NumberInputControls
+						min={0}
+						max={5}
+						step={0.5}
+						value={match.rating || 0}
+						label="Valoración"
+						name={`rating[${match.id}]`}
+					/>
 					<span>{match.winner}</span>
 				</li>
 			{/each}
@@ -72,7 +84,7 @@
 		--rating-color: #8e44ad;
 	}
 	.matches-grid {
-		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 		gap: 1rem;
 	}
 	.badge {
