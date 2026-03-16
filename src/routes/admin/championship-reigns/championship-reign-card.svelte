@@ -51,6 +51,12 @@
 			/>
 		</div>
 
+		{#if reign.Championship.tag}
+			<p class="wrestler-name">{reign.team_name}</p>
+		{:else}
+			<p class="wrestler-name">{reign.Wrestler.name}</p>
+		{/if}
+
 		<div class="championship-reign-statistics">
 			<div class="championship-reign-stats-item">
 				<p class="championship-reign-stats-title">Ganado</p>
