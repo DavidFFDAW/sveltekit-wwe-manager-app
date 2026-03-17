@@ -11,7 +11,7 @@
 		if (rating >= 5) return 'excellent';
 		return 'terrible';
 	};
-	let rating_tag = $derived(get_rating_class(matchData.rating));
+	let rating_tag = $derived(get_rating_class(rating));
 	let participants = $derived(matchData.participants.split('VS').map((p: string) => p.trim()));
 </script>
 
