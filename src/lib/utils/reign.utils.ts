@@ -33,5 +33,11 @@ export const ReignUtils = {
 			return `${reign.Wrestler.name} & ${reign.Partner.name}`;
 		}
 		return reign.Wrestler.name;
+	},
+	getReignRankingStatus: (reign: ChampionshipReign): string => {
+		// aqui analizaremos la cantidad de dias que lo ha tenido, para asignar un tag según acredite.
+		// lo normal es defender el campeonato, al menos una vez cada mes. Se tendrá esto en cuenta para asignar un label
+		if (reign.defences === 0) return 'terrible';
+		return '';
 	}
 };

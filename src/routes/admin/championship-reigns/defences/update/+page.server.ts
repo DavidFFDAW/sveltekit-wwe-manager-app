@@ -1,10 +1,43 @@
-import { ReignsDao } from '$lib/server/dao/reigns.dao';
 import { ReignsRepository } from '$lib/server/dao/repositories/reigns.repository.js';
 import { Helpers } from '$lib/server/server.helpers.js';
 import { Utils } from '$lib/utils/general.utils';
+import { ReignUtils } from '$lib/utils/reign.utils.js';
+
+const reignsRepo = new ReignsRepository();
 
 export const load = async () => {
-	return { reigns: await ReignsDao.getCurrentChampionsDefences() };
+	const reigns = await reignsRepo.get({
+		where: {
+			current: true,
+			lost_date: null,
+			can_stats_count: true,
+			Championship: {
+				active: true
+			}
+		},
+		include: {
+			Wrestler: true,
+			Championship: true,
+			Partner: true,
+			Team: true
+		},
+		orderBy: [
+			{ won_date: 'desc' },
+			{ days: 'desc' }
+		]
+	});
+	
+	return {
+		reigns: reigns.map((reign: any) => {
+			return {
+				...reign,
+				time_days: ReignUtils.getDaysAndMonths(reign.days),
+				ranking_status: ReignUtils.getReignRankingStatus(reign),
+				calculated_name: ReignUtils.getWrestlerOrTeamName(reign),
+				updated_ellapsed: reign.updated_at ? Utils.getEllapsedTime(reign.updated_at) : null
+			};
+		})
+	};
 };
 
 export const actions = {

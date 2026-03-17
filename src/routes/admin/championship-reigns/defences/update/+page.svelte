@@ -3,11 +3,8 @@
 	// /admin\championship-reigns\defences\update
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import NumberInputControls from '$lib/components/forms/inputs/number-input-controls.svelte';
-	import { Utils } from '$lib/utils/general.utils';
-	import { ReignUtils } from '$lib/utils/reign.utils';
-	import type { PageData } from './$types';
 
-	let { data }: { data: PageData } = $props();
+	let { data } = $props();
 </script>
 
 <section class="reigns-defences-update-page">
@@ -21,15 +18,10 @@
 			<div class="grid wrestlers-reigns-grid">
 				{#each data.reigns as reign}
 					{@const isTagTeam = reign.Championship.tag && reign.Partner !== null}
-					{@const name = reign.Partner
-						? reign.Team
-							? reign.Team.name
-							: `${reign.Wrestler.name} & ${reign.Partner.name}`
-						: reign.Wrestler.name}
 					<input type="hidden" name="reign-id" value={reign.id} />
 					<div class="box single-wrestler-reign-card flex column gap-smaller acenter">
 						<header class="single-reign-header flex column gap-5">
-							<h2 class="w1 block tcenter title wrestler-or-team-name">{name}</h2>
+							<h2 class="w1 block tcenter title wrestler-or-team-name">{reign.calculated_name}</h2>
 							<small class="w1 block tcenter">{reign.Championship.name}</small>
 						</header>
 						<div class="wrestler-team-container" class:tag-team={reign.Partner}>
@@ -65,9 +57,9 @@
 							value={reign.defences}
 							step={1}
 						/>
-						<p class="duration">{ReignUtils.getDaysAndMonths(reign.days)}</p>
-						{#if reign.updated_at}
-							<p class="elapsed-time">Actualizado: {Utils.getEllapsedTime(reign.updated_at)}</p>
+						<p class="duration">{reign.time_days}</p>
+						{#if reign.updated_ellapsed}
+							<p class="elapsed-time">Actualizado: {reign.updated_ellapsed}</p>
 						{/if}
 					</div>
 				{/each}
