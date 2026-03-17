@@ -55,6 +55,14 @@ export const actions = {
 				}])
 			);
 
+			console.log({
+				map,
+				ppv_id,
+				matches,
+				map_entries: map.entries(),
+			});
+			
+
 			const promises = map.entries().map(([match_id, matchData]) => { 
 				return repository.updateById(Number(match_id), {
 					rating: matchData.rating,
