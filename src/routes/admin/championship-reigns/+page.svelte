@@ -2,8 +2,6 @@
 	import { errorimage } from '$lib/actions/error.image';
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
-	import Debug from '$lib/components/visual/debug.svelte';
-	import ChampionshipReignCard from './championship-reign-card.svelte';
 
 	let { data } = $props();
 </script>
@@ -11,14 +9,21 @@
 <PageWrapper page="championship-reigns">
 	<header class="championship-reign-page-header">
 		<h1 class="w1">Reinados de Campeonatos</h1>
-		<a class="btn info inline-block" href="{data.path}/rankings">
-			<i class="bi bi-trophy"></i>
-			<span class="tooltip">Rankings</span>
-		</a>
-		<a href="{data.path}/upsert" class="btn success inline-block">
-			<i class="bi bi-plus"></i>
-			<span class="tooltip">Nuevo reinado</span>
-		</a>
+
+		<div class="button">
+			<a class="btn info inline-block" href="{data.path}/rankings">
+				<i class="bi bi-trophy"></i>
+				<span class="tooltip">Rankings</span>
+			</a>
+			<a href="{data.path}/upsert" class="btn success inline-block">
+				<i class="bi bi-plus"></i>
+				<span class="tooltip">Nuevo reinado</span>
+			</a>
+			<a href="{data.path}/defences/update" class="btn warn inline-block">
+				<i class="bi bi-shield"></i>
+				<span class="tooltip">Actualizar defensas</span>
+			</a>
+		</div>
 		<!-- <HttpButton href="/api/reigns/update-days/current" icon="refresh">Actualizar días</HttpButton> -->
 	</header>
 
