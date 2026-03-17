@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-
-	let { match, notice } = $props();
+	let { match } = $props();
 	let matchData = $state(match);
 	let rating = $state(match.rating || 0);
 	const step = 0.5;
@@ -15,11 +13,6 @@
 	};
 	let rating_tag = $derived(get_rating_class(rating));
 	let participants = $derived(matchData.participants.split('VS').map((p: string) => p.trim()));
-
-	onMount(() => {
-		const firstNotice = document.querySelector('rating-card.notice');
-		if (notice && firstNotice) firstNotice.scrollIntoView({ behavior: 'smooth' });
-	});
 </script>
 
 <div
@@ -107,6 +100,7 @@
 	}
 	.rating-card.notice {
 		border-color: #e74c3c;
+		box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
 	}
 	.rating-card h3 {
 		text-decoration: underline;

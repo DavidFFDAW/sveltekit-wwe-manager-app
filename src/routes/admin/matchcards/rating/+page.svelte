@@ -1,6 +1,6 @@
 <script lang="ts">
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
-	import NumberInputControls from '$lib/components/forms/inputs/number-input-controls.svelte';
+	import { onMount } from 'svelte';
 	import RatingCard from './rating-card.svelte';
 
 	let { data } = $props();
@@ -11,6 +11,10 @@
 		ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length || 0
 	);
 
+	onMount(() => {
+		const firstNotice = document.querySelector('.rating-card.notice');
+		if (data.rating.notice && firstNotice) firstNotice.scrollIntoView({ behavior: 'smooth' });
+	});
 	// let firstNight = $derived(data.rating.matches.filter((match) => match.night === 1));
 	// let secondNight = $derived(data.rating.matches.filter((match) => match.night === 2));
 </script>
@@ -31,7 +35,7 @@
 
 		<div class="w1 list grid matches-grid">
 			{#each matches as match}
-				<RatingCard {match} notice={data.rating.notice} />
+				<RatingCard {match} />
 			{/each}
 		</div>
 	</AsyncForm>
