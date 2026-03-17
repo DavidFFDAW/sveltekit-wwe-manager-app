@@ -1,5 +1,7 @@
 <script lang="ts">
+	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import NumberInputControls from '$lib/components/forms/inputs/number-input-controls.svelte';
+	import RatingCard from './rating-card.svelte';
 
 	let { data } = $props();
 	let event = data.rating.event;
@@ -9,11 +11,8 @@
 		ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length || 0
 	);
 
-	$inspect({
-		matches: matches.length,
-		ratings: ratings.length,
-		averageRating
-	});
+	// let firstNight = $derived(data.rating.matches.filter((match) => match.night === 1));
+	// let secondNight = $derived(data.rating.matches.filter((match) => match.night === 2));
 </script>
 
 <div class="page">
@@ -22,7 +21,7 @@
 		<small>Valoraciones para el evento {event.ppv_name}</small>
 	</header>
 
-	<div class="rating-page-container">
+	<AsyncForm method="post" classes="rating-page-container">
 		<p>
 			Valoración media de <strong class="rumble">{event.ppv_name}</strong>:
 			{averageRating.toFixed(2)} estrellas
@@ -30,75 +29,17 @@
 
 		<input type="hidden" name="ppv_id" value={event.id} />
 
-		<ul class="w1 list grid matches-grid">
+		<div class="w1 list grid matches-grid">
 			{#each matches as match}
-				<li class="w1 list-item card box flex total column astart gap-5">
-					<span class="badge badge-card-order">{match.order}</span>
-					<span>
-						{match.stipulation}
-					</span>
-					<span>{match.participants}</span>
-					{#if match.rating}
-						<span
-							class="rumble rating badge"
-							class:rating-bad={match.rating > 0 && match.rating < 3}
-							class:rating-good={match.rating >= 3}
-							class:rating-very-good={match.rating === 4}
-							class:rating-excellent={match.rating === 5}
-						>
-							<i class="bi bi-star-fill"></i>
-							{match.rating}
-						</span>
-					{:else}
-						<span class="badge">Sin valorar</span>
-					{/if}
-					<NumberInputControls
-						min={0}
-						max={5}
-						step={0.5}
-						value={match.rating || 0}
-						label="Valoración"
-						name={`rating[${match.id}]`}
-					/>
-					<span>{match.winner}</span>
-				</li>
+				<RatingCard {match} />
 			{/each}
-		</ul>
-	</div>
+		</div>
+	</AsyncForm>
 </div>
 
 <style>
-	:root {
-		--rating-color: #f39c12;
-	}
-	.rating-bad {
-		--rating-color: #e74c3c;
-	}
-	.rating-good {
-		--rating-color: #f39c12;
-	}
-	.rating-very-good {
-		--rating-color: #27ae60;
-	}
-	.rating-excellent {
-		--rating-color: #8e44ad;
-	}
 	.matches-grid {
 		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 		gap: 1rem;
-	}
-	.badge {
-		font-size: 0.9rem;
-		padding: 0.25em 1em;
-		border-radius: 25px;
-		background-color: #f0f0f0;
-		border: 1px solid #ccc;
-		color: #333;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-	}
-	.rating.rumble {
-		font-size: 1.25rem;
-		font-weight: 600;
-		color: var(--rating-color);
 	}
 </style>
