@@ -17,6 +17,10 @@
 
 <div class="w1 match-card rating-card rating-{rating_tag} relative">
 	<h3 class="w1 tcenter underline">{matchData.stipulation}</h3>
+	<p class="w1 tcenter">
+		{matchData.championship ? `${matchData.championship}` : 'Sin titulo en juego'}
+	</p>
+
 	<div class="match-participants">
 		{#each participants as participant}
 			<div class="participant-item">{participant}</div>
@@ -93,6 +97,8 @@
 	}
 	.rating-card h3 {
 		text-decoration: underline;
+	}
+	.rating-card h3 + p {
 		margin-bottom: 0.5rem;
 	}
 	.rating-card .rating {
