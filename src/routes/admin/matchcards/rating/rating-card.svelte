@@ -1,5 +1,7 @@
 <script lang="ts">
-	let { match } = $props();
+	import { onMount } from 'svelte';
+
+	let { match, notice } = $props();
 	let matchData = $state(match);
 	let rating = $state(match.rating || 0);
 	const step = 0.5;
@@ -13,9 +15,17 @@
 	};
 	let rating_tag = $derived(get_rating_class(rating));
 	let participants = $derived(matchData.participants.split('VS').map((p: string) => p.trim()));
+
+	onMount(() => {
+		const firstNotice = document.querySelector('rating-card.notice');
+		if (notice && firstNotice) firstNotice.scrollIntoView({ behavior: 'smooth' });
+	});
 </script>
 
-<div class="w1 match-card rating-card rating-{rating_tag} relative">
+<div
+	class="w1 match-card rating-card rating-{rating_tag} relative"
+	class:notice={rating === null || !matchData.winner}
+>
 	<h3 class="w1 tcenter underline">{matchData.stipulation}</h3>
 	<p class="w1 tcenter">
 		{matchData.championship ? `${matchData.championship}` : 'Sin titulo en juego'}
@@ -94,6 +104,9 @@
 		border-radius: 8px;
 		padding: 1rem;
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
+	.rating-card.notice {
+		border-color: #e74c3c;
 	}
 	.rating-card h3 {
 		text-decoration: underline;

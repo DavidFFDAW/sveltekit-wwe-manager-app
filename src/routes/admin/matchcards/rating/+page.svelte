@@ -31,7 +31,7 @@
 
 		<div class="w1 list grid matches-grid">
 			{#each matches as match}
-				<RatingCard {match} />
+				<RatingCard {match} notice={data.rating.notice} />
 			{/each}
 		</div>
 	</AsyncForm>

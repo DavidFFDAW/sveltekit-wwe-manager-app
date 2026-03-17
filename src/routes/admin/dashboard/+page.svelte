@@ -48,7 +48,7 @@
 									name={card.ppv_name}
 									image={card.ppv_image}
 									date={card.ppv_date}
-									url={`/admin/matchcards/rating?slug=${card.id}`}
+									url={`/admin/matchcards/rating?slug=${card.id}&notice`}
 								/>
 							{/each}
 						</ul>

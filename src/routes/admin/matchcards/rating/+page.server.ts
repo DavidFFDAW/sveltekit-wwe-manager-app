@@ -27,6 +27,7 @@ export const load = async ({ url }) => {
 
 	return {
 		rating: {
+			notice: url.searchParams.has('notice'),
 			matches: matches,
 			nights: nights,
 			event: event,
