@@ -28,7 +28,7 @@
 		method="post"
 		classes="rating-page-container"
 		buttonText="Guardar valoraciones"
-		reset={true}
+		reset={false}
 	>
 		<p>
 			Valoración media de <strong class="rumble">{event.ppv_name}</strong>:
