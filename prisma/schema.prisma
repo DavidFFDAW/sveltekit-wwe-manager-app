@@ -35,6 +35,7 @@ model Championship {
     short_title       String?             @db.VarChar(20)
     order             Int?                @db.SmallInt
     ChampionshipReign ChampionshipReign[]
+    matches           Match[]
 
     @@map(name: "championship")
 }
@@ -304,19 +305,21 @@ model PPVCard {
 }
 
 model Match {
-    id            Int       @id @default(autoincrement())
-    id_match_card Int       @db.Int // Foreign key to MatchCard
-    order         Int       @db.Int
-    stipulation   String    @db.VarChar(255)
-    championship  String?   @db.VarChar(255)
-    participants  String    @db.Text
-    winner        String?   @db.VarChar(255)
-    night         Int?      @default(1) @db.Int
-    duration      Int?      @db.Int
-    rating        Float?    @db.Float
-    created_at    DateTime? @default(now())
-    updated_at    DateTime? @updatedAt
-    matchcard     PPVCard   @relation(fields: [id_match_card], references: [id])
+    id              Int           @id @default(autoincrement())
+    id_match_card   Int           @db.Int // Foreign key to MatchCard
+    order           Int           @db.Int
+    stipulation     String        @db.VarChar(255)
+    // championship    String?       @db.VarChar(255)
+    championship_id Int?          @db.Int
+    participants    String        @db.Text
+    winner          String?       @db.VarChar(255)
+    night           Int?          @default(1) @db.Int
+    duration        Int?          @db.Int
+    rating          Float?        @db.Float
+    created_at      DateTime?     @default(now())
+    updated_at      DateTime?     @updatedAt
+    matchcard       PPVCard       @relation(fields: [id_match_card], references: [id])
+    championship    Championship? @relation(fields: [championship_id], references: [id])
 
     @@map(name: "matchs")
 }

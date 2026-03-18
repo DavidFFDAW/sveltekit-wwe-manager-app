@@ -69,10 +69,10 @@ export const actions = {
             ]).map(match => {
                 return {
                     _id: match.match_id ? Number(match.match_id) : 0,
-                    stipulation: match.match_stipulation,
-                    championship: match.match_championship || null,
-                    participants: match.match_participants,
-                    winner: match.match_winner || null,
+                    stipulation: match.match_stipulation?.trim(),
+                    championship: match.match_championship?.trim() || null,
+                    participants: match.match_participants?.trim(),
+                    winner: match.match_winner?.trim() || null,
                     night: match.match_night ? Number(match.match_night) : 1,
                     rating: match.match_rating ? Number(match.match_rating) : null,
                     duration: null,

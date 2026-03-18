@@ -25,7 +25,7 @@ export const load = async () => {
 			matches: {
 				some: { OR: [{ rating: null }, { winner: null }, { winner: '' }] }
 			},
-			ppv_date: { lte: new Date() }
+			ppv_date: { lt: new Date() }
 		}
 	});
 

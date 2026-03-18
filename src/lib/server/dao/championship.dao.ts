@@ -17,7 +17,7 @@ export const ChampionshipDao = {
 					}
 				}
 			},
-			orderBy: [{ active: 'desc' }, { name: 'desc' }]
+			orderBy: [{ active: 'desc' }, { name: 'asc' }]
 		});
 	},
 	getChampionshipByID: (id: number) => {
@@ -43,7 +43,7 @@ export const ChampionshipDao = {
 						won_date: 'desc'
 					}
 				}
-			}
+			},
 		});
 	},
 

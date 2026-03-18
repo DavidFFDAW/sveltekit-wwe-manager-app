@@ -12,7 +12,7 @@
 	export let redirect: string = '';
 	export let showButtons: boolean = true;
 	export let showReset: boolean = false;
-	export let buttonText: string = 'Submit';
+	export let buttonText: string = 'Guardar';
 	export let classes: string = 'default-form';
 	export let showToast: boolean = true;
 	export let updateId: string | number = '';
