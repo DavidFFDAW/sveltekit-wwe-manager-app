@@ -1,6 +1,7 @@
 <script lang="ts">
 	let { match = $bindable() } = $props();
 	let hasOtherWinner = $state(match.winner ? !match.participants.includes(match.winner) : false);
+	let altWinner = $state(match.winner);
 	const step = 0.5;
 
 	const get_rating_class = (rating: number) => {
@@ -23,8 +24,8 @@
 		{match.championship ? `${match.championship}` : 'Sin titulo en juego'}
 	</p>
 
-	{#if participants.length > 0}
-		<div class="match-participants">
+	<div class="match-participants">
+		{#if participants.length > 1}
 			<label class="w1 relative">
 				<input
 					type="radio"
@@ -73,20 +74,24 @@
 							class="input app-input"
 							name="alt-winner[{match.id}]"
 							placeholder="Otro ganador..."
-							value={match.winner}
+							bind:value={altWinner}
 						/>
 					</label>
 				{/if}
 			</div>
-		</div>
-
-		<datalist id="match-{match.id}-participants">
-			<option value="No contest">No contest</option>
-			{#each participants as participant}
-				<option value={participant}>{participant}</option>
-			{/each}
-		</datalist>
-	{/if}
+		{:else}
+			<label class="label">
+				<span>Ganador</span>
+				<input
+					type="text"
+					class="input app-input"
+					name="winner[{match.id}]"
+					placeholder="Ganador del combate"
+					bind:value={match.winner}
+				/>
+			</label>
+		{/if}
+	</div>
 
 	<div class="w1 rating-container flex start acenter gap-smaller">
 		<div class="rating relative">
@@ -110,22 +115,22 @@
 
 <style>
 	:root {
-		--rating-color: #f39c12;
+		--rating-color: #333;
 	}
 	.rating-terrible {
 		--rating-color: #c0392b;
 	}
 	.rating-bad {
-		--rating-color: #e74c3c;
+		--rating-color: #834815;
 	}
 	.rating-nice {
-		--rating-color: #f39c12;
+		--rating-color: #f1c40f;
 	}
 	.rating-good {
 		--rating-color: #27ae60;
 	}
 	.rating-excellent {
-		--rating-color: #8e44ad;
+		--rating-color: #14532e;
 	}
 	.rating-card {
 		background-color: #fff;

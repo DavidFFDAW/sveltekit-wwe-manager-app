@@ -309,7 +309,7 @@ model Match {
     id_match_card   Int           @db.Int // Foreign key to MatchCard
     order           Int           @db.Int
     stipulation     String        @db.VarChar(255)
-    // championship    String?       @db.VarChar(255)
+    championship    String?       @db.VarChar(255)
     championship_id Int?          @db.Int
     participants    String        @db.Text
     winner          String?       @db.VarChar(255)
@@ -319,7 +319,7 @@ model Match {
     created_at      DateTime?     @default(now())
     updated_at      DateTime?     @updatedAt
     matchcard       PPVCard       @relation(fields: [id_match_card], references: [id])
-    championship    Championship? @relation(fields: [championship_id], references: [id])
+    Championship    Championship? @relation(fields: [championship_id], references: [id])
 
     @@map(name: "matchs")
 }

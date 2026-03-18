@@ -59,22 +59,25 @@ export const actions = {
 			});
 
 			const parsedMatches = matches.map((match_id: string) => {
-				const winner = data.get(`winner[${match_id}]`) as string;
-				const altWinner = data.get(`alt-winner[${match_id}]`);
+				const winnerForm = data.get(`winner[${match_id}]`) as string;
+				const altWinnerForm = data.get(`alt-winner[${match_id}]`) as string | null;
+				const altWinner = altWinnerForm ? altWinnerForm.trim() : null;
+				const winner = altWinner ? altWinner : (winnerForm ? winnerForm.trim() : null);
 
 				return {
 					id: Number(match_id),
 					rating: data.has(`rating[${match_id}]`) ? Number(data.get(`rating[${match_id}]`)) : null,
-					winner: altWinner && typeof altWinner === 'string' && altWinner.trim() !== '' ? altWinner.trim() : winner.trim() || null
+					winner: winner,
 				};
 			});
 
 			const onlyChanged = parsedMatches.filter((matchData) => {
 				const current = currentMatches.get(matchData.id);
 				if (!current) return false;
+
 				return current.rating !== matchData.rating || current.winner !== matchData.winner;
 			});
-
+			
 			const promises = onlyChanged.map((matchData) => {
 				return repository.updateById(Number(matchData.id), {
 					rating: matchData.rating,

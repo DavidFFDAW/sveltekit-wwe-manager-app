@@ -71,6 +71,7 @@ export const actions = {
                     _id: match.match_id ? Number(match.match_id) : 0,
                     stipulation: match.match_stipulation?.trim(),
                     championship: match.match_championship?.trim() || null,
+                    championship_id: null,
                     participants: match.match_participants?.trim(),
                     winner: match.match_winner?.trim() || null,
                     night: match.match_night ? Number(match.match_night) : 1,
