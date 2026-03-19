@@ -42,7 +42,11 @@ export class PpvCardRepository extends Repository<
 	getMatchCardWithMatches(slug: string, args: Prisma.PPVCardFindManyArgs = {}) {
 		args.include = {
 			...args.include,
-			matches: true
+			matches: {
+				orderBy: {
+					order: 'asc'
+				}
+			}
 		};
 		args.where = {
 			...args.where,
