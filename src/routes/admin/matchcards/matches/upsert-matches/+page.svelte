@@ -1,42 +1,52 @@
 <script lang="ts">
-	import Dialog from '$lib/components/dialog/dialog.svelte';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
-	import { Toast } from '$lib/utils/toast.helper';
 
 	let { data } = $props();
 	let _inner = $state(data.match_card);
-	const ppv = data.match_card.matchCard.id;
 	let matches = $state(data.match_card.matches);
 	let orders = $derived(matches.map((m) => m.order));
-	let showCreateMatch = $state(false);
 
-	const handleSubmit = (e: Event) => {
-		e.preventDefault();
-		const form = e.target as HTMLFormElement;
-		const formData = new FormData(form);
-		const order = formData.get('order') as string;
+	const handleToggleDelete = (match: any) => () => {
+		console.log(match);
+		if (match.type === 'create') {
+			matches = matches.filter((m) => m !== match);
+			return;
+		}
+		match.deleted = !match.deleted;
+	};
 
-		const match = {
-			id: 0,
-			type: 'create',
-			order: order ? Number(order) : orders.length > 0 ? Math.max(...orders) + 1 : 1,
-			stipulation: formData.get('stipulation') as string,
-			championship: formData.get('championship') as string,
-			participants: formData.get('participants') as string,
-			night: (formData.get('night') as string) ? Number(formData.get('night')) : 1
-		};
-
-		matches = [...matches, match];
-		Toast.success('Combate añadido');
-		form.reset();
+	const handleAddMatch = () => {
+		matches = [
+			...matches,
+			{
+				id: Date.now(),
+				order: orders.length > 0 ? Math.max(...orders) + 1 : 1,
+				stipulation: '',
+				championship: '',
+				participants: '',
+				night: 1,
+				type: 'create'
+			}
+		];
 	};
 </script>
 
-<header class="page-header">
-	<h1 class="page-title">Combates</h1>
-	<small class="page-subtitle-ppv">
-		Combates del evento <strong>{_inner.matchCard?.ppv_name}</strong>
-	</small>
+<header class="sticky-page-header flex between">
+	<div class="flex gap-small">
+		<img
+			width="80"
+			draggable="false"
+			src={_inner.matchCard.ppv_image}
+			alt={_inner.matchCard.ppv_name}
+			class="ppv-image"
+		/>
+		<h1 class="page-title">{_inner.matchCard.ppv_name}</h1>
+	</div>
+
+	<button type="button" class="btn rounded cta" onclick={handleAddMatch}>
+		<i class="bi bi-plus"></i>
+		<span class="label">Añadir combate</span>
+	</button>
 </header>
 
 <div class="matchcard-page">
@@ -46,69 +56,34 @@
 		{/each}
 	</datalist>
 
-	<header class="sticky-page-header">
-		<img
-			width="80"
-			draggable="false"
-			src={_inner.matchCard.ppv_image}
-			alt={_inner.matchCard.ppv_name}
-			class="ppv-image"
-		/>
-		<h2>{_inner.matchCard.ppv_name}</h2>
-	</header>
+	<div class="page-container">
+		<AsyncForm
+			method="post"
+			classes="w1 down"
+			redirect="/admin/matchcards"
+			buttonText="Guardar combates"
+			updateId={_inner.matchCard?.id}
+		>
+			<input type="hidden" name="slug" bind:value={_inner.slug} />
+			<input type="hidden" name="ppv_card_id" bind:value={_inner.matchCard.id} />
 
-	<Dialog title="Eliminar combate" opened={showCreateMatch}>
-		<form action="" method="post" class="new-match-form" onsubmit={handleSubmit}>
-			<label class="form-label form-group">
-				<span class="label">Estipulación</span>
-				<input
-					type="text"
-					name="stipulation"
-					class="form-control input"
-					placeholder="Singles match"
-					required
-				/>
-			</label>
-			<label class="form-label form-group">
-				<span class="label">Titulo</span>
-				<input
-					type="text"
-					name="title"
-					class="form-control input"
-					placeholder="Championship match"
-					required
-				/>
-			</label>
-
-			<label class="form-label form-group">
-				<span class="label">Participantes</span>
-				<textarea name="participants" class="form-control input"></textarea>
-			</label>
-
-			<div class="form-actions">
-				<button type="submit" class="btn danger">Añadir combate</button>
-			</div>
-		</form>
-	</Dialog>
-
-	<AsyncForm
-		method="post"
-		classes="w1 down"
-		redirect="/admin/matchcards"
-		buttonText="Guardar cambios"
-		updateId={_inner.matchCard?.id}
-	>
-		<input type="hidden" name="slug" bind:value={_inner.slug} />
-		<input type="hidden" name="ppv_card_id" bind:value={_inner.matchCard.id} />
-
-		<div class="w1 flex between astart gap-medium">
-			<div class="w1 ppv-matches-container flex column gap-medium astart">
+			<div class="w1 grid ppv-matches-container">
 				{#each matches as match, index}
 					{@const _id = match.id === 0 ? `create-${index}` : match.id}
 					{@const key = `match[${_id}]`}
-					<div class="w1 match box relative" style="order: {match.order}" data-identifier={_id}>
-						<h3>
+					<div
+						class="w1 match box relative match-type-{match.type}"
+						style="order: {match.order}"
+						data-identifier={_id}
+					>
+						<h3 class="match-title">
 							Combate {match.order}
+							{#if match.type === 'create'}
+								<span class="badge small cta">Nuevo</span>
+							{/if}
+							{#if index === 0 || index === matches.length - 1}
+								<span class="badge small">{index === 0 ? 'Opener' : 'Main event'}</span>
+							{/if}
 						</h3>
 
 						<input type="hidden" name="matches[]" value={_id} />
@@ -120,7 +95,12 @@
 						<input type="hidden" name="{key}[type]" value={match.type} />
 
 						<div class="action-buttons-container">
-							<button type="button" class="btn small danger" aria-label="Eliminar combate">
+							<button
+								type="button"
+								class="btn small danger"
+								aria-label="Eliminar combate"
+								onclick={handleToggleDelete(match)}
+							>
 								<i class="bi bi-trash"></i>
 							</button>
 						</div>
@@ -128,31 +108,29 @@
 				{/each}
 			</div>
 
-			<div class="w1 edition-panel">
-				<h2>Panel de edición</h2>
-				<p>Selecciona un combate para editar sus detalles</p>
-			</div>
-		</div>
-
-		<button type="button" class="btn small" onclick={() => (showCreateMatch = true)}>
-			<i class="bi bi-plus"></i>
-			<span class="label">Añadir combate</span>
-		</button>
-	</AsyncForm>
+			<div class="w1 flex end"></div>
+		</AsyncForm>
+	</div>
 </div>
 
 <style>
-	.edition-panel {
-		min-height: 100dvh;
+	:root {
+		--matches-rows: 2;
+	}
+	.grid.ppv-matches-container {
+		display: grid;
+		grid-template-columns: repeat(var(--matches-rows), 1fr);
+		gap: 15px;
 	}
 	.sticky-page-header {
-		position: sticky;
+		position: relative;
 		top: 0;
 		left: 0;
 		width: calc(100% + 30px);
 		background: #fff;
 		padding: 15px;
 		margin: 0 -15px;
+		margin-top: -15px;
 		display: flex;
 		align-items: center;
 		gap: 15px;
@@ -161,6 +139,24 @@
 		font-size: 0.7rem;
 		z-index: 5;
 	}
+	.sticky-page-header h1.page-title {
+		font-size: 1.2rem !important;
+	}
+
+	.match.box {
+		border-radius: 6px;
+		border: 1px solid #ccc;
+	}
+	.match.match-type-delete {
+		opacity: 0.5;
+		border: 2px solid red;
+	}
+	.match .match-title {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
 	.fixed-create-match-button {
 		position: fixed;
 		top: 20px;
@@ -186,10 +182,8 @@
 	}
 
 	@media only screen and (max-width: 768px) {
-		.match-card-matches-footer {
-			width: 100%;
-			margin-left: 0;
-			padding-top: 35px;
+		.grid.ppv-matches-container {
+			--matches-rows: 1;
 		}
 	}
 </style>
