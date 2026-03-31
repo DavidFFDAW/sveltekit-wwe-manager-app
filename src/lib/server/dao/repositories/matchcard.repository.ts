@@ -43,9 +43,7 @@ export class PpvCardRepository extends Repository<
 		args.include = {
 			...args.include,
 			matches: {
-				orderBy: {
-					order: 'asc'
-				}
+				orderBy: [{ night: 'asc' }, { order: 'asc' }]
 			}
 		};
 		args.where = {

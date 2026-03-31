@@ -1,25 +1,19 @@
 <script lang="ts">
+	import { tick } from 'svelte';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
+	import MatchItem from './match-item.svelte';
 
 	let { data } = $props();
 	let _inner = $state(data.match_card);
 	let matches = $state(data.match_card.matches);
 	let orders = $derived(matches.map((m) => m.order));
 
-	const handleToggleDelete = (match: any) => () => {
-		console.log(match);
-		if (match.type === 'create') {
-			matches = matches.filter((m) => m !== match);
-			return;
-		}
-		match.deleted = !match.deleted;
-	};
-
 	const handleAddMatch = () => {
+		const id = Date.now();
 		matches = [
 			...matches,
 			{
-				id: Date.now(),
+				id: id,
 				order: orders.length > 0 ? Math.max(...orders) + 1 : 1,
 				stipulation: '',
 				championship: '',
@@ -28,18 +22,16 @@
 				type: 'create'
 			}
 		];
+
+		tick().then(() => {
+			const matchElement = document.querySelector(`[data-identifier="${id}"]`);
+			if (matchElement) matchElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+		});
 	};
 </script>
 
 <header class="sticky-page-header flex between">
 	<div class="flex gap-small">
-		<img
-			width="80"
-			draggable="false"
-			src={_inner.matchCard.ppv_image}
-			alt={_inner.matchCard.ppv_name}
-			class="ppv-image"
-		/>
 		<h1 class="page-title">{_inner.matchCard.ppv_name}</h1>
 	</div>
 
@@ -50,9 +42,31 @@
 </header>
 
 <div class="matchcard-page">
+	<datalist id="stipulations">
+		<option value="Single Match">Single Match</option>
+		<option value="Tag Team Match">Tag Team Match</option>
+		<option value="No Holds Barred">No Holds Barred</option>
+		<option value="Ladder Match">Ladder Match</option>
+		<option value="Extreme Rules">Extreme Rules</option>
+		<option value="Street Fight">Street Fight</option>
+		<option value="Falls Count Anywhere">Falls Count Anywhere</option>
+		<option value="Steel Cage Match">Steel Cage Match</option>
+		<option value="Hell in a Cell">Hell in a Cell</option>
+		<option value="I quit">I quit</option>
+		<option value="Money in the Bank">Money in the Bank</option>
+		<option value="Royal Rumble">Royal Rumble</option>
+		<option value="Elimination Chamber">Elimination Chamber</option>
+	</datalist>
+
 	<datalist id="wrestlers">
 		{#each _inner.wrestlers as wrestler}
 			<option value={wrestler.name}>{wrestler.name}</option>
+		{/each}
+	</datalist>
+
+	<datalist id="championships">
+		{#each _inner.championships as championship}
+			<option value={championship.name}>{championship.name}</option>
 		{/each}
 	</datalist>
 
@@ -68,43 +82,8 @@
 			<input type="hidden" name="ppv_card_id" bind:value={_inner.matchCard.id} />
 
 			<div class="w1 grid ppv-matches-container">
-				{#each matches as match, index}
-					{@const _id = match.id === 0 ? `create-${index}` : match.id}
-					{@const key = `match[${_id}]`}
-					<div
-						class="w1 match box relative match-type-{match.type}"
-						style="order: {match.order}"
-						data-identifier={_id}
-					>
-						<h3 class="match-title">
-							Combate {match.order}
-							{#if match.type === 'create'}
-								<span class="badge small cta">Nuevo</span>
-							{/if}
-							{#if index === 0 || index === matches.length - 1}
-								<span class="badge small">{index === 0 ? 'Opener' : 'Main event'}</span>
-							{/if}
-						</h3>
-
-						<input type="hidden" name="matches[]" value={_id} />
-						<input type="hidden" name="{key}[identifier]" value={match.id} />
-						<input type="hidden" name="{key}[stipulation]" value={match.stipulation} />
-						<input type="hidden" name="{key}[championship]" value={match.championship} />
-						<input type="hidden" name="{key}[participants]" value={match.participants} />
-						<input type="hidden" name="{key}[night]" value={match.night} />
-						<input type="hidden" name="{key}[type]" value={match.type} />
-
-						<div class="action-buttons-container">
-							<button
-								type="button"
-								class="btn small danger"
-								aria-label="Eliminar combate"
-								onclick={handleToggleDelete(match)}
-							>
-								<i class="bi bi-trash"></i>
-							</button>
-						</div>
-					</div>
+				{#each matches as _, index}
+					<MatchItem {index} matches={matches.length} bind:match={matches[index]} />
 				{/each}
 			</div>
 
@@ -123,7 +102,7 @@
 		gap: 15px;
 	}
 	.sticky-page-header {
-		position: relative;
+		position: sticky;
 		top: 0;
 		left: 0;
 		width: calc(100% + 30px);
@@ -134,54 +113,30 @@
 		display: flex;
 		align-items: center;
 		gap: 15px;
-		border-radius: 0 0 10px 10px;
+		border-radius: 0;
+		border-bottom: 1px solid #333;
 		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-		font-size: 0.7rem;
 		z-index: 5;
 	}
+	.sticky-page-header button {
+		font-size: 0.91rem;
+		border-color: #333;
+		background-color: transparent;
+		padding: 6px 12px;
+		color: #333;
+	}
+
 	.sticky-page-header h1.page-title {
 		font-size: 1.2rem !important;
 	}
 
-	.match.box {
-		border-radius: 6px;
-		border: 1px solid #ccc;
-	}
-	.match.match-type-delete {
-		opacity: 0.5;
-		border: 2px solid red;
-	}
-	.match .match-title {
-		display: flex;
-		align-items: center;
-		gap: 10px;
-	}
-
-	.fixed-create-match-button {
-		position: fixed;
-		top: 20px;
-		right: 20px;
-		border-radius: 25px;
-		z-index: 5;
-	}
-	.match-card-matches-footer {
-		width: calc(100% - var(--sidebar-width));
-		position: fixed;
-		padding: 20px 15px;
-		top: 0;
-		left: 0;
-		background: white;
-		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-		margin-left: var(--sidebar-width);
-		border-radius: 0 0 10px 10px;
-		z-index: 10;
-	}
-
-	.match.box.relative.hidden {
-		display: none;
-	}
-
 	@media only screen and (max-width: 768px) {
+		.sticky-page-header {
+			margin-top: -45px;
+			flex-direction: column;
+			align-items: center;
+		}
+
 		.grid.ppv-matches-container {
 			--matches-rows: 1;
 		}
