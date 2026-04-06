@@ -19,6 +19,7 @@ export const load = async ({ url }) => {
 
 	const championships = await championshipRepository.get({
 		select: { name: true, slug: true },
+		where: { active: true },
 		orderBy: { name: 'asc' }
 	});
 	const wrestlers = await wrestlersRepository.getNonReleasedWrestlers({
@@ -49,6 +50,18 @@ export const load = async ({ url }) => {
 	};
 };
 
+const getMatchDatas = (id: string, formData: FormData) => {
+	return {
+		id: id,
+		type: formData.get(`match[${id}][type]`) as string,
+		order: Number(formData.get(`match[${id}][order]`)) as number,
+		stipulation: formData.get(`match[${id}][stipulation]`) as string,
+		participants: formData.get(`match[${id}][participants]`) as string,
+		championship: formData.get(`match[${id}][championship]`) as string,
+		night: Number(formData.get(`match[${id}][night]`)) as number
+	};
+};
+
 export const actions = {
 	default: async ({ request, url }) => {
 		const search = url.searchParams;
@@ -56,49 +69,52 @@ export const actions = {
 		if (!slug) return Helpers.error('Invalid PPV card ID');
 
 		const formData = await request.formData();
+		const ppv_id = formData.get('_update_id') as string;
+		if (!ppv_id) return Helpers.error('Invalid PPV card ID');
+		if (ppv_id !== slug)
+			return Helpers.error(
+				'Hay un error con el id del PPV, recarga la página y vuelve a intentarlo'
+			);
+
 		const matchesByType = {
 			create: formData.getAll('matches[create]') as string[],
 			update: formData.getAll('matches[update]') as string[],
 			delete: formData.getAll('matches[delete]') as string[]
 		};
-		console.log({ matchesByType });
-		// return Helpers.error('Aún no está habilitada esta función', 401);
+
+		const matchesToCreate = matchesByType.create.map((id) => getMatchDatas(id, formData));
+		const matchesToUpdate = matchesByType.update.map((id) => getMatchDatas(id, formData));
+		const matchesToDelete = matchesByType.delete.map((id) => Number(id));
 
 		try {
-			const ppvCard = Helpers.getUpdateID(formData);
-			const matchesIds = formData.getAll('matches[]') as string[];
-			const matches = matchesIds.map((id) => {
-				return {
-					id: id.includes('create-') ? 0 : Number(id),
-					type: formData.get(`match[${id}][type]`) as string,
-					identifier: Number(formData.get(`match[${id}][identifier]`)) as number,
-					stipulation: formData.get(`match[${id}][stipulation]`) as string,
-					championship: formData.get(`match[${id}][championship]`) as string,
-					participants: formData.get(`match[${id}][participants]`) as string,
-					night: Number(formData.get(`match[${id}][night]`)) as number,
-					order: Number(formData.get(`match[${id}][order]`)) as number
-				};
-			});
-
-			const matchesToCreate = matches.filter((match) => match.type === 'create');
-			const matchesToUpdate = matches.filter((match) => match.type === 'update');
-
-			console.log({
-				matchesToCreate,
-				matchesToUpdate
-			});
 			const matchRepository = new MatchRepository();
+			if (matchesToDelete.length > 0) await matchRepository.bulkDeleteIn(matchesToDelete);
 
-			if (matchesByType.delete.length > 0) {
-				await matchRepository.delete({
-					id: { in: matchesByType.delete.map((id) => Number(id)) }
+			const createDatas = matchesToCreate.map((match) => {
+				return {
+					stipulation: match.stipulation,
+					participants: match.participants,
+					championship: match.championship,
+					night: match.night,
+					order: match.order,
+					id_match_card: Number(ppv_id)
+				};
+			}) as any[];
+
+			if (createDatas.length > 0) await matchRepository.bulkCreate(createDatas);
+
+			const updatePromises = matchesToUpdate.map((match) => {
+				return matchRepository.updateById(Number(match.id), {
+					stipulation: match.stipulation,
+					participants: match.participants,
+					championship: match.championship,
+					night: match.night,
+					order: match.order
 				});
-			}
+			});
+			if (updatePromises.length > 0) await Promise.all(updatePromises);
 
-			if (!ppvCard) return Helpers.error('Invalid PPV card ID');
-			return Helpers.error(
-				'Ahora mismo no se puede responder a esta petición, contacta con el desarrollador para más información'
-			);
+			return Helpers.success('Se ha actualizado la match card correctamente');
 		} catch (error) {
 			console.error('Error creating/updating match card:', error);
 			return Helpers.error('Failed to create or update match card');

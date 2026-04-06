@@ -3,10 +3,36 @@
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import MatchItem from './match-item.svelte';
 
-	let { data } = $props();
+	let { data = $bindable() } = $props();
 	let _inner = $state(data.match_card);
 	let matches = $state(data.match_card.matches);
 	let orders = $derived(matches.map((m) => m.order));
+
+	$effect(() => {
+		_inner = data.match_card;
+		matches = data.match_card.matches;
+	});
+
+	const handleToggleDelete = (match: any) => {
+		if (match.type === 'create') {
+			matches = matches.filter((m) => m.id !== match.id);
+		} else {
+			match.type = match.type === 'delete' ? 'update' : 'delete';
+		}
+	};
+
+	const handleChangeOrder = (match: any, direction: 'up' | 'down') => () => {
+		if (match.type === 'delete') return;
+
+		const currentOrder = match.order;
+		const targetOrder = direction === 'up' ? currentOrder - 1 : currentOrder + 1;
+		const targetMatch = matches.find((m) => m.order === targetOrder);
+		if (targetOrder < 1 || targetOrder > orders.length) return;
+
+		if (targetMatch) targetMatch.order = currentOrder;
+		match.order = targetOrder;
+		matches = [...matches];
+	};
 
 	const handleAddMatch = () => {
 		const id = Date.now();
@@ -74,7 +100,6 @@
 		<AsyncForm
 			method="post"
 			classes="w1 down"
-			redirect="/admin/matchcards"
 			buttonText="Guardar combates"
 			updateId={_inner.matchCard?.id}
 		>
@@ -82,8 +107,13 @@
 			<input type="hidden" name="ppv_card_id" bind:value={_inner.matchCard.id} />
 
 			<div class="w1 grid ppv-matches-container">
-				{#each matches as _, index}
-					<MatchItem {index} matches={matches.length} bind:match={matches[index]} />
+				{#each matches as _, index (_.id)}
+					<MatchItem
+						matches={matches.length}
+						bind:match={matches[index]}
+						{handleToggleDelete}
+						{handleChangeOrder}
+					/>
 				{/each}
 			</div>
 
@@ -93,12 +123,17 @@
 </div>
 
 <style>
-	:root {
-		--matches-rows: 2;
+	header.sticky-page-header h1.page-title {
+		font-size: 1.5rem;
+		font-family: 'SourceSans', sans-serif;
+		letter-spacing: 0.02em;
+		text-transform: uppercase;
+		word-spacing: 0.1em;
+		white-space: nowrap;
 	}
 	.grid.ppv-matches-container {
 		display: grid;
-		grid-template-columns: repeat(var(--matches-rows), 1fr);
+		grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
 		gap: 15px;
 	}
 	.sticky-page-header {
@@ -136,9 +171,17 @@
 			flex-direction: column;
 			align-items: center;
 		}
+		.sticky-page-header button {
+			width: 100%;
+			padding: 4px 12px;
+		}
 
 		.grid.ppv-matches-container {
-			--matches-rows: 1;
+			grid-template-columns: 1fr;
+			margin-top: 20px;
+			margin-bottom: 20px;
+			padding: 0 10px;
+			gap: 20px;
 		}
 	}
 </style>

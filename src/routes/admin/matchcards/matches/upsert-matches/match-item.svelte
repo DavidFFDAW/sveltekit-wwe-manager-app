@@ -1,14 +1,7 @@
 <script lang="ts">
-	// import type { MatchObject } from './types';
-
-	let { match = $bindable(), index, matches } = $props();
-	let key = $derived(`match[${match.type}][${match.id}]`);
+	let { match = $bindable(), matches, handleToggleDelete, handleChangeOrder } = $props();
+	let key = $derived(`match[${match.id}]`);
 	let tmpInput: HTMLInputElement;
-
-	const handleToggleDelete = () => {
-		if (match.type === 'create') return;
-		match.type = match.type === 'delete' ? 'update' : 'delete';
-	};
 
 	const handleAddToTextarea = (type: 'vs' | 'wrestler' | 'champion') => () => {
 		const participants = match.participants?.trim() || '';
@@ -37,32 +30,20 @@
 >
 	<h3 class="match-title">
 		Combate {match.order}
-		<div class="flex nogap order-buttons">
-			<button
-				type="button"
-				class="btn small order-move-button"
-				aria-label="Mover combate hacia arriba"
-			>
-				<i class="bi bi-arrow-up"></i>
-			</button>
-			<button
-				type="button"
-				class="btn small order-move-button"
-				aria-label="Mover combate hacia abajo"
-			>
-				<i class="bi bi-arrow-down"></i>
-			</button>
+		<div class="match-title-badges">
+			{#if match.type === 'create'}
+				<span class="badge small create-badge">Creacion</span>
+			{/if}
+			{#if match.order === 1 || match.order === matches}
+				<span class="badge small">{match.order === 1 ? 'Opener' : 'Main event'}</span>
+			{/if}
 		</div>
-
-		{#if match.type === 'create'}
-			<span class="badge small cta">Nuevo</span>
-		{/if}
-		{#if index === 0 || index === matches.length - 1}
-			<span class="badge small">{index === 0 ? 'Opener' : 'Main event'}</span>
-		{/if}
 	</h3>
 
 	<input type="hidden" name="matches[{match.type}]" value={match.id} />
+	<input type="hidden" name="{key}[order]" value={match.order} />
+	<input type="hidden" name="{key}[type]" value={match.type} />
+
 	<div class="w1 down flex column start astart gap-small">
 		<label class="form-label form-item">
 			<span class="label form-label">Estipulacion</span>
@@ -122,7 +103,7 @@
 						name="{key}[night]"
 						value={1}
 						bind:group={match.night}
-						class="form-input app-radio"
+						class="form-input app-radio first-night"
 					/>
 					<span class="label inner">Noche 1</span>
 				</label>
@@ -132,11 +113,39 @@
 						name="{key}[night]"
 						bind:group={match.night}
 						value={2}
-						class="form-input app-radio"
+						class="form-input app-radio second-night"
 					/>
 					<span class="label inner">Noche 2</span>
 				</label>
 			</div>
+		</div>
+
+		<div
+			class="w1 flex between gap-5 order-buttons"
+			class:single={match.order == 1 || match.order >= matches}
+			class:delete={match.type === 'delete'}
+		>
+			{#if match.order < matches}
+				<button
+					type="button"
+					class="btn order-move-button"
+					aria-label="Mover combate hacia abajo"
+					onclick={handleChangeOrder(match, 'down')}
+				>
+					<i class="bi bi-arrow-down"></i>
+					<span>Bajar orden</span>
+				</button>
+			{/if}
+			{#if match.order > 1}
+				<button
+					type="button"
+					class="btn order-move-button"
+					aria-label="Mover combate hacia arriba"
+					onclick={handleChangeOrder(match, 'up')}
+				>
+					<i class="bi bi-arrow-up"></i>
+					<span>Subir orden</span>
+				</button>{/if}
 		</div>
 	</div>
 
@@ -145,7 +154,7 @@
 			type="button"
 			class="btn danger"
 			aria-label="Eliminar combate"
-			onclick={handleToggleDelete}
+			onclick={() => handleToggleDelete(match)}
 		>
 			<i class="bi bi-{match.type === 'delete' ? 'x' : 'trash'}"></i>
 		</button>
@@ -156,18 +165,28 @@
 	.match.box {
 		border-radius: 6px;
 		border: 1px solid #aaa;
-		transition: all 0.2s ease-in-out;
+		transition: all 0.1s ease-in-out;
 	}
 	.match.match-type-delete {
 		border: 2px solid red;
+		opacity: 0.7;
 	}
 	.match .match-title {
 		display: flex;
 		align-items: center;
 		gap: 10px;
 	}
+	.match .match-title .match-title-badges {
+		display: flex;
+		gap: 2px;
+	}
 	.match.box textarea {
 		min-height: 80px;
+	}
+
+	.match .badge.create-badge {
+		background-color: #28a745;
+		color: white;
 	}
 	.match .nights-label-container {
 		width: 100%;
@@ -189,12 +208,16 @@
 		font-size: 0.85rem;
 		padding: 5px;
 	}
-	.match .nights-label-container > label input:checked + span.inner {
-		background-color: #333;
-		border-color: #333;
+	.match .nights-label-container > label input.first-night:checked + span.inner {
+		background-color: #28a745;
+		border-color: #28a745;
 		color: white;
 	}
-
+	.match .nights-label-container > label input.second-night:checked + span.inner {
+		background-color: #7fb7f4;
+		border-color: #7fb7f4;
+		color: white;
+	}
 	.match .textarea-whole-container .textarea-container {
 		gap: 0;
 	}
@@ -233,16 +256,20 @@
 		display: flex;
 		align-items: stretch;
 	}
+	.order-buttons.single {
+		justify-content: flex-end;
+		align-items: center;
+	}
+
+	.order-buttons.delete {
+		display: none;
+	}
 	.order-buttons button.order-move-button {
 		background-color: #fff;
 		border: 1px solid #333;
-		padding: 8px 10px;
+		padding: 8px 20px;
 		color: #333;
-		border-radius: 5px 0 0 5px;
+		border-radius: 8px;
 		align-self: stretch;
-	}
-	.order-buttons button.order-move-button:last-child {
-		border-radius: 0 5px 5px 0;
-		border-left: none;
 	}
 </style>

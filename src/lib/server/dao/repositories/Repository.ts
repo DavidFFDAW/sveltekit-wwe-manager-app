@@ -5,211 +5,218 @@ import type { EntityWithId } from '../../../../@types/Entity';
 import type { PaginationDatas } from '$lib/types/app.types';
 
 export abstract class Repository<
-    T extends EntityWithId,
-    CreateInput,
-    UpdateInput,
-    WhereUniqueInput,
-    FindManyArgs,
-    GroupByArgs,
+	T extends EntityWithId,
+	CreateInput,
+	UpdateInput,
+	WhereUniqueInput,
+	FindManyArgs,
+	GroupByArgs
 > {
-    protected requiredFields: string[] = [];
-    protected prisma: PrismaClient;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    protected model: any; // Aquí guardaremos la referencia al cliente del modelo de Prisma
+	protected requiredFields: string[] = [];
+	protected prisma: PrismaClient;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	protected model: any; // Aquí guardaremos la referencia al cliente del modelo de Prisma
 
-    constructor(modelName: keyof PrismaClient) {
-        this.prisma = prisma;
-        // Asegurarse de que el modelo existe en el cliente de Prisma
-        if (typeof this.prisma[modelName] === 'object') {
-            this.model = this.prisma[modelName];
-        } else {
-            throw new Error(`Model ${String(modelName)} not found in Prisma client.`);
-        }
-    }
+	constructor(modelName: keyof PrismaClient) {
+		this.prisma = prisma;
+		// Asegurarse de que el modelo existe en el cliente de Prisma
+		if (typeof this.prisma[modelName] === 'object') {
+			this.model = this.prisma[modelName];
+		} else {
+			throw new Error(`Model ${String(modelName)} not found in Prisma client.`);
+		}
+	}
 
-    conn() {
-        return this.prisma;
-    }
+	conn() {
+		return this.prisma;
+	}
 
-    getModel() {
-        return this.model;
-    }
+	getModel() {
+		return this.model;
+	}
 
-    getModelName() {
-        return this.model._meta.name;
-    }
+	getModelName() {
+		return this.model._meta.name;
+	}
 
-    getTableNameFromModelName(): string {
-        return this.model.name.replace(/([A-Z])/g, '_$1').toLowerCase();
-    }
+	getTableNameFromModelName(): string {
+		return this.model.name.replace(/([A-Z])/g, '_$1').toLowerCase();
+	}
 
-    select(select: Record<string, boolean>, args?: FindManyArgs): Promise<T[]> {
-        return this.model.findMany({
-            ...args,
-            select: select,
-        });
-    }
+	select(select: Record<string, boolean>, args?: FindManyArgs): Promise<T[]> {
+		return this.model.findMany({
+			...args,
+			select: select
+		});
+	}
 
-    get(args?: FindManyArgs): Promise<T[]> {
-        return this.model.findMany(args);
-    }
+	get(args?: FindManyArgs): Promise<T[]> {
+		return this.model.findMany(args);
+	}
 
-    toMap(args?: FindManyArgs, key: string = 'id'): Promise<Map<string | number, T>> {
-        return this.model.findMany(args).then(
-            (results: T[]) =>
-                new Map(
-                    results.map(item => {
-                        const mapKey = (item as Record<string, unknown>)[key];
-                        if (typeof mapKey === 'string' || typeof mapKey === 'number') {
-                            return [mapKey, item] as [string | number, T];
-                        }
-                        return [0, item] as [number, T]; // Fallback en caso de que la clave no sea válida
-                    }),
-                ),
-        );
-    }
+	toMap(args?: FindManyArgs, key: string = 'id'): Promise<Map<string | number, T>> {
+		return this.model.findMany(args).then(
+			(results: T[]) =>
+				new Map(
+					results.map((item) => {
+						const mapKey = (item as Record<string, unknown>)[key];
+						if (typeof mapKey === 'string' || typeof mapKey === 'number') {
+							return [mapKey, item] as [string | number, T];
+						}
+						return [0, item] as [number, T]; // Fallback en caso de que la clave no sea válida
+					})
+				)
+		);
+	}
 
-    getRow(args?: FindManyArgs): Promise<T> {
-        return this.model.findFirst({
-            ...args,
-            take: 1,
-        });
-    }
+	getRow(args?: FindManyArgs): Promise<T> {
+		return this.model.findFirst({
+			...args,
+			take: 1
+		});
+	}
 
-    getBySlug(slug: string): Promise<T | null> {
-        return this.model.findUnique({
-            where: { slug },
-        });
-    }
+	getBySlug(slug: string): Promise<T | null> {
+		return this.model.findUnique({
+			where: { slug }
+		});
+	}
 
-    getBySlugOrId(slugOrId: string | number): Promise<T | null> {
-        const isId = typeof slugOrId === 'number' || !isNaN(Number(slugOrId));
-        const whereQuery = isId ? { id: Number(slugOrId) } : { slug: slugOrId };
+	getBySlugOrId(slugOrId: string | number): Promise<T | null> {
+		const isId = typeof slugOrId === 'number' || !isNaN(Number(slugOrId));
+		const whereQuery = isId ? { id: Number(slugOrId) } : { slug: slugOrId };
 
-        return this.model.findFirst({
-            where: {
-                ...whereQuery,
-            },
-        });
-    }
+		return this.model.findFirst({
+			where: {
+				...whereQuery
+			}
+		});
+	}
 
-    getSingleById(id: number): Promise<T | null> {
-        return this.model.findUnique({
-            where: { id },
-        });
-    }
+	getSingleById(id: number): Promise<T | null> {
+		return this.model.findUnique({
+			where: { id }
+		});
+	}
 
-    groupBy(args: GroupByArgs): Promise<any> {
-        return this.model.groupBy(args);
-    }
+	groupBy(args: GroupByArgs): Promise<any> {
+		return this.model.groupBy(args);
+	}
 
-    queryRaw(sql: string): Promise<any> {
-        return this.prisma.$queryRaw`${sql}`;
-    }
+	queryRaw(sql: string): Promise<any> {
+		return this.prisma.$queryRaw`${sql}`;
+	}
 
-    paginate(page: number, args?: FindManyArgs, take: number = 15): Promise<[number, T[]]> {
-        const prepage = page < 1 ? 1 : page;
-        const skip = (prepage - 1) * take;
+	paginate(page: number, args?: FindManyArgs, take: number = 15): Promise<[number, T[]]> {
+		const prepage = page < 1 ? 1 : page;
+		const skip = (prepage - 1) * take;
 
-        return Promise.all([
-            this.model.count(args),
-            this.model.findMany({
-                ...args,
-                take,
-                skip,
-            }),
-        ]);
-    }
+		return Promise.all([
+			this.model.count(args),
+			this.model.findMany({
+				...args,
+				take,
+				skip
+			})
+		]);
+	}
 
-    async paginateN(page: number, args?: FindManyArgs, take: number = 15): Promise<PaginationDatas<T>> {
-        const prepage = page < 1 ? 1 : page;
-        const skip = (prepage - 1) * take;
-        const { select, include, ...restArgs } = (args as Record<string, unknown>) || {};
+	async paginateN(
+		page: number,
+		args?: FindManyArgs,
+		take: number = 15
+	): Promise<PaginationDatas<T>> {
+		const prepage = page < 1 ? 1 : page;
+		const skip = (prepage - 1) * take;
+		const { select, include, ...restArgs } = (args as Record<string, unknown>) || {};
 
-        const [totals, filtereds] = await Promise.all([
-            this.model.count(restArgs),
-            this.model.findMany({
-                ...args,
-                take,
-                skip,
-            }),
-        ]);
+		const [totals, filtereds] = await Promise.all([
+			this.model.count(restArgs),
+			this.model.findMany({
+				...args,
+				take,
+				skip
+			})
+		]);
 
-        return {
-            list: filtereds,
-            perPage: take,
-            totalItems: totals,
-            currentPage: prepage,
-            pages: Math.ceil(totals / take),
-        };
-    }
+		return {
+			list: filtereds,
+			perPage: take,
+			totalItems: totals,
+			currentPage: prepage,
+			pages: Math.ceil(totals / take)
+		};
+	}
 
-    query(sql: string): Promise<any> {
-        return this.prisma.$queryRaw`${sql};`;
-    }
+	query(sql: string): Promise<any> {
+		return this.prisma.$queryRaw`${sql};`;
+	}
 
-    unique(where: WhereUniqueInput): Promise<T | null> {
-        return this.model.findUnique({ where });
-    }
+	unique(where: WhereUniqueInput): Promise<T | null> {
+		return this.model.findUnique({ where });
+	}
 
-    exists(where: WhereUniqueInput): Promise<boolean> {
-        return this.model.count({ where }).then((count: number) => count > 0);
-    }
-    existsById(id: number): Promise<boolean> {
-        return this.model.count({ where: { id } }).then((count: number) => count > 0);
-    }
+	exists(where: WhereUniqueInput): Promise<boolean> {
+		return this.model.count({ where }).then((count: number) => count > 0);
+	}
+	existsById(id: number): Promise<boolean> {
+		return this.model.count({ where: { id } }).then((count: number) => count > 0);
+	}
 
-    create(data: CreateInput): Promise<T> {
-        return this.model.create({ data });
-    }
+	create(data: CreateInput): Promise<T> {
+		return this.model.create({ data });
+	}
 
-    bulkCreate(data: CreateInput[]): Promise<T[]> {
-        return this.model.createMany({ data });
-    }
+	bulkCreate(data: CreateInput[]): Promise<T[]> {
+		return this.model.createMany({ data });
+	}
 
-    update(where: WhereUniqueInput, data: UpdateInput): Promise<T> {
-        return this.model.update({ where, data });
-    }
-    updateById(id: number, data: UpdateInput): Promise<T> {
-        return this.model.update({ where: { id }, data });
-    }
+	update(where: WhereUniqueInput, data: UpdateInput): Promise<T> {
+		return this.model.update({ where, data });
+	}
+	updateById(id: number, data: UpdateInput): Promise<T> {
+		return this.model.update({ where: { id }, data });
+	}
 
-    bulkUpdate(where: WhereUniqueInput, data: UpdateInput): Promise<T[]> {
-        return this.model.updateMany({ where, data });
-    }
+	bulkUpdate(where: WhereUniqueInput, data: UpdateInput): Promise<T[]> {
+		return this.model.updateMany({ where, data });
+	}
 
-    delete(where: WhereUniqueInput): Promise<T> {
-        return this.model.delete({ where });
-    }
+	delete(where: WhereUniqueInput): Promise<T> {
+		return this.model.delete({ where });
+	}
+	bulkDeleteIn(ids: number[]): Promise<T[]> {
+		return this.model.deleteMany({ where: { id: { in: ids } } });
+	}
 
-    deleteByIdOrSlug(idOrSlug: string | number): Promise<T | null> {
-        const isId = typeof idOrSlug === 'number' || !isNaN(Number(idOrSlug));
-        const whereQuery = isId ? { id: Number(idOrSlug) } : { slug: idOrSlug };
+	deleteByIdOrSlug(idOrSlug: string | number): Promise<T | null> {
+		const isId = typeof idOrSlug === 'number' || !isNaN(Number(idOrSlug));
+		const whereQuery = isId ? { id: Number(idOrSlug) } : { slug: idOrSlug };
 
-        return this.model.delete({
-            where: {
-                ...whereQuery,
-            },
-        });
-    }
+		return this.model.delete({
+			where: {
+				...whereQuery
+			}
+		});
+	}
 
-    truncate(): Promise<number> {
-        return this.prisma.$executeRaw`TRUNCATE TABLE ${this.model._meta.name};`;
-    }
+	truncate(): Promise<number> {
+		return this.prisma.$executeRaw`TRUNCATE TABLE ${this.model._meta.name};`;
+	}
 
-    deleteAll(): Promise<number> {
-        return this.model.deleteMany({});
-    }
+	deleteAll(): Promise<number> {
+		return this.model.deleteMany({});
+	}
 
-    getRequiredFields(): string[] {
-        return this.requiredFields;
-    }
+	getRequiredFields(): string[] {
+		return this.requiredFields;
+	}
 
-    getSingleByField(field: string, value: string | number) {
-        return this.model.findFirst({
-            where: {
-                [field]: value,
-            },
-        });
-    }
+	getSingleByField(field: string, value: string | number) {
+		return this.model.findFirst({
+			where: {
+				[field]: value
+			}
+		});
+	}
 }

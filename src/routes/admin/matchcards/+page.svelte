@@ -76,7 +76,7 @@
 							<span>Editar evento</span>
 						</a>
 						<a
-							href="/admin/matchcards/matches/upsert?slug={matchcard.id}"
+							href="/admin/matchcards/matches/upsert-matches?slug={matchcard.id}"
 							class="btn small warn rounded icon"
 							aria-label="Editar combates"
 						>

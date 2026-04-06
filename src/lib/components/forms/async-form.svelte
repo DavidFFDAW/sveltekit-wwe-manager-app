@@ -3,7 +3,7 @@
 	import SpinnerLogo from '../spinner/spinner-logo.svelte';
 	import { type ActionResult, type SubmitFunction } from '@sveltejs/kit';
 	import SpinnerSimple from '../spinner/spinner-simple.svelte';
-	import { goto, invalidate } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { Toast } from '$lib/utils/toast.helper';
 
 	export let form: HTMLFormElement | null = null;
@@ -36,7 +36,7 @@
 		}
 
 		return async ({ result, update }) => {
-			console.log({ result, update });
+			// console.log({ result, update });
 			setTimeout(() => {
 				loading = false;
 			}, 500);
@@ -59,7 +59,7 @@
 			if (hasSuccess) {
 				const successMessage = response.data?.message || '¡Operación exitosa!';
 				await update({ reset: reset });
-				await invalidate(''); // Invalidate the current page to refresh the data
+				await invalidateAll(); // Invalidate the current page to refresh the data
 				if (showToast) Toast.success(successMessage);
 				if (afterResponse) afterResponse(response);
 				if (redirectURL) goto(redirectURL);
