@@ -92,6 +92,14 @@
 							<span>Editar valoraciones</span>
 						</a>
 						<a
+							href="/admin/matchcards/summary?id={matchcard.id}"
+							class="btn small info rounded icon"
+							aria-label="Ver resumen del evento"
+						>
+							<i class="bi bi-file-earmark-text"></i>
+							<span>Ver resumen</span>
+						</a>
+						<a
 							href="/admin/matchcards/export/{matchcard.id}"
 							class="btn small info rounded icon"
 							aria-label="Exportar evento"
