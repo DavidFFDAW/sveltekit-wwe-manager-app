@@ -9,13 +9,21 @@ export const load = async ({ url }) => {
 	if (isNaN(matchcardId)) return redirect(302, '/admin/matchcards');
 
 	const cards = new MatchRepository();
-	const thisCard = await cards.getRow({
+	const matches = await cards.get({
 		where: {
 			id_match_card: matchcardId
-		}
+		},
+		orderBy: [
+			{
+				night: 'asc',
+			},
+			{
+				order: 'asc',
+			}
+		]
 	});
 
 	return {
-		thisCard
+		matches: matches
 	};
 }
