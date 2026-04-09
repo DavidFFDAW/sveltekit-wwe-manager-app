@@ -8,8 +8,14 @@
 	import GlobalUtilLinks from './global-admin-links/global-util-links.svelte';
 	import { page } from '$app/state';
 	import MetaTagsSeo from '$lib/components/seo/meta-tags-seo.svelte';
+	import { AnalyticsHelpers } from './api/analytics/track/analytics.helper';
 
 	let { data, children } = $props();
+
+	$effect(() => {
+		console.log({ event: 'pageview', path: page.url.pathname });
+		AnalyticsHelpers.track('pageview', page.url.pathname);
+	});
 </script>
 
 <MetaTagsSeo page={page.data} />

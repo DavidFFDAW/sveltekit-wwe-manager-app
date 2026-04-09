@@ -348,3 +348,19 @@ model Rumble {
 
     @@map(name: "rumble")
 }
+
+model Analytics {
+    id         Int       @id @default(autoincrement())
+    event      String    @db.VarChar(50)
+    page       String    @db.VarChar(150)
+    referer    String?   @db.VarChar(150)
+    device     String?   @db.VarChar(15)
+    os         String?   @db.VarChar(15)
+    browser    String?   @db.VarChar(15)
+    is_bot     Boolean   @default(false) @db.TinyInt
+    bot        String?   @db.VarChar(15)
+    ip_hash    String?   @db.VarChar(200)
+    created_at DateTime? @default(now())
+
+    @@map(name: "analytics")
+}
