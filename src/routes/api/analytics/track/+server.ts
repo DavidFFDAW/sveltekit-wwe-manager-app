@@ -1,3 +1,4 @@
+import { dev } from '$app/environment';
 import { AnalyticsRepository } from '$lib/server/dao/repositories/analytics.respository';
 import { Helpers } from '$lib/server/server.helpers';
 import { AnalyticsHelpers } from './analytics.helper';
@@ -17,6 +18,8 @@ const isSameOrigin = (request: Request, siteOrigin: string): boolean => {
 
 export async function POST({ request, url }) {
 	try {
+		if (dev) return Helpers.api.error('No se registrarán analíticas en desarrollo', 403);
+		
 		if (!isSameOrigin(request, url.origin))
 			return Helpers.api.error('Origen no permitido', 403);
 		
