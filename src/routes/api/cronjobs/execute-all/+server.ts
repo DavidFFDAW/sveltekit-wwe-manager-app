@@ -17,9 +17,9 @@ export async function POST({ request }) {
 		if (!activeCrons || activeCrons.length <= 0)
 			return Api.error('Could not find any active cronjob', 404);
 
-		for (const job of activeCrons) {
-			await cronjobsUtils.executeCronjob(job.slug, false);
-		}
+		const executionPromises = activeCrons.map((job) => cronjobsUtils.executeCronjob(job.slug, false));
+		await Promise.all(executionPromises);
+		
 		await cronjobs.updateManyExecutionDate({
 			active: true
 		});
