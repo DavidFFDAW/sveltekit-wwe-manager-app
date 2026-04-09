@@ -47,6 +47,7 @@ export const load = async ({ locals, url, route, request }) => {
 		path: url.pathname,
 		userIsAdmin: isAdmin,
 		user: storedUser || null,
+		hostname: url.hostname,
 		canonical: (url.origin + url.pathname).replace(/\/$/g, ''),
 		referer: request.headers.get('referer') || null,
 		breadcrumbs: getBreadcrumbs(url.pathname),

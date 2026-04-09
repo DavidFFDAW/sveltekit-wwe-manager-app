@@ -19,18 +19,18 @@ const isSameOrigin = (request: Request, siteOrigin: string): boolean => {
 export async function POST({ request, url }) {
 	try {
 		if (dev) return Helpers.api.error('No se registrarán analíticas en desarrollo', 403);
-		
-		if (!isSameOrigin(request, url.origin))
-			return Helpers.api.error('Origen no permitido', 403);
+		if (!isSameOrigin(request, url.origin)) return Helpers.api.error('Origen no permitido', 403);
+
+		// if (url.pathname.startsWith('/admin')) return Helpers.api.error('No se pueden registrar analíticas desde páginas de administración', 403);
 		
 		const body = await request.json();
+		const path = String(body.url || '/');
+		const event = String(body.event || 'pageview');
+		// if (path.startsWith('/admin')) return Helpers.api.error('No se pueden registrar analíticas desde páginas de administración', 403);
+
 		const userAgent = request.headers.get('user-agent') || 'Unknown';
 		const refererHeader = request.headers.get('referer') || '';
 		const ip = getClientIpAddress(request);
-		// const country = request.headers.get('x-country') || '';
-
-		const event = String(body.event || 'pageview');
-		const path = String(body.url || '/');
 
 		const repository = new AnalyticsRepository();
 		const analyticsData = await AnalyticsHelpers.getAnalyticsData(userAgent, ip);

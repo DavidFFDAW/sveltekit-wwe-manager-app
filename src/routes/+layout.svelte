@@ -12,9 +12,28 @@
 
 	let { data, children } = $props();
 
+	const handleLinkClick = (event: Event) => {
+		const target = event.target as HTMLElement;
+		const link = target.closest('a');
+		console.log({ target, link });
+		if (!link) return;
+
+		const href = link.href;
+		const url = new URL(href);
+		const path =
+			url.hostname !== data.hostname ? url.href : url.pathname + url.searchParams.toString();
+
+		// if (path.startsWith('admin') || path.startsWith('/admin')) return;
+		AnalyticsHelpers.track('link_click', path);
+	};
+
 	$effect(() => {
-		console.log({ event: 'pageview', path: page.url.pathname });
 		AnalyticsHelpers.track('pageview', page.url.pathname);
+
+		document.addEventListener('click', handleLinkClick);
+		return () => {
+			document.removeEventListener('click', handleLinkClick);
+		};
 	});
 </script>
 
