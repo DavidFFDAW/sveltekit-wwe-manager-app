@@ -13,9 +13,9 @@
 	let { data, children } = $props();
 
 	const handleLinkClick = (event: Event) => {
+		if (data.isAdminPage) return;
 		const target = event.target as HTMLElement;
 		const link = target.closest('a');
-		console.log({ target, link });
 		if (!link) return;
 
 		const href = link.href;
@@ -28,7 +28,7 @@
 	};
 
 	$effect(() => {
-		AnalyticsHelpers.track('pageview', page.url.pathname);
+		if (!data.isAdminPage) AnalyticsHelpers.track('pageview', page.url.pathname);
 
 		document.addEventListener('click', handleLinkClick);
 		return () => {
