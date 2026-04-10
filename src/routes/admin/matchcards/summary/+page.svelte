@@ -6,11 +6,13 @@
 		const content = document.querySelectorAll('.copiable .page-summary-item');
 		const textContent = data.matches
 			.map((item, index) => {
-				const championship = item.championship ? `(${item.championship})` : '';
-				const winner = item.winner ? `- Ganador: ${item.winner}` : '';
-				let m = `${index + 1}. ${item.stipulation} ${championship}: ${item.participants}.`;
-				if (winner) m += ` Gana el combate ${winner}`;
-				return m.trim();
+				let text = `${index + 1}. ${item.participants}`;
+				if (item.championship) text += `\n - Championship: ${item.championship}`;
+				if (item.winner) text += `\n - Winner: ${item.winner}`;
+				if (item.stipulation) text += `\n - Stipulation: ${item.stipulation}`;
+				if (item.night) text += `\n - Night: ${item.night}`;
+				text += `\n - Notes:`;
+				return text.trim();
 			})
 			.filter(Boolean)
 			.join('\n');
