@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { Toast } from '$lib/utils/toast.helper';
 	let { data } = $props();
+	let selectedNight = $state(data.nights[0] || 1);
+	let matches = $derived(data.matches[selectedNight]);
 
 	const copyToClipboard = async () => {
-		const content = document.querySelectorAll('.copiable .page-summary-item');
-		const textContent = data.matches
+		const textContent = matches
 			.map((item, index) => {
 				let text = `${index + 1}. ${item.participants}`;
 				if (item.championship) text += `\n - Championship: ${item.championship}`;
 				if (item.winner) text += `\n - Winner: ${item.winner}`;
 				if (item.stipulation) text += `\n - Stipulation: ${item.stipulation}`;
-				if (item.night) text += `\n - Night: ${item.night}`;
 				text += `\n - Notes:`;
 				return text.trim();
 			})
@@ -24,6 +24,8 @@
 			Toast.error('Error al copiar al portapapeles');
 		}
 	};
+
+	$inspect(data);
 </script>
 
 <header class="page-header">
@@ -32,8 +34,21 @@
 </header>
 
 <section class="page-container">
+	{#if data.nights.length > 1}
+		<header class="w1 nights-container">
+			{#each data.nights as night}
+				<label class="form-label relative">
+					<input type="radio" class="app-radio" bind:group={selectedNight} value={night} />
+					<span class="label inner">Noche {night}</span>
+				</label>
+			{/each}
+		</header>
+	{/if}
+
 	<div class="w1 page-summary-list flex start astart column gap-5 copiable">
-		{#each data.matches as match}
+		<h2>Noche {selectedNight}</h2>
+
+		{#each matches as match}
 			<div class="w1 page-summary-item box gap-smaller">
 				<strong>{match.stipulation}:</strong>
 				{#if match.championship}
@@ -78,5 +93,30 @@
 	.flex.buttons > * {
 		flex: 1;
 		width: 100%;
+	}
+	header.nights-container {
+		margin-bottom: 20px;
+		display: flex;
+		gap: 5px;
+	}
+	header.nights-container label {
+		flex: 1;
+		cursor: pointer;
+	}
+	header.nights-container label input + .label.inner {
+		width: 100%;
+		display: inline-block;
+		text-align: center;
+		background-color: #fff;
+		border: 1px solid #ccc;
+		color: #333;
+		padding: 5px 10px;
+		border-radius: 50px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
+	header.nights-container label input:checked + .label.inner {
+		background-color: #333;
+		border-color: #333;
+		color: #fff;
 	}
 </style>
