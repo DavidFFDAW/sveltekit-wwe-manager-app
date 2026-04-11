@@ -297,6 +297,7 @@ model PPVCard {
     ppv_name   String    @db.VarChar(255)
     ppv_image  String    @db.VarChar(255)
     ppv_date   DateTime? @db.DateTime
+    post_id    Int?      @db.Int
     created_at DateTime? @default(now())
     updated_at DateTime? @updatedAt
     matches    Match[]
