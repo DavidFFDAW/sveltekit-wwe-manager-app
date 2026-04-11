@@ -35,108 +35,132 @@
 </header>
 
 <section class="page-container">
-	{#if data.hasMultipleNights}
-		<header class="w1 nights-container">
-			{#each data.nights as night}
-				<label class="form-label relative">
-					<input type="radio" class="app-radio" bind:group={selectedNight} value={night} />
-					<span class="label inner">Noche {night}</span>
-				</label>
-			{/each}
-		</header>
-	{/if}
-
-	<div class="w1 page-summary-list flex start astart column gap-5 copiable">
-		<h2 class="uppercase">Noche {selectedNight}</h2>
-
-		{#each matches as match}
-			<div class="w1 page-summary-item box gap-smaller">
-				<strong>{match.stipulation}:</strong>
-				{#if match.championship}
-					(<span class="championship">{match.championship}</span>)
-				{/if}
-				<span class="match-participants">{match.participants}</span>
-				{#if match.winner}
-					<p class="winner">- Ganador: {match.winner}</p>
-				{/if}
-				<label class="form-item">
-					<span class="form-label label">Notas:</span>
-					<textarea class="notes" placeholder="Notas del combate..." bind:value={match.notes}
-					></textarea>
-				</label>
-			</div>
-		{/each}
-	</div>
-
-	{#if data.ppv.post && data.hasLinkedPost}
-		<a href={`/admin/blog/edit/${data.ppv.post}`} class="post-link btn icon rounded secondary cta">
-			<i class="bi bi-file-earmark-text"></i>
-			<span>Editar post relacionado</span>
-		</a>
-	{:else}
-		<AsyncForm method="post" showButtons={false} redirect="/admin/blog" updateId={data.ppv.id}>
-			<input type="hidden" name="date" value={data.ppv.date?.toISOString().split('T')[0]} />
-			<input type="hidden" name="image" value={data.ppv.image} />
-			<input type="hidden" name="name" value={data.ppv.name} />
-			<input type="hidden" name="action" value="create_summary" />
-
-			<div class="w1 box create-summary-post">
-				<header class="title-block flex start acenter gap-smaller pointer">
-					<i class="bi bi-card-text text-2xl"></i>
-					<h2 class="box-title">Crear resumen</h2>
+	<div class="page-content flex start astart gap-smaller responsive">
+		<div class="w1 page-summary-list flex start astart column gap-5 box">
+			{#if data.hasMultipleNights}
+				<header class="w1 nights-container">
+					{#each data.nights as night}
+						<label class="form-label relative">
+							<input type="radio" class="app-radio" bind:group={selectedNight} value={night} />
+							<span class="label inner">Noche {night}</span>
+						</label>
+					{/each}
 				</header>
+			{/if}
 
-				<div class="post-info">
-					<p>
-						Para crear un post relacionado con esta matchcard, recomendamos pulsar en el botón de
-						"copiar" para copiar el contenido de la matchcard y después acceder a <a
-							href="https://chatgpt.com/g/g-p-67aaf80f33908191bb5ffab06d85b978-wwe/c/9b2d8a04-cd8a-4fb1-9e0f-f76bc23a0479"
-							class="link"
-							target="_blank"
-							rel="noopener noreferrer">ChatGPT</a
-						> para generar un resumen del evento. Una vez tengas el resumen, pégalo en el campo de contenido
-						y pulsa en "Crear post".
-					</p>
-
-					<div class="w1 buttons flex total astart responsive gap-smaller">
-						<button class="btn rounded cta icon" type="button" onclick={copyToClipboard}>
-							<i class="bi bi-clipboard"></i>
-							<span>Copiar</span>
-						</button>
-
-						<a
-							class="btn rounded icon chatgpt-btn"
-							href="https://chatgpt.com/g/g-p-67aaf80f33908191bb5ffab06d85b978-wwe/c/9b2d8a04-cd8a-4fb1-9e0f-f76bc23a0479"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							<i class="bi bi-chat-dots"></i>
-							Accede a ChatGPT
-						</a>
+			<div class="page-matches-card-container">
+				{#each matches as match}
+					<div class="w1 page-summary-item box gap-smaller">
+						<strong>{match.stipulation}:</strong>
+						{#if match.championship}
+							(<span class="championship">{match.championship}</span>)
+						{/if}
+						<span class="match-participants">{match.participants}</span>
+						{#if match.winner}
+							<p class="winner">- Ganador: {match.winner}</p>
+						{/if}
+						<label class="form-item">
+							<span class="form-label label">Notas:</span>
+							<textarea class="notes" placeholder="Notas del combate..." bind:value={match.notes}
+							></textarea>
+						</label>
 					</div>
+				{/each}
+			</div>
+		</div>
 
-					<QuillInput
-						label="Contenido"
-						name="content"
-						placeholder="Escribe aquí el contenido del post relacionado con esta matchcard..."
-						value=""
-						required
-					/>
-					<div class="w1 flex down between acenter gap-smaller">
-						<button class="btn rounded secondary" type="reset">Cancelar</button>
-						<button class="btn rounded cta" type="submit">Crear post</button>
+		{#if data.ppv.post && data.hasLinkedPost}
+			<a
+				href={`/admin/blog/edit/${data.ppv.post}`}
+				class="post-link btn icon rounded secondary cta"
+			>
+				<i class="bi bi-file-earmark-text"></i>
+				<span>Editar post relacionado</span>
+			</a>
+		{:else}
+			<AsyncForm
+				method="post"
+				showButtons={false}
+				redirect="/admin/blog?category=summary"
+				updateId={data.ppv.id}
+			>
+				<input type="hidden" name="date" value={data.ppv.date?.toISOString().split('T')[0]} />
+				<input type="hidden" name="image" value={data.ppv.image} />
+				<input type="hidden" name="name" value={data.ppv.name} />
+				<input type="hidden" name="action" value="create_summary" />
+
+				<div class="w1 box create-summary-post">
+					<header class="title-block flex start acenter gap-smaller pointer">
+						<i class="bi bi-card-text text-2xl"></i>
+						<h2 class="box-title">Crear resumen</h2>
+					</header>
+
+					<div class="post-info">
+						<p>
+							Para crear un post relacionado con esta matchcard, recomendamos pulsar en el botón de
+							"copiar" para copiar el contenido de la matchcard y después acceder a <a
+								href="https://chatgpt.com/g/g-p-67aaf80f33908191bb5ffab06d85b978-wwe/c/9b2d8a04-cd8a-4fb1-9e0f-f76bc23a0479"
+								class="link"
+								target="_blank"
+								rel="noopener noreferrer">ChatGPT</a
+							> para generar un resumen del evento. Una vez tengas el resumen, pégalo en el campo de
+							contenido y pulsa en "Crear post".
+						</p>
+
+						<div class="w1 buttons flex total astart responsive gap-smaller">
+							<button class="btn rounded cta icon" type="button" onclick={copyToClipboard}>
+								<i class="bi bi-clipboard"></i>
+								<span>Copiar</span>
+							</button>
+
+							<a
+								class="btn rounded icon chatgpt-btn"
+								href="https://chatgpt.com/g/g-p-67aaf80f33908191bb5ffab06d85b978-wwe/c/9b2d8a04-cd8a-4fb1-9e0f-f76bc23a0479"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<i class="bi bi-chat-dots"></i>
+								Accede a ChatGPT
+							</a>
+						</div>
+
+						<QuillInput
+							label="Contenido"
+							name="content"
+							placeholder="Escribe aquí el contenido del post relacionado con esta matchcard..."
+							value=""
+							required
+						/>
+						<div class="w1 flex down between acenter gap-smaller">
+							<button class="btn rounded secondary" type="reset">Cancelar</button>
+							<button class="btn rounded cta" type="submit">Crear post</button>
+						</div>
 					</div>
 				</div>
-			</div>
-		</AsyncForm>
-	{/if}
+			</AsyncForm>
+		{/if}
+	</div>
 </section>
 
 <style>
+	.box {
+		border: 1px solid #ccc;
+	}
 	.page-container {
 		display: flex;
 		flex-direction: column;
 		gap: 20px;
+	}
+	.page-container .page-matches-card-container {
+		width: 100%;
+		margin-top: 15px;
+		display: flex;
+		flex-direction: column;
+		gap: 15px;
+	}
+	.page-container .page-summary-item {
+		border: 1px solid #ccc;
+		box-shadow: 0 0px 4px rgba(0, 0, 0, 0.2);
 	}
 	.page-summary-item label.form-item {
 		margin-top: 10px;
@@ -168,7 +192,6 @@
 		text-decoration: underline;
 	}
 	header.nights-container {
-		margin-bottom: 20px;
 		display: flex;
 		gap: 5px;
 	}
