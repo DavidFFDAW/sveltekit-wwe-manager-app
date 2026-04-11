@@ -1,4 +1,3 @@
-import { BlogAdapter } from '$lib/server/adapters/blog.adapter.js';
 import { BlogRepository } from '$lib/server/dao/repositories/blog.repository';
 import { Helpers } from '$lib/server/server.helpers.js';
 

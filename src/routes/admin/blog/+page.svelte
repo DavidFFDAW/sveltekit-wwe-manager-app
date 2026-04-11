@@ -3,7 +3,6 @@
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import Input from '$lib/components/forms/inputs/input.svelte';
-	import RadioList from '$lib/components/forms/inputs/radio-list.svelte';
 	import SimplePagination from '$lib/components/visual/simple-pagination.svelte';
 	import BlogCard from './blog-card.svelte';
 
@@ -34,7 +33,7 @@
 					value={data.filters.searchTitle}
 				/>
 
-				<div class="flex gap-5">
+				<div class="flex gap-5 wrap">
 					<button
 						type="submit"
 						name="status"
@@ -72,6 +71,25 @@
 					</button>
 				</div>
 
+				<div class="w1 category-block">
+					<ul class="categories-list">
+						{#each data.categories as category}
+							<li>
+								<button
+									type="submit"
+									name="category"
+									value={category.value}
+									class="btn rounded small icon icon-gap-5"
+									class:active={data.filters.category === category.value}
+									aria-label={`Buscar categoría ${category.name}`}
+								>
+									<span>{category.name}</span>
+								</button>
+							</li>
+						{/each}
+					</ul>
+				</div>
+
 				<div class="w1 flex end acenter">
 					<button type="submit" class="btn cta">Buscar</button>
 				</div>
@@ -89,3 +107,23 @@
 
 	<ButtonCreate endpoint="/blog/create" />
 </PageWrapper>
+
+<style>
+	.category-block ul.categories-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+	.category-block ul.categories-list li button.btn {
+		display: block;
+		min-width: 80px;
+		background-color: #fff;
+		border: 1px solid #333;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		text-align: center;
+	}
+	.category-block ul.categories-list li button.btn.active {
+		background-color: #333;
+		color: #fff;
+	}
+</style>

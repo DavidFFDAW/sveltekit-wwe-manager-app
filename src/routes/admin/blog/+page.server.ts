@@ -4,14 +4,21 @@ import { Helpers } from '$lib/server/server.helpers';
 
 const allowed_statuses = ['published', 'unpublished', 'draft'];
 
+const getCategoryWhereClause = (category: string) => {
+	if (category === 'all') return {};
+	return { category };
+};
+
 export const load = async ({ locals, url }) => {
 	if (!locals.user && !dev) throw Helpers.redirection('/admin/dashboard');
 	const params = url.searchParams;
 
+	const searchCategory = params.get('category') || 'all';
 	const searchTitle = params.get('search') || '';
 	const publishStatus = params.get('status') || 'published';
 	const publishedFilter = allowed_statuses.includes(publishStatus) ? publishStatus : 'published';
 	const page = parseInt(params.get('page') || '1', 10);
+	const categoryWhereClause = getCategoryWhereClause(searchCategory);
 
 	const blogRepo = new BlogRepository();
 	const paginatedDatas = await blogRepo.paginateN(
@@ -19,7 +26,8 @@ export const load = async ({ locals, url }) => {
 		{
 			where: {
 				title: { contains: searchTitle },
-				status: publishedFilter
+				status: publishedFilter,
+				...categoryWhereClause
 			},
 			orderBy: { created_at: 'desc' }
 		},
@@ -27,10 +35,16 @@ export const load = async ({ locals, url }) => {
 	);
 
 	return {
+		categories: [
+			{ name: 'Todos', value: 'all' },
+			{ name: 'Resúmenes', value: 'summary' },
+			{ name: 'Noticias', value: 'news' }
+		],
 		blogPagination: paginatedDatas,
 		filters: {
 			searchTitle,
-			status: publishedFilter
+			status: publishedFilter,
+			category: params.get('category') || 'all'
 		}
 	};
 };
