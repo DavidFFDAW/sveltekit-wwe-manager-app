@@ -10,7 +10,7 @@ export async function load() {
 	const analyticsData = await repository.get({
 		where: {
 			created_at: {
-				gte: today,
+				lte: today,
 			}
 		},
 		orderBy: {
