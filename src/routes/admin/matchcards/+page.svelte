@@ -91,14 +91,25 @@
 							<i class="bi bi-star"></i>
 							<span>Editar valoraciones</span>
 						</a>
-						<a
-							href="/admin/matchcards/summary?id={matchcard.id}"
-							class="btn small info rounded icon"
-							aria-label="Ver resumen del evento"
-						>
-							<i class="bi bi-file-earmark-text"></i>
-							<span>Ver resumen</span>
-						</a>
+						{#if matchcard.hasSummaryPost}
+							<a
+								href="/admin/blog/update/{matchcard.id}"
+								class="btn small warn rounded icon"
+								aria-label="Editar resumen del evento"
+							>
+								<i class="bi bi-pencil"></i>
+								<span>Editar resumen</span>
+							</a>
+						{:else}
+							<a
+								href="/admin/matchcards/summary?id={matchcard.id}"
+								class="btn small success rounded icon"
+								aria-label="Crear resumen del evento"
+							>
+								<i class="bi bi-card-text"></i>
+								<span>Crear resumen</span>
+							</a>
+						{/if}
 						<a
 							href="/admin/matchcards/export/{matchcard.id}"
 							class="btn small info rounded icon"

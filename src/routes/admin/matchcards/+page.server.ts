@@ -28,7 +28,8 @@ export const load = async ({ url }) => {
 			const matches = '_count' in matchcard ? (matchcard._count as any).matches : 0;
 			return {
 				...matchcard,
-				matches
+				matches,
+				hasSummaryPost: Boolean(matchcard.post_id)
 			};
 		}),
 		uniqueYears: uniqueYears,
