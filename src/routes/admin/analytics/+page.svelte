@@ -5,7 +5,7 @@
 
 <div class="analytics-page">
 	<header class="page-header">
-		<h1>Analítica del sitio</h1>
+		<h1>Analiticas del sitio</h1>
 		<small>Consulta las métricas de tráfico y uso de la aplicación</small>
 	</header>
 
