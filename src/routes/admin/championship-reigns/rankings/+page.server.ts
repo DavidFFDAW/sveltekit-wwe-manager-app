@@ -14,13 +14,13 @@ export const load = async () => {
 		_sum: {
 			days: true
 		},
-		having: {
-			championship_id: {
-				_count: {
-					gt: 1
-				}
-			}
-		},
+		// having: {
+		// 	championship_id: {
+		// 		_count: {
+		// 			gt: 1
+		// 		}
+		// 	}
+		// },
 		orderBy: {
 			_count: {
 				championship_id: 'desc'

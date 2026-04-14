@@ -12,9 +12,13 @@
 	</header>
 
 	<div class="ranking-list-container">
-		<ul class="grid list-container">
+		<ul class="grid list-container responsive">
 			{#each data.rankings as reign}
-				<li class="item card wrestler-card" class:tag={reign.tag}>
+				<li
+					class="item card wrestler-card wrestler-{reign.wrestler.id}"
+					class:tag={reign.tag}
+					data-reign-wrestler={reign.wrestler.id}
+				>
 					<div class="card-header">
 						<img
 							width="80"
