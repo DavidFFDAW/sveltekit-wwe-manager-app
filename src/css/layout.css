@@ -403,7 +403,7 @@ body main.app-main-entrypoint.admin-page .page-header h1+small {
 	}
 
 	.grid.responsive {
-		grid-template-columns: 1fr;
+		grid-template-columns: 1fr !important;
 	}
 
 	.responsive-w1,
