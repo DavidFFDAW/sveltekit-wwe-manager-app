@@ -22,6 +22,9 @@ export const load = async ({ url, locals }) => {
 	const post = await getPost(id, repository);
 	const isUpdate = Boolean(post.id);
 	const maxMinViews = await repository.getMaxMinViewsRange();
+	const currentViewsPercentage = isUpdate && post.views
+		? maxMinViews.max > 0 ? (post?.views / maxMinViews.max) * 100 : 0
+		: 0;
 
 	const authors = await users.get({
 		select: {
@@ -39,6 +42,8 @@ export const load = async ({ url, locals }) => {
 			maxMinViews,
 			action: isUpdate ? 'update' : 'create',
 			post_author: post.admin_id ? post.admin_id : 0,
+			view_percentage: currentViewsPercentage.toFixed(2),
+			view_performance: currentViewsPercentage > 75 ? '🔥 Trending' : (currentViewsPercentage > 50 ? '👍 Normal' : '📉 Low')
 		}
 	};
 }

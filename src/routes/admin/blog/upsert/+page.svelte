@@ -58,6 +58,7 @@
 	>
 		<div class="w1 box flex column gap-smaller blog-upsert-datas">
 			<div class="w1">
+				<p>{data.upsert.view_performance}</p>
 				<input type="text" name="title" bind:value={post.title} placeholder="Título del post" />
 				<input type="hidden" name="slug" value={slug} />
 				<small class="text-muted">{slug}</small>
