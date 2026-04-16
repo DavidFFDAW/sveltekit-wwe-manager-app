@@ -84,6 +84,11 @@
 				<span>Editar este post</span>
 			</a>
 
+			<a href={`/admin/blog/upsert?id=${post.id}`} class="btn small warn rounded icon icon-gap-5">
+				<i class="bi bi-pencil"></i>
+				<span>Upsert</span>
+			</a>
+
 			<a
 				href={`/admin/blog/${post.id}/notifications`}
 				class="btn small info rounded icon icon-gap-5"
