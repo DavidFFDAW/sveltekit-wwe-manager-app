@@ -1,5 +1,5 @@
 // src/repositories/baseRepository.ts
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import prisma from '$lib/server/prisma';
 import type { EntityWithId } from '../../../../@types/Entity';
 import type { PaginationDatas } from '$lib/types/app.types';
@@ -10,7 +10,8 @@ export abstract class Repository<
 	UpdateInput,
 	WhereUniqueInput,
 	FindManyArgs,
-	GroupByArgs
+	GroupByArgs,
+	AggregateArgs
 > {
 	protected requiredFields: string[] = [];
 	protected prisma: PrismaClient;
@@ -29,6 +30,10 @@ export abstract class Repository<
 
 	conn() {
 		return this.prisma;
+	}
+
+	aggregate(args: AggregateArgs): Promise<any> {
+		return this.model.aggregate(args);
 	}
 
 	getModel() {

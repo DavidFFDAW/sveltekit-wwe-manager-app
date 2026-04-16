@@ -7,7 +7,8 @@ export class PPVRepository extends Repository<
 	Prisma.PPVUpdateInput,
 	Prisma.PPVWhereInput,
 	Prisma.PPVFindManyArgs,
-	Prisma.PPVGroupByArgs
+	Prisma.PPVGroupByArgs,
+	Prisma.PPVAggregateArgs
 > {
 	protected requiredFields: string[] = [];
 	private readonly weeklyShows: { name: string; image: string | null }[] = [

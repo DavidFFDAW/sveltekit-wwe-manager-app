@@ -1,5 +1,6 @@
 import { Prisma, type BlogPost } from '@prisma/client';
 import { Repository } from './Repository';
+import prisma from '$lib/server/prisma';
 
 export class BlogRepository extends Repository<
 	BlogPost,
@@ -7,7 +8,8 @@ export class BlogRepository extends Repository<
 	Prisma.BlogPostUpdateInput,
 	Prisma.BlogPostWhereInput,
 	Prisma.BlogPostFindManyArgs,
-	Prisma.BlogPostGroupByArgs
+	Prisma.BlogPostGroupByArgs,
+	Prisma.BlogPostAggregateArgs
 > {
 	protected requiredFields: string[] = [];
 	public allowedStatuses: string[] = ['draft', 'published', 'unpublished'];
@@ -89,5 +91,21 @@ export class BlogRepository extends Repository<
 				created_at: 'desc'
 			}
 		});
+	}
+
+	async getMaxMinViewsRange() {
+		const result = await this.model.aggregate({
+			_max: {
+				views: true
+			},
+			_min: {
+				views: true
+			}
+		});
+
+		return {
+			max: result._max.views || 0,
+			min: result._min.views || 0
+		};
 	}
 }

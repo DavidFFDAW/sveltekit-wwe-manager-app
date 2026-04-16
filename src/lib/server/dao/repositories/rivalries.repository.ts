@@ -7,7 +7,8 @@ export class RivalriesRepository extends Repository<
 	Prisma.RivalriesUpdateInput,
 	Prisma.RivalriesWhereInput,
 	Prisma.RivalriesFindManyArgs,
-	Prisma.RivalriesGroupByArgs
+	Prisma.RivalriesGroupByArgs,
+	Prisma.RivalriesAggregateArgs
 > {
 	protected requiredFields: string[] = ['first_rival', 'second_rival', 'intensity', 'brand'];
 

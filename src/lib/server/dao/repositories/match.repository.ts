@@ -7,7 +7,8 @@ export class MatchRepository extends Repository<
 	Prisma.MatchUpdateInput,
 	Prisma.MatchWhereInput,
 	Prisma.MatchFindManyArgs,
-	Prisma.MatchGroupByArgs
+	Prisma.MatchGroupByArgs,
+	Prisma.MatchAggregateArgs
 > {
 	protected requiredFields: string[] = [];
 

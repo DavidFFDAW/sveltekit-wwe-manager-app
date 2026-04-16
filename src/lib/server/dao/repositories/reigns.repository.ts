@@ -7,7 +7,8 @@ export class ReignsRepository extends Repository<
 	Prisma.ChampionshipReignUpdateInput,
 	Prisma.ChampionshipReignWhereInput,
 	Prisma.ChampionshipReignFindManyArgs,
-	Prisma.ChampionshipReignGroupByArgs
+	Prisma.ChampionshipReignGroupByArgs,
+	Prisma.ChampionshipReignAggregateArgs
 > {
 	protected requiredFields: string[] = [];
 

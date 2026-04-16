@@ -7,7 +7,8 @@ export class WrestlerRepository extends Repository<
 	Prisma.WrestlerUpdateInput,
 	Prisma.WrestlerWhereInput,
 	Prisma.WrestlerFindManyArgs,
-	Prisma.WrestlerGroupByArgs
+	Prisma.WrestlerGroupByArgs,
+	Prisma.WrestlerAggregateArgs
 > {
 	protected requiredFields: string[] = [];
 

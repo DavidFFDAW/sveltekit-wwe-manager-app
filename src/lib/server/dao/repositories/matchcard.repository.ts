@@ -8,7 +8,8 @@ export class PpvCardRepository extends Repository<
 	Prisma.PPVCardUpdateInput,
 	Prisma.PPVCardWhereInput,
 	Prisma.PPVCardFindManyArgs,
-	Prisma.PPVCardGroupByArgs
+	Prisma.PPVCardGroupByArgs,
+	Prisma.PPVCardAggregateArgs
 > {
 	protected requiredFields: string[] = [];
 
