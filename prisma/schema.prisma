@@ -365,3 +365,16 @@ model Analytics {
 
     @@map(name: "analytics")
 }
+
+model IaLog {
+    id           Int       @id @default(autoincrement())
+    model        String    @db.VarChar(20)
+    status       String    @db.VarChar(10)
+    request_id   String    @db.VarChar(255)
+    service      String    @db.VarChar(10)
+    total_tokens Int       @db.Int
+    total_time   Int       @db.Int
+    created_at   DateTime? @default(now())
+
+    @@map(name: "ia_log")
+}

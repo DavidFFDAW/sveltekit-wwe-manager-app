@@ -1,11 +1,17 @@
 <script lang="ts">
 	import { HttpService } from '$lib/services/http.service';
+	import { Utils } from '$lib/utils/general.utils';
 	import { Toast } from '$lib/utils/toast.helper';
 
 	let prompt = $state('');
 	let loading = $state(false);
+	let estimatedTokens = $state(0);
 	let { content = $bindable(''), onaftersubmit }: { content: string; onaftersubmit?: () => void } =
 		$props();
+
+	const calculateTokens = () => {
+		estimatedTokens = Utils.getEstimatedTextTokens(prompt);
+	};
 
 	const handleSubmit = async (ev: Event) => {
 		ev.preventDefault();
@@ -51,11 +57,13 @@
 		{/if}
 
 		<div class="w1 flex column gap-5">
+			<p class="estimated-tokens tcenter">Tokens estimados: {estimatedTokens}</p>
 			<textarea
 				bind:value={prompt}
 				rows="1"
 				cols="10"
 				placeholder="Escribe el tema concreto para generar una entrada para el blog..."
+				oninput={calculateTokens}
 			></textarea>
 
 			<div class="w1 buttons flex between acenter gap-5">
