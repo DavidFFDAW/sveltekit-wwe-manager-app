@@ -53,7 +53,7 @@
 		text-decoration: none;
 		color: inherit;
 	}
-	.pagination-block.slim-pagination-buttons .btn[disabled] {
+	.pagination-block.slim-pagination-buttons .btn[data-disabled] {
 		background-color: #f0f0f0;
 		color: #333;
 		cursor: not-allowed;
