@@ -6,19 +6,15 @@
 
 	let { data } = $props();
 	let post = $state(data.upsert.post);
+	let provider = $state('groq');
 	let slug = $derived(Utils.slugify(post?.title || ''));
 
 	let images = $state<{ url: string; name: string }[]>([]);
-	let showGenerateIA = $state(false);
 	// let blockAiDiv = $state<HTMLDivElement | null>(null);
 
 	$effect(() => {
 		post = data.upsert.post;
 	});
-
-	const toggleClickIA = () => {
-		showGenerateIA = !showGenerateIA;
-	};
 
 	const handleGetImages = async (event: Event) => {
 		event.preventDefault();
@@ -58,7 +54,16 @@
 	>
 		<div class="w1 box flex column gap-smaller blog-upsert-datas">
 			<div class="w1">
-				<p>{data.upsert.view_performance}</p>
+				<p><strong>{data.upsert.view_performance}</strong></p>
+				<p>
+					<strong>Media de visitas de post:</strong>
+					<span>{data.upsert.averageViews}</span>
+				</p>
+				<p>
+					<strong>Rendimiento de vistas:</strong>
+					<span>{data.upsert.view_percentage}%</span>
+				</p>
+
 				<input type="text" name="title" bind:value={post.title} placeholder="Título del post" />
 				<input type="hidden" name="slug" value={slug} />
 				<small class="text-muted">{slug}</small>
@@ -110,15 +115,47 @@
 		</div>
 	</AsyncForm>
 
-	{#if showGenerateIA}
-		<div class="w1 box blog-ia-generate-block" transition:slide={{ duration: 120 }}>
-			<p>
-				Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nihil soluta doloremque eveniet
-				incidunt placeat impedit voluptate, vitae voluptas? Laborum alias officiis sunt cupiditate?
-				Ea quidem voluptas corrupti eos facere quae.
-			</p>
+	<div
+		class="w1 box blog-ia-generate-block flex column astart gap-5"
+		transition:slide={{ duration: 120 }}
+	>
+		<header class="blog-ia-generate-title title-block flex start acenter gap-smaller pointer">
+			<i class="bi bi-robot"></i>
+			<h2 class="box-title">Contenido con IA</h2>
+		</header>
+
+		<div class="w1 h1 flex column between astart gap">
+			<div>
+				<p class="artificial-info">
+					Por defecto esta inteligencia artificial va a recibir instrucciones para escribir un post
+					para un blog de WWE sobre el tema concreto que le especifiques y lo devolverá en html sin
+					utilizar las etiquetas <code>"body"</code>, <code>"html"</code> ni <code>"head"</code>.
+					Solo el contenido. Tampoco incluirá el titular <code>"h1"</code> ni etiquetas
+					<code>"script"</code>
+					o
+					<code>"style"</code>.
+				</p>
+
+				<select name="provider" class="w1 select" bind:value={provider}>
+					<option value="gemini">Gemini</option>
+					<option value="groq">Groq</option>
+					<option value="openai">OpenAI</option>
+				</select>
+			</div>
+
+			<div class="w1 flex between acenter gap-5 buttons-container-item">
+				<button type="button" class="btn icon secondary icon-gap-5">
+					<i class="bi bi-x-lg"></i>
+					<span>Cancelar</span>
+				</button>
+
+				<button type="submit" class="btn icon cta icon-gap-5">
+					<i class="bi bi-check-lg"></i>
+					<span>Generar</span>
+				</button>
+			</div>
 		</div>
-	{/if}
+	</div>
 
 	<div class="w1 box blog-images-box">
 		<form action="" onsubmit={handleGetImages}>
