@@ -108,4 +108,13 @@ export class BlogRepository extends Repository<
 			min: result._min.views || 0
 		};
 	}
+
+	async getPostAverageViews() {
+		const result = await this.model.aggregate({
+			_avg: {
+				views: true
+			}
+		});
+		return result._avg.views || 0;
+	}
 }

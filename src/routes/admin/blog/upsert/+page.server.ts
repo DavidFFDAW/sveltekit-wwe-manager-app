@@ -4,34 +4,30 @@ import { Helpers } from '$lib/server/server.helpers.js';
 import type { Prisma } from '@prisma/client';
 
 const getPost = async (id: number, repository: BlogRepository) => {
-	if (!id || isNaN(id)) 
-		return {} as Prisma.BlogPostUncheckedCreateInput;
+	if (!id || isNaN(id)) return {} as Prisma.BlogPostUncheckedCreateInput;
 
 	const post = await repository.getSingleById(id);
-	if (!post)
-		return {} as Prisma.BlogPostUncheckedCreateInput;
+	if (!post) return {} as Prisma.BlogPostUncheckedCreateInput;
 
 	return post;
-}
+};
 
-export const load = async ({ url, locals }) => {
+export const load = async ({ url }) => {
 	const repository = new BlogRepository();
 	const users = new UsersRepository();
 
 	const id = Number(url.searchParams.get('id'));
 	const post = await getPost(id, repository);
 	const isUpdate = Boolean(post.id);
-	const maxMinViews = await repository.getMaxMinViewsRange();
-	const currentViewsPercentage = isUpdate && post.views
-		? maxMinViews.max > 0 ? (post?.views / maxMinViews.max) * 100 : 0
-		: 0;
+	const averageViews = await repository.getPostAverageViews();
+	const currentViewsPercentage = isUpdate && post.views ? (post.views / averageViews) * 100 : 0;
 
 	const authors = await users.get({
 		select: {
 			id: true,
 			name: true,
 			email: true
-		},
+		}
 	});
 
 	return {
@@ -39,24 +35,30 @@ export const load = async ({ url, locals }) => {
 			post,
 			authors,
 			isUpdate,
-			maxMinViews,
+			averageViews: averageViews.toFixed(2),
 			action: isUpdate ? 'update' : 'create',
 			post_author: post.admin_id ? post.admin_id : 0,
 			view_percentage: currentViewsPercentage.toFixed(2),
-			view_performance: currentViewsPercentage > 75 ? '🔥 Trending' : (currentViewsPercentage > 50 ? '👍 Normal' : '📉 Low')
+			view_performance:
+				currentViewsPercentage > 75
+					? '🔥 Trending'
+					: currentViewsPercentage > 50
+						? '👍 Normal'
+						: '📉 Low'
 		}
 	};
-}
+};
 
 export const actions = {
 	default: async ({ request, url }) => {
 		const datas = await request.formData();
 		const id = Number(url.searchParams.get('id'));
 		if (!id || isNaN(id)) return Helpers.error('ID de post no válido', 400);
-		
+
 		const updateId = Helpers.getUpdateID(datas);
 		if (!updateId || isNaN(updateId)) return Helpers.error('ID de actualización no válido', 400);
-		if (updateId !== id) return Helpers.error('ID de actualización no coincide con el ID del post', 400);
+		if (updateId !== id)
+			return Helpers.error('ID de actualización no coincide con el ID del post', 400);
 
 		const post: Prisma.BlogPostCreateInput = {
 			title: datas.get('title') as string,
@@ -74,5 +76,5 @@ export const actions = {
 		console.log({ post, updateId, autodelete: datas.get('autodelete') });
 
 		return Helpers.error('No se ha especificado una acción válida', 400);
-	 }
-}
+	}
+};
