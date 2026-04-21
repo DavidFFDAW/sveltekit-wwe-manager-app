@@ -1,5 +1,6 @@
 <script lang="ts">
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
+	import QuillInput from '$lib/components/forms/inputs/quill-input.svelte';
 	import { Utils } from '$lib/utils/general.utils.js';
 	import { slide } from 'svelte/transition';
 	// import { tick } from 'svelte';
@@ -9,33 +10,9 @@
 	let provider = $state('groq');
 	let slug = $derived(Utils.slugify(post?.title || ''));
 
-	let images = $state<{ url: string; name: string }[]>([]);
-	// let blockAiDiv = $state<HTMLDivElement | null>(null);
-
 	$effect(() => {
 		post = data.upsert.post;
 	});
-
-	const handleGetImages = async (event: Event) => {
-		event.preventDefault();
-		const form = event.target as HTMLFormElement;
-		const formData = new FormData(form);
-		const query = formData.get('image_query') as string;
-		if (!query) return;
-
-		try {
-			const response = await fetch(
-				`/api/images?provider=google&search=${encodeURIComponent(query)}`
-			);
-			if (!response.ok) throw new Error('Error al buscar imágenes');
-
-			const data = await response.json();
-			console.log({ data });
-			images = data.images; // Asegúrate de que la respuesta tenga esta estructura
-		} catch (error) {
-			console.error('Error al obtener imágenes:', error);
-		}
-	};
 
 	const sendToGenerate = async (event: Event) => {
 		event.preventDefault();
@@ -80,8 +57,8 @@
 	<AsyncForm
 		method="post"
 		updateId={post.id}
-		showButtons={false}
-		classes="w1 form-upsert-blog-post"
+		showButtons={true}
+		classes="w1 form-upsert-blog-post grid grid-page-layout responsive"
 	>
 		<div class="w1 box flex column gap-smaller blog-upsert-datas">
 			<div class="w1">
@@ -94,15 +71,23 @@
 					<strong>Rendimiento de vistas:</strong>
 					<span>{data.upsert.view_percentage}%</span>
 				</p>
-
-				<input type="text" name="title" bind:value={post.title} placeholder="Título del post" />
-				<input type="hidden" name="slug" value={slug} />
-				<small class="text-muted">{slug}</small>
 			</div>
 
+			<label class="form-item label-container relative">
+				<span class="form-label label">Titulo</span>
+				<input type="text" name="title" bind:value={post.title} placeholder="Título del post" />
+				<input type="hidden" name="slug" value={slug} />
+				<small class="form-helper">{slug}</small>
+			</label>
+
 			<input type="text" name="excerpt" value={post.exceptr} placeholder="Extracto del post" />
-			<textarea bind:value={post.content} name="content" placeholder="Contenido del post"
-			></textarea>
+
+			<QuillInput
+				label="Contenido"
+				name="content"
+				bind:value={post.content}
+				placeholder="Contenido del post"
+			/>
 
 			<input type="number" name="views" value={post.views} placeholder="Número de vistas" />
 
@@ -144,12 +129,17 @@
 				</button>
 			</div>
 		</div>
+
+		<div class="w1 box flex column gap-smaller blog-upsert-seo">
+			<h2 class="title-block">SEO</h2>
+
+			<input type="text" name="seo_title" placeholder="Título SEO" />
+			<textarea name="seo_description" placeholder="Descripción SEO"></textarea>
+			<input type="text" name="seo_keywords" placeholder="Keywords SEO (separados por comas)" />
+		</div>
 	</AsyncForm>
 
-	<div
-		class="w1 box blog-ia-generate-block flex column astart gap-5"
-		transition:slide={{ duration: 120 }}
-	>
+	<div class="w1 box blog-ia-generate-block flex column astart gap-5">
 		<header class="blog-ia-generate-title title-block flex start acenter gap-smaller pointer">
 			<i class="bi bi-robot"></i>
 			<h2 class="box-title">Contenido con IA</h2>
@@ -188,24 +178,6 @@
 				</button>
 			</div>
 		</form>
-	</div>
-
-	<div class="w1 box blog-images-box">
-		<form action="" onsubmit={handleGetImages}>
-			<input type="text" name="image_query" placeholder="Buscar imágenes" />
-			<button type="submit" class="btn icon" aria-label="Buscar imágenes">
-				<i class="bi bi-search"></i>
-			</button>
-		</form>
-
-		<ul class="w1 images-list">
-			{#each images as image}
-				<li>
-					<img src={image.url} alt={image.name} />
-					<span>{image.name}</span>
-				</li>
-			{/each}
-		</ul>
 	</div>
 </div>
 

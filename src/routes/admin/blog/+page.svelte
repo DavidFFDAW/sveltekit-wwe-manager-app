@@ -10,7 +10,14 @@
 </script>
 
 <PageWrapper page="admin-blog-page">
-	<h1>Blog</h1>
+	<header class="page-header">
+		<h1>Blog</h1>
+		<a href="/admin/blog/ia-log" class="btn secondary">
+			<i class="bi bi-robot"></i>
+			<span>Uso de IA</span>
+		</a>
+	</header>
+
 	<!-- <a href="/admin/blog/cover-image" class="btn secondary">Administrar imagenes de portada</a> -->
 	<header class="blog-page-header">
 		<div class="w1 flex end mt-down-small">
