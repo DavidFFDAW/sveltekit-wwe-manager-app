@@ -1,4 +1,4 @@
-import { GEMINI_API_KEY, GROQ_API_KEY } from '$env/static/private';
+import { GROQ_API_KEY } from '$env/static/private';
 import { IaRepository } from '$lib/server/dao/repositories/ia.repository.js';
 import { Api, Helpers } from '$lib/server/server.helpers.js';
 import { groq } from '../services/groq.service.js';
@@ -13,39 +13,32 @@ export async function POST({ locals, request }) {
 
     try {
         const repository = new IaRepository();
-        const groqResponse = await groq.chat(
-            [
-                {
-                    role: 'system',
-                    content: 'Eres un asistente útil que genera publicaciones de blog sobre lucha libre.',
-                },
-                {
-                    role: 'system',
-                    content:
-                        'Escribe la respuesta directamente en HTML, sin etiquetas <html> ni <body> ni <h1> y sin <scripts> o <style>. Solo contenido',
-                },
-                { role: 'user', content: prompt },
+		const groqResponse = await groq.chat(
+			[ prompt ],
+			[
+				'Eres un asistente útil que genera publicaciones de blog sobre lucha libre',
+				'Escribe la respuesta directamente en HTML, sin etiquetas <html> ni <body> ni <h1> y sin <scripts> o <style>. Solo contenido',
             ],
             'llama-3.3-70b-versatile',
         );
 
-        const response = await groqResponse.json();
         if (!groqResponse.ok) {
-            console.error('Error trying to generate post', { response });
-            return Api.error('Error al generar el contenido: ' + response.error.status, 500);
+            console.error('Error trying to generate post', { groqResponse });
+            return Api.error('Error al generar el contenido: ' + groqResponse.status, 500);
         }
 
-        const content = response.choices[0].message;
+        const message = groqResponse.data.choices[0].message;
         await repository.create({
             service: 'groq',
             model: 'llama-3.3-70b-versatile',
-            request_id: response.id,
-            status: response.choices[0].finish_reason === 'stop' ? 'success' : 'error',
-            total_time: response.usage.completion_time,
-            total_tokens: response.usage.total_tokens,
+            request_id: groqResponse.data.id,
+            status: groqResponse.data.choices[0].finish_reason === 'stop' ? 'success' : 'error',
+            total_time: groqResponse.data.usage.completion_time,
+            total_tokens: groqResponse.data.usage.total_tokens,
         });
-        if (content.length <= 0) return Api.error('No se ha generado contenido', 500);
-        return Api.response({ response, content, text: content.content }, 200);
+		
+        if (message.content.length <= 0) return Api.error('No se ha generado contenido', 500);
+        return Api.response({ text: message.content }, 200);
     } catch (error) {
         console.error('Error trying to generate post', { error });
         return Api.error('Error al generar el contenido', 500);
