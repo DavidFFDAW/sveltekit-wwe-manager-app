@@ -23,6 +23,33 @@ export const load = async ({ url }) => {
 		}
 	});
 
+	// const dateFrom = new Date(`${yearFilter}-01-01`);
+	// const dateTo = new Date(`${yearFilter}-12-31`);
+
+	// const prisma = ppvCardRepository.conn();
+	// const rows = await prisma.$queryRaw<any[]>`
+	// 	SELECT
+	// 		m.id_match_card,
+	// 		p.ppv_name,
+	// 		p.ppv_date,
+	// 		p.ppv_image,
+	// 		COUNT(m.id) as matches,
+	// 		ROUND(AVG(m.rating), 2) as average,
+	// 		MAX(m.night) as nights
+	// 	FROM matchs m
+	// 	INNER JOIN ppv_card p ON p.id = m.id_match_card
+	// 	WHERE p.ppv_date >= ${dateFrom}
+	// 		AND p.ppv_date <= ${dateTo}
+	// 	GROUP BY m.id_match_card, p.ppv_name, p.ppv_date, p.ppv_image
+	// 	ORDER BY p.ppv_date ASC
+	// `;
+	// const parsedRows = rows.map((row) => ({
+	// 	...row,
+	// 	matches: Number(row.matches),
+	// 	average: Number(row.average),
+	// 	nights: Number(row.nights)
+	// }));
+
 	return {
 		matchcards: matchcards.map((matchcard) => {
 			const matches = '_count' in matchcard ? (matchcard._count as any).matches : 0;
@@ -33,6 +60,7 @@ export const load = async ({ url }) => {
 			};
 		}),
 		uniqueYears: uniqueYears,
-		selectedYear: yearFilter ? Number(yearFilter) : null
+		selectedYear: yearFilter ? Number(yearFilter) : null,
+		// aggregatedMatches: parsedRows
 	};
 };

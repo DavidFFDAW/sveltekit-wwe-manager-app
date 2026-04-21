@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { errorimage } from '$lib/actions/error.image.js';
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
-	export let data;
+	let { data } = $props();
+
+	// $inspect(data.aggregatedMatches);
 </script>
 
 <div class="matchcards-page">
@@ -9,6 +11,8 @@
 		<h1>Cartelera de eventos</h1>
 		<small>Consulta aquí los combates de cada evento registrado</small>
 	</header>
+
+	<!-- <pre>{JSON.stringify(data.aggregatedMatches, null, 2)}</pre> -->
 
 	<div class="box filters-box">
 		<form action="" method="get" class="flex acenter gap-smaller">
