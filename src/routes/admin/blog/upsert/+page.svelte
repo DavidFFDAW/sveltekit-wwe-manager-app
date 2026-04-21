@@ -37,10 +37,41 @@
 		}
 	};
 
+	const sendToGenerate = async (event: Event) => {
+		event.preventDefault();
+		const form = event.target;
+		if (!form || !(form instanceof HTMLFormElement)) return;
+
+		const formData = new FormData(form);
+		const provider = formData.get('provider') as string;
+		const instructions = formData.get('prompt') as string;
+		if (!instructions) return alert('Por favor, ingresa instrucciones para la IA.');
+
+		try {
+			const response = await fetch(`/api/blog/generate/${provider}`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'multipart/form-data' },
+				body: formData
+			});
+			if (!response.ok) throw new Error('Error al generar contenido con IA');
+
+			const data = await response.json();
+			console.log({ generatedContent: data });
+			post.content = data.text; // Asegúrate de que la respuesta tenga esta estructura
+		} catch (error) {
+			console.error('Error al generar contenido con IA:', error);
+		}
+	};
+
+	const scrollToGenerate = () => {
+		const block = document.querySelector('.blog-ia-generate-block');
+		if (block) block.scrollIntoView({ behavior: 'smooth', block: 'start' });
+	};
+
 	$inspect(data.upsert);
 </script>
 
-<button type="button" class="w1 btn icon cta" onclick={toggleClickIA}>
+<button type="button" class="w1 btn icon cta" onclick={scrollToGenerate}>
 	<i class="bi bi-robot"></i>
 	<span>Abrir bloque de generación con IA</span>
 </button>
@@ -124,7 +155,7 @@
 			<h2 class="box-title">Contenido con IA</h2>
 		</header>
 
-		<div class="w1 h1 flex column between astart gap">
+		<form class="w1 h1 flex column between astart gap" method="post" onsubmit={sendToGenerate}>
 			<div>
 				<p class="artificial-info">
 					Por defecto esta inteligencia artificial va a recibir instrucciones para escribir un post
@@ -135,6 +166,8 @@
 					o
 					<code>"style"</code>.
 				</p>
+
+				<textarea name="prompt" placeholder="Instrucciones para la IA"></textarea>
 
 				<select name="provider" class="w1 select" bind:value={provider}>
 					<option value="gemini">Gemini</option>
@@ -154,7 +187,7 @@
 					<span>Generar</span>
 				</button>
 			</div>
-		</div>
+		</form>
 	</div>
 
 	<div class="w1 box blog-images-box">
@@ -196,5 +229,12 @@
 		box-shadow: none;
 		background-color: #d32f2f;
 		border: 1px solid #d32f2f;
+	}
+	textarea {
+		padding: 10px;
+		font-size: 1rem;
+		min-height: 200px;
+		border-radius: 4px;
+		border: 1px solid #ccc;
 	}
 </style>
