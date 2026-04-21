@@ -1,6 +1,9 @@
 <script lang="ts">
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
+	import ImageInput from '$lib/components/forms/inputs/image-input.svelte';
+	import Input from '$lib/components/forms/inputs/input.svelte';
 	import QuillInput from '$lib/components/forms/inputs/quill-input.svelte';
+	import Select from '$lib/components/forms/inputs/select.svelte';
 	import { Utils } from '$lib/utils/general.utils.js';
 	import { slide } from 'svelte/transition';
 	// import { tick } from 'svelte';
@@ -40,6 +43,11 @@
 		}
 	};
 
+	const setImage = (image: { url: string; name: string }) => (event: Event) => {
+		event.preventDefault();
+		post.image = image.url;
+	};
+
 	const scrollToGenerate = () => {
 		const block = document.querySelector('.blog-ia-generate-block');
 		if (block) block.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -61,6 +69,13 @@
 		classes="w1 form-upsert-blog-post grid grid-page-layout responsive"
 	>
 		<div class="w1 box flex column gap-smaller blog-upsert-datas">
+			<ImageInput
+				label="Imagen del post"
+				name="image"
+				bind:image={post.image as string}
+				placeholder="URL de la imagen del post"
+			/>
+
 			<div class="w1">
 				<p><strong>{data.upsert.view_performance}</strong></p>
 				<p>
@@ -80,8 +95,6 @@
 				<small class="form-helper">{slug}</small>
 			</label>
 
-			<input type="text" name="excerpt" value={post.exceptr} placeholder="Extracto del post" />
-
 			<QuillInput
 				label="Contenido"
 				name="content"
@@ -89,34 +102,55 @@
 				placeholder="Contenido del post"
 			/>
 
+			<textarea name="excerpt" bind:value={post.exceptr} placeholder="Extracto breve del post"
+			></textarea>
+
 			<input type="number" name="views" value={post.views} placeholder="Número de vistas" />
 
-			<label>
-				<span>Visible</span>
-				<input type="checkbox" name="visible" checked={post.visible} value="visible" />
-			</label>
+			<div class="w1 flex between acenter gap-5">
+				<label class="relative block">
+					<input
+						type="checkbox"
+						class="app-radio app-checkbox"
+						name="visible"
+						bind:checked={post.visible}
+						value="visible"
+					/>
+					<span class="radio-check-inner inner visible">Visible</span>
+				</label>
 
-			<label class="relative">
-				<input
-					type="checkbox"
-					class="app-radio app-checkbox"
-					name="autodelete"
-					bind:checked={post.deletable}
-					value="deletable"
-				/>
-				<span class="radio-check-inner inner">Autoborrado</span>
-			</label>
+				<label class="relative block">
+					<input
+						type="checkbox"
+						class="app-radio app-checkbox"
+						name="autodelete"
+						bind:checked={post.deletable}
+						value="deletable"
+					/>
+					<span class="radio-check-inner inner deletable">Autoborrado</span>
+				</label>
+			</div>
 
-			<input type="text" name="category" value={post.category} placeholder="Categoría del post" />
-			<input type="text" name="status" value={post.status} placeholder="Estado del post" />
-			<input type="text" name="image" value={post.image} placeholder="Imagen del post" />
+			<Input
+				label="Categoria"
+				type="text"
+				name="category"
+				value={post.category}
+				placeholder="Etiquetas del post (separadas por comas)"
+			/>
 
-			<select name="author" value={data.upsert.post_author}>
-				<option value={0} disabled>Selecciona un autor</option>
+			<Select name="status" label="Estado" value={post.status}>
+				<option value="draft">Borrador</option>
+				<option value="published">Publicado</option>
+				<option value="archived">Archivado</option>
+			</Select>
+
+			<Select name="author" label="Autor" value={data.upsert.post_author as number}>
+				<option value={''} disabled>Selecciona un autor</option>
 				{#each data.upsert.authors as author}
 					<option value={author.id}>{author.name}</option>
 				{/each}
-			</select>
+			</Select>
 
 			<div class="w1 flex between gap-5 buttons-container-item">
 				<button type="reset" class="btn icon secondary icon-gap-5">
@@ -129,15 +163,30 @@
 				</button>
 			</div>
 		</div>
-
-		<div class="w1 box flex column gap-smaller blog-upsert-seo">
-			<h2 class="title-block">SEO</h2>
-
-			<input type="text" name="seo_title" placeholder="Título SEO" />
-			<textarea name="seo_description" placeholder="Descripción SEO"></textarea>
-			<input type="text" name="seo_keywords" placeholder="Keywords SEO (separados por comas)" />
-		</div>
 	</AsyncForm>
+
+	<div class="w1 box blog-ia-generate-block flex column astart gap-5">
+		<header class="blog-ia-generate-title title-block flex start acenter gap-smaller pointer">
+			<i class="bi bi-image"></i>
+			<h2 class="box-title">Gestion imagenes</h2>
+		</header>
+
+		<ul>
+			{#each data.upsert.images.list as image}
+				<li>
+					<button type="button" class="btn icon secondary icon-gap-5" onclick={setImage(image)}>
+						<img
+							width="80"
+							height="80"
+							src={image.url}
+							alt={image.name}
+							class="blog-image-preview"
+						/>
+					</button>
+				</li>
+			{/each}
+		</ul>
+	</div>
 
 	<div class="w1 box blog-ia-generate-block flex column astart gap-5">
 		<header class="blog-ia-generate-title title-block flex start acenter gap-smaller pointer">
@@ -196,12 +245,22 @@
 		box-shadow: none;
 		outline: none;
 	}
+	.app-checkbox + .inner.radio-check-inner.visible {
+		border: 1px solid #4caf50;
+		color: #4caf50;
+	}
+
 	.app-checkbox:checked + .inner.radio-check-inner {
 		color: #fff;
 		box-shadow: none;
 		background-color: #d32f2f;
 		border: 1px solid #d32f2f;
 	}
+	.app-checkbox:checked + .inner.radio-check-inner.visible {
+		background-color: #4caf50;
+		border: 1px solid #4caf50;
+	}
+
 	textarea {
 		padding: 10px;
 		font-size: 1rem;
