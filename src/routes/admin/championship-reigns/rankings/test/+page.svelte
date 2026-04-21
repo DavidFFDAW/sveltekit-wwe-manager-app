@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/state';
 	import { errorimage } from '$lib/actions/error.image';
 	import ButtonsPagination from '$lib/components/visual/pagination/buttons-pagination.svelte';
 	let { data } = $props();

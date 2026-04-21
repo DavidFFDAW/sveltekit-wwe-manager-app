@@ -3,7 +3,7 @@
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
 	let { data } = $props();
 
-	// $inspect(data.aggregatedMatches);
+	$inspect(data.matchcards);
 </script>
 
 <div class="matchcards-page">
@@ -55,6 +55,10 @@
 							<h2>
 								{matchcard.ppv_name}
 								<small class="year">({matchcard.ppv_date?.getFullYear()})</small>
+								<small class="average-star-rating-container flex acenter gap-5">
+									<i class="bi bi-star-fill"></i>
+									<p>{matchcard.average}</p>
+								</small>
 							</h2>
 							<small><strong>{matchcard.matches} combates</strong> registrados</small>
 							{#if matchcard.ppv_date}
@@ -67,6 +71,7 @@
 									})}
 								</small>
 							{/if}
+							<small><strong>{matchcard.nights}</strong> noches</small>
 						</div>
 					</div>
 
@@ -142,6 +147,25 @@
 </div>
 
 <style>
+	.average-star-rating-container {
+		color: #000;
+		padding: 4px 8px;
+		border-radius: 50px;
+		font-size: 0.8rem;
+		gap: 4px;
+		background-color: #fff;
+		border: 1px solid #333;
+	}
+	.average-star-rating-container i.bi-star-fill {
+		color: orange;
+		line-height: 1;
+		white-space: nowrap;
+	}
+	.average-star-rating-container p {
+		margin: 0;
+		font-size: 0.8rem;
+		font-weight: 600;
+	}
 	.filters-box {
 		margin: 20px 0;
 	}
