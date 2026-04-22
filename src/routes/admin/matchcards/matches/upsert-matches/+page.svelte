@@ -8,7 +8,7 @@
 	let matches = $state(data.match_card.matches);
 	let orders = $derived(matches.map((m) => m.order));
 	let hasMultipleNights = $derived(matches.some((m) => m.night !== 1));
-	let night = $state(1);
+	let selectedNight = $state(1);
 
 	let firstNightCount = $derived(matches.filter((m) => m.night === 1).length);
 	let secondNightCount = $derived(matches.length - firstNightCount);
@@ -31,7 +31,7 @@
 
 		const currentOrder = match.order;
 		const targetOrder = direction === 'up' ? currentOrder - 1 : currentOrder + 1;
-		const targetMatch = matches.find((m) => m.order === targetOrder);
+		const targetMatch = matches.find((m) => m.order === targetOrder && m.night === selectedNight)
 		if (targetOrder < 1 || targetOrder > orders.length) return;
 
 		if (targetMatch) targetMatch.order = currentOrder;
@@ -49,7 +49,7 @@
 				stipulation: '',
 				championship: '',
 				participants: '',
-				night: 1,
+				night: selectedNight,
 				type: 'create'
 			}
 		];
@@ -114,11 +114,11 @@
 			{#if hasMultipleNights}
 				<div class="radio-group-container">
 					<label class="relative radio-container radio-label">
-						<input class="app-radio" type="radio" name="night" value={1} bind:group={night} />
+						<input class="app-radio" type="radio" name="night" value={1} bind:group={selectedNight} />
 						<span class="checkmark inner">Noche 1 <small>({firstNightCount})</small></span>
 					</label>
 					<label class="relative radio-container radio-label">
-						<input class="app-radio" type="radio" name="night" value={2} bind:group={night} />
+						<input class="app-radio" type="radio" name="night" value={2} bind:group={selectedNight} />
 						<span class="checkmark inner">Noche 2 <small>({secondNightCount})</small></span>
 					</label>
 				</div>
