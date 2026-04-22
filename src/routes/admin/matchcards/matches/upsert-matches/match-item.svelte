@@ -23,11 +23,7 @@
 	};
 </script>
 
-<div
-	class="w1 match box relative match-type-{match.type}"
-	style="order: {match.night * 10 + match.order}"
-	data-identifier={match.id}
->
+<div class="w1 match box relative match-type-{match.type}" data-identifier={match.id}>
 	<h3 class="match-title">
 		Combate {match.order}
 		<div class="match-title-badges">
