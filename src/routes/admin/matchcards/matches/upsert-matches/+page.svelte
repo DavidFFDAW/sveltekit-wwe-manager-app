@@ -4,11 +4,12 @@
 	import MatchItem from './match-item.svelte';
 
 	let { data = $bindable() } = $props();
+	let selectedNight = $state(1);
 	let _inner = $state(data.match_card);
 	let matches = $state(data.match_card.matches);
 	let orders = $derived(matches.map((m) => m.order));
 	let hasMultipleNights = $derived(matches.some((m) => m.night !== 1));
-	let selectedNight = $state(1);
+	let currentNightMatches = $derived(matches.filter((m) => m.night === selectedNight));
 
 	let firstNightCount = $derived(matches.filter((m) => m.night === 1).length);
 	let secondNightCount = $derived(matches.length - firstNightCount);
@@ -140,7 +141,7 @@
 				{#each matches as _, index (_.id)}
 					<div class="match-item-container" class:hidden={matches[index].night !== selectedNight}>
 						<MatchItem
-							matches={matches.length}
+							matches={currentNightMatches.length}
 							bind:match={matches[index]}
 							{handleToggleDelete}
 							{handleChangeOrder}
