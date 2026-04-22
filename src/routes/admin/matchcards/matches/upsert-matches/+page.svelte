@@ -7,6 +7,11 @@
 	let _inner = $state(data.match_card);
 	let matches = $state(data.match_card.matches);
 	let orders = $derived(matches.map((m) => m.order));
+	let hasMultipleNights = $derived(matches.some((m) => m.night !== 1));
+	let night = $state(1);
+
+	let firstNightCount = $derived(matches.filter((m) => m.night === 1).length);
+	let secondNightCount = $derived(matches.length - firstNightCount);
 
 	$effect(() => {
 		_inner = data.match_card;
@@ -106,14 +111,29 @@
 			<input type="hidden" name="slug" bind:value={_inner.slug} />
 			<input type="hidden" name="ppv_card_id" bind:value={_inner.matchCard.id} />
 
+			{#if hasMultipleNights}
+				<div class="radio-group-container">
+					<label class="relative radio-container radio-label">
+						<input class="app-radio" type="radio" name="night" value={1} bind:group={night} />
+						<span class="checkmark inner">Noche 1 <small>({firstNightCount})</small></span>
+					</label>
+					<label class="relative radio-container radio-label">
+						<input class="app-radio" type="radio" name="night" value={2} bind:group={night} />
+						<span class="checkmark inner">Noche 2 <small>({secondNightCount})</small></span>
+					</label>
+				</div>
+			{/if}
+
 			<div class="w1 grid ppv-matches-container">
 				{#each matches as _, index (_.id)}
-					<MatchItem
-						matches={matches.length}
-						bind:match={matches[index]}
-						{handleToggleDelete}
-						{handleChangeOrder}
-					/>
+					<div class="match-item-container" class:hidden={matches[index].night !== night}>
+						<MatchItem
+							matches={matches.length}
+							bind:match={matches[index]}
+							{handleToggleDelete}
+							{handleChangeOrder}
+						/>
+					</div>
 				{/each}
 			</div>
 
@@ -163,6 +183,36 @@
 
 	.sticky-page-header h1.page-title {
 		font-size: 1.2rem !important;
+	}
+
+	.radio-group-container {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		padding: 10px 0;
+		gap: 15px;
+	}
+	.radio-group-container label.relative.radio-container.radio-label {
+		display: block;
+		width: 100%;
+	}
+	.radio-group-container label.relative.radio-container.radio-label .inner {
+		display: block;
+		padding: 6px 12px;
+		border-radius: 4px;
+		font-size: 0.91rem;
+		color: #333;
+		background-color: #fff;
+		border: 1px solid #333;
+		text-align: center;
+	}
+	.radio-group-container label.relative.radio-container.radio-label input:checked + .inner {
+		background-color: #333;
+		color: #fff;
+	}
+
+	.match-item-container.hidden {
+		display: none;
 	}
 
 	@media only screen and (max-width: 768px) {
