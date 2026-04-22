@@ -139,7 +139,12 @@
 
 			<div class="w1 grid ppv-matches-container">
 				{#each matches as _, index (_.id)}
-					<div class="match-item-container" class:hidden={matches[index].night !== selectedNight}>
+					{@const match = matches[index]}
+					<div
+						class="match-item-container"
+						class:hidden={match.night !== selectedNight}
+						style="order: {match.night * 10 + match.order}"
+					>
 						<MatchItem
 							matches={currentNightMatches.length}
 							bind:match={matches[index]}
