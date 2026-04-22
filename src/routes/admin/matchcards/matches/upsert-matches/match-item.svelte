@@ -37,7 +37,6 @@
 	</h3>
 
 	<input type="hidden" name="matches[{match.type}]" value={match.id} />
-	<input type="hidden" name="{key}[order]" value={match.order} />
 	<input type="hidden" name="{key}[type]" value={match.type} />
 
 	<div class="w1 down flex column start astart gap-small">
@@ -88,6 +87,18 @@
 					</button>
 				</div>
 			</div>
+		</label>
+
+		<label class="form-label form-item manual-order-container">
+			<span class="label form-label">Orden</span>
+			<input
+				type="number"
+				name="{key}[order]"
+				bind:value={match.order}
+				class="form-input"
+				min="1"
+				max={matches}
+			/>
 		</label>
 
 		<div class="form-label form-item nights-container">
