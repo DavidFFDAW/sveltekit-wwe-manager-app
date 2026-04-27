@@ -13,6 +13,6 @@ export class IaRepository extends Repository<
     protected requiredFields: string[] = [];
 
     constructor() {
-        super('ia_log');
+        super('iaLog');
     }
 }

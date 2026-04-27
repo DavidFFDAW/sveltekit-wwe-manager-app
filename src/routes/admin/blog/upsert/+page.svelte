@@ -6,12 +6,17 @@
 	import Select from '$lib/components/forms/inputs/select.svelte';
 	import { Utils } from '$lib/utils/general.utils.js';
 	import { slide } from 'svelte/transition';
+	import GenerateIaBlock from './generate-ia-block.svelte';
 	// import { tick } from 'svelte';
 
 	let { data } = $props();
 	let post = $state(data.upsert.post);
 	let provider = $state('groq');
 	let slug = $derived(Utils.slugify(post?.title || ''));
+
+    const updatePostContent = (content: string) => {
+        post.content = content;
+    };
 
 	$effect(() => {
 		post = data.upsert.post;
@@ -28,7 +33,7 @@
 		if (!instructions) return alert('Por favor, ingresa instrucciones para la IA.');
 
 		try {
-			const response = await fetch(`/api/blog/generate/${provider}`, {
+			const response = await fetch(`/api/blog/generate/model/${provider}`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'multipart/form-data' },
 				body: formData
@@ -65,7 +70,7 @@
 	<AsyncForm
 		method="post"
 		updateId={post.id}
-		showButtons={true}
+		showButtons={false}
 		classes="w1 form-upsert-blog-post grid grid-page-layout responsive"
 	>
 		<div class="w1 box flex column gap-smaller blog-upsert-datas">
@@ -165,69 +170,7 @@
 		</div>
 	</AsyncForm>
 
-	<div class="w1 box blog-ia-generate-block flex column astart gap-5">
-		<header class="blog-ia-generate-title title-block flex start acenter gap-smaller pointer">
-			<i class="bi bi-image"></i>
-			<h2 class="box-title">Gestion imagenes</h2>
-		</header>
-
-		<ul>
-			{#each data.upsert.images.list as image}
-				<li>
-					<button type="button" class="btn icon secondary icon-gap-5" onclick={setImage(image)}>
-						<img
-							width="80"
-							height="80"
-							src={image.url}
-							alt={image.name}
-							class="blog-image-preview"
-						/>
-					</button>
-				</li>
-			{/each}
-		</ul>
-	</div>
-
-	<div class="w1 box blog-ia-generate-block flex column astart gap-5">
-		<header class="blog-ia-generate-title title-block flex start acenter gap-smaller pointer">
-			<i class="bi bi-robot"></i>
-			<h2 class="box-title">Contenido con IA</h2>
-		</header>
-
-		<form class="w1 h1 flex column between astart gap" method="post" onsubmit={sendToGenerate}>
-			<div>
-				<p class="artificial-info">
-					Por defecto esta inteligencia artificial va a recibir instrucciones para escribir un post
-					para un blog de WWE sobre el tema concreto que le especifiques y lo devolverá en html sin
-					utilizar las etiquetas <code>"body"</code>, <code>"html"</code> ni <code>"head"</code>.
-					Solo el contenido. Tampoco incluirá el titular <code>"h1"</code> ni etiquetas
-					<code>"script"</code>
-					o
-					<code>"style"</code>.
-				</p>
-
-				<textarea name="prompt" placeholder="Instrucciones para la IA"></textarea>
-
-				<select name="provider" class="w1 select" bind:value={provider}>
-					<option value="gemini">Gemini</option>
-					<option value="groq">Groq</option>
-					<option value="openai">OpenAI</option>
-				</select>
-			</div>
-
-			<div class="w1 flex between acenter gap-5 buttons-container-item">
-				<button type="button" class="btn icon secondary icon-gap-5">
-					<i class="bi bi-x-lg"></i>
-					<span>Cancelar</span>
-				</button>
-
-				<button type="submit" class="btn icon cta icon-gap-5">
-					<i class="bi bi-check-lg"></i>
-					<span>Generar</span>
-				</button>
-			</div>
-		</form>
-	</div>
+    <GenerateIaBlock models={data.upsert.iaModels} updateContent={updatePostContent} />	
 </div>
 
 <style>
