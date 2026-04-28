@@ -8,8 +8,12 @@
 		<h1 class="page-title">Logs de IA</h1>
 	</header>
 
+	<pre>
+		{JSON.stringify(data.ia, null, 4)}
+	</pre>
+
 	<ul class="ia-list">
-		{#each data.ia.list as log}
+		<!-- {#each data.ia.list as log}
 			<li class="ia-list-item flex column gap-smaller">
 				<p>{log.id}</p>
 				<p>{log.model}</p>
@@ -20,6 +24,6 @@
 				<p>{log.total_tokens}</p>
 				<p>{Utils.toLocaleDate(log.created_at)}</p>
 			</li>
-		{/each}
+		{/each} -->
 	</ul>
 </div>

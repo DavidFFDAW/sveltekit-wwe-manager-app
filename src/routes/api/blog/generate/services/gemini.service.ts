@@ -41,8 +41,8 @@ export const GeminiService = {
             model: model,
             request_id: data.responseId,
             finish_reason: data.candidates[0].finishReason === 'STOP' ? 'success' : 'error',
-            total_tokens: data.usageMetadata.totalTokenCount,
-            total_time: 0
+			total_tokens: data.usageMetadata.totalTokenCount,
+            total_time: 0,
         } as IaStandardResponse;
     }
 };

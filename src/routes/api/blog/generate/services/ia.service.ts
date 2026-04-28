@@ -6,7 +6,7 @@ export const IaService = {
     providersDict: {
         gemini: 'gemini-2.0-flash',
         groq: 'llama-3.3-70b-versatile',
-        openai: 'openai/gpt-oss-120B',
+        openai: 'openai/gpt-oss-20b',
         qwen: 'qwen3-32b',
     } as Record<string, string>,
 

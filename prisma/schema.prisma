@@ -368,12 +368,12 @@ model Analytics {
 
 model IaLog {
     id           Int       @id @default(autoincrement())
-    model        String    @db.VarChar(20)
-    status       String    @db.VarChar(10)
+    model        String    @db.VarChar(100)
+    status       String    @db.VarChar(15)
     request_id   String    @db.VarChar(255)
-    service      String    @db.VarChar(10)
+    service      String    @db.VarChar(15)
     total_tokens Int       @db.Int
-    total_time   Int       @db.Int
+    total_time   Float     @db.Float
     created_at   DateTime? @default(now())
 
     @@map(name: "ia_log")

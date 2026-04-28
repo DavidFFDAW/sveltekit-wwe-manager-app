@@ -1,17 +1,19 @@
 <script lang="ts">
-	import { Toast } from "$lib/utils/toast.helper";
+	import { Utils } from '$lib/utils/general.utils';
+	import { Toast } from '$lib/utils/toast.helper';
 
-    let context = $state('');
-    let generated = $state('');
-    let provider = $state('groq');
-    let { models, updateContent } = $props();
+	let context = $state('');
+	let generated = $state('');
+	let provider = $state('groq');
+	let { models, updateContent } = $props();
+	let estimatedTokens = $derived(Utils.getEstimatedTextTokens(context));
 
-    const handleResetGenerate = () => {
-        context = '';
-        generated = '';
-    };
+	const handleResetGenerate = () => {
+		context = '';
+		generated = '';
+	};
 
-    const handleSubmitGenerate = async (event: Event) => {
+	const handleSubmitGenerate = async (event: Event) => {
 		event.preventDefault();
 		const form = event.target;
 		if (!form || !(form instanceof HTMLFormElement)) return;
@@ -27,68 +29,93 @@
 				body: formData
 			});
 			const data = await response.json();
-            if (!response.ok) {
-                generated = '';
-                return Toast.error(data.message || 'Error al generar contenido con IA');
-            }
+			if (!response.ok) {
+				generated = '';
+				return Toast.error(data.message || 'Error al generar contenido con IA');
+			}
 			console.log({ generatedContent: data });
-            updateContent(data.text);
-            generated = data.text;
+			updateContent({
+				title: data.title,
+				content: data.text,
+				exceptr: data.excerpt
+			});
+			generated = data.text;
 		} catch (error: any) {
-			console.error({error});
-            Toast.error(error.message || 'Error al generar contenido con IA');
+			console.error({ error });
+			Toast.error(error.message || 'Error al generar contenido con IA');
 		}
 	};
 </script>
 
 <div class="w1 box blog-ia-generate-block flex column astart gap-5">
-		<header class="blog-ia-generate-title title-block flex start acenter gap-smaller pointer">
-			<i class="bi bi-robot"></i>
-			<h2 class="box-title">Contenido con IA</h2>
-		</header>
+	<header class="blog-ia-generate-title title-block flex start acenter gap-smaller pointer">
+		<i class="bi bi-robot"></i>
+		<h2 class="box-title">Contenido con IA</h2>
+	</header>
 
-		<form class="w1 h1 flex column between astart gap" method="post" onsubmit={handleSubmitGenerate}>
-			<div>
-				<p class="artificial-info">
-					Por defecto esta inteligencia artificial va a recibir instrucciones para escribir un post
-					para un blog de WWE sobre el tema concreto que le especifiques y lo devolverá en html sin
-					utilizar las etiquetas <code>"body"</code>, <code>"html"</code> ni <code>"head"</code>.
-					Solo el contenido. Tampoco incluirá el titular <code>"h1"</code> ni etiquetas
-					<code>"script"</code>
-					o
-					<code>"style"</code>.
-				</p>
+	<form class="w1 h1 flex column between astart gap" method="post" onsubmit={handleSubmitGenerate}>
+		<div>
+			<p class="artificial-info">
+				Por defecto esta inteligencia artificial va a recibir instrucciones para escribir un post
+				para un blog de WWE sobre el tema concreto que le especifiques y lo devolverá en html sin
+				utilizar las etiquetas <code>"body"</code>, <code>"html"</code> ni <code>"head"</code>. Solo
+				el contenido. Tampoco incluirá el titular <code>"h1"</code> ni etiquetas
+				<code>"script"</code>
+				o
+				<code>"style"</code>.
+			</p>
 
-				<textarea name="prompt" placeholder="Instrucciones para la IA" class="w1 textarea" bind:value={context} required></textarea>
-
-				<select name="provider" class="w1 select" bind:value={provider}>
-					{#each models as model}
-						<option value={model}>{model}</option>
-					{/each}
-				</select>
-
-                <code class="generated-preview">
-                    {#if generated}
-                        <div class="generated-content">
-                            {@html generated}
-                        </div>
-                    {/if}
-                </code>
+			<div class="flex end">
+				<small>Tokens: {estimatedTokens}</small>
 			</div>
 
-			<div class="w1 flex between acenter gap-5 buttons-container-item">
-				<button type="button" class="btn icon secondary icon-gap-5" onclick={handleResetGenerate}>
-					<i class="bi bi-x-lg"></i>
-					<span>Cancelar</span>
-				</button>
+			<textarea
+				name="prompt"
+				placeholder="Instrucciones para la IA"
+				class="w1 textarea"
+				bind:value={context}
+				required
+			></textarea>
 
-				<button type="submit" class="btn icon warn icon-gap-5">
-					<i class="bi bi-check-lg"></i>
-					<span>Generar</span>
-				</button>
-			</div>
-		</form>
-	</div>
+			<select name="provider" class="w1 select" bind:value={provider}>
+				{#each models as model}
+					<option value={model}>{model}</option>
+				{/each}
+			</select>
+
+			<code class="generated-preview">
+				{#if generated}
+					<div class="generated-content">
+						{@html generated}
+					</div>
+				{/if}
+			</code>
+		</div>
+
+		<div class="w1 flex between acenter gap-5 buttons-container-item">
+			<button type="button" class="btn icon secondary icon-gap-5" onclick={handleResetGenerate}>
+				<i class="bi bi-x-lg"></i>
+				<span>Cancelar</span>
+			</button>
+
+			<button type="submit" class="btn icon warn icon-gap-5">
+				<i class="bi bi-check-lg"></i>
+				<span>Generar</span>
+			</button>
+		</div>
+	</form>
+</div>
 
 <style>
+	.generated-preview {
+		display: block;
+		margin-top: 10px;
+		max-height: 300px;
+		overflow-y: auto;
+		white-space: pre-wrap;
+		background: #e7e7e7;
+		padding: 10px 15px;
+		border-radius: 8px;
+		border: 1px solid #999;
+	}
 </style>

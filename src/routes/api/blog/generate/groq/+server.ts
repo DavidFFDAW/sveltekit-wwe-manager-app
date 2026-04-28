@@ -15,7 +15,7 @@ export async function POST({ locals, request }) {
     if (!prompt) return Api.error('No se ha proporcionado un prompt', 400);
 
     try {
-        const repository = new IaRepository();
+        const logs = new IaRepository();
         const service = IaService.getServiceByModel(provider);
 
         const groqResponse = await service.chat({
@@ -33,7 +33,7 @@ export async function POST({ locals, request }) {
         }
 
         const message = groqResponse.text;
-        await repository.create({
+        await logs.register({
             service: 'groq',
             model: 'llama-3.3-70b-versatile',
             request_id: groqResponse.request_id,

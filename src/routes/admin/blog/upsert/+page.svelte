@@ -14,9 +14,9 @@
 	let provider = $state('groq');
 	let slug = $derived(Utils.slugify(post?.title || ''));
 
-    const updatePostContent = (content: string) => {
-        post.content = content;
-    };
+	const updatePostDatas = (datas: Record<string, any>) => {
+		post = { ...post, ...datas };
+	};
 
 	$effect(() => {
 		post = data.upsert.post;
@@ -170,7 +170,7 @@
 		</div>
 	</AsyncForm>
 
-    <GenerateIaBlock models={data.upsert.iaModels} updateContent={updatePostContent} />	
+	<GenerateIaBlock models={data.upsert.iaModels} updateContent={updatePostDatas} />
 </div>
 
 <style>

@@ -32,14 +32,14 @@ export const GroqService = {
         }
 
         return {
+            model: model,
+            service: 'groq',
             ok: response.ok,
+            request_id: data.id,
             status: response.status,
             text: data.choices[0].message.content,
-            service: 'groq',
-            model: model,
-            request_id: data.id,
-            finish_reason: data.choices[0].finish_reason === 'stop' ? 'success' : 'error',
-            total_time: data.usage.completion_time,
+			finish_reason: data.choices[0].finish_reason === 'stop' ? 'success' : 'error',
+			total_time: data.usage.completion_time,
             total_tokens: data.usage.total_tokens
         } as IaStandardResponse;
     }

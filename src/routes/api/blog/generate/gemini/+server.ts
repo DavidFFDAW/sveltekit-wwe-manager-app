@@ -14,8 +14,7 @@ export async function POST({ locals, request }) {
 	if (!prompt) return Api.error('No se ha proporcionado un prompt', 400);
 
 	try {
-		const repository = new IaRepository();
-
+		const logs = new IaRepository();
 		const service = IaService.getServiceByModel('gemini');
 		const iaResponse = await service.chat({
 			prompts: [prompt],
@@ -31,7 +30,7 @@ export async function POST({ locals, request }) {
 			return Api.error('Error al generar el contenido: ' + iaResponse.status, 500);
 		}
 
-		await repository.create({
+		await logs.register({
 			service: 'gemini',
 			model: 'gemini-2.5-flash-lite',
 			request_id: iaResponse.request_id,
