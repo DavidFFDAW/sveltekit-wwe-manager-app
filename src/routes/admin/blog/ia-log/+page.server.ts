@@ -13,7 +13,7 @@ export const load = async ({ url }) => {
 	const connection = logs.conn();
 	const filterDate = url.searchParams.get('date')?.replace(/\//g, '-');
 	
-	const dates: { dates: Date }[] = await connection.$queryRaw`SELECT DISTINCT(DATE(created_at)) AS dates FROM ia_log ORDER BY created_at ASC`;
+	const dates: { dates: Date }[] = await connection.$queryRaw`SELECT DISTINCT(DATE(created_at)) AS dates FROM ia_log ORDER BY dates ASC`;
 	const cleanedDates = dates.map(d => ({
 		text: d.dates.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }),
 		value: d.dates.toISOString().slice(0, 10)
