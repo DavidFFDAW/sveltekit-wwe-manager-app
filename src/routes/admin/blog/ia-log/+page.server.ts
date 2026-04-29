@@ -25,12 +25,11 @@ export const load = async ({ url }) => {
 	const start = today.toISOString().slice(0, 10) + ' 00:00:00';
 	const end = today.toISOString().slice(0, 10) + ' 23:59:59';
 
-	const usage: LogEntry[] = await connection.$queryRaw`SELECT model, DATE(created_at) AS \`date\`, SUM(total_tokens) AS tokens FROM ia_log WHERE created_at > ${start} AND created_at < ${end} GROUP BY model, DATE(created_at) ORDER BY created_at DESC, model ASC`;
-	
+	const usage: any = await connection.$queryRaw`SELECT model, DATE(created_at) AS created, SUM(total_tokens) AS tokens FROM ia_log WHERE created_at > ${start} AND created_at < ${end} GROUP BY model, DATE(created_at) ORDER BY created DESC, model ASC`;
 	const cleanedUsage = usage.map((entry: any) => ({
 		model: entry.model,
-		date: entry.date.toISOString().slice(0, 10),
-		text: entry.date.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+		date: entry.created.toISOString().slice(0, 10),
+		text: entry.created.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }),
 		tokens: Number(entry.tokens)
 	})) as LogEntry[];
 

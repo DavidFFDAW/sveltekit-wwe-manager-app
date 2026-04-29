@@ -12,7 +12,7 @@
 <PageWrapper page="admin-blog-page">
 	<header class="page-header">
 		<h1>Blog</h1>
-		<a href="/admin/blog/ia-log" class="btn secondary">
+		<a href="/admin/blog/ia-log" class="btn secondary inline-block down">
 			<i class="bi bi-robot"></i>
 			<span>Uso de IA</span>
 		</a>
