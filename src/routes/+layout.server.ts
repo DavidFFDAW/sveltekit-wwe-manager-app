@@ -52,6 +52,7 @@ export const load = async ({ locals, url, route, request }) => {
 		referer: request.headers.get('referer') || null,
 		breadcrumbs: getBreadcrumbs(url.pathname),
 		pageRouteSlug: getPageRouteSlug(url.pathname),
-		isAdminPage: url.pathname.startsWith('/admin')
+		isAdminPage: url.pathname.startsWith('/admin'),
+		isMobile: /mobile|android|iphone|ipad|phone/i.test(request.headers.get('user-agent') || '')
 	};
 };
