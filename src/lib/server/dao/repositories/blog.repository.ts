@@ -32,6 +32,22 @@ export class BlogRepository extends Repository<
 			}
 		});
 	}
+	public getPublishedPostsByStatuses(statuses: string[]): Promise<BlogPost[]> {
+		return this.model.findMany({
+			where: {
+				visible: true,
+				status: {
+					in: statuses
+				},
+				created_at: {
+					lte: new Date()
+				}
+			},
+			orderBy: {
+				created_at: 'desc'
+			}
+		});
+	}
 
 	public getReadablePostBySlug(slug: string) {
 		return this.model.findFirst({

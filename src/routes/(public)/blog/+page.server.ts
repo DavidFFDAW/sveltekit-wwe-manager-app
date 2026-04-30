@@ -1,9 +1,20 @@
 import { BlogRepository } from '$lib/server/dao/repositories/blog.repository';
-import { UsersDao } from '$lib/server/dao/users.dao.js';
+import { UsersRepository } from '$lib/server/dao/repositories/users.repository.js';
+
+const getUserRole = (locals: App.Locals) => {
+	if (!locals.user) return 'guest';
+	return locals.user.role;
+};
 
 export const load = async ({ locals }) => {
-	const blogRepository = new BlogRepository();
-	const blogPosts = await blogRepository.getPublishedPosts();
-	const userDatas = locals.user ? await UsersDao.getUserById(locals.user.uuid) : null;
+	const role = getUserRole(locals);
+	const isAdminRole = ['admin', 'superadmin'].includes(role);
+	const statuses = isAdminRole ? ['published', 'private'] : ['published'];
+
+	const blog = new BlogRepository();
+	const users = new UsersRepository();
+	const blogPosts = await blog.getPublishedPostsByStatuses(statuses);
+	const userDatas = locals.user ? await users.getSingleById(locals.user.uuid) : null;
+
 	return { posts: blogPosts, user: userDatas };
 };

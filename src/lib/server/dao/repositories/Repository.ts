@@ -98,9 +98,9 @@ export abstract class Repository<
 		});
 	}
 
-	getSingleById(id: number): Promise<T | null> {
+	getSingleById(id: number | string): Promise<T | null> {
 		return this.model.findUnique({
-			where: { id }
+			where: { id: Number(id) }
 		});
 	}
 
