@@ -1,56 +1,18 @@
 <script lang="ts">
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import ImageInput from '$lib/components/forms/inputs/image-input.svelte';
-	import Input from '$lib/components/forms/inputs/input.svelte';
 	import QuillInput from '$lib/components/forms/inputs/quill-input.svelte';
-	import Select from '$lib/components/forms/inputs/select.svelte';
+	import Gallery from '$lib/components/gallery/gallery.svelte';
+	import Imgur from '$lib/components/modules/imgur/imgur.svelte';
 	import { Utils } from '$lib/utils/general.utils.js';
-	import { slide } from 'svelte/transition';
 	import GenerateIaBlock from './generate-ia-block.svelte';
-	// import { tick } from 'svelte';
 
 	let { data } = $props();
 	let post = $state(data.upsert.post);
-	let provider = $state('groq');
 	let slug = $derived(Utils.slugify(post?.title || ''));
 
 	const updatePostDatas = (datas: Record<string, any>) => {
 		post = { ...post, ...datas };
-	};
-
-	$effect(() => {
-		post = data.upsert.post;
-	});
-
-	const sendToGenerate = async (event: Event) => {
-		event.preventDefault();
-		const form = event.target;
-		if (!form || !(form instanceof HTMLFormElement)) return;
-
-		const formData = new FormData(form);
-		const provider = formData.get('provider') as string;
-		const instructions = formData.get('prompt') as string;
-		if (!instructions) return alert('Por favor, ingresa instrucciones para la IA.');
-
-		try {
-			const response = await fetch(`/api/blog/generate/model/${provider}`, {
-				method: 'POST',
-				headers: { 'Content-Type': 'multipart/form-data' },
-				body: formData
-			});
-			if (!response.ok) throw new Error('Error al generar contenido con IA');
-
-			const data = await response.json();
-			console.log({ generatedContent: data });
-			post.content = data.text; // Asegúrate de que la respuesta tenga esta estructura
-		} catch (error) {
-			console.error('Error al generar contenido con IA:', error);
-		}
-	};
-
-	const setImage = (image: { url: string; name: string }) => (event: Event) => {
-		event.preventDefault();
-		post.image = image.url;
 	};
 
 	const scrollToGenerate = () => {
@@ -58,157 +20,293 @@
 		if (block) block.scrollIntoView({ behavior: 'smooth', block: 'start' });
 	};
 
-	$inspect(data.upsert);
+	const handlePasteImageUrlFromClipboard = async () => {
+		try {
+			const text = await navigator.clipboard.readText();
+			if (text) post.image = text;
+		} catch (error) {
+			console.error('Error al pegar desde el portapapeles:', error);
+		}
+	};
+
+	$effect(() => {
+		post = data.upsert.post;
+	});
+	// $inspect(data.upsert);
 </script>
 
-<button type="button" class="w1 btn icon cta" onclick={scrollToGenerate}>
-	<i class="bi bi-robot"></i>
-	<span>Abrir bloque de generación con IA</span>
-</button>
+<div class="page-container flex column gap start astart total">
+	<button type="button" class="w1 btn icon cta" onclick={scrollToGenerate}>
+		<i class="bi bi-robot"></i>
+		<span>Abrir bloque de generación con IA</span>
+	</button>
 
-<div class="page-container grid grid-page-layout responsive">
+	<GenerateIaBlock models={data.upsert.iaModels} updateContent={updatePostDatas} />
+
 	<AsyncForm
 		method="post"
 		updateId={post.id}
-		showButtons={false}
+		showButtons={true}
 		classes="w1 form-upsert-blog-post grid grid-page-layout responsive"
 	>
-		<div class="w1 box flex column gap-smaller blog-upsert-datas">
-			<ImageInput
-				label="Imagen del post"
-				name="image"
-				bind:image={post.image as string}
-				placeholder="URL de la imagen del post"
-			/>
-
-			<div class="w1">
-				<p><strong>{data.upsert.view_performance}</strong></p>
-				<p>
-					<strong>Media de visitas de post:</strong>
-					<span>{data.upsert.averageViews}</span>
-				</p>
-				<p>
-					<strong>Rendimiento de vistas:</strong>
-					<span>{data.upsert.view_percentage}%</span>
-				</p>
-			</div>
-
-			<label class="form-item label-container relative">
-				<span class="form-label label">Titulo</span>
-				<input type="text" name="title" bind:value={post.title} placeholder="Título del post" />
-				<input type="hidden" name="slug" value={slug} />
-				<small class="form-helper">{slug}</small>
-			</label>
-
-			<QuillInput
-				label="Contenido"
-				name="content"
-				bind:value={post.content}
-				placeholder="Contenido del post"
-			/>
-
-			<textarea name="excerpt" bind:value={post.exceptr} placeholder="Extracto breve del post"
-			></textarea>
-
-			<input type="number" name="views" value={post.views} placeholder="Número de vistas" />
-
-			<div class="w1 flex between acenter gap-5">
-				<label class="relative block">
-					<input
-						type="checkbox"
-						class="app-radio app-checkbox"
-						name="visible"
-						bind:checked={post.visible}
-						value="visible"
-					/>
-					<span class="radio-check-inner inner visible">Visible</span>
+		<div class="main-layout">
+			<div class="w1 box flex column gap-smaller blog-upsert-main-contents">
+				<label class="label label-container relative">
+					<span class="label-text">Titulo</span>
+					<input type="text" name="title" bind:value={post.title} placeholder="Título del post" />
+					<input type="hidden" name="slug" value={slug} />
+					<small class="form-helper">{slug}</small>
 				</label>
 
-				<label class="relative block">
-					<input
-						type="checkbox"
-						class="app-radio app-checkbox"
-						name="autodelete"
-						bind:checked={post.deletable}
-						value="deletable"
-					/>
-					<span class="radio-check-inner inner deletable">Autoborrado</span>
+				<QuillInput
+					label="Contenido"
+					name="content"
+					bind:value={post.content}
+					placeholder="Contenido del post"
+				/>
+
+				<label class="label">
+					<span class="label-text">Resumen</span>
+					<textarea name="excerpt" bind:value={post.exceptr} placeholder="Extracto breve del post"
+					></textarea>
 				</label>
+
+				<label class="label">
+					<span class="label-text">Vistas</span>
+					<input type="number" name="views" value={post.views} placeholder="Número de vistas" />
+				</label>
+
+				<div class="w1 flex between gap-5 buttons-container-item">
+					<button type="reset" class="btn icon secondary icon-gap-5">
+						<i class="bi bi-x-lg"></i>
+						<span>Cancelar</span>
+					</button>
+					<button type="submit" class="btn icon cta icon-gap-5">
+						<i class="bi bi-check-lg"></i>
+						<span>Guardar</span>
+					</button>
+				</div>
 			</div>
 
-			<Input
-				label="Categoria"
-				type="text"
-				name="category"
-				value={post.category}
-				placeholder="Etiquetas del post (separadas por comas)"
-			/>
+			<div class="w1 second-column-datas">
+				<div class="box">
+					<div class="image-container">
+						<img src={post.image || '/noimage.jpg'} alt="Imagen del post" class="w1" />
+						<label class="label" aria-label="URL de la imagen del post">
+							<input
+								type="text"
+								name="image"
+								bind:value={post.image}
+								placeholder="URL de la imagen del post"
+							/>
+							<button
+								type="button"
+								class="btn btn-paste icon"
+								onclick={handlePasteImageUrlFromClipboard}
+								title="Pegar URL de imagen desde el portapapeles"
+								aria-label="Pegar URL de imagen desde el portapapeles"
+							>
+								<i class="bi bi-clipboard"></i>
+							</button>
+						</label>
 
-			<Select name="status" label="Estado" value={post.status}>
-				<option value="draft">Borrador</option>
-				<option value="published">Publicado</option>
-				<option value="archived">Archivado</option>
-			</Select>
+						<div class="w1 image-container-providers">
+							<Gallery bind:value={post.image as string} />
+							<Imgur bind:value={post.image as string} />
+						</div>
+					</div>
 
-			<Select name="author" label="Autor" value={data.upsert.post_author as number}>
-				<option value={''} disabled>Selecciona un autor</option>
-				{#each data.upsert.authors as author}
-					<option value={author.id}>{author.name}</option>
-				{/each}
-			</Select>
+					<div class="w1 flex between gap-5 buttons-container-item">
+						<label class="w1 relative flex start acenter gap-5">
+							<input
+								type="checkbox"
+								class="app-checkbox-visible checkbox"
+								name="visible"
+								bind:checked={post.visible}
+								value="visible"
+							/>
+							<span class="radio-check-inner inner featured">Visible</span>
+						</label>
 
-			<div class="w1 flex between gap-5 buttons-container-item">
-				<button type="reset" class="btn icon secondary icon-gap-5">
-					<i class="bi bi-x-lg"></i>
-					<span>Cancelar</span>
-				</button>
-				<button type="submit" class="btn icon cta icon-gap-5">
-					<i class="bi bi-check-lg"></i>
-					<span>Guardar</span>
-				</button>
+						<label class="w1 relative flex start acenter gap-5">
+							<input
+								type="checkbox"
+								class="app-checkbox-visible checkbox"
+								name="deletable"
+								bind:checked={post.deletable}
+								value="deletable"
+							/>
+							<span class="radio-check-inner inner featured">Autoborrado</span>
+						</label>
+					</div>
+				</div>
+
+				<div class="box">
+					<label class="label">
+						<span class="label-text">Estado</span>
+						<select name="status" placeholder="Estado del post" value={post.status}>
+							<option value="draft">Borrador</option>
+							<option value="published">Publicado</option>
+							<option value="private">Privado</option>
+						</select>
+					</label>
+
+					<label class="label">
+						<span class="label-text">Fecha de publicación</span>
+						<input
+							type="datetime-local"
+							name="published_at"
+							value={post.created_at}
+							placeholder="Fecha de publicación del post"
+						/>
+					</label>
+
+					<label class="label">
+						<span class="label-text">Autor</span>
+						<select
+							name="author"
+							placeholder="Autor del post"
+							value={data.upsert.post_author as number}
+						>
+							<option value={''} disabled>Selecciona un autor</option>
+							{#each data.upsert.authors as author}
+								<option value={author.id}>{author.name}</option>
+							{/each}
+						</select>
+					</label>
+
+					<label class="label">
+						<span class="label-text">Categorías</span>
+						<input
+							type="text"
+							name="category"
+							value={post.category}
+							placeholder="Categorías del post (separadas por comas)"
+						/>
+					</label>
+				</div>
 			</div>
 		</div>
 	</AsyncForm>
-
-	<GenerateIaBlock models={data.upsert.iaModels} updateContent={updatePostDatas} />
 </div>
 
 <style>
-	.grid.grid-page-layout {
-		margin-top: 1rem;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 1rem;
+	label.label {
+		width: 100%;
+		display: flex;
+		position: relative;
+		flex-direction: column;
+		gap: 4px;
 	}
-
-	.app-checkbox + .inner.radio-check-inner {
-		color: #d32f2f;
-		border: 1px solid #d32f2f;
-		border-radius: 50px;
-		padding: 4px 20px;
-		box-shadow: none;
+	label.label span.label-text {
+		font-size: 16px;
+		font-weight: 600;
+		text-transform: uppercase;
+		color: #000;
+	}
+	label.label input,
+	label.label textarea,
+	label.label select {
+		width: 100%;
 		outline: none;
+		font-size: 14px;
+		font-family: 'sourcesans', sans-serif;
+		background-color: #fff;
+		border: 1px solid #ddd;
+		border-radius: 5px;
+		padding: 10px;
 	}
-	.app-checkbox + .inner.radio-check-inner.visible {
-		border: 1px solid #4caf50;
-		color: #4caf50;
+	.page-container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 20px 50px 20px;
 	}
-
-	.app-checkbox:checked + .inner.radio-check-inner {
-		color: #fff;
+	input.app-checkbox-visible.checkbox {
+		width: 20px;
+		min-height: 20px;
+	}
+	.box {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: flex-start;
+		background-color: #fff;
+		border: 1px solid #ddd;
+		padding: 16px;
+		border-radius: 8px;
 		box-shadow: none;
-		background-color: #d32f2f;
-		border: 1px solid #d32f2f;
+		gap: 16px;
 	}
-	.app-checkbox:checked + .inner.radio-check-inner.visible {
-		background-color: #4caf50;
-		border: 1px solid #4caf50;
+	.main-layout {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 340px;
+		align-items: stretch;
+		gap: 16px;
+		padding: 6px 0;
+	}
+	.main-layout .second-column-datas {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+	.main-layout .second-column-datas .box {
+		width: 100%;
+		/* height: 100%; */
+	}
+	.main-layout .second-column-datas .image-container {
+		width: 100%;
+	}
+	.main-layout .second-column-datas .image-container label {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: center;
+		gap: 0;
+	}
+	.main-layout .second-column-datas .image-container img {
+		width: 100%;
+		max-width: 100%;
+		max-height: 150px;
+		height: auto;
+		border-radius: 8px 8px 0 0;
+		object-fit: cover;
+	}
+	.main-layout .second-column-datas .image-container label input {
+		border-radius: 0 0 0 8px;
+	}
+	.main-layout .second-column-datas .image-container label button.btn-paste {
+		display: block;
+		border: 1px solid #ddd;
+		border-radius: 0 0 8px 0;
+		border-left: none;
+		background: none;
+		padding: 8px;
+		cursor: pointer;
+		color: #555;
+	}
+	.main-layout .second-column-datas .image-container .image-container-providers {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 8px;
+		gap: 8px;
 	}
 
 	textarea {
-		padding: 10px;
-		font-size: 1rem;
-		min-height: 200px;
-		border-radius: 4px;
-		border: 1px solid #ccc;
+		min-height: 80px;
+	}
+
+	@media only screen and (max-width: 768px) {
+		.main-layout {
+			grid-template-columns: 1fr;
+		}
+		.page-container {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 0 0 0 0;
+		}
 	}
 </style>
