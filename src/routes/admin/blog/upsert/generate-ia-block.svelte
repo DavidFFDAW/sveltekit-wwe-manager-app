@@ -82,23 +82,10 @@
 					<option value={model}>{model}</option>
 				{/each}
 			</select>
-
-			<code class="generated-preview">
-				{#if generated}
-					<div class="generated-content">
-						{@html generated}
-					</div>
-				{/if}
-			</code>
 		</div>
 
-		<div class="w1 flex between acenter gap-5 buttons-container-item">
-			<button type="button" class="btn icon secondary icon-gap-5" onclick={handleResetGenerate}>
-				<i class="bi bi-x-lg"></i>
-				<span>Cancelar</span>
-			</button>
-
-			<button type="submit" class="btn icon warn icon-gap-5">
+		<div class="w1 flex end acenter gap-5 buttons-container-item">
+			<button type="submit" class="btn icon cta icon-gap-5">
 				<i class="bi bi-check-lg"></i>
 				<span>Generar</span>
 			</button>
@@ -107,15 +94,4 @@
 </div>
 
 <style>
-	.generated-preview {
-		display: block;
-		margin-top: 10px;
-		max-height: 300px;
-		overflow-y: auto;
-		white-space: pre-wrap;
-		background: #e7e7e7;
-		padding: 10px 15px;
-		border-radius: 8px;
-		border: 1px solid #999;
-	}
 </style>
