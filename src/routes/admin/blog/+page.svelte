@@ -16,6 +16,10 @@
 			<i class="bi bi-robot"></i>
 			<span>Uso de IA</span>
 		</a>
+		<a href="/admin/blog/upsert" class="btn cta inline-block down">
+			<i class="bi bi-plus-lg"></i>
+			<span>Upsert de post</span>
+		</a>
 	</header>
 
 	<!-- <a href="/admin/blog/cover-image" class="btn secondary">Administrar imagenes de portada</a> -->
