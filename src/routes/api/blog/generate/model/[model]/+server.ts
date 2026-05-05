@@ -27,7 +27,7 @@ export async function POST({ locals, request, params }) {
         const response = await service.chat({
             prompts: [prompt],
             instructions: [
-                'Genera un post breve para blog para el modo universo de WWE2K según el prompt del usuario. Devuelve JSON válido con title, excerpt (≤150 caracteres, que resuma el contenido) y content en HTML (párrafos, sin negritas ni mayúsculas excesivas y en español), sin etiquetas <html>, <body>, <h1>, <script> ni <style>, ni markdown ni explicaciones.'
+                'Genera un post para blog para el modo universo de WWE2K según el prompt del usuario. Devuelve JSON válido con title, excerpt (≤150 caracteres, que resuma el contenido) y content en HTML (párrafos, sin negritas ni mayúsculas excesivas y en español), sin etiquetas <html>, <body>, <h1>, <script> ni <style>, ni markdown ni explicaciones.'
             ],
             model: model,
         });
