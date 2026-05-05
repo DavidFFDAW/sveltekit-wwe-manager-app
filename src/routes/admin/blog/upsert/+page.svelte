@@ -1,13 +1,15 @@
 <script lang="ts">
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
-	import ImageInput from '$lib/components/forms/inputs/image-input.svelte';
 	import QuillInput from '$lib/components/forms/inputs/quill-input.svelte';
 	import Gallery from '$lib/components/gallery/gallery.svelte';
 	import Imgur from '$lib/components/modules/imgur/imgur.svelte';
-	import { Utils } from '$lib/utils/general.utils.js';
 	import GenerateIaBlock from './generate-ia-block.svelte';
+	import { Utils } from '$lib/utils/general.utils.js';
+	import { fade } from 'svelte/transition';
+	import { tick } from 'svelte';
 
 	let { data } = $props();
+	let showIaBlock = $state(false);
 	let post = $state(data.upsert.post);
 	let slug = $derived(Utils.slugify(post?.title || ''));
 
@@ -15,9 +17,12 @@
 		post = { ...post, ...datas };
 	};
 
-	const scrollToGenerate = () => {
+	const scrollToGenerate = async () => {
+		showIaBlock = true;
+		await tick();
+
 		const block = document.querySelector('.blog-ia-generate-block');
-		if (block) block.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		if (block) block.scrollIntoView({ behavior: 'smooth', block: 'center' });
 	};
 
 	const handlePasteImageUrlFromClipboard = async () => {
@@ -41,7 +46,11 @@
 		<span>Abrir bloque de generación con IA</span>
 	</button>
 
-	<GenerateIaBlock models={data.upsert.iaModels} updateContent={updatePostDatas} />
+	{#if showIaBlock}
+		<div class="ia-block" transition:fade>
+			<GenerateIaBlock models={data.upsert.iaModels} updateContent={updatePostDatas} />
+		</div>
+	{/if}
 
 	<AsyncForm
 		method="post"
@@ -188,6 +197,18 @@
 			</div>
 		</div>
 	</AsyncForm>
+
+	<div class="fixed right ia-content-reminder">
+		<button
+			type="button"
+			class="btn ia-reminder-button"
+			onclick={scrollToGenerate}
+			aria-label="Abrir bloque de generación con IA"
+			title="Abrir bloque de generación con IA"
+		>
+			<i class="bi bi-openai"></i>
+		</button>
+	</div>
 </div>
 
 <style>
@@ -297,6 +318,32 @@
 
 	textarea {
 		min-height: 80px;
+	}
+
+	.fixed.ia-content-reminder {
+		position: fixed;
+		background-color: #fff;
+		border: 1px solid #333;
+		border-right: none;
+		border-radius: 4px 0 0 4px;
+		padding: 8px 5px;
+		bottom: 60px;
+		right: 0px;
+		z-index: 1000;
+	}
+	.fixed.ia-content-reminder .ia-reminder-button {
+		color: #fff;
+		background-color: #333;
+		border: none;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 18px;
+		font-weight: 100;
+		padding: 6px;
+		border-radius: 6px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		cursor: pointer;
 	}
 
 	@media only screen and (max-width: 768px) {
