@@ -154,7 +154,7 @@
 					<label class="label">
 						<span class="label-text">Fecha de publicación</span>
 						<input
-							type="datetime-local"
+							type="date"
 							name="published_at"
 							value={post.created_at}
 							placeholder="Fecha de publicación del post"

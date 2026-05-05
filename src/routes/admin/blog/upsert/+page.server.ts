@@ -71,7 +71,8 @@ export const actions = {
 		if (isUpdate && updateId !== id)
 			return Helpers.error('ID de actualización no coincide con el ID del post', 400);
 
-		const publishedDate = new Date(datas.get('publish_date') as string);
+		const publishedDate = new Date(datas.get('published_at') as string);
+		publishedDate.setHours(0, 0, 0, 0);
 
 		try {
 			const repository = new BlogRepository();
@@ -84,7 +85,7 @@ export const actions = {
 				content: datas.get('content') as string,
 				views: Number(datas.get('views') || 0),
 				visible: datas.get('visible') === 'visible',
-				deletable: datas.get('autodelete') === 'deletable',
+				deletable: datas.get('deletable') === 'deletable',
 				category: datas.get('category') as string,
 				status: repository.getPostStatus(datas.get('status') as string),
 				image: (datas.get('image') as string) || '',
