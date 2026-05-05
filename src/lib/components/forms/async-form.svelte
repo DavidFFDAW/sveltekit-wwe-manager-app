@@ -5,6 +5,7 @@
 	import SpinnerSimple from '../spinner/spinner-simple.svelte';
 	import { goto, invalidateAll } from '$app/navigation';
 	import { Toast } from '$lib/utils/toast.helper';
+	import { Utils } from '$lib/utils/general.utils';
 
 	export let form: HTMLFormElement | null = null;
 	export let method: 'post' | 'get' | 'put' | 'delete' = 'post';
@@ -36,7 +37,7 @@
 		}
 
 		return async ({ result, update }) => {
-			// console.log({ result, update });
+			// console.log({ result });
 			setTimeout(() => {
 				loading = false;
 			}, 500);
@@ -44,6 +45,13 @@
 			const hasError = result.type === 'error' || result.type === 'failure';
 			if (result.type === 'redirect') {
 				goto(result.location);
+				return;
+			}
+			if (response.data.type === 'redirect' && response.data.redirect) {
+				Toast.success('Redirigiendo...');
+
+				await Utils.sleep(500);
+				goto(response.data.redirect);
 				return;
 			}
 			if (afterSubmit) afterSubmit(response);

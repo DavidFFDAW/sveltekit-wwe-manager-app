@@ -25,6 +25,14 @@ export const Helpers = {
 	error: (message: string, code?: number) => {
 		return fail(code || 500, { message });
 	},
+	responseRedirect: (url: string, status: number = 302) => {
+		return {
+			status,
+			redirect: url,
+			type: 'redirect',
+			message: `Redirigiendo a ${url}`
+		};
+	},
 	getParsedFormDatas,
 	checkRequiredFields: (formData: FormData, requiredFields: string[]) => {
 		const missingFields = requiredFields.filter(
