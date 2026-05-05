@@ -70,6 +70,21 @@
 		]}
 		bind:value={championshipDatas.gender}
 	/>
+	<RadioList
+		name="type"
+		label="Tipo"
+		options={[
+			{
+				label: 'Título (por defecto)',
+				value: 'title'
+			},
+			{
+				label: 'Money In The Bank',
+				value: 'mitb'
+			}
+		]}
+		bind:value={championshipDatas.type}
+	/>
 
 	<div class="w1 flex total gap-smaller">
 		<ToggleInput label="Activo" name="active" bind:checked={championshipDatas.active} />
