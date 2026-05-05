@@ -139,7 +139,7 @@
 		left: 0;
 		width: 100%;
 		background-color: #fff;
-		border-top: 1px solid #ddd;
+		border-top: 1px solid #333;
 		box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 		z-index: 50;
 	}
