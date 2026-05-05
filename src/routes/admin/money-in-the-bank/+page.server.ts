@@ -7,7 +7,8 @@ export const load = async ({ url }) => {
 	const reigns = new ReignsRepository();
 	const conn = reigns.conn();
 
-	const availableYears: { year: number }[] = await conn.$queryRaw`SELECT DISTINCT EXTRACT(YEAR FROM won_date) AS year FROM ChampionshipReign WHERE Championship.type = 'mitb' ORDER BY year DESCSELECT DISTINCT EXTRACT(YEAR FROM r.won_date) AS year FROM championship_reigns r INNER JOIN championship c WHERE c.type = 'mitb' ORDER BY year DESC`;
+	const query = `SELECT DISTINCT EXTRACT(YEAR FROM won_date) AS year FROM championship_reigns r INNER JOIN championship c ON c.id = r.championship_id WHERE c.type = 'mitb' ORDER BY year DESC`;
+	const availableYears: { year: number }[] = await conn.$queryRaw`${query}`;
 
 	const currentYearMitbs = await reigns.get({
 		where: {
