@@ -76,7 +76,7 @@
 					<input type="number" name="views" value={post.views} placeholder="Número de vistas" />
 				</label>
 
-				<div class="w1 flex between gap-5 buttons-container-item">
+				<!-- <div class="w1 flex between gap-5 buttons-container-item">
 					<button type="reset" class="btn icon secondary icon-gap-5">
 						<i class="bi bi-x-lg"></i>
 						<span>Cancelar</span>
@@ -85,7 +85,7 @@
 						<i class="bi bi-check-lg"></i>
 						<span>Guardar</span>
 					</button>
-				</div>
+				</div> -->
 			</div>
 
 			<div class="w1 second-column-datas">
