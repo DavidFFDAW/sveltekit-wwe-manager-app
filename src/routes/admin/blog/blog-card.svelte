@@ -45,15 +45,15 @@
 				</button>
 			{/if}
 
-			{#if post.status !== 'unpublished'}
+			{#if post.status !== 'private'}
 				<button
 					class="btn small rounded warn icon icon-gap-5"
 					formaction="?/changeStatus"
-					value="unpublished"
+					value="private"
 					name="status"
 				>
-					<i class="bi bi-eye-slash-fill"></i>
-					<span>Mover a no publicado</span>
+					<i class="bi bi-shield-lock"></i>
+					<span>Mover a privados</span>
 				</button>
 			{/if}
 
