@@ -39,7 +39,7 @@ export async function POST({ locals, request }) {
 			total_tokens: iaResponse.total_tokens
 		});
 
-		const content = iaResponse.text;
+		const content = IaService.parseJson(iaResponse.text);
 		if (!content || content.length <= 0) return Api.error('No se ha generado contenido', 500);
 		return Api.response({ text: content }, 200);
 	} catch (error) {

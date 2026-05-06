@@ -37,11 +37,7 @@ export async function POST({ locals, request, params }) {
 			return Api.error('Error al generar el contenido: ' + response.status, 500);
 		}
 
-		console.log({
-			response
-		});
-		// replace ```json and ``` if they exist, and unescape newlines and quotes
-		const curatedText = response.text.replace(/\\n/g, '\n').replace(/\\"/g, '"').replace(/```json/g, '').replace(/```/g, '').trim();
+		const curatedText = IaService.parseJson(response.text)
 		const json = JSON.parse(curatedText) as { title: string; excerpt: string; content: string };
 		if (!json || !json.content) {
 			console.error('Invalid response format from IA service', { response });

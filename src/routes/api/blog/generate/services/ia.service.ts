@@ -34,6 +34,20 @@ export const IaService = {
 	},
 	getAvailableModels() {
 		return Object.keys(this.providersDict);
+	},
+	parseJson(text: string) {
+		return text.trim()
+			.replace(/```json\n?/g, '')
+			.replace(/\n?```/g, '')
+			.replace(/^```\n?/g, '')
+			.replace(/\n?```$/g, '')
+			.replace(/\\n/g, '')
+			.replace(/\n/g, '')
+			.replace(/\t/g, '')
+			.replace(/\\t/g, '')
+			.replace(/\\"/g, '"')
+			.replace(/\\'/g, "'")
+			.replace(/\\\\/g, '\\');
 	}
 };
 export default IaService;
