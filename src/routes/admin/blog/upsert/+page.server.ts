@@ -26,6 +26,12 @@ export const load = async ({ url, locals }) => {
 	const currentViewsPercentage = isUpdate && post.views ? (post.views / averageViews) * 100 : 0;
 
 	const localUserId = locals.user?.uuid || 1;
+	const publishedDate = post.created_at
+		? typeof post.created_at === 'string'
+			? new Date(post.created_at)
+			: post.created_at
+		: new Date();
+
 	const authors = await users.get({
 		select: {
 			id: true,
@@ -39,6 +45,7 @@ export const load = async ({ url, locals }) => {
 			post,
 			authors,
 			isUpdate,
+			published_at: publishedDate.toISOString().split('T')[0],
 			averageViews: averageViews.toFixed(2),
 			action: isUpdate ? 'update' : 'create',
 			iaModels: IaService.getAvailableModels(),

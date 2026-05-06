@@ -37,7 +37,6 @@
 	$effect(() => {
 		post = data.upsert.post;
 	});
-	// $inspect(data.upsert);
 </script>
 
 <div class="page-container flex column gap start astart total">
@@ -165,7 +164,7 @@
 						<input
 							type="date"
 							name="published_at"
-							value={post.created_at}
+							value={data.upsert.published_at}
 							placeholder="Fecha de publicación del post"
 						/>
 					</label>
