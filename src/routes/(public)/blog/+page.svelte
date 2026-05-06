@@ -3,8 +3,10 @@
 	import MainHeader from '$lib/components/headers/main-header.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import SubscriptionBlock from './subscription-block.svelte';
+	import { Utils } from '$lib/utils/general.utils';
 
 	export let data;
+	let isAdmin = data.userIsAdmin;
 </script>
 
 <MainHeader
@@ -27,14 +29,22 @@
 					<a href="/blog/{post.slug}">
 						<div class="w1 h1 article-content">
 							<header>
+								{#if data.userIsAdmin}
+									<span class="badge badge-post-status">
+										{post.status}
+									</span>
+								{/if}
 								<img src={post.image} alt={post.title} use:errorimage />
 							</header>
 							<div class="w1 h1 text-content flex column gap-medium astart">
 								<h3>{post.title}</h3>
 								<p>{post.exceptr}</p>
 
-								<footer class="w1 flex end">
-									<p>{post.created_at?.toLocaleDateString()}</p>
+								<footer class="w1 flex end blog-article-footer">
+									<p>{Utils.formatDate(post.created_at)}</p>
+									{#if post.category}
+										<span class="badge badge-category">{post.category}</span>
+									{/if}
 								</footer>
 							</div>
 						</div>
@@ -52,14 +62,22 @@
 					<a href="/blog/{post.slug}" class="w1 block">
 						<div class="w1 article-content">
 							<header>
+								{#if data.userIsAdmin}
+									<span class="badge badge-post-status">
+										{post.status}
+									</span>
+								{/if}
 								<img src={post.image} alt={post.title} use:errorimage />
 							</header>
 							<div class="w1 text-content flex column gap-medium astart">
 								<h3>{post.title}</h3>
 								<p>{post.exceptr}</p>
 
-								<footer class="w1 flex end">
-									<p>{post.created_at?.toLocaleDateString()}</p>
+								<footer class="w1 flex end blog-article-footer">
+									<p>{Utils.formatDate(post.created_at)}</p>
+									{#if post.category}
+										<span class="badge badge-category">{post.category}</span>
+									{/if}
 								</footer>
 							</div>
 						</div>
@@ -71,6 +89,9 @@
 </PageWrapper>
 
 <style>
+	.article-content {
+		position: relative;
+	}
 	.blog-content.latest-news {
 		position: relative;
 		padding: 15px;
@@ -120,9 +141,9 @@
 
 	article img {
 		width: 100%;
-        height: 250px;
+		height: 250px;
 		max-height: 250px;
-        object-fit: cover;
+		object-fit: cover;
 	}
 
 	.blog-content.rest-of-news .blog-list {
@@ -131,5 +152,34 @@
 	.blog-content.rest-of-news article img {
 		height: 280px;
 		max-height: 100%;
+	}
+
+	footer.blog-article-footer {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: flex-start;
+		margin-top: 1rem;
+	}
+	footer.blog-article-footer span {
+		align-self: flex-end;
+		display: inline-block;
+		background-color: #333;
+		color: #fff;
+		padding: 3px 8px;
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		margin-top: 5px;
+	}
+	.badge.badge-post-status {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		padding: 5px 12px;
+		font-size: 0.75rem;
+		text-transform: capitalize;
+		text-align: center;
+		background-color: rgba(0, 0, 0, 0.7);
+		color: #fff;
 	}
 </style>
