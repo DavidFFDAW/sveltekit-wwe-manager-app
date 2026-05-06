@@ -37,17 +37,15 @@ export const IaService = {
 	},
 	parseJson(text: string) {
 		return text.trim()
+			.replace(/```json\n{\n/g, '{')
+			.replace(/\n}\n/g, '}')
 			.replace(/```json\n?/g, '')
+			.replace(/```$/g, '')
 			.replace(/\n?```/g, '')
 			.replace(/^```\n?/g, '')
 			.replace(/\n?```$/g, '')
-			.replace(/\\n/g, '')
-			.replace(/\n/g, '')
-			.replace(/\t/g, '')
-			.replace(/\\t/g, '')
-			.replace(/\\"/g, '"')
-			.replace(/\\'/g, "'")
-			.replace(/\\\\/g, '\\');
+			.replace(/\n/g, "")
+			.replace(/\t/g, '');
 	}
 };
 export default IaService;
