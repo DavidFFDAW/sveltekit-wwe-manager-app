@@ -4,6 +4,11 @@
 </script>
 
 <section class="page">
+	<a href="{data.canonical}/upsert" class="btn icon cta">
+		<i class="bi bi-plus-lg"></i>
+		Nuevo ganador MITB
+	</a>
+
 	<header class="page-header">
 		<h1>Money in the Bank</h1>
 		<form action="" method="get" class="box">

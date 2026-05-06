@@ -110,6 +110,15 @@
 								<span>Royal Rumble</span>
 							</a>
 						</li>
+
+						<li
+							class="w1 background"
+							style="background-image: url('https://wallpapercave.com/wp/wp9559108.jpg')"
+						>
+							<a href="/admin/money-in-the-bank">
+								<span>Money in the Bank</span>
+							</a>
+						</li>
 					</ul>
 				</nav>
 			</div>
