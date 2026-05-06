@@ -16,14 +16,12 @@ const getPost = async (id: number, repository: BlogRepository) => {
 };
 
 export const load = async ({ url, locals }) => {
-	const repository = new BlogRepository();
 	const users = new UsersRepository();
+	const repository = new BlogRepository();
 
 	const id = Number(url.searchParams.get('id'));
 	const post = await getPost(id, repository);
 	const isUpdate = Boolean(post.id);
-	const averageViews = await repository.getPostAverageViews();
-	const currentViewsPercentage = isUpdate && post.views ? (post.views / averageViews) * 100 : 0;
 
 	const localUserId = locals.user?.uuid || 1;
 	const publishedDate = post.created_at
@@ -46,17 +44,9 @@ export const load = async ({ url, locals }) => {
 			authors,
 			isUpdate,
 			published_at: publishedDate.toISOString().split('T')[0],
-			averageViews: averageViews.toFixed(2),
 			action: isUpdate ? 'update' : 'create',
 			iaModels: IaService.getAvailableModels(),
 			post_author: post.admin_id ? post.admin_id : localUserId,
-			view_percentage: currentViewsPercentage.toFixed(2),
-			view_performance:
-				currentViewsPercentage > 75
-					? '🔥 Trending'
-					: currentViewsPercentage > 50
-						? '👍 Normal'
-						: '📉 Low'
 		}
 	};
 };
@@ -101,14 +91,12 @@ export const actions = {
 				created_at: publishedDate
 			};
 
-			if (!isUpdate) {
-				const created = await repository.create(post as Prisma.BlogPostCreateInput);
-				return Helpers.responseRedirect(`/admin/blog/upsert?id=${created.id}`);
-			}
+			const isUpserted = isUpdate
+				? await repository.create(post as Prisma.BlogPostCreateInput)
+				: await repository.updateById(updateId, post);
+			if (!isUpserted) return Helpers.error('Error al guardar el post', 500);
 
-			if (isUpdate) await repository.updateById(updateId, post);
 			return Helpers.success('Post guardado exitosamente');
-
 		} catch (error: unknown) {
 			console.error('Error al guardar el post:', error);
 			return Helpers.error('Error al guardar el post', 500);

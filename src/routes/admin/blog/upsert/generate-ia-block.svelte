@@ -3,15 +3,9 @@
 	import { Toast } from '$lib/utils/toast.helper';
 
 	let context = $state('');
-	let generated = $state('');
-	let provider = $state('groq');
-	let { models, updateContent } = $props();
+	let provider = $state('gpt-20');
+	let { models, updateContent, updateBlockState } = $props();
 	let estimatedTokens = $derived(Utils.getEstimatedTextTokens(context));
-
-	const handleResetGenerate = () => {
-		context = '';
-		generated = '';
-	};
 
 	const handleSubmitGenerate = async (event: Event) => {
 		event.preventDefault();
@@ -30,7 +24,6 @@
 			});
 			const data = await response.json();
 			if (!response.ok) {
-				generated = '';
 				return Toast.error(data.message || 'Error al generar contenido con IA');
 			}
 			console.log({ generatedContent: data });
@@ -39,7 +32,7 @@
 				content: data.text,
 				exceptr: data.excerpt
 			});
-			generated = data.text;
+			updateBlockState(false);
 		} catch (error: any) {
 			console.error({ error });
 			Toast.error(error.message || 'Error al generar contenido con IA');
@@ -54,34 +47,35 @@
 	</header>
 
 	<form class="w1 h1 flex column between astart gap" method="post" onsubmit={handleSubmitGenerate}>
-		<div>
+		<div class="w1 flex column gap-smaller">
 			<p class="artificial-info">
-				Por defecto esta inteligencia artificial va a recibir instrucciones para escribir un post
-				para un blog de WWE sobre el tema concreto que le especifiques y lo devolverá en html sin
-				utilizar las etiquetas <code>"body"</code>, <code>"html"</code> ni <code>"head"</code>. Solo
-				el contenido. Tampoco incluirá el titular <code>"h1"</code> ni etiquetas
-				<code>"script"</code>
-				o
-				<code>"style"</code>.
+				Aquí solo tendrás que elegir un modelo y escribir el contexto de qué ha pasado o sobre qué
+				irá el post. La inteligencia artificial se encargará del resto.
 			</p>
 
-			<div class="flex end">
-				<small>Tokens: {estimatedTokens}</small>
-			</div>
+			<label class="label">
+				<span class="label-text">Modelo de IA</span>
+				<select name="provider" class="w1 select" bind:value={provider}>
+					{#each models as model}
+						<option value={model}>{model}</option>
+					{/each}
+				</select>
+			</label>
 
-			<textarea
-				name="prompt"
-				placeholder="Instrucciones para la IA"
-				class="w1 textarea"
-				bind:value={context}
-				required
-			></textarea>
+			<label class="label">
+				<div class="w1 flex between acenter">
+					<span class="label-text">Contexto para la IA</span>
+					<small>Tokens: {estimatedTokens}</small>
+				</div>
 
-			<select name="provider" class="w1 select" bind:value={provider}>
-				{#each models as model}
-					<option value={model}>{model}</option>
-				{/each}
-			</select>
+				<textarea
+					name="prompt"
+					placeholder="Instrucciones para la IA"
+					class="w1 textarea"
+					bind:value={context}
+					required
+				></textarea>
+			</label>
 		</div>
 
 		<div class="w1 flex end acenter gap-5 buttons-container-item">
@@ -94,4 +88,33 @@
 </div>
 
 <style>
+	label.label {
+		width: 100%;
+		display: flex;
+		position: relative;
+		flex-direction: column;
+		gap: 4px;
+	}
+	label.label span.label-text {
+		font-size: 16px;
+		font-weight: 600;
+		text-transform: uppercase;
+		color: #000;
+	}
+	label.label textarea,
+	label.label select {
+		width: 100%;
+		outline: none;
+		font-size: 14px;
+		font-family: 'sourcesans', sans-serif;
+		background-color: #fff;
+		border: 1px solid #ddd;
+		border-radius: 5px;
+		padding: 10px;
+	}
+
+	textarea {
+		min-height: 100px;
+		resize: vertical;
+	}
 </style>

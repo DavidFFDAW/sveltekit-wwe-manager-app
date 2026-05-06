@@ -17,6 +17,10 @@
 		post = { ...post, ...datas };
 	};
 
+	const updateBlockState = (state: boolean) => {
+		showIaBlock = state;
+	};
+
 	const scrollToGenerate = async () => {
 		showIaBlock = true;
 		await tick();
@@ -47,7 +51,11 @@
 
 	{#if showIaBlock}
 		<div class="ia-block" transition:fade>
-			<GenerateIaBlock models={data.upsert.iaModels} updateContent={updatePostDatas} />
+			<GenerateIaBlock
+				models={data.upsert.iaModels}
+				updateContent={updatePostDatas}
+				updateBlockState={showIaBlock}
+			/>
 		</div>
 	{/if}
 
@@ -55,6 +63,7 @@
 		method="post"
 		updateId={post.id}
 		showButtons={true}
+		redirect="/admin/blog"
 		classes="w1 form-upsert-blog-post grid grid-page-layout responsive"
 	>
 		<div class="main-layout">
