@@ -12,7 +12,7 @@ export class BlogRepository extends Repository<
 	Prisma.BlogPostAggregateArgs
 > {
 	protected requiredFields: string[] = [];
-	public allowedStatuses: string[] = ['draft', 'published', 'unpublished'];
+	public allowedStatuses: string[] = ['draft', 'published', 'private'];
 
 	constructor() {
 		super('blogPost');

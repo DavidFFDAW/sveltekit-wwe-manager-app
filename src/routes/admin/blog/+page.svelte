@@ -60,18 +60,6 @@
 					<button
 						type="submit"
 						name="status"
-						value="unpublished"
-						class="btn rounded small filter icon icon-gap-5"
-						class:active={data.filters.status === 'unpublished'}
-						aria-label="Buscar no publicados"
-					>
-						<i class="bi bi-eye-slash-fill"></i>
-						<span>No publicados</span>
-					</button>
-
-					<button
-						type="submit"
-						name="status"
 						value="draft"
 						class="btn rounded small filter icon icon-gap-5"
 						class:active={data.filters.status === 'draft'}
@@ -79,6 +67,18 @@
 					>
 						<i class="bi bi-journal-text"></i>
 						<span>Borradores</span>
+					</button>
+
+					<button
+						type="submit"
+						name="status"
+						value="private"
+						class="btn rounded small filter icon icon-gap-5"
+						class:active={data.filters.status === 'private'}
+						aria-label="Buscar privados"
+					>
+						<i class="bi bi-shield-lock"></i>
+						<span>Privados</span>
 					</button>
 				</div>
 
