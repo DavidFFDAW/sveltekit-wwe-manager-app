@@ -92,9 +92,9 @@ export const actions = {
 			};
 
 			const isUpserted = isUpdate
-				? await repository.create(post as Prisma.BlogPostCreateInput)
-				: await repository.updateById(updateId, post);
-			if (!isUpserted) return Helpers.error('Error al guardar el post', 500);
+				? await repository.updateById(updateId, post)
+				: await repository.create(post as Prisma.BlogPostCreateInput);
+			if (!Boolean(isUpserted.id)) return Helpers.error('Error al guardar el post', 500);
 
 			return Helpers.success('Post guardado exitosamente');
 		} catch (error: unknown) {

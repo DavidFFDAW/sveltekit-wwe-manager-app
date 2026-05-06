@@ -197,7 +197,7 @@
 						<input
 							type="text"
 							name="category"
-							value={post.category}
+							value={post.category || 'noticias'}
 							placeholder="Categorías del post (separadas por comas)"
 						/>
 					</label>
