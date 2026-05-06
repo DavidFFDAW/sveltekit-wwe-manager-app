@@ -2,8 +2,6 @@ import { dev } from '$app/environment';
 import { BlogRepository } from '$lib/server/dao/repositories/blog.repository.js';
 import { Helpers } from '$lib/server/server.helpers';
 
-const allowed_statuses = ['published', 'unpublished', 'draft'];
-
 const getCategoryWhereClause = (category: string) => {
 	if (category === 'all') return {};
 	return { category };
@@ -16,11 +14,12 @@ export const load = async ({ locals, url }) => {
 	const searchCategory = params.get('category') || 'all';
 	const searchTitle = params.get('search') || '';
 	const publishStatus = params.get('status') || 'published';
-	const publishedFilter = allowed_statuses.includes(publishStatus) ? publishStatus : 'published';
+
+	const blogRepo = new BlogRepository();
+	const publishedFilter = blogRepo.isStatusAllowed(publishStatus) ? publishStatus : 'published';
 	const page = parseInt(params.get('page') || '1', 10);
 	const categoryWhereClause = getCategoryWhereClause(searchCategory);
 
-	const blogRepo = new BlogRepository();
 	const paginatedDatas = await blogRepo.paginateN(
 		page,
 		{
@@ -55,14 +54,14 @@ export const actions = {
 		const datas = await request.formData();
 		const updatingID = Helpers.getUpdateID(datas);
 		if (!updatingID) return Helpers.error('ID not found');
-
 		const status = datas.get('status');
-		if (typeof status !== 'string' || !allowed_statuses.includes(status)) {
-			return Helpers.error('Invalid status value');
-		}
+
 
 		try {
 			const repository = new BlogRepository();
+			if (typeof status !== 'string' || !repository.isStatusAllowed(status)) {
+				return Helpers.error('Invalid status value');
+			}
 			const post = await repository.getSingleById(updatingID);
 			if (!post) return Helpers.error('Post not found');
 
