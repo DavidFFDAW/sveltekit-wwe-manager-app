@@ -54,7 +54,7 @@
 			<GenerateIaBlock
 				models={data.upsert.iaModels}
 				updateContent={updatePostDatas}
-				updateBlockState={showIaBlock}
+				{updateBlockState}
 			/>
 		</div>
 	{/if}
