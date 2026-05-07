@@ -50,7 +50,7 @@
 	</button>
 
 	{#if showIaBlock}
-		<div class="ia-block" transition:fade>
+		<div class="w1 ia-block" transition:fade>
 			<GenerateIaBlock
 				models={data.upsert.iaModels}
 				updateContent={updatePostDatas}
