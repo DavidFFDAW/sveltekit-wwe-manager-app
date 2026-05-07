@@ -30,6 +30,8 @@ export class PPVRepository extends Repository<
 		}
 	];
 
+	private readonly weekly: string[] = ['raw', 'smackdown', 'awl', 'evolution', 'tnme'];
+
 	constructor() {
 		super('pPV');
 	}
@@ -39,13 +41,11 @@ export class PPVRepository extends Repository<
 	}
 
 	getActiveNames() {
-		return this.prisma.pPV
-			.findMany({
-				where: { active: true },
-				select: { name: true },
-				orderBy: { game_date: 'asc' }
-			})
-			.then((results) => [...this.getWeeklyShows(), ...results.map((r) => r.name)]);
+		return this.get({
+			where: { active: true },
+			select: { name: true },
+			orderBy: { game_date: 'asc' }
+		}).then((results) => [...this.weekly, ...results.map((r) => r.name)]);
 	}
 
 	updatePpvDate(id: number, newDate: Date | null): Promise<PPV> {

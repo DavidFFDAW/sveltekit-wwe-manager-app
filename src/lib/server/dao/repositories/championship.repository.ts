@@ -15,4 +15,14 @@ export class ChampionshipRepository extends Repository<
 	constructor() {
 		super('championship');
 	}
+
+	getChampionshipsByMitbGender(gender: string) {
+		return this.get({
+			where: {
+				type: { not: 'mitb' },
+				gender: gender,
+				tag: false,
+			},
+		});
+	}
 }

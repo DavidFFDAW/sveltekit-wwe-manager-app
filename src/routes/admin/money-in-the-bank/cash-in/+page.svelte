@@ -1,15 +1,41 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { errorimage } from '$lib/actions/error.image.js';
+	import Debug from '$lib/components/visual/debug.svelte';
 
 	let { data } = $props();
 	$inspect(data.cashin);
 </script>
+
+<!-- <Debug datas={data.cashin} /> -->
 
 <div class="page page-container">
 	<header class="page-header">
 		<h1>Canjeo MITB</h1>
 		<small>{data.cashin.mitb.championship.name}</small>
 	</header>
+
+	<div class="page-content">
+		<div class="flex gap-medium">
+			<div class="box"></div>
+			<div class="box"></div>
+		</div>
+	</div>
+
+	<form action="" method="post">
+		<div class="chps">
+			{#each data.cashin.availableChampionships as c}
+				<button type="submit" value={c.championship.id} name="championship" class="btn cta down">
+					<img
+						width="100"
+						src={c.championship.image}
+						alt={c.championship.name}
+						use:errorimage={data.statics.championship}
+					/>
+				</button>
+			{/each}
+		</div>
+	</form>
 
 	<div class="casher">
 		<div class="casher-info" style="background-image: url({data.cashin.mitb.championship.image})">
@@ -24,20 +50,6 @@
 				<div class="casher-date">{data.cashin.mitb.date}</div>
 			</div>
 		</div>
-	</div>
-
-	<div class="championships-list">
-		{#each data.cashin.availableChampionships as championship}
-			<div class="championship">
-				<img
-					width="100"
-					src={championship.image}
-					alt={championship.name}
-					use:errorimage={data.statics.championship}
-				/>
-				<div>{championship.name}</div>
-			</div>
-		{/each}
 	</div>
 </div>
 
@@ -74,5 +86,12 @@
 		width: auto;
 		max-width: 100%;
 		height: 80%;
+	}
+
+	.page-content .flex .box:nth-child(1) {
+		width: 30%;
+	}
+	.page-content .flex .box:nth-child(2) {
+		width: 70%;
 	}
 </style>

@@ -1,5 +1,6 @@
 import { Prisma, type ChampionshipReign } from '@prisma/client';
 import { Repository } from './Repository';
+import { ReignUtils } from '$lib/utils/reign.utils';
 
 export class ReignsRepository extends Repository<
 	ChampionshipReign,
@@ -76,5 +77,34 @@ export class ReignsRepository extends Repository<
 			...args,
 		};
 		return this.groupBy(fields);
+	}
+
+	getCurrentReignForChampionship(championshipId: number) {
+		return this.getRow({
+			where: {
+				current: true,
+				lost_date: null,
+				championship_id: championshipId,
+			},
+			include: {
+				Wrestler: true,
+				Championship: true,
+			},
+			orderBy: {
+				won_date: 'desc',
+			},
+		});
+	}
+
+	async finishReign(id: number, reign: ChampionshipReign, lostDate: Date) {
+		if (isNaN(id)) throw new Error('Invalid reign ID');
+		if (!(lostDate instanceof Date) || isNaN(lostDate.getTime())) throw new Error('Invalid lost date');
+
+		const real_days = ReignUtils.getDaysBetweenDates(reign.won_date, lostDate);
+		return this.updateById(id, {
+			lost_date: lostDate,
+			days: real_days,
+			current: false,
+		});
 	}
 }
