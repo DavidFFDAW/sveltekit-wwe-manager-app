@@ -3,7 +3,7 @@ import type { Prisma } from '@prisma/client';
 import prisma from '../prisma';
 
 export const PPVDao = {
-	weeklyShows: ['Raw', 'SmackDown', 'AWL', 'Saturday Night Main Event'],
+	weeklyShows: ['Raw', 'SmackDown', 'Evolution', 'Saturday Night Main Event'],
 	getPPVs: () => {
 		return prisma.pPV.findMany();
 	},

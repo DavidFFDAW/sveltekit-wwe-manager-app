@@ -19,8 +19,9 @@ export const load = async ({ url }) => {
 				select: { id: true, name: true, slug: true, image_name: true }
 			},
 			Championship: {
-				select: { id: true, name: true, image: true }
+				select: { id: true, name: true, image: true, gender: true }
 			},
+			id: true,
 			won_date: true,
 			lost_date: true,
 			current: true,
@@ -38,13 +39,17 @@ export const load = async ({ url }) => {
 			},
 		},
 		orderBy: {
-			won_date: 'desc'
+			Championship: {
+				gender: 'desc'
+			}
 		},
 	}) as any[];
 
+	const firstReignYear = currentYearMitbs.length > 0 ? currentYearMitbs[0].won_date.getFullYear() : filterReal;
+
 	return {
 		mitb: {
-			currentYear,
+			currentYear: firstReignYear === currentYear ? currentYear : firstReignYear,
 			availableYears: availableYears,
 			reigns: currentYearMitbs.map(reign => ({
 				...reign,

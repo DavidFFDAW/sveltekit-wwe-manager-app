@@ -27,7 +27,7 @@ export const actions = {
 		if (entries.length === 0) return Helpers.error('No se enviaron datos en el formulario');
 
 		try {
-			const validBrands = ['raw', 'smackdown', 'awl'];
+			const validBrands = ['raw', 'smackdown', 'awl', 'evolution'];
 			const brands = entries.reduce(
 				(acc, [key, value]) => {
 					if (!key.startsWith('brand[')) return acc;

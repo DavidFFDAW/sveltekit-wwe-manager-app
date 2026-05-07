@@ -67,7 +67,7 @@
 				type="text"
 				placeholder="Evento en el que se ganó"
 				bind:value={reign.ppv_won as string}
-				options={['RAW', 'Smackdown', 'AWL', 'Saturday Night Main Event', ...ppvs]}
+				options={['RAW', 'Smackdown', 'Evolution', 'Saturday Night Main Event', ...ppvs]}
 			/>
 			<Input
 				label="Forma de victoria"

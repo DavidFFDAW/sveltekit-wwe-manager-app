@@ -53,6 +53,18 @@ export const load = async ({ locals, url, route, request }) => {
 		breadcrumbs: getBreadcrumbs(url.pathname),
 		pageRouteSlug: getPageRouteSlug(url.pathname),
 		isAdminPage: url.pathname.startsWith('/admin'),
-		isMobile: /mobile|android|iphone|ipad|phone/i.test(request.headers.get('user-agent') || '')
+		isMobile: /mobile|android|iphone|ipad|phone/i.test(request.headers.get('user-agent') || ''),
+		statics: {
+			vacant: '/vacant.webp',
+			noimage: '/noimage.jpg',
+			championship: '/unknown-championship.webp',
+			icon: '/icons/versatile.png',
+			brands: {
+				raw: '/brands/raw.webp',
+				smackdown: '/brands/smackdown.webp',
+				awl: '/brands/awl.webp',
+				evolution: '/brands/awl.webp',
+			},
+		}
 	};
 };

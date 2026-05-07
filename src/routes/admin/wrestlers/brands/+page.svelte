@@ -19,7 +19,7 @@
 								width="88"
 								height="88"
 								src={wrestler.image_name}
-								use:errorimage={'/vacant.webp'}
+								use:errorimage={data.statics.vacant}
 								alt={wrestler.name}
 							/>
 						</div>
@@ -40,7 +40,7 @@
 								bind:group={wrestler.brand}
 							/>
 							<div class="inner inner-brand brand-raw">
-								<img width="25" src="/brands/raw.webp" alt="RAW" />
+								<img width="25" src={data.statics.brands.raw} alt="RAW" />
 							</div>
 						</label>
 
@@ -53,7 +53,7 @@
 								bind:group={wrestler.brand}
 							/>
 							<div class="inner inner-brand brand-smackdown">
-								<img width="25" src="/brands/smackdown.webp" alt="SMACKDOWN" />
+								<img width="25" src={data.statics.brands.smackdown} alt="SMACKDOWN" />
 							</div>
 						</label>
 
@@ -66,7 +66,7 @@
 								bind:group={wrestler.brand}
 							/>
 							<div class="inner inner-brand brand-awl">
-								<img width="25" src="/brands/awl.webp" alt="AWL" />
+								<img width="25" src={data.statics.brands.awl} alt="AWL" />
 							</div>
 						</label>
 					</div>
