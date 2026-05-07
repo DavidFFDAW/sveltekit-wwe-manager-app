@@ -26,7 +26,7 @@ export const load = async ({ url }) => {
     const prisma = ppvCardRepository.conn();
     const rows = await prisma.$queryRaw<MatchCardWithStats[]>`
 		SELECT
-            m.id_match_card AS id,
+            p.id AS id,
 			m.id_match_card,
 			p.ppv_name,
 			p.ppv_date,
@@ -39,7 +39,7 @@ export const load = async ({ url }) => {
 		RIGHT JOIN ppv_card p ON p.id = m.id_match_card
 		WHERE p.ppv_date >= ${dateFrom}
 			AND p.ppv_date <= ${dateTo}
-		GROUP BY m.id_match_card, p.ppv_name, p.ppv_date, p.ppv_image
+		GROUP BY m.id_match_card, p.id, p.ppv_name, p.ppv_date, p.ppv_image, p.post_id
 		ORDER BY p.ppv_date ASC
 	`;
 
