@@ -9,7 +9,7 @@
 	import { errorimage } from '$lib/actions/error.image';
 
 	export let data;
-	const ppvs = data.event_card.ppvs;
+	// const ppvs = data.event_card.ppvs;
 	const pagedatas = data.event_card;
 
 	let upsertCard = {
