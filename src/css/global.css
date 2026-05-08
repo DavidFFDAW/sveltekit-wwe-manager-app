@@ -140,7 +140,7 @@ i.customs-icons.app-bootstrap-custom-icon.bi.icon-big {
 	font-size: 14px;
 	font-weight: 500;
 	text-transform: uppercase;
-	font-family: 'dreadnotus', sans-serif;
+	font-family: 'sourcesans', sans-serif;
 	cursor: pointer;
 }
 
@@ -155,7 +155,7 @@ i.customs-icons.app-bootstrap-custom-icon.bi.icon-big {
 	font-size: 22px;
 	font-weight: 800;
 	line-height: 0;
-	font-family: 'Poppins', sans-serif;
+	font-family: 'sourcesans', sans-serif;
 }
 
 input,
