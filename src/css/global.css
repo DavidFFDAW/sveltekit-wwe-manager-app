@@ -137,8 +137,8 @@ i.customs-icons.app-bootstrap-custom-icon.bi.icon-big {
 }
 
 .form-item .label.form-label {
-	font-size: 14px;
-	font-weight: 500;
+	font-size: 16px;
+	font-weight: 800;
 	text-transform: uppercase;
 	font-family: 'sourcesans', sans-serif;
 	cursor: pointer;
@@ -568,8 +568,10 @@ aside.sidebar.shown+main.app-main-entrypoint .sidebar-margin {
 	background-color: transparent;
 	border: 1px solid #ccc;
 	border-radius: 25px;
+    font-weight: 500;
 	overflow: hidden;
 	cursor: pointer;
+    font-family: 'sourcesans', sans-serif;
 }
 
 .radio-checkbox-container-wrapper .radio-checkbox-input:checked+.radio-checkbox-inner-item .label-item-text {

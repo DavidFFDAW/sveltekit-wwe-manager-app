@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { errorimage } from '$lib/actions/error.image';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
-	import Image from '$lib/components/visual/image.svelte';
 	import { WrestlerConstants } from '$lib/constants/wrestler.constants';
 	import type { Wrestler } from '@prisma/client';
 
@@ -41,7 +40,7 @@
 				</label>
 
 				<label class="form-item">
-					<span class="label form-label">Brand</span>
+					<span class="label form-label">Media</span>
 					<input
 						type="number"
 						name="overall"
