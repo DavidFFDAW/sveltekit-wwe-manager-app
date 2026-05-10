@@ -49,6 +49,12 @@
 			</tr>
 		</tfoot>
 	</table>
+
+	<br />
+
+	<pre>
+        {JSON.stringify(data.ia.yearlyUsage, null, 5)}
+    </pre>
 </div>
 
 <style>
