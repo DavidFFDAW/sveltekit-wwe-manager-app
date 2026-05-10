@@ -47,10 +47,10 @@
 	</header>
 
 	<form class="w1 h1 flex column between astart gap" method="post" onsubmit={handleSubmitGenerate}>
-		<div class="w1 flex column gap-smaller">
+		<div class="w1 flex start astart column gap-smaller">
 			<p class="artificial-info">
 				Aquí solo tendrás que elegir un modelo y escribir el contexto de qué ha pasado o sobre qué
-				irá el post. La inteligencia artificial se encargará del resto.
+				irá el post. <br /> La inteligencia artificial se encargará del resto.
 			</p>
 
 			<label class="label">
