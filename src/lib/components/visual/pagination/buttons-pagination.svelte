@@ -4,7 +4,6 @@
 	let { page: _page, class: css = '' } = $props();
 	let input_page = $state(_page);
 	let path = $derived(page.url.pathname);
-	$inspect(_page, path);
 </script>
 
 <div class="w1 pagination-block slim-pagination-buttons {css}">
