@@ -51,11 +51,12 @@
 		if (value) quill.root.innerHTML = value;
 		quill.on('text-change', () => {
 			if (!quill) return;
+			if (!quill.root.innerHTML) return;
 			value = quill.root.innerHTML;
 		});
 	});
 
-	$: if (quill && value !== quill.root.innerHTML) {
+	$: if (quill && value && value !== quill.root.innerHTML) {
 		quill.root.innerHTML = value;
 	}
 </script>
