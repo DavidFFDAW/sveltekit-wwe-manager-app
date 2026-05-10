@@ -4,10 +4,9 @@
 	import ActionsAsync from '$lib/components/buttons/grouped-actions/actions-async.svelte';
 	import GroupedActions from '$lib/components/buttons/grouped-actions/grouped-actions.svelte';
 	import Input from '$lib/components/forms/inputs/input.svelte';
-	import RadioList from '$lib/components/forms/inputs/radio-list.svelte';
 	import PpvList from './ppv-list.svelte';
 	// import Calendar from './calendar.svelte';
-	export let data;
+	let { data } = $props();
 </script>
 
 <!-- <div class="w1">
@@ -105,6 +104,7 @@
 		</form>
 	</header>
 
+	<h3>Hay un total de {data.ppvs.length} PPVs con estos filtros</h3>
 	<section class="w1 ppv-list-container down">
 		<PpvList ppvs={data.ppvs} />
 	</section>
