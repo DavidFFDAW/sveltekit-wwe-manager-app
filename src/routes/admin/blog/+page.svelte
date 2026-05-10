@@ -118,7 +118,7 @@
 		</div>
 	</div>
 
-	<ButtonCreate endpoint="/blog/create" />
+	<ButtonCreate endpoint="/blog/upsert" />
 </PageWrapper>
 
 <style>
@@ -145,9 +145,9 @@
 		color: #fff;
 	}
 
-    @media (max-width: 767px) {
-        .blog-page-admin-list-container {
-            grid-template-columns: 1fr;
-        }
-    }
+	@media (max-width: 767px) {
+		.blog-page-admin-list-container {
+			grid-template-columns: 1fr;
+		}
+	}
 </style>
