@@ -1,9 +1,14 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { errorimage } from '$lib/actions/error.image.js';
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
 	let { data } = $props();
 
-	$inspect(data.matchcards);
+	function checkConfirmation(event: Event) {
+		if (!confirm('¿Estás seguro de que deseas realizar esta acción?')) {
+			event.preventDefault();
+		}
+	}
 </script>
 
 <div class="matchcards-page">
@@ -34,23 +39,27 @@
 	<section class="w1 down eventcard-events-list">
 		<h2 class="w1">Eventos del año: {data.selectedYear}</h2>
 
-		<div class="w1 ppv-match-card-list flex column gap-small">
+		<div class="w1 ppv-match-card-list">
 			{#each data.matchcards as matchcard}
 				<div
-					class="w1 matchcard relative box"
+					class="w1 matchcard matchcard-item relative box"
 					data-href="/admin/matchcards/upsert?slug={matchcard.id}"
 				>
-					<div class="w1 flex start astart gap-smaller responsive">
+					<div class="w1 relative flex start astart column gap-smaller responsive matchcard-header">
 						<img
 							width="120"
 							src={matchcard.ppv_image}
 							class="responsive-w1 w1-responsive rounded"
-							use:errorimage={'/noimage.jpg'}
+							use:errorimage={data.statics.noimage}
 							alt={matchcard.ppv_name}
 							title={matchcard.ppv_name}
 							loading="lazy"
 							draggable="false"
 						/>
+						<span class="badge badge-matchcard-year">
+							{matchcard.formatted_date}
+						</span>
+
 						<div class="flex column start astart nogap">
 							<h2>
 								{matchcard.ppv_name}
@@ -137,6 +146,18 @@
 							<i class="bi bi-file-earmark-spreadsheet"></i>
 							<span>Exportar CSV</span>
 						</a>
+						<form action="" method="post" use:enhance onsubmit={checkConfirmation}>
+							<button
+								type="submit"
+								name="delete_event"
+								value={matchcard.id}
+								class="btn small danger rounded icon"
+								aria-label="Eliminar evento"
+							>
+								<i class="bi bi-trash"></i>
+								<span>Eliminar evento</span>
+							</button>
+						</form>
 					</footer>
 				</div>
 			{/each}
@@ -147,6 +168,27 @@
 </div>
 
 <style>
+	.ppv-match-card-list {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 20px;
+	}
+	.ppv-match-card-list .matchcard-header img {
+		width: 100%;
+		height: auto;
+		max-height: 150px;
+		aspect-ratio: 16 / 9;
+	}
+	.ppv-match-card-list .matchcard-header .badge.badge-matchcard-year {
+		position: absolute;
+		top: 5px;
+		right: 5px;
+		color: #fff;
+		padding: 4px 8px;
+		font-size: 0.75rem;
+		border: 1px solid #fff;
+		background-color: rgba(0, 0, 0, 0.5);
+	}
 	.average-star-rating-container {
 		color: #000;
 		padding: 4px 8px;

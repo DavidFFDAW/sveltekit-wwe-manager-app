@@ -25,6 +25,13 @@
 		event.preventDefault();
 		upsertCard.name = ppv.name;
 		upsertCard.image = ppv.image;
+		console.log({
+			ppv,
+			upsertCard,
+			date: ppv.game_date,
+			flatpickrFormatted: Utils.formatFlatpickrDate(ppv.game_date)
+		});
+
 		upsertCard.date = Utils.formatFlatpickrDate(ppv.game_date);
 	};
 

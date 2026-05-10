@@ -1,4 +1,6 @@
+import { Utils } from '$lib/utils/general.utils.js';
 import { PpvCardRepository } from '$lib/server/dao/repositories/matchcard.repository.js';
+import { Helpers } from '$lib/server/server.helpers.js';
 
 type MatchCardWithStats = {
     id: number;
@@ -48,6 +50,7 @@ export const load = async ({ url }) => {
         hasSummaryPost: Boolean(row.post_id),
         matches: Number(row.matches),
         average: Number(row.average),
+        formatted_date: Utils.formatDate(row.ppv_date),
         nights: Number(row.nights)
     }));
 
@@ -57,3 +60,22 @@ export const load = async ({ url }) => {
         selectedYear: yearFilter ? Number(yearFilter) : null
     };
 };
+
+export const actions = {
+    default: async ({ request }) => {
+        const formData = await request.formData();
+
+        try {
+            const id = formData.get('delete_event');
+            const matchcards = new PpvCardRepository();
+            await matchcards.delete({
+                id: Number(id)
+            });
+
+            return Helpers.success('Evento eliminado correctamente');
+        } catch (error) {
+            console.error('Error processing form data:', error);
+            return Helpers.error('Error processing form data');
+        }
+    }
+}
