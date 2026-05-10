@@ -21,7 +21,7 @@
 		<div class="post-card-datas">
 			<header class="post-card-title">
 				<h2>{post.title}</h2>
-				<small>{post.slug}</small>
+				<!-- <small>{post.slug}</small> -->
 			</header>
 			<p class="post-card-excerpt">{post.exceptr}</p>
 			<span class="post-card-badge post-card-date"
@@ -69,15 +69,13 @@
 				</button>
 			{/if}
 
-			<button
-				class="btn small danger rounded icon icon-gap-5"
-				formaction="?/delete"
-				data-confirm="true"
-				data-confirm-message="¿Estás seguro de que deseas eliminar este post? Esta acción no se puede deshacer."
+			<a
+				href={`/admin/blog/${post.id}/notifications`}
+				class="btn small info rounded icon icon-gap-5"
 			>
-				<i class="bi bi-trash3-fill"></i>
-				<span>Eliminar este post</span>
-			</button>
+				<i class="bi bi-bell-fill"></i>
+				<span>Notificaciones</span>
+			</a>
 
 			<a href={`/admin/blog/update/${post.id}`} class="btn small warn rounded icon icon-gap-5">
 				<i class="bi bi-pencil"></i>
@@ -89,13 +87,15 @@
 				<span>Upsert</span>
 			</a>
 
-			<a
-				href={`/admin/blog/${post.id}/notifications`}
-				class="btn small info rounded icon icon-gap-5"
+			<button
+				class="btn small danger rounded icon icon-gap-5"
+				formaction="?/delete"
+				data-confirm="true"
+				data-confirm-message="¿Estás seguro de que deseas eliminar este post? Esta acción no se puede deshacer."
 			>
-				<i class="bi bi-bell-fill"></i>
-				<span>Notificaciones</span>
-			</a>
+				<i class="bi bi-trash3-fill"></i>
+				<span>Eliminar este post</span>
+			</button>
 		</footer>
 	</SimpleAsyncForm>
 </div>
@@ -103,6 +103,10 @@
 <style>
 	.wwe-post-card.post-card {
 		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+
 		position: relative;
 		background-color: #fff;
 		border: 1px solid #ddd;
@@ -114,9 +118,14 @@
 	}
 	.wwe-post-card.post-card .post-card-inner {
 		display: flex;
+		flex-direction: column;
 		align-items: flex-start;
 		gap: 16px;
 	}
+	.wwe-post-card.post-card .post-card-inner > * {
+		width: 100%;
+	}
+
 	.wwe-post-card.post-card .post-card-inner img {
 		width: 250px;
 		max-width: 250px;
@@ -127,7 +136,7 @@
 	.wwe-post-card.post-card .post-card-inner .post-card-datas {
 		flex: 1;
 		width: 100%;
-		max-width: 80%;
+		/* max-width: 80%; */
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
@@ -144,12 +153,12 @@
 		font-size: 20px;
 		transform: scaleY(1.2);
 	}
-	.wwe-post-card.post-card .post-card-inner .post-card-datas .post-card-title small {
+	/* .wwe-post-card.post-card .post-card-inner .post-card-datas .post-card-title small {
 		color: #666;
 		display: block;
 		font-size: 13px;
 		margin-top: -2px;
-	}
+	} */
 	.wwe-post-card.post-card .post-card-inner .post-card-datas .post-card-excerpt {
 		height: 100%;
 		flex-grow: 1;
@@ -186,7 +195,7 @@
 		border-top: 2px solid #eee;
 		flex-wrap: wrap;
 		display: flex;
-		justify-content: flex-end;
+		justify-content: center;
 		gap: 10px;
 	}
 	.wwe-post-card.post-card .blog-post-card-actions > * {

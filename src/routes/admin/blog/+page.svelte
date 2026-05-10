@@ -111,15 +111,22 @@
 	<div class="blog-page-admin-list flex column astart gap-smaller">
 		<SimplePagination pages={data.blogPagination.pages} current={data.blogPagination.currentPage} />
 
-		{#each data.blogPagination.list as post}
-			<BlogCard {post} />
-		{/each}
+		<div class="blog-page-admin-list-container">
+			{#each data.blogPagination.list as post}
+				<BlogCard {post} />
+			{/each}
+		</div>
 	</div>
 
 	<ButtonCreate endpoint="/blog/create" />
 </PageWrapper>
 
 <style>
+	.blog-page-admin-list-container {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+		gap: 20px;
+	}
 	.category-block ul.categories-list {
 		display: flex;
 		flex-wrap: wrap;
@@ -137,4 +144,10 @@
 		background-color: #333;
 		color: #fff;
 	}
+
+    @media (max-width: 767px) {
+        .blog-page-admin-list-container {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
