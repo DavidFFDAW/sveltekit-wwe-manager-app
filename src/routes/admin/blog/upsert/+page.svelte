@@ -41,7 +41,6 @@
 	$effect(() => {
 		post = data.upsert.post;
 	});
-	$inspect(data.upsert);
 </script>
 
 <div class="page-container flex column gap start astart total">

@@ -1,97 +1,97 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
 	import { errorimage } from '$lib/actions/error.image.js';
-	import Debug from '$lib/components/visual/debug.svelte';
-
+	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	let { data } = $props();
 	$inspect(data.cashin);
 </script>
 
-<!-- <Debug datas={data.cashin} /> -->
-
 <div class="page page-container">
-	<header class="page-header">
+	<!-- <header class="page-header">
 		<h1>Canjeo MITB</h1>
 		<small>{data.cashin.mitb.championship.name}</small>
-	</header>
+	</header> -->
 
-	<div class="page-content">
-		<div class="flex gap-medium">
-			<div class="box"></div>
-			<div class="box"></div>
-		</div>
-	</div>
-
-	<form action="" method="post">
-		<div class="chps">
-			{#each data.cashin.availableChampionships as c}
-				<button type="submit" value={c.championship.id} name="championship" class="btn cta down">
+	<AsyncForm method="post" reset={true} redirect={data.cashin.parentPage} showButtons={false}>
+		<div
+			class="ww-mitb-cashin-layout ww-mitb-gender-{data.cashin.mitb.championship.gender.toLowerCase()}"
+		>
+			<div class="card mitb-holder-info">
+				<header class="card-mitb-header">
 					<img
-						width="100"
-						src={c.championship.image}
-						alt={c.championship.name}
-						use:errorimage={data.statics.championship}
+						class=""
+						src={data.cashin.mitb.championship.image}
+						alt={data.cashin.mitb.championship.name}
+						use:errorimage={data.statics.mitb}
+						width="58"
 					/>
-				</button>
-			{/each}
-		</div>
-	</form>
+					<p>MITB actual</p>
+				</header>
 
-	<div class="casher">
-		<div class="casher-info" style="background-image: url({data.cashin.mitb.championship.image})">
-			<img
-				width="100"
-				src={data.cashin.mitb.wrestler.image_name as string}
-				alt={data.cashin.mitb.wrestler.name}
-				use:errorimage={data.statics.vacant}
-			/>
-			<div class="casher-text">
-				<div class="casher-name">{data.cashin.mitb.wrestler.name}</div>
-				<div class="casher-date">{data.cashin.mitb.date}</div>
+				<div class="ww-mitb-holder-image">
+					<img
+						width="58"
+						src={data.cashin.mitb.wrestler.image_name}
+						alt={data.cashin.mitb.wrestler.name}
+						use:errorimage={data.statics.vacant}
+					/>
+					<div class="w1 ww-mitb-holder-inner-datas">
+						<p>
+							<strong>{data.cashin.mitb.wrestler.name}</strong>
+						</p>
+					</div>
+				</div>
+				<div class="ww-border ww-mitb-gender"></div>
+				<div class="ww-border ww-mitb-date"></div>
+				<div class="ww-border ww-mitb-warning"></div>
 			</div>
+			<div class="card"></div>
 		</div>
-	</div>
+	</AsyncForm>
 </div>
 
 <style>
-	.page.page-container {
-		max-width: 800px;
-		margin: 0 auto;
+	.ww-mitb-cashin-layout {
+		display: grid;
+		grid-template-columns: 340px 1fr;
+		margin-top: 20px;
+		gap: 15px;
 	}
-	.casher {
-		display: flex;
-		justify-content: center;
-		margin: 10px 0;
+	.card {
+		background: #fff;
+		border: 1px solid #ccc;
+		border-radius: 16px;
+		padding: 15px;
 	}
-	.casher .casher-info {
+	.card.mitb-holder-info {
 		width: 100%;
-		max-width: 200px;
-		height: 200px;
-		padding: 2rem;
-		position: relative;
-		background-color: #fff;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 20px;
+	}
+	.card.mitb-holder-info > * {
+		width: 100%;
+	}
+	.ww-mitb-holder-image {
+		width: 100%;
+		background-color: #eee;
 		border: 1px solid #ccc;
 		border-radius: 8px;
-		background-size: contain;
-		background-position: center;
-		background-repeat: no-repeat;
-		overflow: hidden;
+	}
+	.ww-border {
+		border-bottom: 1px solid #ccc;
 	}
 
-	.casher img {
-		position: absolute;
-		bottom: 0;
-		left: 50%;
-		transform: translateX(-50%);
-		width: auto;
-		max-width: 100%;
-		height: 80%;
+	.mitb-holder-info .card-mitb-header {
+		display: flex;
+		gap: 15px;
+		align-items: center;
+		text-align: center;
 	}
-
-	.page-content .flex .box:nth-child(1) {
-		width: 30%;
-	}
-	.page-content .flex .box:nth-child(2) {
-		width: 70%;
+	.mitb-holder-info .card-mitb-header img {
+		width: 58px;
+		height: 58px;
+		border-radius: 16px;
+		background-image: linear-gradient(135deg, #ffe08a, #c78a00);
 	}
 </style>
