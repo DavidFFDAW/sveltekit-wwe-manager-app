@@ -41,6 +41,7 @@
 	$effect(() => {
 		post = data.upsert.post;
 	});
+	$inspect(data.upsert);
 </script>
 
 <div class="page-container flex column gap start astart total">
@@ -66,6 +67,8 @@
 		redirect="/admin/blog"
 		classes="w1 form-upsert-blog-post grid grid-page-layout responsive"
 	>
+		<input type="hidden" name="_action" value={data.upsert.action} />
+
 		<div class="main-layout">
 			<div class="w1 box flex column gap-smaller blog-upsert-main-contents">
 				<label class="label label-container relative">
