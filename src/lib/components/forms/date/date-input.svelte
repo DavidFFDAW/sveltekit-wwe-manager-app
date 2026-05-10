@@ -38,6 +38,16 @@
 		value = null;
 		if (FlatPickr) FlatPickr.clear();
 	};
+
+	// update when date value changes externally
+	$effect(() => {
+		if (FlatPickr && value) {
+			const date = new Date(value);
+			if (!isNaN(date.getTime())) {
+				FlatPickr.setDate(date, false);
+			}
+		}
+	});
 </script>
 
 <div class="flatpicker-container form-item">
