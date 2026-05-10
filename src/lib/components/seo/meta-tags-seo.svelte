@@ -4,12 +4,6 @@
 
 	let metas = $derived(page.metas ? { ...DEFAULT_METAS, ...page.metas } : DEFAULT_METAS);
 	let title = $derived(metas.title || page.pagetitle);
-
-    $inspect({
-        page,
-        title,
-        metas
-    });
 </script>
 
 <svelte:head>
