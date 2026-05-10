@@ -10,7 +10,7 @@
 	<header class="championship-reign-page-header">
 		<h1 class="w1">Reinados de Campeonatos</h1>
 
-		<div class="button">
+		<div class="buttons down">
 			<a class="btn info inline-block" href="{data.path}/rankings">
 				<i class="bi bi-trophy"></i>
 				<span class="tooltip">Rankings</span>
@@ -22,6 +22,10 @@
 			<a href="{data.path}/defences/update" class="btn warn inline-block">
 				<i class="bi bi-shield"></i>
 				<span class="tooltip">Actualizar defensas</span>
+			</a>
+			<a href="{data.path}/bydate" class="btn info inline-block">
+				<i class="bi bi-calendar"></i>
+				<span class="tooltip">Consultar reinados por fecha</span>
 			</a>
 		</div>
 		<!-- <HttpButton href="/api/reigns/update-days/current" icon="refresh">Actualizar días</HttpButton> -->

@@ -1,11 +1,15 @@
 <script lang="ts">
 	import { DEFAULT_METAS } from '$lib/constants/metas.constants';
+	const { page } = $props();
 
-	export let page: Record<string, any>;
-	let title: string = '';
+	let metas = $derived(page.metas ? { ...DEFAULT_METAS, ...page.metas } : DEFAULT_METAS);
+	let title = $derived(metas.title || page.pagetitle);
 
-	$: metas = page.metas ? { ...DEFAULT_METAS, ...page.metas } : DEFAULT_METAS;
-	$: title = metas.title || page.pagetitle;
+    $inspect({
+        page,
+        title,
+        metas
+    });
 </script>
 
 <svelte:head>
