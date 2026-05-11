@@ -1,3 +1,5 @@
+import path from 'path';
+
 export const prerender = false;
 export const ssr = true;
 
@@ -43,6 +45,7 @@ export const load = async ({ locals, url, route, request }) => {
     const isAdmin = storedUser ? ['admin', 'superadmin'].includes(storedUser.role) : false;
 
     return {
+        src_path: `/src/routes${route.id || '/'}`,
         pagetitle: getPageTitle(url.pathname, route.id),
         path: url.pathname,
         userIsAdmin: isAdmin,
@@ -66,6 +69,6 @@ export const load = async ({ locals, url, route, request }) => {
                 awl: '/brands/awl.webp',
                 evolution: '/brands/awl.webp',
             },
-        }
+        },
     };
 };

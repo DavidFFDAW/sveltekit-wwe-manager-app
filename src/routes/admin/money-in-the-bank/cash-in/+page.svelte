@@ -5,6 +5,15 @@
 	$inspect(data.cashin);
 </script>
 
+<svelte:head>
+	<link
+		rel="stylesheet"
+		href="{data.src_path}/cash-in.css"
+		class="wwe-aaaaaaaaaaa"
+		data-css="yes"
+	/>
+</svelte:head>
+
 <div class="page page-container">
 	<!-- <header class="page-header">
 		<h1>Canjeo MITB</h1>
