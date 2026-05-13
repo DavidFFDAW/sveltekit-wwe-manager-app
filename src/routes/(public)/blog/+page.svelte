@@ -38,10 +38,10 @@
 							</header>
 							<div class="w1 h1 text-content flex column gap-medium astart">
 								<h3>{post.title}</h3>
-								<p>{post.exceptr}</p>
+								<p>{post.exceptr}{post.exceptr?.endsWith('.') ? '' : '.'}</p>
 
 								<footer class="w1 flex end blog-article-footer">
-									<p>{Utils.formatDate(post.created_at)}</p>
+									<p class="date-text">{Utils.formatDate(post.created_at)}</p>
 									{#if post.category}
 										<span class="badge badge-category">{post.category}</span>
 									{/if}
@@ -56,7 +56,7 @@
 
 	<section class="blog-content rest-of-news flex column gap astart down">
 		<h2>Otras noticias</h2>
-		<div class="w1 grid three-column-grid responsive gap-medium blog-list">
+		<div class="w1 ww-posts ww-posts-container blog-list">
 			{#each data.posts.slice(3) as post}
 				<article class="w1 blog-article">
 					<a href="/blog/{post.slug}" class="w1 block">
@@ -71,10 +71,10 @@
 							</header>
 							<div class="w1 text-content flex column gap-medium astart">
 								<h3>{post.title}</h3>
-								<p>{post.exceptr}</p>
+								<p>{post.exceptr}{post.exceptr?.endsWith('.') ? '' : '.'}</p>
 
 								<footer class="w1 flex end blog-article-footer">
-									<p>{Utils.formatDate(post.created_at)}</p>
+									<p class="date-text">{Utils.formatDate(post.created_at)}</p>
 									{#if post.category}
 										<span class="badge badge-category">{post.category}</span>
 									{/if}
@@ -91,6 +91,7 @@
 <style>
 	.article-content {
 		position: relative;
+		height: 100%;
 	}
 	.blog-content.latest-news {
 		position: relative;
@@ -99,6 +100,16 @@
 		background-color: #333;
 		z-index: 2;
 	}
+	.blog-content.latest-news .blog-list {
+		margin: 0 auto;
+		max-width: 1400px;
+	}
+	.blog-content.latest-news .blog-list article {
+		border: 1px solid #555;
+		border-radius: 8px;
+		overflow: hidden;
+	}
+
 	.blog-content.latest-news::after {
 		content: '';
 		position: absolute;
@@ -121,6 +132,10 @@
 		font-weight: 700;
 		font-family: 'dreadnotus', sans-serif;
 		text-transform: uppercase;
+	}
+	.blog-content.rest-of-news {
+		margin: 0 auto;
+		max-width: 1400px;
 	}
 
 	article {
@@ -146,12 +161,20 @@
 		object-fit: cover;
 	}
 
-	.blog-content.rest-of-news .blog-list {
-		gap: 25px;
-	}
 	.blog-content.rest-of-news article img {
 		height: 280px;
 		max-height: 100%;
+	}
+
+	.ww-posts.ww-posts-container.blog-list {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+		gap: 20px;
+	}
+	.ww-posts.ww-posts-container.blog-list article {
+		border: 1px solid #ccc;
+		border-radius: 8px;
+		overflow: hidden;
 	}
 
 	footer.blog-article-footer {
@@ -160,6 +183,17 @@
 		justify-content: flex-start;
 		align-items: flex-start;
 		margin-top: 1rem;
+	}
+	footer.blog-article-footer .date-text {
+		position: absolute;
+		bottom: 10px;
+		left: 10px;
+		font-size: 0.85rem;
+		padding: 4px 12px;
+		background: #fff;
+		color: #000;
+		border: 1px solid #ccc;
+		border-radius: 25px;
 	}
 	footer.blog-article-footer span {
 		align-self: flex-end;
@@ -181,5 +215,15 @@
 		text-align: center;
 		background-color: rgba(0, 0, 0, 0.7);
 		color: #fff;
+	}
+
+	article:hover {
+		box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+		transform: translateY(-6px);
+		transition: all 0.2s ease-in-out;
+	}
+	article:hover .text-content,
+	article:hover .article-content {
+		background-color: #f9f9f9;
 	}
 </style>
