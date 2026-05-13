@@ -143,6 +143,13 @@
 					<span class="btn-text">Guardar</span>
 				</button>
 			{/if}
+
+			<!-- {#if !update}
+				<button type="submit" class="ww-button-update-dates btn cta icon">
+					<i class="bi bi-calendar-check"></i>
+					<span class="btn-text">Fechas</span>
+				</button>
+			{/if} -->
 		</div>
 
 		<!-- <div class="w1 flex end acenter gap-smaller">

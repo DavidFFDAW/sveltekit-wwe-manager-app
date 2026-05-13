@@ -95,10 +95,24 @@ export class ReignsRepository extends Repository<
 			},
 		});
 	}
+	getBasicCurrentReignForChampionship(championshipId: number) {
+		return this.getRow({
+			where: {
+				current: true,
+				lost_date: null,
+				championship_id: championshipId,
+			},
+			orderBy: {
+				won_date: 'desc',
+			},
+		});
+	}
+
 
 	async finishReign(id: number, reign: ChampionshipReign, lostDate: Date) {
 		if (isNaN(id)) throw new Error('Invalid reign ID');
-		if (!(lostDate instanceof Date) || isNaN(lostDate.getTime())) throw new Error('Invalid lost date');
+		if (!(lostDate instanceof Date) || isNaN(lostDate.getTime()))
+			throw new Error('Invalid lost date');
 
 		const real_days = ReignUtils.getDaysBetweenDates(reign.won_date, lostDate);
 		return this.updateById(id, {

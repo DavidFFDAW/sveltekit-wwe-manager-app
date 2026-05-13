@@ -42,6 +42,10 @@ export const Helpers = {
 			return { error: true, message: `Faltan campos requeridos: ${missingFields.join(', ')}` };
 		return { error: false, message: '' };
 	},
+	checkRequiredFieldsThrow: (formData: FormData, requiredFields: string[]) => {
+		const { error, message } = Helpers.checkRequiredFields(formData, requiredFields);
+		if (error) throw new Error(message);
+	},
 	slugify: Utils.slugify,
 	apiResponse: (data: Record<string, any>, status: number = 200) => {
 		return json(data, { status });
