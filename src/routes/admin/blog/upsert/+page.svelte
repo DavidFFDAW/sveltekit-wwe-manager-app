@@ -43,6 +43,13 @@
 	});
 </script>
 
+<datalist id="blog-upsert-categories-list">
+	<option>Noticias</option>
+	<option>Resúmenes</option>
+	<option>Entrevistas</option>
+	<option>Podcasts</option>
+</datalist>
+
 <div class="page-container flex column gap start astart total">
 	<button type="button" class="w1 btn icon cta" onclick={scrollToGenerate}>
 		<i class="bi bi-robot"></i>
@@ -74,7 +81,11 @@
 					<span class="label-text">Titulo</span>
 					<input type="text" name="title" bind:value={post.title} placeholder="Título del post" />
 					<input type="hidden" name="slug" value={slug} />
-					<small class="form-helper">{slug}</small>
+				</label>
+
+				<label class="label label-container relative">
+					<span class="label-text">Slug</span>
+					<input type="text" name="slug" bind:value={slug} placeholder="Slug del post" />
 				</label>
 
 				<QuillInput
@@ -199,8 +210,9 @@
 						<input
 							type="text"
 							name="category"
-							value={post.category || 'noticias'}
+							value={post.category || 'Noticias'}
 							placeholder="Categorías del post (separadas por comas)"
+							list="blog-upsert-categories-list"
 						/>
 					</label>
 				</div>
