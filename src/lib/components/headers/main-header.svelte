@@ -1,24 +1,33 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
 	import { blur, fade } from 'svelte/transition';
-
 	type BgPosition = 'center' | 'top' | 'bottom' | 'left' | 'right';
+	interface Props {
+		height?: string;
+		title?: string;
+		links?: boolean;
+		background?: string;
+		mobileBackground?: string;
+		bgPosition?: BgPosition;
+		mobileBgPosition?: BgPosition;
+		titlePosition?: 'top' | 'center' | 'bottom';
+	}
 
-	export let height = '350px';
-	export let title: string = 'Universo WWE';
-	export let links: boolean = true;
-	export let background: string =
-		'https://media.bleacherreport.com/image/upload/v1688552009/ftzi2nvfvqea8nsoq8fe.jpg';
-	export let mobileBackground: string =
-		'https://media.bleacherreport.com/image/upload/v1688552009/ftzi2nvfvqea8nsoq8fe.jpg';
-	export let bgPosition: BgPosition = 'center';
-	export let mobileBgPosition: BgPosition = 'center';
-	export let titlePosition: string = 'bottom';
+	let {
+		height = '350px',
+		title = 'Universo WWE',
+		links = true,
+		background = 'https://media.bleacherreport.com/image/upload/v1688552009/ftzi2nvfvqea8nsoq8fe.jpg',
+		mobileBackground = 'https://media.bleacherreport.com/image/upload/v1688552009/ftzi2nvfvqea8nsoq8fe.jpg',
+		bgPosition = 'center',
+		mobileBgPosition = 'center',
+		titlePosition = 'bottom'
+	}: Props = $props();
+
+	let path = $derived(page.url.pathname);
 </script>
 
 <header
-	in:fade
-	out:blur
 	class="w1 home-page-header main-app-header"
 	style="--bg-image: url({background}); --mobile-bg-image: url({mobileBackground}); --header-height: {height}; --bg-position: {bgPosition}; --mobile-bg-position: {mobileBgPosition};"
 >
@@ -37,16 +46,13 @@
 					<li class="list-item">
 						<a href="/">Home</a>
 					</li>
-					<li class="list-item">
+					<li class="list-item" class:active={path.startsWith('/pages')}>
 						<a href="/pages">Paginas</a>
 					</li>
-					<li class="list-item">
+					<li class="list-item" class:active={path.startsWith('/blog')}>
 						<a href="/blog">Blog</a>
 					</li>
-					<li class="list-item">
-						<a href="/twitter">Twitter</a>
-					</li>
-					<li class="list-item">
+					<li class="list-item" class:active={path.startsWith('/admin')}>
 						<a
 							href="/admin"
 							data-sveltekit-preload-code={false}
@@ -114,22 +120,35 @@
 		display: flex;
 		justify-content: space-evenly;
 		align-items: center;
-		gap: 35px;
+		gap: 25px;
 	}
 	header.home-page-header.main-app-header nav ul li.list-item {
 		display: block;
 		width: 100%;
 		text-align: center;
 	}
-	header.home-page-header.main-app-header nav ul li.list-item:last-child {
+	/* header.home-page-header.main-app-header nav ul li.list-item:last-child {
 		padding-right: 10px;
-	}
+	} */
 	header.home-page-header.main-app-header nav ul li.list-item a {
 		display: block;
+		position: relative;
 		font-family: 'dreadnotus', sans-serif;
 	}
 	header.home-page-header.main-app-header nav ul li.list-item a:hover {
 		color: #f00;
+	}
+	header.home-page-header.main-app-header nav ul li.list-item.active a::after {
+		content: '';
+		display: block;
+		width: 15%;
+		position: absolute;
+		bottom: -5px;
+		left: 50%;
+		transform: translateX(-50%);
+		height: 3px;
+		background-color: #f00;
+		border-radius: 50px;
 	}
 
 	@media (max-width: 768px) {
@@ -140,6 +159,9 @@
 		}
 		header.home-page-header.main-app-header h1 {
 			font-size: 2em;
+		}
+		header.home-page-header.main-app-header nav ul li.list-item.active a::after {
+			width: 100%;
 		}
 	}
 

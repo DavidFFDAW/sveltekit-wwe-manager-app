@@ -77,7 +77,7 @@
 		</article>
 
 		<article class="w1 home-article">
-			<a href="/pages" class="w1 block">
+			<a href="/ppvs" class="w1 block">
 				<div class="w1 article-content flex gap-medium astart responsive">
 					<img
 						src="https://www.wwe.com/f/styles/gallery_img_l/public/all/2024/01/131_RR_01272024GD_37295--a0647e43afa91c64976613f63e4c387c.jpg"
@@ -90,7 +90,7 @@
 						<p>
 							Explora la lista de eventos anuales programados en el universo WWE, desde los más
 							icónicos hasta los nuevos. Descubre los eventos especiales, los PPV y los shows
-							semanales que se llevarán a cabo en el calendario
+							semanales que se llevarán a cabo en el calendario.
 						</p>
 					</div>
 				</div>
@@ -165,9 +165,6 @@
 	}
 
 	@media screen and (max-width: 768px) {
-		section.home-content {
-			padding-top: 0;
-		}
 		section.home-content article.home-article .article-content {
 			height: auto;
 		}
