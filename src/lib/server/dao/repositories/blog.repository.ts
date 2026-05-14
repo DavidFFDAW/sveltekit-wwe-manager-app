@@ -137,4 +137,24 @@ export class BlogRepository extends Repository<
 		});
 		return result._avg.views || 0;
 	}
+
+	getRelatedPosts(postId: number, category: string, take: number = 2): Promise<BlogPost[]> {
+		return this.model.findMany({
+			where: {
+				id: {
+					not: postId
+				},
+				visible: true,
+				status: 'published',
+				category: category,
+				created_at: {
+					lte: new Date()
+				}
+			},
+			orderBy: {
+				created_at: 'desc'
+			},
+			take: take
+		});
+	}
 }

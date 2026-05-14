@@ -2,12 +2,11 @@
 	import { errorimage } from '$lib/actions/error.image';
 	import Icon from '$lib/components/icons/icon.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
-	import type { BlogPost } from '@prisma/client';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 
-	let showShareButton = false;
-	export let data: { post: BlogPost } = { post: {} as BlogPost };
+	let { data } = $props();
+	let showShareButton = $state(false);
 
 	function buttonShare(event: Event) {
 		event.preventDefault();
@@ -52,7 +51,7 @@
 			</article>
 
 			{#if showShareButton}
-				<button class="btn-share" type="button" on:click={buttonShare} transition:fade>
+				<button class="btn-share" type="button" onclick={buttonShare} transition:fade>
 					<Icon icon="share" />
 				</button>
 			{/if}
@@ -64,9 +63,34 @@
 			</div>
 		{/if}
 	</div>
+
+	<div class="w1 related-posts-container">
+		{#each data.related_posts as related}
+			<article class="w1 blog-article">
+				<a href="/blog/{related.slug}" class="w1 block blog-post">
+					<div class="w1 article-content">{related.title}</div>
+				</a>
+			</article>
+		{/each}
+	</div>
 </PageWrapper>
 
 <style>
+	.related-posts-container {
+		margin: 0 auto;
+		max-width: 800px;
+
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 1rem;
+	}
+	.related-posts-container .blog-post {
+		padding: 1rem;
+		border-radius: 8px;
+		border: 1px solid #ccc;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	}
+
 	.btn-share {
 		position: fixed;
 		bottom: 10px;
@@ -121,6 +145,8 @@
 	.blog-container .blog-post-image.post-image {
 		width: 100%;
 		height: auto;
+		max-height: 400px;
+		object-fit: cover;
 	}
 
 	.blog-container.error .blog-post-error-container a {
