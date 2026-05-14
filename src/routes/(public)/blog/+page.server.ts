@@ -16,5 +16,5 @@ export const load = async ({ locals }) => {
 	const blogPosts = await blog.getPublishedPostsByStatuses(statuses);
 	const userDatas = locals.user ? await users.getSingleById(locals.user.uuid) : null;
 
-	return { posts: blogPosts, user: userDatas };
+	return { posts: blogPosts, user: userDatas, role };
 };

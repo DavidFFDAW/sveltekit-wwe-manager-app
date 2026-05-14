@@ -4,16 +4,16 @@
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import SubscriptionBlock from './subscription-block.svelte';
 	import { Utils } from '$lib/utils/general.utils';
+	import BlogPostCard from './blog-post-card.svelte';
 
-	export let data;
-	let isAdmin = data.userIsAdmin;
+	let { data } = $props();
 </script>
 
 <MainHeader
 	title="Blog"
 	height="450px"
 	bgPosition="top"
-	mobileBgPosition="center"
+	mobileBgPosition="top"
 	background="https://www.wrestlinginc.com/img/gallery/cody-rhodes-says-the-final-boss-reminds-him-of-wwe-hall-of-famers-heel-turn/l-intro-1712436460.jpg"
 	mobileBackground="https://e00-xlk-ue-marca.uecdn.es/uploads/2024/03/28/66056608b302d.jpeg"
 	titlePosition="center"
@@ -23,33 +23,9 @@
 	<SubscriptionBlock user={data.user} />
 	<section class="blog-content flex column gap latest-news">
 		<h2 class="w1 tleft">Ultimas noticias</h2>
-		<div class="w1 flex center astart gap-medium blog-list responsive">
+		<div class="w1 ww-latest-posts blog-list responsive">
 			{#each data.posts.slice(0, 3) as post}
-				<article class="w1 blog-article">
-					<a href="/blog/{post.slug}">
-						<div class="w1 h1 article-content">
-							<header>
-								{#if data.userIsAdmin}
-									<span class="badge badge-post-status">
-										{post.status}
-									</span>
-								{/if}
-								<img src={post.image} alt={post.title} use:errorimage />
-							</header>
-							<div class="w1 h1 text-content flex column gap-medium astart">
-								<h3>{post.title}</h3>
-								<p>{post.exceptr}{post.exceptr?.endsWith('.') ? '' : '.'}</p>
-
-								<footer class="w1 flex end blog-article-footer">
-									<p class="date-text">{Utils.formatDate(post.created_at)}</p>
-									{#if post.category}
-										<span class="badge badge-category">{post.category}</span>
-									{/if}
-								</footer>
-							</div>
-						</div>
-					</a>
-				</article>
+				<BlogPostCard {post} isAdmin={data.userIsAdmin} />
 			{/each}
 		</div>
 	</section>
@@ -58,31 +34,7 @@
 		<h2>Otras noticias</h2>
 		<div class="w1 ww-posts ww-posts-container blog-list">
 			{#each data.posts.slice(3) as post}
-				<article class="w1 blog-article">
-					<a href="/blog/{post.slug}" class="w1 block">
-						<div class="w1 article-content">
-							<header>
-								{#if data.userIsAdmin}
-									<span class="badge badge-post-status">
-										{post.status}
-									</span>
-								{/if}
-								<img src={post.image} alt={post.title} use:errorimage />
-							</header>
-							<div class="w1 text-content flex column gap-medium astart">
-								<h3>{post.title}</h3>
-								<p>{post.exceptr}{post.exceptr?.endsWith('.') ? '' : '.'}</p>
-
-								<footer class="w1 flex end blog-article-footer">
-									<p class="date-text">{Utils.formatDate(post.created_at)}</p>
-									{#if post.category}
-										<span class="badge badge-category">{post.category}</span>
-									{/if}
-								</footer>
-							</div>
-						</div>
-					</a>
-				</article>
+				<BlogPostCard {post} isAdmin={data.userIsAdmin} />
 			{/each}
 		</div>
 	</section>
@@ -171,6 +123,11 @@
 		grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
 		gap: 20px;
 	}
+	.ww-latest-posts.blog-list {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 20px;
+	}
 	.ww-posts.ww-posts-container.blog-list article {
 		border: 1px solid #ccc;
 		border-radius: 8px;
@@ -247,5 +204,14 @@
 	article:hover .text-content,
 	article:hover .article-content {
 		background-color: #f9f9f9;
+	}
+
+	@media only screen and (max-width: 853px) {
+		.ww-latest-posts.blog-list {
+			grid-template-columns: repeat(1, 1fr);
+		}
+		.ww-posts.ww-posts-container.blog-list {
+			grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		}
 	}
 </style>
