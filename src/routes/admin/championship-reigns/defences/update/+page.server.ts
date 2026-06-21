@@ -34,7 +34,7 @@ export const load = async () => {
                 time_days: ReignUtils.getDaysAndMonths(reign.days),
                 ranking_status: ReignUtils.getReignRankingStatus(reign),
                 calculated_name: ReignUtils.getWrestlerOrTeamName(reign),
-                updated_ellapsed: reign.updated_at ? Utils.getEllapsedTime(reign.updated_at) : null
+                updated_ellapsed: reign.last_time_updated ? Utils.getEllapsedTime(reign.last_time_updated) : null
             };
         })
     };
