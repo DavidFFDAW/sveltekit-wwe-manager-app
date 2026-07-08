@@ -15,44 +15,42 @@ type Wrestler = {
 export const load = async ({ url }) => {
 	const id = url.searchParams.get('id');
 	const wrestlers = new WrestlerRepository();
-	const championships = new ChampionshipRepository();
 	const reigns = new ReignsRepository();
 
-	const mitbs = await championships.get({
-		select: { id: true, name: true, image: true, gender: true },
-		where: {
-			type: 'mitb'
-		}
-	});
-
-	const elegibleWrestlers = await wrestlers.getNonReleasedWrestlers({
+	const wrestlersList = await wrestlers.get({
 		select: { id: true, name: true, slug: true, sex: true, image_name: true },
+		where: {
+			status: { not: { in: ['released', 'injured'] } }
+		},
 		orderBy: {
 			name: 'asc'
 		}
 	}) as Wrestler[];
-	const genderWrestlers = elegibleWrestlers.reduce((acc, wrestler) => {
-		if (wrestler.sex.toLowerCase() === 'm') {
-			acc.male.push(wrestler);
-		} else if (wrestler.sex.toLowerCase() === 'f') {
-			acc.female.push(wrestler);
-		}
-		return acc;
-	}, { male: [], female: [] } as { male: Wrestler[]; female: Wrestler[] });
 
 	const currentReign = Boolean(id) ? (await reigns.getSingleById(Number(id))) : {} as ChampionshipReign;
 	const isUpdate = Boolean(id) && currentReign?.id;
 
+	const upsertDatas = {
+		id: currentReign?.id || 0,
+		date: currentReign?.won_date || (new Date()).toISOString().split('T')[0],
+		wrestler_id: currentReign?.wrestler_id || 0,
+		ppv: currentReign?.ppv_won || 'Money in the Bank',
+		match: currentReign?.victory_way || 'Ladder match',
+	}
+
 	return {
 		upsert: {
 			isUpdate,
-			mitbs: mitbs,
-			reign: currentReign,
-			wrestlers: elegibleWrestlers,
-			genderWrestlers
+			upsertDatas,
+			wrestlers: wrestlersList,
+			wrestlersMap: new Map(wrestlersList.map((wrestler) => [wrestler.id, wrestler])),
+		},
+		metas: {
+			title: isUpdate ? 'Editar MITB' : 'Nuevo MITB',
 		}
-	};
+	}
 }
+
 export const actions = {
 	default: async ({ request }) => {
 		const data = await request.formData();

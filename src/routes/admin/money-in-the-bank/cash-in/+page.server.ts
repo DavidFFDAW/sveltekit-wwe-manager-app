@@ -87,8 +87,6 @@ export const actions = {
 				mitbId: Number(formData.get('mitb_id') as string),
 				wrestlerId: Number(formData.get('wrestler_id') as string),
 			};
-			console.log({ datas });
-
 			if (isNaN(datas.championship)) return Helpers.error('Invalid championship selected.', 400);
 
 			const reigns = new ReignsRepository();

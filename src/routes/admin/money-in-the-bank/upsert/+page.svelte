@@ -1,270 +1,258 @@
 <script lang="ts">
 	import { errorimage } from '$lib/actions/error.image';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
+	import { Utils } from '$lib/utils/general.utils.js';
 	import type { ChampionshipReign } from '@prisma/client';
-	import { fade } from 'svelte/transition';
 
 	let { data } = $props();
-	let step = $state(data.upsert.isUpdate ? 3 : 0);
-	let reign = $state(data.upsert.reign || ({} as ChampionshipReign));
+	let upd = $state(data.upsert.upsertDatas);
 
-	let selectedMitb = $derived(data.upsert.mitbs.find((mitb) => mitb.id === reign?.championship_id));
-	let mitbGender = $derived(selectedMitb?.gender.toLowerCase() === 'm' ? 'male' : 'female');
-	let wrestlerList = $derived(data.upsert.genderWrestlers[mitbGender as 'male' | 'female'] || []);
-	let selectedWrestler = $derived(
-		wrestlerList.find((wrestler) => wrestler.id === reign?.wrestler_id)
-	);
-
-	const incrementStep = () => {
-		if (step < 3) step += 1;
-	};
-
-	const decrementStep = () => {
-		if (step > 0) step -= 1;
-	};
-
-	$inspect({ step, upsert: data.upsert, selectedMitb, mitbGender, wrestlerList });
+	let date = $state(new Date(upd.date));
+	let wrestlerList = $derived(data.upsert.wrestlers || []);
+	let selectedWrestler = $derived(data.upsert.wrestlersMap?.get(upd.wrestler_id) || ({} as any));
+	$inspect({
+		upsert: data.upsert,
+		upsertDatas: upd,
+		selectedWrestler,
+		wrestlerList,
+		map: data.upsert.wrestlersMap,
+		today: date
+	});
 </script>
 
-<section class="page">
+<section class="mitb-upsert-page">
+	<header class="page-header">
+		<span class="badge mitb-badge">Money In The Bank</span>
+	</header>
+
 	<AsyncForm
 		method="post"
 		showButtons={false}
-		updateId={reign?.id}
+		updateId={upd.id}
 		classes="w1 form-upsert-mitb-reign"
 	>
-		<div class="w1 ww-form-content-wrapper">
-			<div class="w1 ww-form-steps-container">
-				{#if step === 0}
-					<div
-						class="w1 ww-form-step ww-form-step-mitb"
-						data-step={1}
-						transition:fade={{ duration: 100 }}
-					>
-						<header class="ww-form-step-header">
-							<h2>Money in the Bank</h2>
-							<small>Selecciona el money in the bank</small>
-						</header>
+		<div class="mitb-upsert-panels">
+			<div class="mitb-panel mitb-upsert-big-panel-content">
+				<div class="section-title">
+					<div class="number">1</div>
+					<div>
+						<h2>Ganador del combate</h2>
+						<p>Listado compacto preparado para rosters largos.</p>
+					</div>
+				</div>
 
-						<div class="mitb-container">
-							{#each data.upsert.mitbs as mitb}
-								<label class="relative">
-									<input
-										type="radio"
-										name="championship_id"
-										value={mitb.id}
-										bind:group={reign.championship_id}
-										onchange={incrementStep}
-										class="app-radio"
-									/>
-									<div class="mitb-card" class:selected={reign.championship_id === mitb.id}>
-										<h3>{mitb.name}</h3>
-										<img width={60} src={mitb.image} alt={mitb.name} />
-									</div>
-								</label>
-							{/each}
+				<div class="mitb-selector-select-wrestler">
+					<div class="mitb-selector-select-toolbar">
+						<label class="search">
+							<input type="search" placeholder="Buscar por nombre, marca, división o estado..." />
+						</label>
+						<div class="filters">
+							<button type="button" class="chip active">Todos</button>
+							<button type="button" class="chip">Raw</button>
+							<button type="button" class="chip">SmackDown</button>
+							<button type="button" class="chip">NXT</button>
+							<button type="button" class="chip">Activos</button>
+							<button type="button" class="chip">Part-time</button>
 						</div>
 					</div>
-				{/if}
 
-				{#if step === 1}
-					<div
-						class="w1 ww-form-step ww-form-step-wrestler"
-						data-step={2}
-						transition:fade={{ duration: 100 }}
-					>
-						<header class="ww-form-step-header">
-							<h2>Ganador</h2>
-							<small>Selecciona el luchador ganador del money in the bank</small>
-						</header>
-
-						<div class="wrestlers-list-container">
-							{#each wrestlerList as wrestler}
-								<label class="relative">
-									<input
-										type="radio"
-										name="wrestler_id"
-										value={wrestler.id}
-										bind:group={reign.wrestler_id}
-										onchange={incrementStep}
-										class="app-radio"
-									/>
-									<div class="wrestler-card" class:selected={reign.wrestler_id === wrestler.id}>
-										<h3>{wrestler.name}</h3>
-										<img
-											width={60}
-											src={wrestler.image_name as string}
-											alt={wrestler.name}
-											use:errorimage
-										/>
-									</div>
-								</label>
-							{/each}
-						</div>
+					<div class="results-info">
+						<span>Mostrando 124 luchadores disponibles</span>
+						<span>1 seleccionado</span>
 					</div>
-				{/if}
+					<div class="wrestler-list">
+						<label class="wrestler-row">
+							<input type="radio" name="wrestler_id" value="1" checked="" />
+							<div class="wrestler-row-inner">
+								<div class="avatar">
+									<img src="https://placehold.co/120x120/dbeafe/1e3a8a?text=TS" alt="" />
+								</div>
 
-				{#if step === 2}
-					<div
-						class="w1 ww-form-step ww-form-step-resume"
-						data-step={3}
-						transition:fade={{ duration: 100 }}
-					>
-						<header class="ww-form-step-header">
-							<h2>Resumen</h2>
-							<small>Revisa los datos antes de guardar el money in the bank</small>
-						</header>
+								<div class="wrestler-main">
+									<strong>Tiffany Stratton</strong>
+									<span>División femenina · Activa</span>
+								</div>
 
-						<div class="w1 flex column gap-10">
-							<div class="flex column gap-5">
-								<strong>Money in the Bank:</strong>
-								<span>{selectedMitb?.name}</span>
-								<span>{selectedMitb?.id}</span>
+								<div class="badges">
+									<span class="badge smackdown">SmackDown</span>
+									<span class="check">✓</span>
+								</div>
 							</div>
+						</label>
 
-							<div class="flex column gap-5">
-								<strong>Ganador:</strong>
-								<span>{selectedWrestler?.name}</span>
-								<span>{selectedWrestler?.id}</span>
+						<label class="wrestler-row">
+							<input type="radio" name="wrestler_id" value="2" />
+							<div class="wrestler-row-inner">
+								<div class="avatar">
+									<img src="https://placehold.co/120x120/fce7f3/9d174d?text=RR" alt="" />
+								</div>
+
+								<div class="wrestler-main">
+									<strong>Rhea Ripley</strong>
+									<span>División femenina · Activa</span>
+								</div>
+
+								<div class="badges">
+									<span class="badge raw">Raw</span>
+									<span class="check">✓</span>
+								</div>
 							</div>
+						</label>
 
-							<pre>{JSON.stringify(reign, null, 2)}</pre>
-						</div>
+						<label class="wrestler-row">
+							<input type="radio" name="wrestler_id" value="3" />
+							<div class="wrestler-row-inner">
+								<div class="avatar">LK</div>
+
+								<div class="wrestler-main">
+									<strong>LA Knight</strong>
+									<span>División masculina · Activo</span>
+								</div>
+
+								<div class="badges">
+									<span class="badge smackdown">SmackDown</span>
+									<span class="check">✓</span>
+								</div>
+							</div>
+						</label>
+
+						<label class="wrestler-row">
+							<input type="radio" name="wrestler_id" value="4" />
+							<div class="wrestler-row-inner">
+								<div class="avatar">JU</div>
+
+								<div class="wrestler-main">
+									<strong>Jey Uso</strong>
+									<span>División masculina · Activo</span>
+								</div>
+
+								<div class="badges">
+									<span class="badge raw">Raw</span>
+									<span class="check">✓</span>
+								</div>
+							</div>
+						</label>
+
+						<label class="wrestler-row">
+							<input type="radio" name="wrestler_id" value="5" />
+							<div class="wrestler-row-inner">
+								<div class="avatar">CB</div>
+
+								<div class="wrestler-main">
+									<strong>Carmelo Hayes</strong>
+									<span>División masculina · Activo</span>
+								</div>
+
+								<div class="badges">
+									<span class="badge smackdown">SmackDown</span>
+									<span class="check">✓</span>
+								</div>
+							</div>
+						</label>
 					</div>
-				{/if}
+				</div>
 			</div>
+			<div class="mitb-panel mitb-upsert-summary-panel">
+				<div class="mitb-summary-hero"></div>
+				<div class="mitb-summary-content">
+					<div class="mitb-summary-row">
+						<span class="mitb-summary-row-label">Fecha</span>
+						<span class="mitb-summary-row-value">{Utils.formatDate(date)}</span>
+					</div>
 
-			<div class="ww-form-content-buttons ww-step-{step}">
-				{#if step > 0}
-					<button type="button" class="btn icon" onclick={decrementStep}>
-						<i class="bi bi-arrow-left"></i>
-						<span>Anterior</span>
-					</button>
-				{/if}
+					<hr />
 
-				<button
-					type={step === 3 ? 'submit' : 'button'}
-					class="btn cta icon"
-					onclick={incrementStep}
-				>
-					<span>{step === 3 ? 'Guardar' : 'Siguiente'}</span>
-					<i class="bi bi-arrow-right"></i>
-				</button>
+					<div class="mitb-summary-row">
+						<span class="mitb-summary-row-label">Evento</span>
+						<span class="mitb-summary-row-value">{upd.ppv}</span>
+					</div>
+				</div>
 			</div>
 		</div>
 	</AsyncForm>
 </section>
 
 <style>
-	.ww-form-content-wrapper {
-		width: 100%;
-		max-width: 480px;
-		margin: 0 auto;
-		position: relative;
-		height: calc(100dvh - 45px - 15px);
-		background: #fff;
-		border: 1px solid #ccc;
-		border-radius: 8px;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-		padding: 20px;
-		/* overflow: hidden; */
+	:root {
+		--yellow: #f4c84f;
+		--dark: #151c2d;
 	}
-	.ww-form-content-wrapper .ww-form-steps-container {
-		position: relative;
-		min-height: calc(100% - 40px);
-		max-height: calc(100% - 40px);
-		padding-bottom: 5px;
-		overflow: auto;
+	.mitb-panel.mitb-upsert-big-panel-content {
+		padding: 20px 15px;
 	}
-	.ww-form-content-wrapper .ww-form-steps-container .ww-form-step {
-		display: block;
-		height: 100%;
-	}
-	.ww-form-content-wrapper .ww-form-content-buttons {
-		width: 100%;
+	.section-title {
 		display: flex;
-		justify-content: space-between;
 		align-items: center;
-		bottom: 0px;
-		padding: 8px 0 20px 0;
-		gap: 8px;
-	}
-	.ww-form-content-wrapper .ww-form-content-buttons.ww-step-0 {
-		justify-content: flex-end;
-	}
-
-	.ww-form-content-wrapper .ww-form-steps-container .ww-form-step header {
-		position: relative;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		flex-direction: column;
 		margin-bottom: 20px;
+		gap: 14px;
 	}
-	.ww-form-content-wrapper .ww-form-steps-container .ww-form-step header::after {
-		content: '';
-		position: absolute;
-		bottom: -8px;
-		left: 50%;
-		transform: translateX(-50%);
-		width: 25%;
-		height: 4px;
-		background-color: var(--raw);
-		border-radius: 2px;
+	.section-title .number {
+		width: 40px;
+		height: 40px;
+		border-radius: 14px;
+		background: var(--dark);
+		color: white;
+		display: grid;
+		place-items: center;
+		font-weight: 900;
+		flex: 0 0 40px;
 	}
-
-	.ww-form-content-wrapper .ww-form-steps-container .ww-form-step header h2,
-	.ww-form-content-wrapper .ww-form-steps-container .ww-form-step header small {
+	.mitb-badge {
+		background-color: #fff6dd;
+		border: 3px solid #d8c9a1;
+		margin: 1px;
+		color: #8a6400;
+		display: inline-block;
 		text-align: center;
+		font-size: 16px;
 	}
-	.ww-form-content-wrapper .ww-form-steps-container .ww-form-step header h2 {
-		font-size: 20px;
-		font-weight: 700;
-		text-transform: uppercase;
-		color: #000;
-	}
-	.ww-form-content-wrapper .ww-form-steps-container .ww-form-step .mitb-container {
+	.mitb-upsert-panels {
 		display: grid;
-		height: 100%;
-		grid-template-rows: repeat(2, 1fr);
-		gap: 12px;
-	}
-	.mitb-container label .mitb-card {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 12px;
-		padding: 12px;
-		border: 1px solid #ddd;
-		border-radius: 8px;
-		cursor: pointer;
-		transition: all 0.2s ease;
-	}
-	.mitb-container label .mitb-card.selected {
-		border-color: #0070f3;
-		background-color: #e6f0ff;
-	}
-
-	.ww-form-content-wrapper .ww-form-steps-container .ww-form-step .wrestlers-list-container {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-		padding-right: 8px;
-		gap: 12px;
-	}
-
-	.wrestlers-list-container label .wrestler-card {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
+		grid-template-columns: 1fr 300px;
 		gap: 10px;
-		padding: 8px;
-		border: 1px solid #ddd;
-		border-radius: 8px;
-		transition: all 0.2s ease;
-		cursor: pointer;
 	}
-	.wrestlers-list-container label .wrestler-card.selected {
-		border-color: #0070f3;
-		background-color: #e6f0ff;
+	.mitb-upsert-panels .mitb-panel {
+		background-color: #fff;
+		border: 1px solid #ccc;
+		border-radius: 0.5rem;
+		min-height: 300px;
+		overflow: hidden;
+	}
+
+	.mitb-upsert-summary-panel {
+		display: flex;
+		flex-direction: column;
+	}
+	.mitb-upsert-summary-panel .mitb-summary-hero {
+		width: 100%;
+		min-height: 150px;
+		padding: 25px;
+		background:
+			radial-gradient(circle at top right, rgba(244, 200, 79, 0.45), transparent 35%),
+			linear-gradient(145deg, #151c2d, #0f172a);
+	}
+
+	.mitb-upsert-summary-panel .mitb-summary-content {
+		display: flex;
+		flex-direction: column;
+		padding: 15px;
+		gap: 10px;
+	}
+	.mitb-upsert-summary-panel .mitb-summary-content hr {
+		margin: 0 -15px;
+		width: calc(100% + 30px);
+		border: 0;
+	}
+
+	.mitb-upsert-summary-panel .mitb-summary-content .mitb-summary-row .mitb-summary-row-label {
+		display: block;
+		font-weight: bold;
+		text-transform: uppercase;
+	}
+
+	@media only screen and (max-width: 768px) {
+		.mitb-upsert-panels {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>
