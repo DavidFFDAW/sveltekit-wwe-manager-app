@@ -9,6 +9,8 @@ type Wrestler = {
 	name: string;
 	slug: string;
 	image_name: string | null;
+	brand: string;
+	status: string;
 	sex: 'm' | 'f';
 }
 
@@ -18,7 +20,7 @@ export const load = async ({ url }) => {
 	const reigns = new ReignsRepository();
 
 	const wrestlersList = await wrestlers.get({
-		select: { id: true, name: true, slug: true, sex: true, image_name: true },
+		select: { id: true, name: true, slug: true, sex: true, image_name: true, brand: true, status: true },
 		where: {
 			status: { not: { in: ['released', 'injured'] } }
 		},

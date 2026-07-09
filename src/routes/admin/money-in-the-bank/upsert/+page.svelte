@@ -2,22 +2,30 @@
 	import { errorimage } from '$lib/actions/error.image';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import { Utils } from '$lib/utils/general.utils.js';
-	import type { ChampionshipReign } from '@prisma/client';
 
+	const maxItems = 50;
 	let { data } = $props();
 	let upd = $state(data.upsert.upsertDatas);
+	let filters: Record<string, string> = $state({
+		search: ''
+	});
 
 	let date = $state(new Date(upd.date));
 	let wrestlerList = $derived(data.upsert.wrestlers || []);
-	let selectedWrestler = $derived(data.upsert.wrestlersMap?.get(upd.wrestler_id) || ({} as any));
-	$inspect({
-		upsert: data.upsert,
-		upsertDatas: upd,
-		selectedWrestler,
-		wrestlerList,
-		map: data.upsert.wrestlersMap,
-		today: date
+	let filteredList = $derived.by(() => {
+		if (!filters.search && !filters.brand && !filters.status)
+			return wrestlerList.slice(0, maxItems);
+		return wrestlerList
+			.filter((wrestler) => {
+				const searchMatch = filters.search
+					? wrestler.name.toLowerCase().includes(filters.search.toLowerCase())
+					: true;
+				return searchMatch;
+			})
+			.slice(0, maxItems);
 	});
+
+	let selectedWrestler = $derived(data.upsert.wrestlersMap?.get(upd.wrestler_id) || ({} as any));
 </script>
 
 <section class="mitb-upsert-page">
@@ -44,111 +52,51 @@
 				<div class="mitb-selector-select-wrestler">
 					<div class="mitb-selector-select-toolbar">
 						<label class="search">
-							<input type="search" placeholder="Buscar por nombre, marca, división o estado..." />
+							<input
+								type="search"
+								placeholder="Buscar por nombre, marca, división o estado..."
+								bind:value={filters.search}
+							/>
 						</label>
-						<div class="filters">
-							<button type="button" class="chip active">Todos</button>
-							<button type="button" class="chip">Raw</button>
-							<button type="button" class="chip">SmackDown</button>
-							<button type="button" class="chip">NXT</button>
-							<button type="button" class="chip">Activos</button>
-							<button type="button" class="chip">Part-time</button>
-						</div>
 					</div>
 
 					<div class="results-info">
-						<span>Mostrando 124 luchadores disponibles</span>
-						<span>1 seleccionado</span>
+						<span>Mostrando {filteredList.length} luchadores disponibles</span>
+						{#if upd.wrestler_id}<span>1 seleccionado</span>{/if}
 					</div>
+
 					<div class="wrestler-list">
-						<label class="wrestler-row">
-							<input type="radio" name="wrestler_id" value="1" checked="" />
-							<div class="wrestler-row-inner">
-								<div class="avatar">
-									<img src="https://placehold.co/120x120/dbeafe/1e3a8a?text=TS" alt="" />
+						{#each filteredList as wrestler}
+							{@const initials = wrestler.name
+								.split(' ')
+								.map((n) => n[0])
+								.join('')}
+							<label class="wrestler-row">
+								<input
+									type="radio"
+									name="wrestler_id"
+									value={wrestler.id}
+									bind:group={upd.wrestler_id}
+								/>
+								<div class="wrestler-row-inner">
+									<div class="avatar">
+										<img src="https://placehold.co/120x120/dbeafe/1e3a8a?text={initials}" alt="" />
+									</div>
+
+									<div class="wrestler-main">
+										<strong>{wrestler.name}</strong>
+										<span
+											>División {wrestler.sex == 'm' ? 'masculina' : 'femenina'} · {wrestler.status}</span
+										>
+									</div>
+
+									<div class="badges">
+										<span class="badge {wrestler.brand.toLowerCase()}">{wrestler.brand}</span>
+										<span class="check">✓</span>
+									</div>
 								</div>
-
-								<div class="wrestler-main">
-									<strong>Tiffany Stratton</strong>
-									<span>División femenina · Activa</span>
-								</div>
-
-								<div class="badges">
-									<span class="badge smackdown">SmackDown</span>
-									<span class="check">✓</span>
-								</div>
-							</div>
-						</label>
-
-						<label class="wrestler-row">
-							<input type="radio" name="wrestler_id" value="2" />
-							<div class="wrestler-row-inner">
-								<div class="avatar">
-									<img src="https://placehold.co/120x120/fce7f3/9d174d?text=RR" alt="" />
-								</div>
-
-								<div class="wrestler-main">
-									<strong>Rhea Ripley</strong>
-									<span>División femenina · Activa</span>
-								</div>
-
-								<div class="badges">
-									<span class="badge raw">Raw</span>
-									<span class="check">✓</span>
-								</div>
-							</div>
-						</label>
-
-						<label class="wrestler-row">
-							<input type="radio" name="wrestler_id" value="3" />
-							<div class="wrestler-row-inner">
-								<div class="avatar">LK</div>
-
-								<div class="wrestler-main">
-									<strong>LA Knight</strong>
-									<span>División masculina · Activo</span>
-								</div>
-
-								<div class="badges">
-									<span class="badge smackdown">SmackDown</span>
-									<span class="check">✓</span>
-								</div>
-							</div>
-						</label>
-
-						<label class="wrestler-row">
-							<input type="radio" name="wrestler_id" value="4" />
-							<div class="wrestler-row-inner">
-								<div class="avatar">JU</div>
-
-								<div class="wrestler-main">
-									<strong>Jey Uso</strong>
-									<span>División masculina · Activo</span>
-								</div>
-
-								<div class="badges">
-									<span class="badge raw">Raw</span>
-									<span class="check">✓</span>
-								</div>
-							</div>
-						</label>
-
-						<label class="wrestler-row">
-							<input type="radio" name="wrestler_id" value="5" />
-							<div class="wrestler-row-inner">
-								<div class="avatar">CB</div>
-
-								<div class="wrestler-main">
-									<strong>Carmelo Hayes</strong>
-									<span>División masculina · Activo</span>
-								</div>
-
-								<div class="badges">
-									<span class="badge smackdown">SmackDown</span>
-									<span class="check">✓</span>
-								</div>
-							</div>
-						</label>
+							</label>
+						{/each}
 					</div>
 				</div>
 			</div>
@@ -250,7 +198,7 @@
 		text-transform: uppercase;
 	}
 
-	@media only screen and (max-width: 768px) {
+	@media only screen and (max-width: 900px) {
 		.mitb-upsert-panels {
 			grid-template-columns: 1fr;
 		}
