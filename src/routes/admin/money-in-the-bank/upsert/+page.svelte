@@ -67,32 +67,37 @@
 
 					<div class="wrestler-list">
 						{#each filteredList as wrestler}
-							{@const initials = wrestler.name
-								.split(' ')
-								.map((n) => n[0])
-								.join('')}
-							<label class="wrestler-row">
+							<label class="wrestler-row relative">
 								<input
 									type="radio"
 									name="wrestler_id"
+									class="app-radio"
 									value={wrestler.id}
 									bind:group={upd.wrestler_id}
 								/>
-								<div class="wrestler-row-inner">
-									<div class="avatar">
-										<img src="https://placehold.co/120x120/dbeafe/1e3a8a?text={initials}" alt="" />
+								<div class="wrestler-row-inner inner wrestler-card">
+									<div class="wrestler-card-inner">
+										<img
+											width="60"
+											height="60"
+											src={wrestler.image_name}
+											alt=""
+											class="wrestler-image"
+											use:errorimage
+										/>
+										<div class="wrestler-main">
+											<strong class="wrestler-name">{wrestler.name}</strong>
+											<span class="division-text">
+												División {wrestler.sex == 'm' ? 'masculina' : 'femenina'} · {wrestler.status}
+											</span>
+										</div>
 									</div>
+									<div class="wrestler-card-badges">
+										<span class="badge brand-badge {wrestler.brand.toLowerCase()}">
+											{wrestler.brand}
+										</span>
 
-									<div class="wrestler-main">
-										<strong>{wrestler.name}</strong>
-										<span
-											>División {wrestler.sex == 'm' ? 'masculina' : 'femenina'} · {wrestler.status}</span
-										>
-									</div>
-
-									<div class="badges">
-										<span class="badge {wrestler.brand.toLowerCase()}">{wrestler.brand}</span>
-										<span class="check">✓</span>
+										<span class="check-badge">✓</span>
 									</div>
 								</div>
 							</label>
@@ -196,6 +201,76 @@
 		display: block;
 		font-weight: bold;
 		text-transform: uppercase;
+	}
+
+	.wrestler-list {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+	.wrestler-row-inner.wrestler-card {
+		border: 1px solid #ccc;
+		background-color: #fff;
+		border-radius: 0.5rem;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 10px;
+		gap: 10px;
+	}
+	.wrestler-row-inner.wrestler-card img.wrestler-image {
+		width: 60px;
+		height: 60px;
+		aspect-ratio: 1/1;
+		object-fit: cover;
+		border: 1px solid #0f172a;
+		border-radius: 0.5rem;
+	}
+
+	.wrestler-card-badges {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+	.wrestler-card-badges .check-badge {
+		display: none;
+		width: 25px;
+		height: 25px;
+		color: var(--dark);
+		background-color: var(--yellow);
+		font-weight: bold;
+		text-align: center;
+		line-height: 25px;
+		border-radius: 50%;
+	}
+
+	label.wrestler-row input[type='radio']:checked + .wrestler-row-inner.wrestler-card .check-badge {
+		display: inline-block;
+	}
+
+	.wrestler-card .brand-badge {
+		padding: 5px 8px;
+		border-radius: 999px;
+		font-size: 12px;
+		font-weight: 900;
+		background: #eef2ff;
+		color: #3730a3;
+		text-transform: capitalize;
+	}
+	.wrestler-card .brand-badge.raw {
+		background: #fee2e2;
+		color: #991b1b;
+	}
+
+	.wrestler-card .brand-badge.smackdown {
+		background: #dbeafe;
+		color: #1d4ed8;
+	}
+
+	.wrestler-card .brand-badge.awl,
+	.wrestler-card .brand-badge.evolution {
+		background: #fef3c7;
+		color: #92400e;
 	}
 
 	@media only screen and (max-width: 900px) {

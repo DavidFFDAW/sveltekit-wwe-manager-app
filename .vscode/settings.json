@@ -1,3 +1,27 @@
 {
+	"editor.formatOnType": false,
+	"editor.formatOnPaste": false,
 	"editor.formatOnSave": true,
+	"files.watcherExclude": {
+		"**/.git/**": true,
+		"**/node_modules/**": true,
+		"**/.svelte-kit/**": true,
+		"**/build/**": true,
+		"**/dist/**": true,
+		"**/coverage/**": true,
+		"**/logs/**": true,
+		"**/tmp/**": true,
+		"**/.cache/**": true
+	},
+	"search.exclude": {
+		"**/.git": true,
+		"**/node_modules": true,
+		"**/.svelte-kit": true,
+		"**/build": true,
+		"**/dist": true,
+		"**/coverage": true,
+		"**/logs": true,
+		"**/tmp": true,
+		"**/.cache": true
+	}
 }

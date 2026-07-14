@@ -56,6 +56,25 @@ export const load = async ({ url }) => {
 export const actions = {
 	default: async ({ request }) => {
 		const data = await request.formData();
+		const updateId = Helpers.getUpdateID(data);
+
+		const wrestlerId = data.get('wrestler_id') as string | null;
+		if (!wrestlerId || isNaN(Number(wrestlerId)))
+			return Helpers.error('Wrestler inválido', 400);
+
+		const gender = data.get('mitb_gender') as string | null;
+		if (!gender || !['m', 'f'].includes(gender))
+			return Helpers.error('Género inválido', 400);
+
+		const championships = new ChampionshipRepository();
+		const mitb = await championships.getRow({
+			where: {
+				type: 'mitb',
+				gender: gender,
+			},
+		});
+
+		// const reigns = new ReignsRepository();
 		for (const [key, value] of data.entries()) {
 			console.log(`${key}: ${value}`);
 		}
