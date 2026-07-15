@@ -1,6 +1,7 @@
 import { Prisma, type BlogPost } from '@prisma/client';
 import { Repository } from './Repository';
 import prisma from '$lib/server/prisma';
+import DateUtils from '$lib/utils/date.utils';
 
 export class BlogRepository extends Repository<
 	BlogPost,
@@ -33,6 +34,7 @@ export class BlogRepository extends Repository<
 		});
 	}
 	public getPublishedPostsByStatuses(statuses: string[]): Promise<BlogPost[]> {
+		const timezoneDate = DateUtils.getDateInstanceTimezone(new Date(), 'Europe/Madrid');
 		return this.model.findMany({
 			where: {
 				visible: true,
@@ -40,7 +42,7 @@ export class BlogRepository extends Repository<
 					in: statuses
 				},
 				created_at: {
-					lte: new Date()
+					lte: timezoneDate
 				}
 			},
 			orderBy: {
@@ -56,7 +58,7 @@ export class BlogRepository extends Repository<
 				visible: true,
 				status: 'published',
 				created_at: {
-					lte: new Date()
+					lte: DateUtils.getDateInstanceTimezone(new Date(), 'Europe/Madrid'),
 				}
 			},
 			take: 1
@@ -148,7 +150,7 @@ export class BlogRepository extends Repository<
 				status: 'published',
 				category: category,
 				created_at: {
-					lte: new Date()
+					lte: DateUtils.getDateInstanceTimezone(new Date(), 'Europe/Madrid')
 				}
 			},
 			orderBy: {
