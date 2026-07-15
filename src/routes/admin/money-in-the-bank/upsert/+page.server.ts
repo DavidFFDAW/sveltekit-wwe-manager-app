@@ -25,7 +25,6 @@ export const load = async ({ url }) => {
 		json: date.toJSON(),
 		stringify: JSON.stringify(date),
 		tostring: date.toString(),
-		toinstant: date.toTemporalInstant(),
 		timestring: date.toTimeString(),
 		locale: date.toLocaleString(),
 		locale_date: date.toLocaleDateString(),
