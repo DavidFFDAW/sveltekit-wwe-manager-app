@@ -47,7 +47,7 @@
 				goto(result.location);
 				return;
 			}
-			if (response.data.type === 'redirect' && response.data.redirect) {
+			if (response.data && response.data.type === 'redirect' && response.data.redirect) {
 				Toast.success('Redirigiendo...');
 
 				await Utils.sleep(500);
