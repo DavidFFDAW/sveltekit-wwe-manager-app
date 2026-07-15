@@ -60,15 +60,8 @@ export const actions = {
 		const updateId = Helpers.getUpdateID(data);
 		const ppvWon = data.get('ppv') as string | null || 'Money in the Bank';
 		const wonTimestamp = data.get('won_date') as string | null;
-		const wonDate = DateUtils.getDateInstanceTimezone(new Date(wonTimestamp || ''), 'Europe/Madrid')
+		const wonDate = new Date(wonTimestamp || '');
 		wonDate.setHours(0, 0, 0, 0);
-
-		console.log({
-			updateId,
-			wonTimestamp,
-			wonDate,
-			ppvWon,
-		});
 
 		const wrestlerId = data.get('wrestler_id') as string | null;
 		if (!wrestlerId || isNaN(Number(wrestlerId)))
@@ -81,7 +74,6 @@ export const actions = {
 				return Helpers.error('Wrestler no encontrado', 404);
 
 			const gender = wrestler.sex.toLowerCase().trim();
-			console.log('wrestler gender', gender);
 			if (!gender || !['m', 'f'].includes(gender))
 				return Helpers.error('Género inválido', 400);
 
@@ -108,16 +100,8 @@ export const actions = {
 				await reigns.finishReign(currentMitbReign.id, currentMitbReign, wonDate);
 			}
 
-			console.log({
-				updateId,
-				currentMitbReign,
-				wrestler,
-				mitb,
-			});
-
 			const today = new Date();
 			const calculatedDays = DateUtils.getDaysBetweenDates(wonDate, today);
-			console.log('calculatedDays', calculatedDays);
 
 			await reigns.upsert({
 				Wrestler: {
