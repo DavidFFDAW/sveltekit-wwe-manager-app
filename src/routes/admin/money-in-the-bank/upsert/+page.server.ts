@@ -2,6 +2,7 @@ import { ChampionshipRepository } from "$lib/server/dao/repositories/championshi
 import { ReignsRepository } from "$lib/server/dao/repositories/reigns.repository.js";
 import { WrestlerRepository } from "$lib/server/dao/repositories/wrestler.repository";
 import { Helpers } from "$lib/server/server.helpers";
+import DateUtils from "$lib/utils/date.utils.js";
 import type { ChampionshipReign } from "@prisma/client";
 
 type Wrestler = {
@@ -15,7 +16,7 @@ type Wrestler = {
 }
 
 export const load = async ({ url }) => {
-	const date = new Date();
+	const date = DateUtils.getDateInstanceTimezone(new Date(), 'Europe/Madrid');
 	console.log({
 		time: date.getTime(),
 		iso: date.toISOString(),

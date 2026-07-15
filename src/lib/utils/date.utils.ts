@@ -12,6 +12,10 @@ export const DateUtils = {
 	getDaysBetweenDates: (startDate: Date, endDate: Date): number => {
 		const timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
 		return Math.floor(timeDiff / (1000 * 3600 * 24));
+	},
+	getDateInstanceTimezone: (date: Date, timezone: string): Date => {
+		const dateString = date.toLocaleString('en-US', { timeZone: timezone });
+		return new Date(dateString);
 	}
 };
 
