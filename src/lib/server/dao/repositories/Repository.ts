@@ -183,9 +183,6 @@ export abstract class Repository<
 		return this.model.update({ where: { id }, data });
 	}
 	upsert(upsert: CreateInput | UpdateInput, updateId?: number | null): Promise<T> {
-		if (!updateId) {
-			throw new Error('updateId must be provided for upsert operation.');
-		}
 		return !updateId
 			? this.model.create({ data: upsert as CreateInput })
 			: this.model.update({
