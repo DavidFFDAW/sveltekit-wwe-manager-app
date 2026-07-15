@@ -75,7 +75,7 @@
 							</tr>
 							<tr>
 								<td class="mitb-table-title"><strong>Tiempo</strong></td>
-								<td>{reign.days_held} días</td>
+								<td>{reign.days_held}</td>
 							</tr>
 							{#if reign.lost_date}
 								<tr>
