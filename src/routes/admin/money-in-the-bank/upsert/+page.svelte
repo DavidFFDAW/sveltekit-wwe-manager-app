@@ -37,6 +37,7 @@
 		method="post"
 		showButtons={false}
 		updateId={upd.id}
+		redirect="/admin/money-in-the-bank"
 		classes="w1 form-upsert-mitb-reign"
 	>
 		<div class="mitb-upsert-panels">
@@ -104,9 +105,26 @@
 						{/each}
 					</div>
 				</div>
+
+				<button type="submit" class="btn cta">
+					<i class="bi bi-check-lg"></i>
+					Guardar
+				</button>
 			</div>
 			<div class="mitb-panel mitb-upsert-summary-panel">
-				<div class="mitb-summary-hero"></div>
+				<div class="mitb-summary-hero">
+					{#if selectedWrestler && selectedWrestler.image_name}
+						<img
+							class="preview-wrestler-image"
+							src={selectedWrestler.image_name}
+							alt={selectedWrestler.name}
+							width="100"
+							height="100"
+							use:errorimage
+						/>
+					{/if}
+				</div>
+
 				<div class="mitb-summary-content">
 					<div class="mitb-summary-row">
 						<span class="mitb-summary-row-label">Fecha</span>
@@ -161,13 +179,14 @@
 	}
 	.mitb-upsert-panels {
 		display: grid;
-		grid-template-columns: 1fr 300px;
-		gap: 10px;
+		grid-template-columns: minmax(0, 1fr) 360px;
+		gap: 24px;
 	}
 	.mitb-upsert-panels .mitb-panel {
 		background-color: #fff;
 		border: 1px solid #ccc;
 		border-radius: 0.5rem;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 		min-height: 300px;
 		overflow: hidden;
 	}
@@ -178,11 +197,21 @@
 	}
 	.mitb-upsert-summary-panel .mitb-summary-hero {
 		width: 100%;
+		position: relative;
 		min-height: 150px;
 		padding: 25px;
 		background:
 			radial-gradient(circle at top right, rgba(244, 200, 79, 0.45), transparent 35%),
 			linear-gradient(145deg, #151c2d, #0f172a);
+	}
+	.mitb-upsert-summary-panel .mitb-summary-hero .preview-wrestler-image {
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		transform: translate(-50%, 0);
+		width: auto;
+		height: 95%;
+		object-fit: cover;
 	}
 
 	.mitb-upsert-summary-panel .mitb-summary-content {
@@ -206,6 +235,8 @@
 	.wrestler-list {
 		display: flex;
 		flex-direction: column;
+		max-height: 400px;
+		overflow-y: auto;
 		gap: 10px;
 	}
 	.wrestler-row-inner.wrestler-card {
@@ -219,8 +250,8 @@
 		gap: 10px;
 	}
 	.wrestler-row-inner.wrestler-card img.wrestler-image {
-		width: 60px;
-		height: 60px;
+		width: 45px;
+		height: 45px;
 		aspect-ratio: 1/1;
 		object-fit: cover;
 		border: 1px solid #0f172a;

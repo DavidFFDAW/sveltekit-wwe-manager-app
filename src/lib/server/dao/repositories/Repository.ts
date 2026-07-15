@@ -182,6 +182,19 @@ export abstract class Repository<
 	updateById(id: number, data: UpdateInput): Promise<T> {
 		return this.model.update({ where: { id }, data });
 	}
+	upsert(upsert: CreateInput | UpdateInput, updateId?: number | null): Promise<T> {
+		if (!updateId) {
+			throw new Error('updateId must be provided for upsert operation.');
+		}
+		return !updateId
+			? this.model.create({ data: upsert as CreateInput })
+			: this.model.update({
+				where: {
+					id: updateId
+				},
+				data: upsert as UpdateInput
+			});
+	}
 
 	bulkUpdate(where: WhereUniqueInput, data: UpdateInput): Promise<T[]> {
 		return this.model.updateMany({ where, data });

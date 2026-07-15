@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { errorimage } from '$lib/actions/error.image';
-	import ButtonAccordion from '$lib/components/buttons/button-accordion.svelte';
 	import SimpleAsyncForm from '$lib/components/forms/simple-async-form.svelte';
 	import { Utils } from '$lib/utils/general.utils';
 	import type { BlogPost } from '@prisma/client';
 	import { fade } from 'svelte/transition';
 
+	const today = new Date();
 	let { post }: { post: BlogPost } = $props();
 </script>
 
@@ -13,10 +13,9 @@
 	<div class="post-card-inner">
 		<div class="image-container">
 			<img src={post.image} alt={post.title} width="150" height="150" use:errorimage />
-			<a href={`/blog/${post.slug}`} target="_blank" class="w1 btn info icon">
-				<i class="bi bi-file-earmark-text-fill"></i>
-				<span>Ver post</span>
-			</a>
+			{#if post.created_at && post.created_at.getTime() > today.getTime()}
+				<div class="post-card-banner post-card-banner-unpublished">Post aun no publicado</div>
+			{/if}
 		</div>
 		<div class="post-card-datas">
 			<header class="post-card-title">
@@ -33,6 +32,14 @@
 
 	<SimpleAsyncForm classes="w1 blog-post-card-actions" updateId={post.id} method="post">
 		<footer class="blog-post-card-actions actions-buttons">
+			<a
+				href={`/blog/${post.slug}`}
+				target="_blank"
+				class="btn small rounded success icon icon-gap-5"
+			>
+				<i class="bi bi-eye-fill"></i>
+				<span>Ver post</span>
+			</a>
 			{#if post.status !== 'draft'}
 				<button
 					class="btn small rounded info icon icon-gap-5"
@@ -77,14 +84,9 @@
 				<span>Notificaciones</span>
 			</a>
 
-			<a href={`/admin/blog/update/${post.id}`} class="btn small warn rounded icon icon-gap-5">
-				<i class="bi bi-pencil"></i>
-				<span>Editar este post</span>
-			</a>
-
 			<a href={`/admin/blog/upsert?id=${post.id}`} class="btn small warn rounded icon icon-gap-5">
 				<i class="bi bi-pencil"></i>
-				<span>Upsert</span>
+				<span>Editar post</span>
 			</a>
 
 			<button
@@ -101,6 +103,16 @@
 </div>
 
 <style>
+	.post-card-banner.post-card-banner-unpublished {
+		width: 100%;
+		text-align: center;
+		background-color: #9e0505;
+		color: #fff;
+		font-weight: 700;
+		border-radius: 0 0 10px 10px;
+		padding: 5px 10px;
+		text-align: center;
+	}
 	.wwe-post-card.post-card {
 		width: 100%;
 		display: flex;
