@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { errorimage } from '$lib/actions/error.image';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
+	import DateInput from '$lib/components/forms/date/date-input.svelte';
+	import Input from '$lib/components/forms/inputs/input.svelte';
 	import { Utils } from '$lib/utils/general.utils.js';
 
 	const maxItems = 50;
@@ -26,6 +28,13 @@
 	});
 
 	let selectedWrestler = $derived(data.upsert.wrestlersMap?.get(upd.wrestler_id) || ({} as any));
+
+	function scrollToPreview() {
+		const preview = document.querySelector('.preview-wrestler-image');
+		if (preview) {
+			preview.scrollIntoView({ behavior: 'smooth', block: 'center' });
+		}
+	}
 </script>
 
 <section class="mitb-upsert-page">
@@ -42,27 +51,20 @@
 	>
 		<div class="mitb-upsert-panels">
 			<div class="mitb-panel mitb-upsert-big-panel-content">
-				<div class="section-title">
-					<div class="number">1</div>
-					<div>
-						<h2>Ganador del combate</h2>
-						<p>Listado compacto preparado para rosters largos.</p>
-					</div>
-				</div>
-
 				<div class="mitb-selector-select-wrestler">
 					<div class="mitb-selector-select-toolbar">
 						<label class="search">
 							<input
 								type="search"
+								class="search-input"
 								placeholder="Buscar por nombre, marca, división o estado..."
 								bind:value={filters.search}
 							/>
 						</label>
 					</div>
 
-					<div class="results-info">
-						<span>Mostrando {filteredList.length} luchadores disponibles</span>
+					<div class="mitb-banner-count-info">
+						<span>Mostrando {filteredList.length} luchadores</span>
 						{#if upd.wrestler_id}<span>1 seleccionado</span>{/if}
 					</div>
 
@@ -75,6 +77,8 @@
 									class="app-radio"
 									value={wrestler.id}
 									bind:group={upd.wrestler_id}
+									onclick={scrollToPreview}
+									onchange={scrollToPreview}
 								/>
 								<div class="wrestler-row-inner inner wrestler-card">
 									<div class="wrestler-card-inner">
@@ -89,7 +93,7 @@
 										<div class="wrestler-main">
 											<strong class="wrestler-name">{wrestler.name}</strong>
 											<span class="division-text">
-												División {wrestler.sex == 'm' ? 'masculina' : 'femenina'} · {wrestler.status}
+												División {wrestler.sex == 'M' ? 'masculina' : 'femenina'} · {wrestler.status}
 											</span>
 										</div>
 									</div>
@@ -105,12 +109,8 @@
 						{/each}
 					</div>
 				</div>
-
-				<button type="submit" class="btn cta">
-					<i class="bi bi-check-lg"></i>
-					Guardar
-				</button>
 			</div>
+
 			<div class="mitb-panel mitb-upsert-summary-panel">
 				<div class="mitb-summary-hero">
 					{#if selectedWrestler && selectedWrestler.image_name}
@@ -126,16 +126,20 @@
 				</div>
 
 				<div class="mitb-summary-content">
-					<div class="mitb-summary-row">
-						<span class="mitb-summary-row-label">Fecha</span>
-						<span class="mitb-summary-row-value">{Utils.formatDate(date)}</span>
+					<div class="mitb-summary-row form-item">
+						<label class="form-label label">
+							<span class="label-text">Fecha</span>
+							<input type="date" name="won_date" value={upd.date} />
+						</label>
 					</div>
 
 					<hr />
 
-					<div class="mitb-summary-row">
-						<span class="mitb-summary-row-label">Evento</span>
-						<span class="mitb-summary-row-value">{upd.ppv}</span>
+					<div class="w1 button-container flex end acenter">
+						<button type="submit" class="btn cta">
+							<i class="bi bi-check-lg"></i>
+							Guardar
+						</button>
 					</div>
 				</div>
 			</div>
@@ -157,16 +161,45 @@
 		margin-bottom: 20px;
 		gap: 14px;
 	}
-	.section-title .number {
-		width: 40px;
-		height: 40px;
-		border-radius: 14px;
-		background: var(--dark);
-		color: white;
-		display: grid;
-		place-items: center;
-		font-weight: 900;
-		flex: 0 0 40px;
+	.mitb-banner-count-info {
+		width: calc(100% + 30px);
+		margin: 10px -15px 10px -15px;
+		padding: 10px 15px;
+		border-top: 1px solid #ccc;
+		border-bottom: 1px solid #ccc;
+		padding-bottom: 5px;
+		text-align: center;
+		font-weight: 600;
+		font-size: 14px;
+	}
+
+	.search-input {
+		width: 100%;
+		padding: 12px 15px;
+		background-color: #fff;
+		border: 0.5px solid #ccc;
+		color: var(--dark);
+		border-radius: 12px;
+		font-size: 14px;
+		box-shadow: none;
+	}
+	.search-input:focus {
+		outline: none;
+		border-color: var(--yellow);
+		box-shadow: 0 0 0 2px rgba(244, 200, 79, 0.3);
+	}
+	.search-input::placeholder {
+		color: #999;
+		font-style: italic;
+		font-size: 12px;
+	}
+	.form-item input[type='date'] {
+		width: 100%;
+		padding: 10px 12px;
+		border: 1px solid #ccc;
+		border-radius: 12px;
+		font-weight: 400;
+		font-size: 14px;
 	}
 	.mitb-badge {
 		background-color: #fff6dd;
@@ -233,9 +266,12 @@
 	}
 
 	.wrestler-list {
+		width: calc(100% + 30px);
+		margin: 10px -15px 10px -15px;
+		padding: 10px 15px;
 		display: flex;
 		flex-direction: column;
-		max-height: 400px;
+		max-height: 50dvh;
 		overflow-y: auto;
 		gap: 10px;
 	}
@@ -293,6 +329,7 @@
 		color: #991b1b;
 	}
 
+	.wrestler-card .brand-badge.SD,
 	.wrestler-card .brand-badge.smackdown {
 		background: #dbeafe;
 		color: #1d4ed8;

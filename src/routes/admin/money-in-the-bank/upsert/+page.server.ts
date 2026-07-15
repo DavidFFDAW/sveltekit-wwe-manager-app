@@ -2,6 +2,7 @@ import { ChampionshipRepository } from "$lib/server/dao/repositories/championshi
 import { ReignsRepository } from "$lib/server/dao/repositories/reigns.repository.js";
 import { WrestlerRepository } from "$lib/server/dao/repositories/wrestler.repository";
 import { Helpers } from "$lib/server/server.helpers";
+import { DateUtils } from "$lib/utils/date.utils";
 import type { ChampionshipReign } from "@prisma/client";
 
 type Wrestler = {
@@ -11,7 +12,7 @@ type Wrestler = {
 	image_name: string | null;
 	brand: string;
 	status: string;
-	sex: 'm' | 'f';
+	sex: 'M' | 'F';
 }
 
 export const load = async ({ url }) => {
@@ -59,7 +60,7 @@ export const actions = {
 		const updateId = Helpers.getUpdateID(data);
 		const ppvWon = data.get('ppv') as string | null || 'Money in the Bank';
 		const wonTimestamp = data.get('won_date') as string | null;
-		const wonDate = wonTimestamp ? new Date(wonTimestamp) : new Date();
+		const wonDate = DateUtils.getDateInstanceTimezone(new Date(wonTimestamp || ''), 'Europe/Madrid')
 		wonDate.setHours(0, 0, 0, 0);
 
 		console.log({
@@ -104,8 +105,7 @@ export const actions = {
 			})
 
 			if (currentMitbReign && !updateId) {
-				console.log('Current MITB reign exists, finishing it before creating a new one');
-				// await reigns.finishReign(currentMitbReign.id, currentMitbReign, wonDate);
+				await reigns.finishReign(currentMitbReign.id, currentMitbReign, wonDate);
 			}
 
 			console.log({
@@ -115,7 +115,9 @@ export const actions = {
 				mitb,
 			});
 
-			return Helpers.success('Aqui se harían las cosas', 400);
+			const today = new Date();
+			const calculatedDays = DateUtils.getDaysBetweenDates(wonDate, today);
+			console.log('calculatedDays', calculatedDays);
 
 			await reigns.upsert({
 				Wrestler: {
@@ -125,9 +127,10 @@ export const actions = {
 					connect: { id: mitb.id }
 				},
 				ppv_won: ppvWon,
-				victory_way: data.get('match') as string | null || 'Ladder match',
+				victory_way: "Ladder match",
 				won_date: wonDate,
 				current: currentMitbReign ? currentMitbReign.current : true,
+				days: calculatedDays,
 			}, updateId);
 		} catch (error) {
 			console.error('Error updating reign:', error);
