@@ -1,6 +1,7 @@
 import { Prisma, type ChampionshipReign } from '@prisma/client';
 import { Repository } from './Repository';
 import { ReignUtils } from '$lib/utils/reign.utils';
+import type { RankingChampionshipReign, RankingReign } from '$lib/types/app.types';
 
 export class ReignsRepository extends Repository<
 	ChampionshipReign,
@@ -120,5 +121,47 @@ export class ReignsRepository extends Repository<
 			days: real_days,
 			current: false,
 		});
+	}
+
+	async getRankingByWrestler(): Promise<RankingReign[]> {
+		const list = await this.prisma.$queryRaw`SELECT
+            COUNT(w.name) AS total_reigns,
+            SUM(r.days) AS total_days, w.id AS wrestler_id, w.name, w.image_name AS wrestler_image
+            FROM championship_reigns r 
+            JOIN wrestler w 
+            ON (r.wrestler_id = w.id OR r.partner = w.id) 
+            JOIN championship c ON c.id = r.championship_id 
+            WHERE r.can_stats_count = true
+            GROUP BY w.id ORDER BY total_days DESC` as RankingReign[];
+
+		return list.map((item) => ({
+			name: item.name,
+			total_reigns: Number(item.total_reigns),
+			total_days: Number(item.total_days),
+			wrestler_id: Number(item.wrestler_id),
+			wrestler_image: item.wrestler_image,
+		}));
+	}
+
+	async getRankingByChampionships(): Promise<RankingChampionshipReign[]> {
+		const list = await this.prisma.$queryRaw`SELECT
+            COUNT(c.name) AS times_won, 
+            SUM(r.days) AS total_days, w.name, w.image_name AS wrestler_image, c.name AS championship_name, c.id AS championship_id, c.image AS championship_image
+            FROM championship_reigns r 
+            JOIN wrestler w 
+            ON (r.wrestler_id = w.id OR r.partner = w.id)
+            JOIN championship c 
+            ON c.id = r.championship_id 
+            WHERE r.can_stats_count = true
+            GROUP BY c.id, w.id ORDER BY total_days DESC` as RankingChampionshipReign[];
+		return list.map((item) => ({
+			name: item.name,
+			times_won: Number(item.times_won),
+			total_days: Number(item.total_days),
+			championship_id: Number(item.championship_id),
+			wrestler_image: item.wrestler_image,
+			championship_name: item.championship_name,
+			championship_image: item.championship_image,
+		}));
 	}
 }
