@@ -46,7 +46,17 @@
 		background-color: #fff;
 		border-radius: 8px;
 		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		border: 1px solid #ddd;
 		text-align: center;
 		overflow: hidden;
+	}
+
+	@media (max-width: 600px) {
+		ul.ww-wrestlers-container {
+			grid-template-columns: 1fr;
+		}
+		ul.ww-wrestlers-container li.ww-wrestler-item {
+			padding: 0.5rem;
+		}
 	}
 </style>

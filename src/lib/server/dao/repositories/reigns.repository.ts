@@ -132,7 +132,7 @@ export class ReignsRepository extends Repository<
             ON (r.wrestler_id = w.id OR r.partner = w.id) 
             JOIN championship c ON c.id = r.championship_id 
             WHERE r.can_stats_count = true
-            GROUP BY w.id ORDER BY total_days DESC` as RankingReign[];
+            GROUP BY w.id ORDER BY total_reigns DESC, total_days DESC` as RankingReign[];
 
 		return list.map((item) => ({
 			name: item.name,
@@ -153,7 +153,7 @@ export class ReignsRepository extends Repository<
             JOIN championship c 
             ON c.id = r.championship_id 
             WHERE r.can_stats_count = true
-            GROUP BY c.id, w.id ORDER BY total_days DESC` as RankingChampionshipReign[];
+            GROUP BY c.id, w.id ORDER BY times_won DESC, total_days DESC` as RankingChampionshipReign[];
 		return list.map((item) => ({
 			name: item.name,
 			times_won: Number(item.times_won),
