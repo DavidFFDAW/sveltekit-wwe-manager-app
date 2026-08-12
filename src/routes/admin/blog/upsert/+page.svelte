@@ -3,6 +3,7 @@
 	import QuillInput from '$lib/components/forms/inputs/quill-input.svelte';
 	import Gallery from '$lib/components/gallery/gallery.svelte';
 	import Imgur from '$lib/components/modules/imgur/imgur.svelte';
+	import CategoriesSelector from './categories-selector.svelte';
 	import GenerateIaBlock from './generate-ia-block.svelte';
 	import { Utils } from '$lib/utils/general.utils.js';
 	import { fade } from 'svelte/transition';
@@ -204,6 +205,8 @@
 							{/each}
 						</select>
 					</label>
+
+					<CategoriesSelector defaultCategories={data.upsert.categories} type="checkbox" />
 
 					<label class="label">
 						<span class="label-text">Categorías</span>
