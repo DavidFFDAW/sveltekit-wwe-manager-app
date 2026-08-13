@@ -138,6 +138,7 @@ export class ReignsRepository extends Repository<
 			name: item.name,
 			total_reigns: Number(item.total_reigns),
 			total_days: Number(item.total_days),
+			calculated_time: ReignUtils.getDaysAndMonths(Number(item.total_days)),
 			wrestler_id: Number(item.wrestler_id),
 			wrestler_image: item.wrestler_image,
 		}));
@@ -159,6 +160,7 @@ export class ReignsRepository extends Repository<
 			name: item.name,
 			times_won: Number(item.times_won),
 			total_days: Number(item.total_days),
+			calculated_time: ReignUtils.getDaysAndMonths(Number(item.total_days)),
 			championship_id: Number(item.championship_id),
 			wrestler_image: item.wrestler_image,
 			championship_name: item.championship_name,

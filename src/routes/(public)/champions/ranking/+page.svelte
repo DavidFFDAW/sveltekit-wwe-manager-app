@@ -24,6 +24,9 @@
 					<p class="ww-wrestler-stats">
 						Total Reigns: {wrestler.total_reigns} | Total Days: {wrestler.total_days}
 					</p>
+					<p class="ww-wrestler-calculated-time">
+						Calculated Time: {wrestler.calculated_time}
+					</p>
 				</div>
 			</li>
 		{/each}
