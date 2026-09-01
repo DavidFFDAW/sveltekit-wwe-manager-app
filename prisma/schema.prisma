@@ -129,6 +129,7 @@ model BlogPost {
     deletable      Boolean?         @default(false) @db.TinyInt
     views          Int              @default(0) @db.Int
     ReportComments ReportComments[]
+    Injury         Injuries?        @relation("injury_post")
 
     @@map(name: "news")
 }
@@ -286,6 +287,8 @@ model Injuries {
     severity    String    @db.VarChar(50)
     start_date  DateTime? @db.DateTime
     end_date    DateTime  @db.DateTime
+    post_id     Int?      @unique @db.Int
+    Post        BlogPost? @relation("injury_post", fields: [post_id], references: [id])
     created_at  DateTime? @default(now())
     updated_at  DateTime? @updatedAt
 
