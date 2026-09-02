@@ -87,6 +87,12 @@ export abstract class Repository<
 		});
 	}
 
+	getById(id: string | number): Promise<T | null> {
+		return this.model.findUnique({
+			where: { id: Number(id) }
+		});
+	}
+
 	getBySlugOrId(slugOrId: string | number): Promise<T | null> {
 		const isId = typeof slugOrId === 'number' || !isNaN(Number(slugOrId));
 		const whereQuery = isId ? { id: Number(slugOrId) } : { slug: slugOrId };

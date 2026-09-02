@@ -35,4 +35,19 @@ export class UsersRepository extends Repository<
 			}
 		});
 	}
+
+	public getUsersBaseDataByRole(role: string) {
+		return this.get({
+			select: {
+				id: true,
+				name: true,
+				email: true,
+				username: true,
+			},
+			where: {
+				active: true,
+				type: role.toLowerCase().trim()
+			}
+		});
+	}
 }

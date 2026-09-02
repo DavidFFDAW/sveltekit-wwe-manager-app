@@ -288,6 +288,7 @@ model Injuries {
     start_date  DateTime? @db.DateTime
     end_date    DateTime  @db.DateTime
     post_id     Int?      @unique @db.Int
+    is_notified Boolean   @default(false) @db.TinyInt
     Post        BlogPost? @relation("injury_post", fields: [post_id], references: [id])
     created_at  DateTime? @default(now())
     updated_at  DateTime? @updatedAt

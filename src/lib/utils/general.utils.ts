@@ -184,6 +184,14 @@ export const Utils = {
 
 		return date.toLocaleDateString('es-ES', options);
 	},
+	toShortDate: (date: Date | null): string => {
+		if (!date) return '';
+		return date.toLocaleDateString('es-ES', {
+			year: 'numeric',
+			month: 'short',
+			day: 'numeric'
+		});
+	},
 	toLocaleDate(
 		date: Date | string | null,
 		options: Intl.DateTimeFormatOptions = {
