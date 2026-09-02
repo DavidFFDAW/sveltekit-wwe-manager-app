@@ -16,7 +16,7 @@ export async function load({ url }) {
 
 	return {
 		wrestlers: wrestlers.list,
-		total: wrestlers.total,
+		total: wrestlers.totalItems,
 		pages: wrestlers.pages,
 		page,
 		perPage

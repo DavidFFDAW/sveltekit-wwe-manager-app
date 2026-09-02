@@ -2,7 +2,7 @@
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import EditorForm from './components/editor-form.svelte';
 	const templateImage = 'https://davidfernandezdeveloper.es/2k/images/cody-rhodes.webp';
-	export let data = { wrestlers: [], hasApiToken: true };
+	let { data } = $props();
 </script>
 
 <PageWrapper page="wrestler-image-editor">

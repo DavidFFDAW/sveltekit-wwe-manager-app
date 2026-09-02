@@ -7,7 +7,8 @@ export class AnalyticsRepository extends Repository<
 	Prisma.AnalyticsUpdateInput,
 	Prisma.AnalyticsWhereInput,
 	Prisma.AnalyticsFindManyArgs,
-	Prisma.AnalyticsGroupByArgs
+	Prisma.AnalyticsGroupByArgs,
+	Prisma.AnalyticsAggregateArgs
 > {
 	protected requiredFields: string[] = [];
 

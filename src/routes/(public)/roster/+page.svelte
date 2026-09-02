@@ -3,7 +3,7 @@
 	import RosterCard from '$lib/components/visual/roster-card.svelte';
 	import MainHeader from '$lib/components/headers/main-header.svelte';
 
-	export let data = { wrestlers: [] };
+	let { data } = $props();
 </script>
 
 <PageWrapper page="roster-page">

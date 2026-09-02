@@ -3,7 +3,7 @@
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import ChampionCard from './champion-card.svelte';
 
-	export let data = { reigns: [] };
+	let { data } = $props();
 </script>
 
 <PageWrapper page="current-champions">

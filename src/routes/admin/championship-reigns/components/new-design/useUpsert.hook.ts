@@ -4,7 +4,6 @@ import type {
 } from './../../interfaces/reigns.interfaces';
 import { derived, writable } from 'svelte/store';
 import type { UpsertReign, UpsertReignTeams } from '../../interfaces/reigns.interfaces';
-import type { UpsertReignState } from './interfaces';
 
 const currentStep = writable(1);
 const selectedChampionshipID = writable<number | null>(null);
@@ -18,7 +17,7 @@ const wrestlers = writable<UpserReignWrestler[]>([]);
 const teams = writable<UpsertReignTeams[]>([]);
 const titleType = writable<string>('single'); // 'individual', 'equipo', 'parejaSinEquipo'
 
-export function useUpsertReign(initialData?: UpsertReignState) {
+export function useUpsertReign(initialData?: any) {
 	if (initialData) {
 		championships.set(initialData.championships);
 		wrestlers.set(initialData.wrestlers);

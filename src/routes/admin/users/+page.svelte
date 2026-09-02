@@ -3,7 +3,7 @@
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 
-	export let data = { users: [] };
+	let { data } = $props();
 </script>
 
 <PageWrapper page="admin-users">
