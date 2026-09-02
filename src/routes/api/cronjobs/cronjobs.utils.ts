@@ -7,7 +7,6 @@ export const cronjobsUtils = {
 		const now = Math.floor(Date.now() / 1000);
 		return Math.abs(now - timestamp) <= tolerance;
 	},
-
 	isSignatureValid: (slug: string, timestamp: number, signature: string): boolean => {
 		const payload = `${slug}:${timestamp}`;
 		const expected = crypto.createHmac('sha256', CRON_JOB_SECRET).update(payload).digest('hex');

@@ -1,12 +1,17 @@
 import injuries from '$lib/server/dao/injuries.js';
+import { InjuriesRepository } from '$lib/server/dao/repositories/injuries.repository';
 import { WrestlerDao } from '$lib/server/dao/wrestler.dao.js';
 import { Helpers } from '$lib/server/server.helpers.js';
 
 export const load = async () => {
-	const wrestlers = await WrestlerDao.getWrestlers();
-	const injuriesList = await injuries.getAll();
+	const injuriesRepo = new InjuriesRepository();
+	const injuriesList = await injuriesRepo.get({
+		include: { Wrestler: { select: { id: true, name: true, image_name: true } } }
+	});
 
-	return { wrestlers, injuries: injuriesList };
+	return {
+		injuries: injuriesList as any[]
+	};
 };
 
 const commonDatasValidator = (formData: FormData) => {
