@@ -14,7 +14,12 @@
 	</header>
 
 	<div class="step-inner">
-		<PagedList list={championships} bind:selected={selectedChampionshipId} name="championship_id" />
+		<PagedList
+			list={championships}
+			bind:selected={selectedChampionshipId}
+			name="championship_id"
+			nextStep="2"
+		/>
 	</div>
 	<div class="buttons">
 		<button type="button" class="btn secondary" onclick={previousStep}>Atras</button>

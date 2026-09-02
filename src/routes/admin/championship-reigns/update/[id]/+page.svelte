@@ -7,18 +7,10 @@
 	import type {
 		UpsertReign,
 		UpserReignWrestler,
-		UpserReignChampionship,
-		UpsertReignTeams
+		UpserReignChampionship
 	} from '../../interfaces/reigns.interfaces';
 
-	export let data = {
-		reign: {} as any,
-		wrestlers: [],
-		championships: [],
-		ppvs: [],
-		teams: [],
-		newDesign: false
-	};
+	let { data } = $props();
 </script>
 
 <PageWrapper page="admin-championship-reigns-update-page">

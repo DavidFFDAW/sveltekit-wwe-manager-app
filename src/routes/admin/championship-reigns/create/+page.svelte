@@ -6,14 +6,8 @@
 	import UpsertReigns from '../components/upsert-reigns.svelte';
 	import type { UpserReignWrestler } from '../interfaces/reigns.interfaces';
 
-	export let data = {
-		wrestlers: [],
-		championships: [],
-		ppvs: [],
-		teams: []
-	};
-
-	$: isNewDesign = page.url.searchParams.has('new');
+	let { data } = $props();
+	let isNewDesign = $derived(page.url.searchParams.has('new'));
 </script>
 
 <PageWrapper page="admin-championship-reigns-update-page">
@@ -34,7 +28,7 @@
 					image: wrestler.image_name as string,
 					gender: wrestler.sex,
 					status: wrestler.status
-				})) as UpserReignWrestler[]}
+				})) as any[]}
 				championships={data.championships as {
 					id: number;
 					name: string;

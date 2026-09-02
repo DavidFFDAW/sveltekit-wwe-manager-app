@@ -26,7 +26,8 @@ export const customEnhance = (afterSubmit: (args: any) => void) => {
 				const errorMessage =
 					response.data?.message ||
 					'Ha ocurrido un error. Por favor, inténtalo de nuevo más tarde.';
-				return Toast.error(errorMessage);
+				Toast.error(errorMessage);
+				return;
 			}
 
 			const hasSuccess = !hasError && /20\d/g.test(result.status.toString());
@@ -36,7 +37,8 @@ export const customEnhance = (afterSubmit: (args: any) => void) => {
 				await update({ reset: false });
 				await invalidate(''); // Invalidate the current page to refresh the data
 				buttonInitiator.disabled = false;
-				return Toast.success(successMessage);
+				Toast.success(successMessage);
+				return;
 			}
 		};
 	};

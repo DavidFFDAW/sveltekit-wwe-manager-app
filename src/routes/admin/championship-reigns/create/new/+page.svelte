@@ -1,23 +1,13 @@
 <script lang="ts">
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
-	import ResourceSelector from '$lib/components/forms/selector/resource-selector.svelte';
-	import WrestlersSelector from '$lib/components/forms/selector/specific/wrestlers-selector.svelte';
-	import Icon from '$lib/components/icons/icon.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	import Image from '$lib/components/visual/image.svelte';
-	import PpvSelector from '$lib/components/visual/ppv-selector.svelte';
 	import type { Wrestler } from '@prisma/client';
 	import { fade } from 'svelte/transition';
-	import UpsertCommonDatas from '../../components/upsert-common-datas.svelte';
 
 	let step = 1;
 	const maxSteps = 3;
-	export let data = {
-		wrestlers: [],
-		championships: [],
-		ppvs: [],
-		teams: []
-	};
+	let { data } = $props();
 	const initialWrestlersList = data.wrestlers;
 	const initialChampionshipsList = data.championships;
 
@@ -74,9 +64,9 @@
 	};
 
 	const tagChampionshipsID = data.championships.filter((c) => c.tag).map((c) => c.id);
-	$: isTagChampionship = selectedChampionship
-		? tagChampionshipsID.includes(selectedChampionship)
-		: false;
+	let isTagChampionship = $derived(
+		selectedChampionship ? tagChampionshipsID.includes(selectedChampionship) : false
+	);
 </script>
 
 <PageWrapper page="admin-championship-reigns-update-page">
