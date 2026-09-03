@@ -1,33 +1,15 @@
 <script lang="ts">
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import { errorimage } from '$lib/actions/error.image';
-
-	type Wrestler = {
-		id: number;
-		name: string;
-		brand?: string | null;
-		status?: string | null;
-		image_name?: string | null;
-	};
-
-	type Injury = {
-		id?: number;
-		wrestler_id?: number;
-		injury?: string;
-		severity?: string;
-		start_date?: Date | string | null;
-		end_date?: Date | string | null;
-		is_notified?: boolean;
-		post_id?: number | null;
-	};
+	const today = new Date().toISOString().split('T')[0];
 
 	let { data } = $props();
-	let upsert = data.injury_upsert;
-	let injury: Injury = upsert.injury || {};
-	let wrestlers: Wrestler[] = upsert.wrestlers || [];
-	let isUpdate = Boolean(upsert.param_id);
+	let isCreate = data.injury_upsert.isCreate;
+	let isUpdate = !isCreate;
 
-	const today = new Date().toISOString().split('T')[0];
+	let wrestlers = data.injury_upsert.wrestlers;
+	let injuryData = data.injury_upsert.injury;
+
 	const severityOptions = [
 		{
 			value: 'low',
@@ -49,26 +31,10 @@
 		}
 	];
 
-	const severityAliases: Record<string, string> = {
-		leve: 'low',
-		low: 'low',
-		moderada: 'medium',
-		moderado: 'medium',
-		medium: 'medium',
-		grave: 'high',
-		high: 'high'
-	};
-
-	const toDateInput = (value?: Date | string | null) => {
-		if (!value) return '';
-		const date = new Date(value);
-		if (Number.isNaN(date.getTime())) return '';
-		return date.toISOString().split('T')[0];
-	};
-
-	const formatDate = (value: string) => {
+	const formatDate = (value: string | Date | undefined | null) => {
 		if (!value) return '-';
-		const [year, month, day] = value.split('-');
+		const strDate = value instanceof Date ? value.toISOString().split('T')[0] : value;
+		const [year, month, day] = strDate.split('-');
 		return `${day}/${month}/${year}`;
 	};
 
@@ -81,14 +47,12 @@
 			.join('');
 
 	let searchTerm = $state('');
-	let selectedWrestlerId = $state<number | null>(injury.wrestler_id || null);
-	let injuryName = $state(injury.injury || '');
-	let severity = $state(severityAliases[injury.severity?.toLowerCase?.() || ''] || 'medium');
-	let startDate = $state(toDateInput(injury.start_date) || today);
-	let endDate = $state(toDateInput(injury.end_date));
-	let createPost = $state(false);
-	let postTitle = $state('');
-	let postExcerpt = $state('');
+	let selectedWrestlerId = $state<number | null>(injuryData.wrestler_id || null);
+	let postData = $state({
+		title: '',
+		excerpt: '',
+		createPost: false
+	});
 
 	let filteredWrestlers = $derived.by(() => {
 		const term = searchTerm.trim().toLowerCase();
@@ -103,27 +67,27 @@
 		wrestlers.find((wrestler) => wrestler.id === selectedWrestlerId) || null
 	);
 	let selectedSeverity = $derived(
-		severityOptions.find((option) => option.value === severity) || severityOptions[1]
+		severityOptions.find((option) => option.value === injuryData.severity) || severityOptions[1]
 	);
 	let durationLabel = $derived.by(() => {
-		if (!startDate || !endDate) return '-';
+		if (!injuryData.start_date || !injuryData.end_date) return '-';
 
-		const start = new Date(`${startDate}T00:00:00`);
-		const end = new Date(`${endDate}T00:00:00`);
+		const start = new Date(`${injuryData.start_date}T00:00:00`);
+		const end = new Date(`${injuryData.end_date}T00:00:00`);
 		const diff = Math.round((end.getTime() - start.getTime()) / 86400000);
 
 		return diff >= 0 ? `${diff} días` : 'Fecha final no válida';
 	});
 
 	$effect(() => {
-		if (selectedWrestler && createPost && !postTitle.trim()) {
-			postTitle = `${selectedWrestler.name} estará de baja por lesión`;
+		if (selectedWrestler && isCreate && !postData.title.trim()) {
+			postData.title = `${selectedWrestler.name} estará de baja por lesión`;
 		}
 	});
 
 	$effect(() => {
-		if (selectedWrestler && createPost && injuryName && !postExcerpt.trim()) {
-			postExcerpt = `${selectedWrestler.name} estará alejado de la competición tras sufrir ${injuryName.toLowerCase()}.`;
+		if (selectedWrestler && isCreate && injuryData.name && !postData.excerpt.trim()) {
+			postData.excerpt = `${selectedWrestler.name} estará alejado de la competición tras sufrir ${injuryData.name.toLowerCase()}.`;
 		}
 	});
 </script>
@@ -132,7 +96,7 @@
 	<header class="page-header injury-header">
 		<div>
 			<span class="eyebrow">Gestión médica</span>
-			<h1>{isUpdate ? 'Editar lesión' : 'Registrar lesión'}</h1>
+			<h1>{!isCreate ? 'Editar lesión' : 'Registrar lesión'}</h1>
 			<p>
 				Añade la lesión al historial del luchador, define su periodo estimado de baja y deja
 				preparada la información editorial si quieres publicarla en el blog.
@@ -152,7 +116,7 @@
 			action="upsert"
 			redirect="/admin/injuries"
 			buttonText={isUpdate ? 'Actualizar lesión' : 'Guardar lesión'}
-			updateId={injury.id || ''}
+			updateId={injuryData.id || ''}
 			showButtons={false}
 			classes="injury-form-card"
 		>
@@ -233,7 +197,7 @@
 						<input
 							type="text"
 							name="injury"
-							bind:value={injuryName}
+							bind:value={injuryData.name}
 							placeholder="Ej. Rotura del ligamento cruzado anterior"
 							maxlength="255"
 							required
@@ -253,7 +217,7 @@
 										type="radio"
 										name="severity"
 										value={option.value}
-										bind:group={severity}
+										bind:group={injuryData.severity}
 										required
 									/>
 									<div class="severity-card">
@@ -279,12 +243,12 @@
 				<div class="form-grid">
 					<label class="field">
 						<span>Fecha de inicio</span>
-						<input type="date" name="start_date" bind:value={startDate} required />
+						<input type="date" name="start_date" bind:value={injuryData.start_date} required />
 					</label>
 
 					<label class="field">
 						<span>Fecha prevista de recuperación</span>
-						<input type="date" name="end_date" bind:value={endDate} required />
+						<input type="date" name="end_date" bind:value={injuryData.end_date} required />
 					</label>
 				</div>
 
@@ -302,13 +266,13 @@
 						<strong>
 							<span
 								class="pill"
-								class:done={injury.is_notified}
-								class:pending={!injury.is_notified}
+								class:done={injuryData.is_notified}
+								class:pending={!injuryData.is_notified}
 							>
-								{injury.is_notified ? 'Notificada' : 'Pendiente'}
+								{injuryData.is_notified ? 'Notificada' : 'Pendiente'}
 							</span>
 						</strong>
-						<input type="hidden" name="is_notified" value={injury.is_notified ? '1' : '0'} />
+						<input type="hidden" name="is_notified" value={injuryData.is_notified ? '1' : '0'} />
 					</div>
 
 					<div class="status-tile">
@@ -337,24 +301,29 @@
 					</div>
 
 					<label class="switch">
-						<input type="checkbox" name="create_post" value="1" bind:checked={createPost} />
+						<input
+							type="checkbox"
+							name="create_post"
+							value="1"
+							bind:checked={postData.createPost}
+						/>
 						<span class="slider"></span>
 					</label>
 				</div>
 
-				{#if createPost}
+				{#if postData.createPost}
 					<div class="blog-options">
 						<div class="form-grid">
 							<label class="field field-full">
 								<span>Título sugerido</span>
-								<input type="text" name="post_title" bind:value={postTitle} maxlength="255" />
+								<input type="text" name="post_title" bind:value={postData.title} maxlength="255" />
 							</label>
 
 							<label class="field field-full">
 								<span>Resumen / introducción</span>
 								<textarea
 									name="post_excerpt"
-									bind:value={postExcerpt}
+									bind:value={postData.excerpt}
 									placeholder="Texto introductorio de la noticia..."
 								></textarea>
 							</label>
@@ -364,15 +333,19 @@
 							<div class="status-tile">
 								<span>Post vinculado</span>
 								<strong>
-									<span class="pill" class:linked={injury.post_id} class:pending={!injury.post_id}>
-										{injury.post_id ? 'Ya vinculado' : 'Se creará al guardar'}
+									<span
+										class="pill"
+										class:linked={injuryData.post_id}
+										class:pending={!injuryData.post_id}
+									>
+										{injuryData.post_id ? 'Ya vinculado' : 'Se creará al guardar'}
 									</span>
 								</strong>
 							</div>
 
 							<div class="status-tile">
 								<span>post_id</span>
-								<strong>{injury.post_id || 'Autogenerado'}</strong>
+								<strong>{injuryData.post_id || 'Autogenerado'}</strong>
 							</div>
 						</div>
 					</div>
@@ -419,7 +392,7 @@
 				<div class="summary-list">
 					<div class="summary-item">
 						<span>Lesión</span>
-						<strong>{injuryName || 'Sin especificar'}</strong>
+						<strong>{injuryData.name || 'Sin especificar'}</strong>
 					</div>
 
 					<div class="summary-item">
@@ -429,12 +402,12 @@
 
 					<div class="summary-item">
 						<span>Inicio</span>
-						<strong>{formatDate(startDate)}</strong>
+						<strong>{formatDate(injuryData.start_date)}</strong>
 					</div>
 
 					<div class="summary-item">
 						<span>Recuperación prevista</span>
-						<strong>{formatDate(endDate)}</strong>
+						<strong>{formatDate(injuryData.end_date)}</strong>
 					</div>
 
 					<div class="summary-item">
@@ -442,17 +415,17 @@
 						<strong>
 							<span
 								class="pill"
-								class:done={injury.is_notified}
-								class:pending={!injury.is_notified}
+								class:done={injuryData.is_notified}
+								class:pending={!injuryData.is_notified}
 							>
-								{injury.is_notified ? 'Notificada' : 'Pendiente'}
+								{injuryData.is_notified ? 'Notificada' : 'Pendiente'}
 							</span>
 						</strong>
 					</div>
 
 					<div class="summary-item">
 						<span>Blog</span>
-						<strong>{createPost ? 'Crear publicación' : 'No generar publicación'}</strong>
+						<strong>{postData.createPost ? 'Crear publicación' : 'No generar publicación'}</strong>
 					</div>
 				</div>
 

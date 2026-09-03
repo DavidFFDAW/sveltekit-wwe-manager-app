@@ -5,12 +5,24 @@ import { Helpers } from '$lib/server/server.helpers.js';
 import { Utils } from '$lib/utils/general.utils.js';
 import type { BlogPost, Injuries, Prisma, Wrestler } from '@prisma/client';
 
+export type UpsertInjury = {
+	id?: number;
+	name: string;
+	wrestler_id?: number;
+	injury?: string;
+	severity?: string;
+	start_date?: Date | string | null;
+	end_date?: Date | string | null;
+	is_notified?: boolean;
+	post_id?: number | null;
+};
+
 export const load = async ({ url }) => {
 	const id = url.searchParams.get('id');
 	const Injuries = new InjuriesRepository();
 	const Wrestlers = new WrestlerRepository();
 
-	const injury = id ? await Injuries.getById(id) : {};
+	const injury = (id ? await Injuries.getById(id) : {}) as UpsertInjury;
 	const wrestlers = await Wrestlers.getNonReleasedWrestlers({
 		orderBy: {
 			name: 'asc'
@@ -21,6 +33,7 @@ export const load = async ({ url }) => {
 		injury_upsert: {
 			injury,
 			wrestlers,
+			isCreate: url.searchParams.has('id') && Boolean(injury.id),
 			param_id: id
 		}
 	};
