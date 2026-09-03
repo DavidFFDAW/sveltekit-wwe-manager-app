@@ -4,14 +4,24 @@ import { InjuriesRepository } from '$lib/server/dao/repositories/injuries.reposi
 import { UsersRepository } from '$lib/server/dao/repositories/users.repository';
 import { Helpers } from '$lib/server/server.helpers';
 
+const injuryResponse = (message: BodyInit, init: ResponseInit) => {
+	console.log({
+		message,
+		init
+	});
+	return new Response(message, init);
+}
+
 export const GET: RequestHandler = async ({ request }) => {
 	const authHeader = request.headers.get('Authorization');
 	if (!request.headers.has('Authorization') || authHeader !== `Bearer ${CRON_JOB_SECRET}`)
-		return new Response('Unauthorized', { status: 401 });
+		return injuryResponse('Unauthorized', { status: 401 });
 
 	// Siempre trabajamos con la hora de ejecución que tiene el cron
 	const today = new Date();
 	today.setUTCHours(1, 30, 0, 0);
+	console.log('Today ISO:', today.toISOString());
+
 
 	try {
 		const Injuries = new InjuriesRepository();
@@ -32,8 +42,12 @@ export const GET: RequestHandler = async ({ request }) => {
 			}
 		}) as any[];
 
+		console.log({
+			finishedInjuriesFound: finishedInjuries.length,
+		});
+
 		if (finishedInjuries.length <= 0)
-			return new Response('No se encontró ninguna lesión que haya finalizado.', { status: 200 });
+			return injuryResponse('No se encontró ninguna lesión que haya finalizado.', { status: 200 });
 
 		const injuriesIds = finishedInjuries.map((injury) => injury.id);
 		await Injuries.bulkUpdate(
@@ -52,15 +66,21 @@ export const GET: RequestHandler = async ({ request }) => {
 			? `Los luchadores ${wrestlerNames} se han recuperado de las lesiones que tenían y están listos para volver a la programación habitual.`
 			: `El luchador ${wrestlerNames} se ha recuperado de sus lesiones y está completamente recuperado y listo para volver a ser incluído en la programación.`
 
+		console.log({
+			emails,
+			message,
+			wrestlerNames,
+		});
+
 		Helpers.sendSimpleEmail(
 			emails,
 			'Recuperación lesiones',
 			message
 		);
 
-		return new Response(`Se han revisado las lesiones. Se han notificado la finalización de ${injuriesIds.length} lesiones.`, { status: 200 });
+		return injuryResponse(`Se han revisado las lesiones. Se han notificado la finalización de ${injuriesIds.length} lesiones.`, { status: 200 });
 	} catch (error) {
 		console.error('Error in check-injuries cronjob:', error);
-		return new Response('Ha habido un error interno. Revisa los logs o habla con tu administrador/proveedor para ver qué podría estar ocurriendo', { status: 500 });
+		return injuryResponse('Ha habido un error interno. Revisa los logs o habla con tu administrador/proveedor para ver qué podría estar ocurriendo', { status: 500 });
 	}
 };
