@@ -1,99 +1,56 @@
-import injuries from '$lib/server/dao/injuries.js';
+import { Utils } from '$lib/utils/general.utils.js';
 import { InjuriesRepository } from '$lib/server/dao/repositories/injuries.repository';
-import { WrestlerDao } from '$lib/server/dao/wrestler.dao.js';
-import { Helpers } from '$lib/server/server.helpers.js';
+
+const normalizeDate = (value: Date | string | null) => {
+	if (!value) return null;
+	const date = new Date(value);
+	if (Number.isNaN(date.getTime())) return null;
+	date.setUTCHours(0, 0, 0, 0);
+	return date;
+};
+
+const getSeverityLabel = (severity: string | null) => {
+	const labels: Record<string, string> = {
+		low: 'Leve',
+		medium: 'Moderada',
+		high: 'Grave'
+	};
+
+	if (!severity) return 'Sin indicar';
+	return labels[severity.toLowerCase()] || severity;
+};
+
+const getDaysLabel = (startDate: Date | null, endDate: Date | null) => {
+	if (!startDate || !endDate) return 'Sin rango';
+
+	const days = Math.max(0, Math.round((endDate.getTime() - startDate.getTime()) / 86400000));
+	return `${days} dias`;
+};
 
 export const load = async () => {
-	const injuriesRepo = new InjuriesRepository();
-	const injuriesList = await injuriesRepo.get({
+	const today = new Date();
+	const Injuries = new InjuriesRepository();
+	const injuriesList = await Injuries.get({
 		include: { Wrestler: { select: { id: true, name: true, image_name: true } } }
 	});
 
 	return {
-		injuries: injuriesList as any[]
+		injuries: injuriesList.map((injury) => {
+			const startDate = normalizeDate(injury.start_date);
+			const endDate = normalizeDate(injury.end_date);
+			const isPast = Boolean(endDate && endDate < today);
+
+			return {
+				...injury,
+				start: Utils.toShortDate(startDate),
+				end: Utils.toShortDate(endDate),
+				isPast,
+				isCurrent: !isPast,
+				statusLabel: isPast ? 'Pasada' : 'Actual',
+				severityLabel: getSeverityLabel(injury.severity),
+				durationLabel: getDaysLabel(startDate, endDate),
+				postLabel: injury.post_id ? `Post #${injury.post_id}` : 'Sin post'
+			};
+		})
 	};
-};
-
-const commonDatasValidator = (formData: FormData) => {
-	const { error, message } = Helpers.checkRequiredFields(formData, [
-		'injury-name',
-		'injury-dates',
-		'injury-severity',
-		'selected-injured-wrestler-resource-id'
-	]);
-	if (error) throw new Error(message);
-
-	const wrestlerId = Number(formData.get('selected-injured-wrestler-resource-id'));
-	if (!wrestlerId) throw new Error('El luchador es requerido');
-	const dates = Helpers.getDateRange(formData, 'injury-dates');
-
-	if (!dates.start || !dates.end) throw new Error('Las fechas son requeridas');
-	if (dates.start > dates.end) {
-		throw new Error('La fecha de inicio no puede ser mayor que la de fin');
-	}
-
-	return { dates, wrestlerId };
-};
-
-export const actions = {
-	createInjury: async ({ request, locals }) => {
-		if (!Helpers.hasPermission(locals)) return Helpers.error('No tienes permisos', 403);
-		const formData = await request.formData();
-		try {
-			const { dates, wrestlerId } = commonDatasValidator(formData);
-			const wrestler = await WrestlerDao.getWrestlerById(wrestlerId);
-			if (!wrestler) return Helpers.error('No se ha encontrado el luchador', 404);
-
-			await injuries.create({
-				injury: formData.get('injury-name') as string,
-				severity: formData.get('injury-severity') as string,
-				start_date: dates.start,
-				end_date: dates.end as Date,
-				Wrestler: {
-					connect: {
-						id: wrestlerId
-					}
-				}
-			});
-			await WrestlerDao.update(wrestlerId, {
-				status: 'injured'
-			});
-
-			return Helpers.success('Lesion creada correctamente', 200);
-		} catch (e) {
-			console.error(e);
-			return Helpers.error('No se ha podido crear esta lesion', 500);
-		}
-	},
-	updateInjury: async ({ request, locals }) => {
-		if (!Helpers.hasPermission(locals)) return Helpers.error('No tienes permisos', 403);
-		const formData = await request.formData();
-		try {
-			const { dates, wrestlerId } = commonDatasValidator(formData);
-			const updateID = Helpers.getUpdateID(formData);
-			const wrestler = await WrestlerDao.getWrestlerById(wrestlerId);
-			if (!wrestler) return Helpers.error('No se ha encontrado el luchador', 404);
-
-			await injuries.update(updateID, {
-				injury: formData.get('injury-name') as string,
-				severity: formData.get('injury-severity') as string,
-				start_date: dates.start,
-				end_date: dates.end as Date,
-				Wrestler: {
-					connect: {
-						id: wrestlerId
-					}
-				}
-			});
-
-			await WrestlerDao.update(wrestlerId, {
-				status: 'injured'
-			});
-
-			return Helpers.success('Lesion actualizada correctamente', 200);
-		} catch (e) {
-			console.error(e);
-			return Helpers.error('No se ha podido crear esta lesion', 500);
-		}
-	}
 };
