@@ -72,11 +72,16 @@ export const GET: RequestHandler = async ({ request }) => {
 			wrestlerNames,
 		});
 
-		Helpers.sendSimpleEmail(
+		const response = await Helpers.sendSimpleEmail(
 			emails,
 			'Recuperación lesiones',
 			message
 		);
+
+		console.log({
+			email_response: response
+		});
+
 
 		return injuryResponse(`Se han revisado las lesiones. Se han notificado la finalización de ${injuriesIds.length} lesiones.`, { status: 200 });
 	} catch (error) {
