@@ -254,6 +254,23 @@ export const Utils = {
 		if (diffMinutes === 1) return 'hace 1 minuto';
 		return 'hace unos minutos';
 	},
+	getDateLocaleIso: (date: Date = new Date(), locale = 'en-GB') => {
+		return date
+			.toLocaleDateString(locale, {
+				year: 'numeric',
+				month: '2-digit',
+				day: '2-digit'
+			})
+			.replace(/(\d+)\/(\d+)\/(\d+)/, '$3-$2-$1');
+	},
+	getDateLocaleHourIso: (date: Date = new Date(), locale = 'en-GB') => {
+		return date.toLocaleTimeString(locale, {
+			hour: '2-digit',
+			minute: '2-digit',
+			second: '2-digit',
+			hour12: false
+		});
+	},
 	getBrandImage: (brand: string): string => {
 		const searchBrand = brand.toLowerCase().replace(/ /g, '-');
 		const foundBrand = brands[searchBrand];

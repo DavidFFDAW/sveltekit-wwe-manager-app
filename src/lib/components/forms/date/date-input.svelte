@@ -6,9 +6,20 @@
 	import type { Instance } from 'flatpickr/dist/types/instance';
 	import { Spanish } from 'flatpickr/dist/l10n/es';
 
-	let { label, name, min = undefined, max = undefined, value = null, required = false } = $props();
+	let {
+		label,
+		name,
+		min = undefined,
+		max = undefined,
+		value = null,
+		required = false,
+		hasTime = false
+	} = $props();
 	let flatpickrInput: HTMLInputElement | null = null;
 	let FlatPickr: Instance;
+
+	let time = $state('');
+	const today = new Date();
 
 	onMount(() => {
 		if (!flatpickrInput) return;
@@ -25,7 +36,8 @@
 				firstDayOfWeek: 1 // Start week on Monday
 			},
 			onChange: ([date]) => {
-				value = date.toISOString().split('T')[0]; // Format date to YYYY-MM-DD
+				value = Utils.getDateLocaleIso(date);
+				if (hasTime) time = Utils.getDateLocaleHourIso(today);
 			}
 		});
 
@@ -59,6 +71,10 @@
 	</label>
 	<div class="w1 flex end gap-5">
 		<input type="hidden" id={name} {name} bind:this={flatpickrInput} readonly={true} {required} />
+		{#if hasTime && time.length > 0}
+			<input type="hidden" name="{name}_time" value={time} />
+		{/if}
+
 		<button
 			class="btn icon remove"
 			type="button"
