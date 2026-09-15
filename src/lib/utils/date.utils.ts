@@ -25,7 +25,8 @@ export const DateUtils = {
 			hour: '2-digit',
 			minute: '2-digit',
 			second: '2-digit',
-			hour12: false
+			hour12: false,
+			timeZone: 'Europe/Madrid'
 		});
 	},
 	format: (date: Date = new Date(), format: string, formatter: Intl.DateTimeFormat | null = null) => {
