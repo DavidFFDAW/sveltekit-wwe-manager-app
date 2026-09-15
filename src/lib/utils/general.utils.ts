@@ -256,20 +256,21 @@ export const Utils = {
 	},
 	getDateLocaleIso: (date: Date = new Date(), locale = 'en-GB') => {
 		return date
-			.toLocaleDateString(locale, {
+			.toLocaleString(locale, {
 				year: 'numeric',
 				month: '2-digit',
 				day: '2-digit'
 			})
 			.replace(/(\d+)\/(\d+)\/(\d+)/, '$3-$2-$1');
 	},
-	getDateLocaleHourIso: (date: Date = new Date(), locale = 'en-GB') => {
-		return date.toLocaleTimeString(locale, {
+	getDateLocaleHourIso: (date: Date = new Date(), locale = 'en-GB', includeSeconds = false) => {
+		const options: Intl.DateTimeFormatOptions = {
 			hour: '2-digit',
 			minute: '2-digit',
-			second: '2-digit',
 			hour12: false
-		});
+		}
+		if (includeSeconds) options['second'] = '2-digit';
+		return date.toLocaleTimeString(locale, options);
 	},
 	getBrandImage: (brand: string): string => {
 		const searchBrand = brand.toLowerCase().replace(/ /g, '-');

@@ -16,6 +16,31 @@ export const DateUtils = {
 	getDateInstanceTimezone: (date: Date, timezone: string): Date => {
 		const dateString = date.toLocaleString('en-US', { timeZone: timezone });
 		return new Date(dateString);
+	},
+	getFormatter: () => {
+		return new Intl.DateTimeFormat('en-ES', {
+			year: 'numeric',
+			month: '2-digit',
+			day: '2-digit',
+			hour: '2-digit',
+			minute: '2-digit',
+			second: '2-digit',
+			hour12: false
+		});
+	},
+	format: (date: Date = new Date(), format: string, formatter: Intl.DateTimeFormat | null = null) => {
+		const _formatter = formatter ? formatter : DateUtils.getFormatter();
+		const parts = _formatter.formatToParts(date);
+		const { year, month, day, hour, minute, second } = Object.fromEntries(
+			parts.map(p => [p.type, p.value])
+		);
+
+		return format.replace('Y', year)
+			.replace('m', month)
+			.replace('d', day)
+			.replace('H', hour)
+			.replace('i', minute)
+			.replace('s', second)
 	}
 };
 
