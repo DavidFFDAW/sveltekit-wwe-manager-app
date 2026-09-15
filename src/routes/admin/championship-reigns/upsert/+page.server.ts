@@ -4,6 +4,7 @@ import { ReignsRepository } from '$lib/server/dao/repositories/reigns.repository
 import { TeamsRepository } from '$lib/server/dao/repositories/teams.repository';
 import { WrestlerRepository } from '$lib/server/dao/repositories/wrestler.repository';
 import { Helpers } from '$lib/server/server.helpers.js';
+import DateUtils from '$lib/utils/date.utils.js';
 import { ReignUtils } from '$lib/utils/reign.utils.js';
 import type { Prisma } from '@prisma/client';
 
@@ -95,6 +96,11 @@ export const actions = {
 			const championship = await chpRepo.getSingleById(championshipId);
 			if (!championship) return Helpers.error('El campeonato seleccionado no existe', 400);
 
+			const today = new Date();
+			const startTime = formData.has('start_date_time')
+				? formData.get('start_date_time') as string
+				: DateUtils.format(today, 'H:i');
+
 			const datas = {
 				championshipId: championshipId,
 				type: formData.get('tag_type'),
@@ -116,6 +122,8 @@ export const actions = {
 
 			const updateId = Helpers.getUpdateID(formData);
 			const action = updateId ? 'update' : 'create';
+			const [hours, minutes] = startTime.split(':').map(t => Number(t));
+			datas.won_date.setHours(hours, minutes, 0);
 
 			const isTagTeam = championship.tag;
 			const isManualTeam = datas.currentTagType === 'manual';
@@ -201,10 +209,10 @@ export const actions = {
 				action === 'create'
 					? () => reignsRepo.create(upsertObject as Prisma.ChampionshipReignCreateInput)
 					: () =>
-							reignsRepo.updateById(
-								Number(updateId),
-								upsertObject as Prisma.ChampionshipReignUpdateInput
-							);
+						reignsRepo.updateById(
+							Number(updateId),
+							upsertObject as Prisma.ChampionshipReignUpdateInput
+						);
 
 			// console.log({ ...upsertObject, isTagTeam, isManualTeam, action });
 			// return Helpers.success(`Reinado ${action === 'create' ? 'creado' : 'actualizado'} correctamente`);
