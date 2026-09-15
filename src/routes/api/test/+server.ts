@@ -12,7 +12,7 @@ export async function GET({ url }) {
 			params
 		}, 500);
 
-	const date = new Date(timestamp);
+	const date = timestamp ? new Date(timestamp) : new Date();
 	const debug: Record<string, any> = {
 		date,
 		date_iso: date.toISOString(),
