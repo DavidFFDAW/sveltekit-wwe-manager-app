@@ -13,12 +13,12 @@ export const DateUtils = {
 		const timeDiff = Math.abs(endDate.getTime() - startDate.getTime());
 		return Math.floor(timeDiff / (1000 * 3600 * 24));
 	},
-	getDateInstanceTimezone: (date: Date, timezone: string): Date => {
+	getDateInstanceTimezone: (date: Date, timezone: string = 'Europe/Madrid'): Date => {
 		const dateString = date.toLocaleString('en-US', { timeZone: timezone });
 		return new Date(dateString);
 	},
-	getFormatter: () => {
-		return new Intl.DateTimeFormat('en-ES', {
+	getFormatter: (locale: string = 'es-ES', timezone: string = 'Europe/Madrid') => {
+		return new Intl.DateTimeFormat(locale, {
 			year: 'numeric',
 			month: '2-digit',
 			day: '2-digit',
@@ -26,7 +26,7 @@ export const DateUtils = {
 			minute: '2-digit',
 			second: '2-digit',
 			hour12: false,
-			timeZone: 'Europe/Madrid'
+			timeZone: timezone,
 		});
 	},
 	format: (date: Date = new Date(), format: string, formatter: Intl.DateTimeFormat | null = null) => {
