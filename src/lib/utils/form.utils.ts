@@ -7,7 +7,7 @@ export class FormUtils {
 		return value ? value.toString().trim() : '';
 	}
 
-	public has = (key: string): boolean => this.get(key) !== '';
+	public has = (key: string): boolean => this.fields.has(key) && this.get(key) !== '';
 	public normalize = (text: string) => text.trim().replace(/\[\]$/, '').replace(/\s+/g, '_').toLowerCase();
 
 	public getNumber = (key: string, fallback: number = 0): number => {
@@ -22,12 +22,26 @@ export class FormUtils {
 		return new Date(iso);
 	}
 
-	public getBoolean = (key: string): boolean => {
-		const parsed = this.get(key).toLowerCase();
-		return ['1', 'true', 'on', 'yes', 'active', 'visible', 'checked'].includes(parsed);
-	}
-
 	public getUpdateID = () => Number(this.get('_update_id'));
 	public getToggleInput = (key: string): boolean => this.get(key) === 'on';
 	public getAction = (): string => this.get('_action');
+
+	public checkFields = (requiredFields: string[]) => {
+		const missingFields = requiredFields.filter(
+			(field) => !this.fields.has(field) || !this.fields.get(field)
+		);
+		if (missingFields.length > 0)
+			return { error: true, message: `Faltan campos requeridos: ${missingFields.join(', ')}` };
+
+		return { error: false, message: '' };
+	}
+
+	public checkFieldsThrow = (requiredFields: string[]) => {
+		const { error, message } = this.checkFields(requiredFields);
+		if (error) throw new Error(message);
+	}
+
+	public getEntries = () => {
+		this.fields.entries().map(entry => { })
+	}
 }

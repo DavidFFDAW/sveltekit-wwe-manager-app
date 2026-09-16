@@ -3,6 +3,7 @@ import { CRON_JOB_SECRET } from '$env/static/private';
 import { InjuriesRepository } from '$lib/server/dao/repositories/injuries.repository';
 import { UsersRepository } from '$lib/server/dao/repositories/users.repository';
 import { EmailUtils } from '$lib/server/email.utils';
+import EmailService from '$lib/server/services/email.server.service';
 
 export const GET: RequestHandler = async ({ request }) => {
 	const authHeader = request.headers.get('Authorization');
@@ -52,7 +53,7 @@ export const GET: RequestHandler = async ({ request }) => {
 			? `Los luchadores ${wrestlerNames} se han recuperado de las lesiones que tenían y están listos para volver a la programación habitual.`
 			: `El luchador ${wrestlerNames} se ha recuperado de sus lesiones y está completamente recuperado y listo para volver a ser incluído en la programación.`
 
-		await EmailUtils.sendSimpleEmail(
+		await EmailService.sendSimpleEmail(
 			emails,
 			'Recuperación lesiones',
 			message
