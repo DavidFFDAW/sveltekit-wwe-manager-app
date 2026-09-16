@@ -2,7 +2,6 @@ import type { RequestHandler } from './$types';
 import { CRON_JOB_SECRET } from '$env/static/private';
 import { InjuriesRepository } from '$lib/server/dao/repositories/injuries.repository';
 import { UsersRepository } from '$lib/server/dao/repositories/users.repository';
-import { EmailUtils } from '$lib/server/email.utils';
 import EmailService from '$lib/server/services/email.server.service';
 
 export const GET: RequestHandler = async ({ request }) => {
