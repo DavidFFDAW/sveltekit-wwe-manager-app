@@ -1,17 +1,7 @@
-import { MAIL_API_ADMIN, MAIL_API_KEY, MAIL_API_URL } from '$env/static/private';
 import { getParsedFormDatas, Utils } from '$lib/utils/general.utils';
 import { fail, json, redirect } from '@sveltejs/kit';
-import fs from 'fs';
 import { Api as ApiHelpers } from './api.helpers';
-
-interface EmailOptions {
-	emails: string | string[];
-	html: string;
-	subject: string;
-	from?: { email: string; name: string };
-	body?: string;
-	variables: { [key: string]: string };
-}
+import fs from 'fs';
 
 export const Api = ApiHelpers;
 export const Helpers = {
@@ -106,42 +96,5 @@ export const Helpers = {
 		const takeLimit = Number(searchParams.get('limit') || limit);
 		const offset = (page - 1) * takeLimit;
 		return { page, limit: takeLimit, offset };
-	},
-	sendSimpleEmail: (emails: string[], subject: string, body: string) => {
-		if (!emails.length) return false;
-		const uniqueTo = [...new Set([...emails, MAIL_API_ADMIN])];
-
-		return fetch(MAIL_API_URL, {
-			mode: 'cors',
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${MAIL_API_KEY}` },
-			body: JSON.stringify({
-				to: uniqueTo,
-				subject,
-				body
-			})
-		});
-	},
-	sendEmail: ({ emails, html, subject, body, variables }: EmailOptions, simpleEmail: boolean = false) => {
-		const emailsArray = Array.isArray(emails) ? emails : [emails];
-		const uniqueTo = [...new Set([...emailsArray, MAIL_API_ADMIN])];
-
-		const options: any = {
-			to: uniqueTo,
-			subject,
-			body,
-			from: { email: 'no-reply-wwe-manager@wwemanager.es', name: 'WWE@Manager' }
-		}
-		if (!simpleEmail) {
-			options['html'] = html;
-			options['variables'] = variables;
-		}
-
-		return fetch(MAIL_API_URL, {
-			mode: 'cors',
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${MAIL_API_KEY}` },
-			body: JSON.stringify(options)
-		});
 	}
 };
