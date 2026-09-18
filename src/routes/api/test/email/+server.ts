@@ -9,7 +9,6 @@ export const GET = async () => {
                 templateRoute,
                 root: process.cwd(),
                 dirname: dirname,
-                dir: __dirname,
             }),
             { status: 200 },
         );
