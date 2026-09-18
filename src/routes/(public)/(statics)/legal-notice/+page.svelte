@@ -1,5 +1,5 @@
 <script>
-	import { MAIL_API_ADMIN } from '$env/static/private';
+	import { CONTACT_EMAIL } from '$lib/constants/metas.constants';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 </script>
 
@@ -14,7 +14,7 @@
 			<h2>1. Titularidad del sitio web</h2>
 			<p>
 				El sitio web es propiedad de David Fernández Flores. Puedes contactarnos en
-				{MAIL_API_ADMIN}.
+				{CONTACT_EMAIL}.
 			</p>
 			<h2>2. Uso del sitio web</h2>
 			<p>

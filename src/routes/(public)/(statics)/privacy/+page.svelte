@@ -1,6 +1,6 @@
 <script>
-	import { MAIL_API_ADMIN } from '$env/static/private';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
+	import { CONTACT_EMAIL } from '$lib/constants/metas.constants';
 	const year = new Date().getFullYear();
 	const webName = 'WWE 2K Universo';
 </script>
@@ -68,7 +68,7 @@
 			<h2>8. Contacto</h2>
 			<p>
 				Si tienes alguna pregunta sobre esta Política de Privacidad, puedes ponerte en contacto con
-				nosotros en {MAIL_API_ADMIN}.
+				nosotros en {CONTACT_EMAIL}.
 			</p>
 
 			<div class="footer">
