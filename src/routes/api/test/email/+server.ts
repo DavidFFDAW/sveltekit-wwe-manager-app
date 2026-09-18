@@ -10,6 +10,10 @@ async function checkIfFile(filePath: string) {
     }
 }
 
+const json = (response: Record<string, any>, status = 200) => {
+    return new Response(JSON.stringify(response, null, 5), { status });
+};
+
 export const GET = async () => {
     try {
         const root = process.cwd();
@@ -17,14 +21,14 @@ export const GET = async () => {
         const templateRoute = EmailService.getTemplateDirectory('blog');
         const templateExists = checkIfFile(templateRoute);
 
-        return new Response(
-            JSON.stringify({
+        return json(
+            {
                 root,
                 files,
                 templateRoute,
                 templateExists,
-            }),
-            { status: 200 },
+            },
+            200,
         );
     } catch (e: unknown) {
         if (e instanceof Error) return new Response(e.message, { status: 500 });

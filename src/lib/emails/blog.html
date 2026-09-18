@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<meta name="x-apple-disable-message-reformatting" />
+		<title>Nuevo post publicado</title>
+		<style>
+			/* Basic email resets */
+			body,
+			table,
+			td,
+			a {
+				-webkit-text-size-adjust: 100%;
+				-ms-text-size-adjust: 100%;
+			}
+			table,
+			td {
+				mso-table-lspace: 0pt;
+				mso-table-rspace: 0pt;
+			}
+			img {
+				-ms-interpolation-mode: bicubic;
+				border: 0;
+				outline: none;
+				text-decoration: none;
+				display: block;
+			}
+			table {
+				border-collapse: collapse !important;
+			}
+			body {
+				margin: 0 !important;
+				padding: 0 !important;
+				width: 100% !important;
+				background: #f4f4f4;
+			}
+
+			/* Mobile */
+			@media screen and (max-width: 600px) {
+				.container {
+					width: 100% !important;
+				}
+				.px {
+					padding-left: 16px !important;
+					padding-right: 16px !important;
+				}
+				.content {
+					padding: 16px !important;
+				}
+				.title {
+					font-size: 22px !important;
+					line-height: 28px !important;
+				}
+				.btn {
+					display: block !important;
+					width: 100% !important;
+					text-align: center !important;
+				}
+				.meta td {
+					display: block !important;
+					width: 100% !important;
+					padding: 4px 0 !important;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<!-- Preheader (hidden) -->
+		<div
+			style="
+				display: none;
+				font-size: 1px;
+				line-height: 1px;
+				max-height: 0;
+				max-width: 0;
+				opacity: 0;
+				overflow: hidden;
+				mso-hide: all;
+			"
+		>
+			Nuevo post publicado: {{POST_TITLE}}
+		</div>
+
+		<table
+			role="presentation"
+			width="100%"
+			cellspacing="0"
+			cellpadding="0"
+			border="0"
+			style="background: #f4f4f4"
+		>
+			<tr>
+				<td align="center" style="padding: 24px 12px">
+					<!-- Main container -->
+					<table
+						role="presentation"
+						width="600"
+						cellspacing="0"
+						cellpadding="0"
+						border="0"
+						class="container"
+						style="width: 600px; max-width: 600px; background: #ffffff; border: 1px solid #dddddd"
+					>
+						<!-- Header -->
+						<tr>
+							<td class="px" style="padding: 18px 24px; border-bottom: 1px solid #e6e6e6">
+								<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+									<tr>
+										<td
+											align="left"
+											style="
+												font-family: Arial, Helvetica, sans-serif;
+												font-size: 14px;
+												font-weight: 700;
+												color: #111111;
+											"
+										>
+											{{BRAND_NAME}}
+										</td>
+										<td
+											align="right"
+											style="
+												font-family: Arial, Helvetica, sans-serif;
+												font-size: 12px;
+												color: #777777;
+											"
+										>
+											{{POST_DATE}}
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+
+						<!-- Body -->
+						<tr>
+							<td class="content" style="padding: 24px">
+								<!-- Title -->
+								<div
+									class="title"
+									style="
+										font-family: Arial, Helvetica, sans-serif;
+										font-size: 24px;
+										line-height: 30px;
+										font-weight: 700;
+										color: #111111;
+										margin: 0 0 10px 0;
+									"
+								>
+									{{POST_TITLE}}
+								</div>
+
+								<!-- Meta -->
+								<table
+									role="presentation"
+									width="100%"
+									cellspacing="0"
+									cellpadding="0"
+									border="0"
+									class="meta"
+									style="margin: 0 0 14px 0"
+								>
+									<tr>
+										<td
+											style="
+												font-family: Arial, Helvetica, sans-serif;
+												font-size: 12px;
+												line-height: 18px;
+												color: #666666;
+												padding: 0 12px 0 0;
+											"
+										>
+											Show: <strong style="color: #111111">{{SHOW_NAME}}</strong>
+										</td>
+										<td
+											style="
+												font-family: Arial, Helvetica, sans-serif;
+												font-size: 12px;
+												line-height: 18px;
+												color: #666666;
+												padding: 0 12px 0 0;
+											"
+										>
+											Evento: <strong style="color: #111111">{{EVENT_NAME}}</strong>
+										</td>
+										<td
+											style="
+												font-family: Arial, Helvetica, sans-serif;
+												font-size: 12px;
+												line-height: 18px;
+												color: #666666;
+											"
+										>
+											Autor: <strong style="color: #111111">{{AUTHOR_NAME}}</strong>
+										</td>
+									</tr>
+									<tr>
+										<td
+											colspan="3"
+											style="
+												padding-top: 4px;
+												font-family: Arial, Helvetica, sans-serif;
+												font-size: 12px;
+												line-height: 18px;
+												color: #666666;
+											"
+										>
+											Etiquetas: <strong style="color: #111111">{{POST_TAGS}}</strong>
+										</td>
+									</tr>
+								</table>
+
+								<!-- Image preview (required) -->
+								<div style="margin: 0 0 14px 0">
+									<img
+										src="{{POST_IMAGE_URL}}"
+										alt=""
+										width="552"
+										style="width: 100%; max-width: 552px; height: auto; border: 1px solid #e6e6e6"
+									/>
+								</div>
+
+								<!-- Excerpt -->
+								<div
+									style="
+										font-family: Arial, Helvetica, sans-serif;
+										font-size: 14px;
+										line-height: 22px;
+										color: #333333;
+										margin: 0 0 18px 0;
+									"
+								>
+									{{POST_EXCERPT}}
+								</div>
+
+								<!-- CTA -->
+								<table
+									role="presentation"
+									cellspacing="0"
+									cellpadding="0"
+									border="0"
+									style="margin: 0 0 10px 0"
+								>
+									<tr>
+										<td bgcolor="#111111" style="border-radius: 4px">
+											<a
+												class="btn"
+												href="{{POST_URL}}"
+												style="
+													display: inline-block;
+													font-family: Arial, Helvetica, sans-serif;
+													font-size: 14px;
+													font-weight: 700;
+													color: #ffffff;
+													text-decoration: none;
+													padding: 12px 16px;
+													border-radius: 4px;
+												"
+											>
+												Leer el post completo
+											</a>
+										</td>
+										<td width="10"></td>
+										<td>
+											<a
+												class="btn"
+												href="{{BLOG_URL}}"
+												style="
+													display: inline-block;
+													font-family: Arial, Helvetica, sans-serif;
+													font-size: 14px;
+													font-weight: 700;
+													color: #111111;
+													text-decoration: none;
+													padding: 12px 16px;
+													border: 1px solid #cccccc;
+													border-radius: 4px;
+													background: #ffffff;
+												"
+											>
+												Ver blog
+											</a>
+										</td>
+									</tr>
+								</table>
+
+								<!-- Fallback link -->
+								<div
+									style="
+										font-family: Arial, Helvetica, sans-serif;
+										font-size: 12px;
+										line-height: 18px;
+										color: #777777;
+										margin: 0;
+									"
+								>
+									Si el botón no funciona, copia y pega este enlace en tu navegador:<br />
+									<span style="color: #111111">{{POST_URL}}</span>
+								</div>
+							</td>
+						</tr>
+
+						<!-- Footer -->
+						<tr>
+							<td class="px" style="padding: 18px 24px; border-top: 1px solid #e6e6e6">
+								<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+									<tr>
+										<td
+											align="left"
+											style="
+												font-family: Arial, Helvetica, sans-serif;
+												font-size: 12px;
+												line-height: 18px;
+												color: #777777;
+											"
+										>
+											Recibes este correo porque estás suscrito al blog de {{BRAND_NAME}}.<br />
+											<a
+												href="{{PREFERENCES_URL}}"
+												style="color: #111111; text-decoration: underline"
+												>Gestionar preferencias</a
+											>
+											&nbsp;·&nbsp;
+											<a
+												href="{{UNSUBSCRIBE_URL}}"
+												style="color: #111111; text-decoration: underline"
+												>Darme de baja</a
+											>
+										</td>
+										<td
+											align="right"
+											style="
+												font-family: Arial, Helvetica, sans-serif;
+												font-size: 12px;
+												line-height: 18px;
+												color: #777777;
+											"
+										>
+											© {{YEAR}} {{BRAND_NAME}}
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					<!-- End container -->
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>
