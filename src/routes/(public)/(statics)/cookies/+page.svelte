@@ -1,7 +1,7 @@
 <script>
+	import { MAIL_API_ADMIN } from '$env/static/private';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 	const webName = 'WWE 2K Universo';
-	const contactEmail = 'davidferflo2@gmail.com';
 </script>
 
 <PageWrapper page={'legal-notice'}>
@@ -47,7 +47,7 @@
 			<h2>5. Contacto</h2>
 			<p>
 				Si tienes alguna pregunta sobre nuestra Política de Cookies, puedes ponerte en contacto con
-				nosotros en {contactEmail}.
+				nosotros en {MAIL_API_ADMIN}.
 			</p>
 
 			<div class="footer">

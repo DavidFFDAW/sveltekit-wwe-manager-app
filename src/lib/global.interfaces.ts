@@ -1,15 +1,22 @@
 export type Emails = string[] | string;
 export interface EmailBaseOptions {
-	to: string[];
-	body: string;
-	subject: string;
-	from?: { email: string; name: string };
+    to: string[];
+    body: string;
+    subject: string;
+    from?: string;
 }
 export interface EmailOptions {
-	emails: string | string[];
-	html: string;
-	subject: string;
-	from?: { email: string; name: string };
-	body?: string;
-	variables: { [key: string]: string };
+    emails: string | string[];
+    html: string;
+    subject: string;
+    body: string;
+    from?: string;
+    variables?: { [key: string]: string };
+}
+
+export interface EmailResponse {
+    code: number;
+    error: string | boolean;
+    message: string;
+    is_error: boolean;
 }
