@@ -1,5 +1,5 @@
-import { ChampionshipDao } from '$lib/server/dao/championship.dao.js';
 import { Helpers } from '$lib/server/server.helpers.js';
+import { ChampionshipDao } from '$lib/server/dao/championship.dao.js';
 
 export const load = async ({ locals }) => {
 	if (!Helpers.hasPermission(locals, 'admin')) throw Helpers.redirection('/login');

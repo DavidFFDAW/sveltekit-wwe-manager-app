@@ -8,6 +8,7 @@
 
 <PageWrapper page="admin-championships-page">
 	<h1>Administrar campeonatos</h1>
+	<a href="/admin/championships/draft">Cambiar marcas a los campeonatos</a>
 
 	<div class="grid grid-championship-column gap-small">
 		{#each data.championships as championship}
