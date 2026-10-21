@@ -10,7 +10,7 @@ export const load = async ({ url }) => {
 	const wrestlers = await repository.paginateN(
 		page,
 		{
-			select: { id: true, name: true, brand: true },
+			select: { id: true, name: true, brand: true, image_name: true },
 			orderBy: { slug: 'asc' }
 		},
 		20

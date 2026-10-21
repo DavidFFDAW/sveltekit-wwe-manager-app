@@ -65,6 +65,8 @@
 			</div>
 		</div>
 	</AsyncForm>
+
+	<a href="/admin/wrestlers/{wrestler.id}/reigns" class="btn small warn">Ver reinados</a>
 </div>
 
 <style>
