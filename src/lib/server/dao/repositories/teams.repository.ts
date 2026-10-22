@@ -29,3 +29,5 @@ export class TeamsRepository extends Repository<
 		});
 	}
 }
+
+export const teams = new TeamsRepository();

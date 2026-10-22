@@ -1,6 +1,5 @@
 import { Prisma, type BlogPost } from '@prisma/client';
 import { Repository } from './Repository';
-import prisma from '$lib/server/prisma';
 import DateUtils from '$lib/utils/date.utils';
 
 export class BlogRepository extends Repository<
@@ -160,3 +159,5 @@ export class BlogRepository extends Repository<
 		});
 	}
 }
+
+export const blog = new BlogRepository();

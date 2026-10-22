@@ -51,3 +51,5 @@ export class UsersRepository extends Repository<
 		});
 	}
 }
+
+export const users = new UsersRepository();

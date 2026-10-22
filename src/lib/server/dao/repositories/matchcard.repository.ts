@@ -55,3 +55,5 @@ export class PpvCardRepository extends Repository<
 		return this.getRow(args) as Promise<PPVCard & { matches: Match[] }>;
 	}
 }
+
+export const matchcard = new PpvCardRepository();

@@ -41,3 +41,5 @@ export class RumbleRepository extends Repository<
 		});
 	}
 }
+
+export const rumble = new RumbleRepository();

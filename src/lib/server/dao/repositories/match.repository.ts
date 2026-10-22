@@ -30,3 +30,5 @@ export class MatchRepository extends Repository<
 		});
 	}
 }
+
+export const match = new MatchRepository();

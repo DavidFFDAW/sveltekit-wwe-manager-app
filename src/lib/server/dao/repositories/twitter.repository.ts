@@ -16,3 +16,5 @@ export class TwitterRepository extends Repository<
 		super('tweets');
 	}
 }
+
+export const twitter = new TwitterRepository();

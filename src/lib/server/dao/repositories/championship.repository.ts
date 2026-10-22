@@ -26,3 +26,5 @@ export class ChampionshipRepository extends Repository<
 		});
 	}
 }
+
+export const championship = new ChampionshipRepository();

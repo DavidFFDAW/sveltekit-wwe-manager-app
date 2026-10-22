@@ -16,3 +16,5 @@ export class AnalyticsRepository extends Repository<
 		super('analytics');
 	}
 }
+
+export const analytics = new AnalyticsRepository();

@@ -2,20 +2,20 @@ import { Prisma, type IaLog } from '@prisma/client';
 import { Repository } from './Repository';
 
 export class IaRepository extends Repository<
-    IaLog,
-    Prisma.IaLogCreateInput,
-    Prisma.IaLogUpdateInput,
-    Prisma.IaLogWhereInput,
-    Prisma.IaLogFindManyArgs,
-    Prisma.IaLogGroupByArgs,
-    Prisma.IaLogAggregateArgs
+	IaLog,
+	Prisma.IaLogCreateInput,
+	Prisma.IaLogUpdateInput,
+	Prisma.IaLogWhereInput,
+	Prisma.IaLogFindManyArgs,
+	Prisma.IaLogGroupByArgs,
+	Prisma.IaLogAggregateArgs
 > {
-    protected requiredFields: string[] = [];
+	protected requiredFields: string[] = [];
 
-    constructor() {
-        super('iaLog');
+	constructor() {
+		super('iaLog');
 	}
-	
+
 	register(data: Prisma.IaLogCreateInput) {
 		return this.create({
 			...data,
@@ -26,3 +26,5 @@ export class IaRepository extends Repository<
 		});
 	}
 }
+
+export const ia = new IaRepository();

@@ -22,3 +22,5 @@ export class InjuriesRepository extends Repository<
 		super('injuries');
 	}
 }
+
+export const injuries = new InjuriesRepository();

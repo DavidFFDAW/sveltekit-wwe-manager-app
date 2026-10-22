@@ -168,3 +168,5 @@ export class ReignsRepository extends Repository<
 		}));
 	}
 }
+
+export const reigns = new ReignsRepository();

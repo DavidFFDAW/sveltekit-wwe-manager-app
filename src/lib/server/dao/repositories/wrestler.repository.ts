@@ -25,3 +25,5 @@ export class WrestlerRepository extends Repository<
 		return this.get(args);
 	}
 }
+
+export const wrestler = new WrestlerRepository();

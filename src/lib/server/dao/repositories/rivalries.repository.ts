@@ -16,3 +16,5 @@ export class RivalriesRepository extends Repository<
 		super('rivalries');
 	}
 }
+
+export const rivalries = new RivalriesRepository();
