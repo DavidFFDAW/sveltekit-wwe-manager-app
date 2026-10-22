@@ -26,4 +26,4 @@ export class WrestlerRepository extends Repository<
 	}
 }
 
-export const wrestler = new WrestlerRepository();
+export const wrestlers = new WrestlerRepository();

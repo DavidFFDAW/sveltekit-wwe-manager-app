@@ -1,15 +1,14 @@
 import type { Actions } from './$types';
 import { Helpers } from '$lib/server/server.helpers';
-import { ChampionshipRepository } from '$lib/server/dao/repositories/championship.repository';
 import { brandsArray } from '$lib/constants/app';
 import FormService from '$lib/services/form.service';
+import { championship } from '$lib/server/dao/repositories';
 
 export const load = (async ({ locals }) => {
 	if (!Helpers.hasPermission(locals, 'admin'))
 		throw Helpers.redirection('/login');
 
-	const Champions = new ChampionshipRepository();
-	const championships = await Champions.get({
+	const championships = await championship.get({
 		where: {
 			active: true,
 			type: { not: 'mitb' },

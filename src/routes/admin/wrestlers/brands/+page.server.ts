@@ -1,13 +1,11 @@
-import { WrestlerRepository } from '$lib/server/dao/repositories/wrestler.repository.js';
+import { wrestlers } from '$lib/server/dao/repositories';
 import { Helpers } from '$lib/server/server.helpers.js';
-
-const repository = new WrestlerRepository();
 
 export const load = async ({ url }) => {
 	const params = url.searchParams;
 	const page = parseInt(params.get('page') || '1', 10) || 1;
 
-	const wrestlers = await repository.paginateN(
+	const list = await wrestlers.paginateN(
 		page,
 		{
 			select: { id: true, name: true, brand: true, image_name: true },
@@ -16,7 +14,7 @@ export const load = async ({ url }) => {
 		20
 	);
 	return {
-		wrestlers
+		wrestlers: list
 	};
 };
 
@@ -43,7 +41,7 @@ export const actions = {
 
 			await Promise.allSettled(
 				Object.entries(brands).map(([brand, ids]) => {
-					return repository.bulkUpdate({ id: { in: ids } }, { brand });
+					return wrestlers.bulkUpdate({ id: { in: ids } }, { brand });
 				})
 			);
 
