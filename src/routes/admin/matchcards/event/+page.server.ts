@@ -1,14 +1,12 @@
-import { PpvCardRepository } from '$lib/server/dao/repositories/matchcard.repository.js';
+import { matchcard } from '$lib/server/dao/repositories/matchcard.repository.js';
 import { Helpers } from '$lib/server/server.helpers.js';
 import { Utils } from '$lib/utils/general.utils.js';
-import { PPVRepository } from '$lib/server/dao/repositories/ppv.repository.js';
+import { ppv } from '$lib/server/dao/repositories/ppv.repository.js';
 
 export const load = async ({ url }) => {
     const slug = url.searchParams.get('slug') as string;
-    const ppvRepository = new PPVRepository();
-    const matchCardRepository = new PpvCardRepository();
 
-    const ppvs = await ppvRepository.get({
+    const ppvs = await ppv.get({
         select: {
             id: true,
             name: true,
@@ -24,7 +22,7 @@ export const load = async ({ url }) => {
         }
     });
 
-    const matchCardEvent = (await matchCardRepository.getRow({
+    const matchCardEvent = (await matchcard.getRow({
         where: { id: Number(slug) },
         include: {
             matches: true
@@ -51,7 +49,6 @@ export const actions = {
         try {
             const action = Helpers.getAction(formData);
             const updateId = Helpers.getUpdateID(formData);
-            const matchCardRepository = new PpvCardRepository();
 
             const ppv_date = formData.get('ppv_date_done') as string;
             const ppvRealDate = Utils.getUTCDate(ppv_date);
@@ -63,8 +60,8 @@ export const actions = {
             };
 
             const upserted = action === 'create'
-                ? await matchCardRepository.create(datas)
-                : await matchCardRepository.updateById(updateId, datas);
+                ? await matchcard.create(datas)
+                : await matchcard.updateById(updateId, datas);
 
             if (!upserted.id) return Helpers.error('Failed to create or update match card');
             return Helpers.success('Match card ' + (action === 'create' ? 'created' : 'updated') + ' successfully');

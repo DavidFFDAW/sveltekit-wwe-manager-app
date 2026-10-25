@@ -1,13 +1,11 @@
-import { AnalyticsRepository } from "$lib/server/dao/repositories/analytics.respository";
+import { analytics } from "$lib/server/dao/repositories/analytics.respository";
 
 export async function load() {
 	const today = new Date();
 	today.setHours(0, 0, 0, 0);
 
-	const repository = new AnalyticsRepository();
-
 	// get today registered analytics grouped by event
-	const analyticsData = await repository.get({
+	const analyticsData = await analytics.get({
 		where: {
 			created_at: {
 				lte: today,

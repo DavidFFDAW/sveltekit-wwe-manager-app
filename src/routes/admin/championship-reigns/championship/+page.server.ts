@@ -1,5 +1,5 @@
 import { ReignsDao } from '$lib/server/dao/reigns.dao';
-import { ReignsRepository } from '$lib/server/dao/repositories/reigns.repository.js';
+import { reigns } from '$lib/server/dao/repositories/reigns.repository.js';
 import { Helpers } from '$lib/server/server.helpers.js';
 import DateUtils from '$lib/utils/date.utils.js';
 import { Utils } from '$lib/utils/general.utils.js';
@@ -8,7 +8,6 @@ import { ReignUtils } from '$lib/utils/reign.utils.js';
 export const load = async ({ locals, url }) => {
     if (!Helpers.hasPermission(locals)) throw Helpers.redirection('/');
 
-    const reigns = new ReignsRepository();
     const page = Number(url.searchParams.get('page') || '1');
     const paramChampionship = url.searchParams.get('id');
     const year = url.searchParams.get('year') ? Number(url.searchParams.get('year')) : new Date().getFullYear();

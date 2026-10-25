@@ -1,4 +1,4 @@
-import { PPVRepository } from '$lib/server/dao/repositories/ppv.repository';
+import { ppv } from '$lib/server/dao/repositories/ppv.repository';
 import { Helpers } from '$lib/server/server.helpers.js';
 
 export type PPVCalendarEntry = {
@@ -10,8 +10,8 @@ export type PPVCalendarEntry = {
 };
 
 export async function load({ request }) {
-	const ppvRepo = new PPVRepository();
-	const ppvs = await ppvRepo.get({
+
+	const ppvs = await ppv.get({
 		where: { active: true },
 		orderBy: { game_date: 'asc' }
 	});
@@ -62,7 +62,7 @@ export const actions = {
 		const entries = Array.from(formData.entries());
 
 		try {
-			const repository = new PPVRepository();
+
 			const updatePpvDatePromises = entries
 				.filter(([key]) => key.startsWith('ppv_calendar_dates['))
 				.map(([key, value]) => {
@@ -70,7 +70,7 @@ export const actions = {
 					const match = key.match(regex);
 					return match ? { id: parseInt(match[1], 10), date: value as string } : null;
 				})
-				.map((item) => (item ? repository.updatePpvDate(item.id, new Date(item.date)) : null));
+				.map((item) => (item ? ppv.updatePpvDate(item.id, new Date(item.date)) : null));
 
 			await Promise.all(updatePpvDatePromises);
 			return Helpers.success('Las fechas de PPVs se han actualizado correctamente.');

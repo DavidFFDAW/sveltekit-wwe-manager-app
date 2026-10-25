@@ -1,6 +1,6 @@
 import { ReignsDao } from '$lib/server/dao/reigns.dao';
-import { ChampionshipRepository } from '$lib/server/dao/repositories/championship.repository.js';
-import { ReignsRepository } from '$lib/server/dao/repositories/reigns.repository.js';
+import { championship } from '$lib/server/dao/repositories/championship.repository.js';
+import { reigns } from '$lib/server/dao/repositories/reigns.repository.js';
 import { Helpers } from '$lib/server/server.helpers.js';
 import DateUtils from '$lib/utils/date.utils.js';
 
@@ -10,9 +10,6 @@ export const load = async ({ locals, url }) => {
     const paramChampionship = url.searchParams.get('championship');
     if (paramChampionship && !isNaN(Number(paramChampionship)))
         return Helpers.redirection('/admin/championship-reigns/championship?id=' + paramChampionship);
-
-    const reigns = new ReignsRepository();
-    const championships = new ChampionshipRepository();
 
     const list = await reigns.groupBy({
         by: ['championship_id'],
@@ -25,7 +22,7 @@ export const load = async ({ locals, url }) => {
         },
     });
     const championshipIds = list.map((reign: any) => reign.championship_id);
-    const championshipsData = await championships.toMap({
+    const championshipsData = await championship.toMap({
         select: { id: true, name: true, slug: true, image: true, active: true, tag: true },
         where: { id: { in: championshipIds } },
     });
@@ -38,12 +35,10 @@ export const load = async ({ locals, url }) => {
         };
     });
 
-    console.log({ unified: unified[0] });
-
     return {
         reigns_panel: {
-            type: 'championships',
-            championships: unified,
+            type: 'championship',
+            championship: unified,
             reigns: [],
         },
     };
@@ -61,7 +56,7 @@ export const actions = {
             const { error, message } = Helpers.checkRequiredFields(formData, ['won_date', 'victory_way', 'ppv_won']);
             if (error) return Helpers.error(message, 400);
 
-            const reignExists = await ReignsDao.reignExists(updateID);
+            const reignExists = await reigns.existsById(updateID);
             if (!reignExists) return Helpers.error('El reinado no existe.', 404);
 
             const wonDate = new Date(formData.get('won_date') as string);

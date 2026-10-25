@@ -1,20 +1,18 @@
-import { WrestlerRepository } from '$lib/server/dao/repositories/wrestler.repository.js';
+import { wrestlers } from '$lib/server/dao/repositories/wrestler.repository.js';
 import { Helpers } from '$lib/server/server.helpers.js';
-
-const repository = new WrestlerRepository();
 
 export const load = async ({ url }) => {
     const params = url.searchParams;
     const page = parseInt(params.get('page') || '1', 10) || 1;
 
-    const wrestlers = await repository.paginateN(
+	const pagination = await wrestlers.paginateN(
         page,
         {
             orderBy: { name: 'asc' },
         },
         20,
     );
-    return { wrestlers, list: wrestlers.list.map(w => ({ ...w, hired: w.status === 'active' })) };
+	return { wrestlers: pagination, list: pagination.list.map(w => ({ ...w, hired: w.status === 'active' })) };
 };
 
 export const actions = {
@@ -37,13 +35,13 @@ export const actions = {
                 {} as Record<string, number[]>,
             );
 
-            await repository.bulkUpdate(
+            await wrestlers.bulkUpdate(
                 {
                     id: { in: statuses['active'] || [] },
                 },
                 { status: 'active' },
             );
-            await repository.bulkUpdate(
+            await wrestlers.bulkUpdate(
                 {
                     id: { in: statuses['released'] || [] },
                 },

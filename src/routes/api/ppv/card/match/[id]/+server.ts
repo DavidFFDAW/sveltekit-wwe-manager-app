@@ -1,4 +1,4 @@
-import { MatchRepository } from '$lib/server/dao/repositories/match.repository.js';
+import { match } from '$lib/server/dao/repositories/match.repository.js';
 import { Api } from '$lib/server/server.helpers.js';
 
 export async function DELETE({ params, url }) {
@@ -10,8 +10,7 @@ export async function DELETE({ params, url }) {
     }
 
     try {
-        const matchRepository = new MatchRepository();
-        await matchRepository.delete({
+        await match.delete({
             id: Number(matchId),
             id_match_card: Number(ppvId),
         });

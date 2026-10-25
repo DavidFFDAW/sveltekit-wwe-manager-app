@@ -1,4 +1,4 @@
-import { PpvCardRepository } from '$lib/server/dao/repositories/matchcard.repository';
+import { matchcard } from '$lib/server/dao/repositories/matchcard.repository';
 import { Helpers } from '$lib/server/server.helpers';
 
 export const actions = {
@@ -15,8 +15,7 @@ export const actions = {
 			const json = JSON.parse(text);
 			if (!json) return Helpers.error('El archivo no contiene un JSON válido', 400);
 
-			const matchcardRepository = new PpvCardRepository();
-			const existCardWithSameName = await matchcardRepository.getRow({
+			const existCardWithSameName = await matchcard.getRow({
 				where: { ppv_name: json.ppv_name }
 			});
 			if (existCardWithSameName)
@@ -25,7 +24,7 @@ export const actions = {
 					400
 				);
 
-			const createdPPV = await matchcardRepository.create({
+			const createdPPV = await matchcard.create({
 				ppv_name: json.ppv_name,
 				ppv_image: json.ppv_image,
 				ppv_date: new Date(json.ppv_date),

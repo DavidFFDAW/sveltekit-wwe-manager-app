@@ -1,7 +1,7 @@
 import { Utils } from "$lib/utils/general.utils.js";
 import { Helpers } from "$lib/server/server.helpers.js";
-import { ReignsRepository } from "$lib/server/dao/repositories/reigns.repository";
-import { PPVRepository } from "$lib/server/dao/repositories/ppv.repository.js";
+import { reigns } from "$lib/server/dao/repositories/reigns.repository";
+import { ppv } from "$lib/server/dao/repositories/ppv.repository.js";
 import type { Prisma } from "@prisma/client";
 import { ReignUtils } from "$lib/utils/reign.utils.js";
 
@@ -9,9 +9,6 @@ export const load = async ({ url }) => {
 	const id = url.searchParams.get('mitb');
 	const parentPage = url.pathname.split('/').slice(0, -1).join('/');
 	if (!id || isNaN(Number(id))) return Helpers.redirection(parentPage);
-
-	const ppvs = new PPVRepository();
-	const reigns = new ReignsRepository();
 
 	const reign = await reigns.getBaseReign({
 		id: Number(id),
@@ -66,7 +63,7 @@ export const load = async ({ url }) => {
 				wrestler: c.Wrestler as { id: number, name: string, image_name: string },
 				championship: c.Championship as { id: number, name: string, image: string, gender: string },
 			})),
-			ppvs: await ppvs.getActiveNames(),
+			ppv: await ppv.getActiveNames(),
 		}
 	};
 }
@@ -89,11 +86,9 @@ export const actions = {
 			};
 			if (isNaN(datas.championship)) return Helpers.error('Invalid championship selected.', 400);
 
-			const reigns = new ReignsRepository();
 			const previousChampionshipReign = await reigns.getBasicCurrentReignForChampionship(datas.championship);
 			const currentMitbReign = await reigns.getSingleById(datas.mitbId);
 			console.log({ previousChampionshipReign, currentMitbReign });
-
 
 			if (!currentMitbReign || !currentMitbReign.id) return Helpers.error('No current reign found for the selected MITB.', 404);
 			if (!previousChampionshipReign.id) return Helpers.error('No current reign found for the selected championship.', 404);

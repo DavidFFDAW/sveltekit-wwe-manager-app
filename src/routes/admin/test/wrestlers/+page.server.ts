@@ -1,10 +1,10 @@
-import { WrestlerRepository } from '$lib/server/dao/repositories/wrestler.repository';
+import { wrestlers } from '$lib/server/dao/repositories/wrestler.repository';
 import type { PageServerLoad } from './$types';
 
 export const load = (async () => {
-	const wrestlerRepo = new WrestlerRepository();
+
 	return {
-		wrestlers: await wrestlerRepo.get({
+		wrestlers: await wrestlers.get({
 			take: 50,
 			where: {
 				status: { notIn: ['released'] }

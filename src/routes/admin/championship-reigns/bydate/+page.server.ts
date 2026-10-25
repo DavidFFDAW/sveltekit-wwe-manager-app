@@ -1,4 +1,4 @@
-import { ReignsRepository } from '$lib/server/dao/repositories/reigns.repository.js';
+import { reigns } from '$lib/server/dao/repositories/reigns.repository.js';
 import { Utils } from '$lib/utils/general.utils';
 
 type DBReign = {
@@ -24,7 +24,6 @@ export const load = async ({ url }) => {
     const today = new Date();
     const date = url.searchParams.get('date');
 
-    const reigns = new ReignsRepository();
     const currentDate = date ? new Date(date) : today;
     const dateISO = currentDate.toISOString().split('T')[0];
     const conn = reigns.conn();

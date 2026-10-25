@@ -1,5 +1,5 @@
 import { PPVDao } from '$lib/server/dao/ppv.dao.js';
-import { PPVRepository } from '$lib/server/dao/repositories/ppv.repository.js';
+import { ppv } from '$lib/server/dao/repositories/ppv.repository.js';
 import { Helpers } from '$lib/server/server.helpers.js';
 
 const getFilters = (typeFilter: string) => {
@@ -16,10 +16,8 @@ export async function load({ url }) {
 	const searchFilter = params.get('search') || '';
 	const filters = getFilters(activeFilter as string);
 
-	const ppvRepo = new PPVRepository();
-
 	return {
-		ppvs: await ppvRepo.get({
+		ppvs: await ppv.get({
 			where: {
 				...filters,
 				name: { contains: searchFilter }

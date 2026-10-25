@@ -1,8 +1,8 @@
-import { ReignsRepository } from '$lib/server/dao/repositories/reigns.repository';
+import { reigns } from '$lib/server/dao/repositories/reigns.repository';
 
 export const load = async () => {
-	const database = new ReignsRepository();
-	const rankingByChampionships = await database.getRankingByChampionships();
+
+	const rankingByChampionships = await reigns.getRankingByChampionships();
 
 	return {
 		ranking: rankingByChampionships,

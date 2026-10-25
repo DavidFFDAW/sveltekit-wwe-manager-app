@@ -1,10 +1,10 @@
-import { WrestlerRepository } from '$lib/server/dao/repositories/wrestler.repository.js';
+import { wrestlers } from '$lib/server/dao/repositories/wrestler.repository.js';
 import { WrestlerDao } from '$lib/server/dao/wrestler.dao.js';
 import { Helpers } from '$lib/server/server.helpers.js';
 import type { Prisma } from '@prisma/client';
 
 export async function load({ url }) {
-	const wrestlerRepository = new WrestlerRepository();
+
 	const search = url.searchParams.has('search') ? (url.searchParams.get('search') as string) : '';
 	const currentPage = url.searchParams.has('page') ? Number(url.searchParams.get('page')) : 1;
 	const genderFilter = url.searchParams.has('gender') ? url.searchParams.get('gender') : '';
@@ -21,7 +21,7 @@ export async function load({ url }) {
 		filters.status = statusFilter;
 	}
 
-	const [total, wrestlers] = await wrestlerRepository.paginate(
+	const [total, wrestlerList] = await wrestlers.paginate(
 		currentPage,
 		{
 			orderBy: {
@@ -39,7 +39,7 @@ export async function load({ url }) {
 			search: search
 		},
 		page: currentPage,
-		wrestlers: wrestlers,
+		wrestlers: wrestlerList,
 		total: total
 	};
 }
@@ -65,11 +65,11 @@ export const actions = {
 		const datas = await request.formData();
 
 		try {
-			const repository = new WrestlerRepository();
+
 			const updateId = Number(datas.get('_update_id'));
 			if (!updateId) return Helpers.error('No se ha encontrado el luchador a actualizar');
 
-			const updatedWrestler = await repository.updateById(updateId, {
+			const updatedWrestler = await wrestlers.updateById(updateId, {
 				status: datas.get('status') as string,
 				overall: datas.get('overall') ? Number(datas.get('overall')) : undefined,
 				name: datas.get('name') as string

@@ -1,12 +1,11 @@
-import { PpvCardRepository } from '$lib/server/dao/repositories/matchcard.repository.js';
+import { matchcard } from '$lib/server/dao/repositories/matchcard.repository.js';
 import { Helpers } from '$lib/server/server.helpers.js';
 
 export const GET = async ({ params }) => {
 	const id = params.slug;
 	if (!id || isNaN(Number(id))) return Helpers.api.error('ID inválido o no proporcionado', 400);
 
-	const matchCardRepository = new PpvCardRepository();
-	const matchCardEvent = await matchCardRepository.getRow({
+	const matchCardEvent = await matchcard.getRow({
 		where: { id: Number(id) },
 		include: {
 			matches: true

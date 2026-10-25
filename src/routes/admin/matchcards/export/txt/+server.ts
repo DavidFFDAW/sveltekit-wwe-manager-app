@@ -1,12 +1,11 @@
-import { PpvCardRepository } from '$lib/server/dao/repositories/matchcard.repository';
+import { matchcard } from '$lib/server/dao/repositories/matchcard.repository';
 import { Helpers } from '$lib/server/server.helpers';
 
 export const GET = async ({ url }) => {
 	const id = url.searchParams.get('id');
 	if (!id || isNaN(Number(id))) return Helpers.api.error('ID inválido o no proporcionado', 400);
 
-	const matchCardRepository = new PpvCardRepository();
-	const matchCardEvent = await matchCardRepository.getMatchCardWithMatches(id);
+	const matchCardEvent = await matchcard.getMatchCardWithMatches(id);
 	if (!matchCardEvent) return Helpers.api.error('Evento no encontrado', 404);
 
 	const randomUuid = crypto.randomUUID().split('-')[0];

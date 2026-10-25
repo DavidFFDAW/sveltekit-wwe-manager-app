@@ -1,14 +1,13 @@
-import { ReignsRepository } from '$lib/server/dao/repositories/reigns.repository';
-import { WrestlerRepository } from '$lib/server/dao/repositories/wrestler.repository';
+import { reigns } from '$lib/server/dao/repositories/reigns.repository';
+import { wrestlers } from '$lib/server/dao/repositories/wrestler.repository';
 import { Helpers } from '$lib/server/server.helpers';
 import { ReignUtils } from '$lib/utils/reign.utils';
-// import { TeamsRepository } from '$lib/server/dao/repositories/teams.repository';
-// import { WrestlerRepository } from '$lib/server/dao/repositories/wrestler.repository';
+// import { teams } from '$lib/server/dao/repositories/teams.repository';
+// import { wrestlers } from '$lib/server/dao/repositories/wrestler.repository';
 // import { ReignUtils } from '$lib/utils/reign.utils';
 
 export const load = async ({ url }) => {
-    const reigns = new ReignsRepository();
-    const wrestlers = new WrestlerRepository();
+
     const pagination = Helpers.getPaginationFromSearchParams(url.searchParams);
 
     // 1. obtener reinados agrupados por wrestler_id con conteo (reinados, total_dias) limitado por pagina

@@ -1,8 +1,8 @@
 import { Helpers } from '$lib/server/server.helpers';
-import { ReignsRepository } from '$lib/server/dao/repositories/reigns.repository';
+import { reigns } from '$lib/server/dao/repositories/reigns.repository';
 import type { ChampionshipReign } from '@prisma/client';
 import type { PaginationDatas } from '$lib/types/app.types.js';
-import { WrestlerRepository } from '$lib/server/dao/repositories/wrestler.repository.js';
+import { wrestlers } from '$lib/server/dao/repositories/wrestler.repository.js';
 import { ReignUtils } from '$lib/utils/reign.utils.js';
 import { Utils } from '$lib/utils/general.utils.js';
 
@@ -34,8 +34,6 @@ export const load = async ({ url }) => {
     const id = url.searchParams.get('id');
     if (!id || isNaN(Number(id))) return Helpers.redirection('/admin/championship-reigns');
 
-    const reigns = new ReignsRepository();
-    const wrestlers = new WrestlerRepository();
     const wrestler = await wrestlers.getSingleById(Number(id));
     if (!wrestler) return Helpers.redirection('/admin/championship-reigns');
 

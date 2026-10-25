@@ -1,6 +1,6 @@
-import { BlogRepository } from '$lib/server/dao/repositories/blog.repository.js';
-import { InjuriesRepository } from '$lib/server/dao/repositories/injuries.repository';
-import { WrestlerRepository } from '$lib/server/dao/repositories/wrestler.repository.js';
+import { blog } from '$lib/server/dao/repositories/blog.repository.js';
+import { injuries } from '$lib/server/dao/repositories/injuries.repository';
+import { wrestlers } from '$lib/server/dao/repositories/wrestler.repository.js';
 import { Helpers } from '$lib/server/server.helpers.js';
 import { Utils } from '$lib/utils/general.utils.js';
 import type { BlogPost, Injuries, Prisma, Wrestler } from '@prisma/client';
@@ -19,11 +19,9 @@ export type UpsertInjury = {
 
 export const load = async ({ url }) => {
 	const id = url.searchParams.get('id');
-	const Injuries = new InjuriesRepository();
-	const Wrestlers = new WrestlerRepository();
 
-	const injury = (id ? await Injuries.getById(id) : {}) as UpsertInjury;
-	const wrestlers = await Wrestlers.getNonReleasedWrestlers({
+	const injury = (id ? await injuries.getById(id) : {}) as UpsertInjury;
+	const wrestlerList = await wrestlers.getNonReleasedWrestlers({
 		orderBy: {
 			name: 'asc'
 		}
@@ -32,7 +30,7 @@ export const load = async ({ url }) => {
 	return {
 		injury_upsert: {
 			injury,
-			wrestlers,
+			wrestlers: wrestlerList,
 			isCreate: url.searchParams.has('id') && Boolean(injury.id),
 			param_id: id
 		}
@@ -98,13 +96,13 @@ const upsertBlogPost = async (
 	injury: Injuries,
 	adminId: number
 ): Promise<BlogPost> => {
-	const Blog = new BlogRepository();
+
 	const postPayload = getPostPayload(formData, wrestler, injury, adminId);
 
-	if (injury.post_id) return Blog.updateById(injury.post_id, postPayload);
+	if (injury.post_id) return blog.updateById(injury.post_id, postPayload);
 
-	const post = await Blog.create(postPayload);
-	await new InjuriesRepository().updateById(injury.id, {
+	const post = await blog.create(postPayload);
+	await injuries.updateById(injury.id, {
 		Post: {
 			connect: {
 				id: post.id
@@ -120,16 +118,14 @@ export const actions = {
 		if (!Helpers.hasPermission(locals)) return Helpers.error('No tienes permisos', 403);
 
 		const formData = await request.formData();
-		const Injuries = new InjuriesRepository();
-		const Wrestlers = new WrestlerRepository();
 
 		try {
 			const { wrestlerId, startDate, endDate } = validateInjuryForm(formData);
 			const updateId = Helpers.getUpdateID(formData);
-			const wrestler = await Wrestlers.getById(wrestlerId);
+			const wrestler = await wrestlers.getById(wrestlerId);
 			if (!wrestler) return Helpers.error('No se ha encontrado el luchador', 404);
 
-			const savedInjury = await Injuries.upsert(
+			const savedInjury = await injuries.upsert(
 				{
 					injury: formData.get('injury') as string,
 					severity: formData.get('severity') as string,
@@ -149,7 +145,7 @@ export const actions = {
 				await upsertBlogPost(formData, wrestler, savedInjury, locals.user?.uuid || 1);
 			}
 
-			await Wrestlers.updateById(wrestlerId, {
+			await wrestlers.updateById(wrestlerId, {
 				status: 'injured'
 			});
 

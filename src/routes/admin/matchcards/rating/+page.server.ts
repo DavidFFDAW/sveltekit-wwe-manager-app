@@ -1,14 +1,13 @@
 import { Helpers } from '$lib/server/server.helpers.js';
-import { PpvCardRepository } from '$lib/server/dao/repositories/matchcard.repository';
+import { matchcard } from '$lib/server/dao/repositories/matchcard.repository';
 import type { Match, PPVCard } from '@prisma/client';
-import { MatchRepository } from '$lib/server/dao/repositories/match.repository.js';
+import { match } from '$lib/server/dao/repositories/match.repository.js';
 
 export const load = async ({ url }) => {
 	const slug = url.searchParams.get('slug');
 	if (!slug) return Helpers.redirection('/admin/matchcards');
 
-	const repository = new PpvCardRepository();
-	const matchCardEvent = (await repository.getRow({
+	const matchCardEvent = (await matchcard.getRow({
 		where: { id: Number(slug) },
 		include: {
 			matches: {
@@ -41,15 +40,15 @@ export const load = async ({ url }) => {
 };
 
 export const actions = {
-	default: async ({ request }) => { 
+	default: async ({ request }) => {
 		const data = await request.formData();
 		const ppv_id = data.get('ppv_id');
 		if (!ppv_id || typeof ppv_id !== 'string') return Helpers.error('Se requiere un ID de PPV válido', 400);
 		const matches = data.getAll('matches[]') as string[];
 
 		try {
-			const repository = new MatchRepository();
-			const currentMatches = await repository.toMap({
+
+			const currentMatches = await match.toMap({
 				select: {
 					id: true,
 					rating: true,
@@ -77,14 +76,14 @@ export const actions = {
 
 				return current.rating !== matchData.rating || current.winner !== matchData.winner;
 			});
-			
+
 			const promises = onlyChanged.map((matchData) => {
-				return repository.updateById(Number(matchData.id), {
+				return match.updateById(Number(matchData.id), {
 					rating: matchData.rating,
 					winner: matchData.winner
 				});
 			});
-			
+
 			await Promise.all(promises);
 			return Helpers.success('Se han actualizado las valoraciones de los combates', 200);
 		} catch (error) {

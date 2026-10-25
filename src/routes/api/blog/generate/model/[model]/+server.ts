@@ -1,7 +1,7 @@
 import IaService from '../../services/ia.service.js';
 import { Api, Helpers } from '$lib/server/server.helpers.js';
-import { IaRepository } from '$lib/server/dao/repositories/ia.repository.js';
-// import { IaRepository } from '$lib/server/dao/repositories/ia.repository.js';
+import { ia } from '$lib/server/dao/repositories/ia.repository.js';
+// import { ia } from '$lib/server/dao/repositories/ia.repository.js';
 
 export async function POST({ locals, request, params }) {
 	if (!Helpers.hasPermission(locals))
@@ -20,7 +20,6 @@ export async function POST({ locals, request, params }) {
 		const prompt = formData.get('prompt') as string;
 		if (!prompt) return Api.error('No se ha proporcionado un prompt', 400);
 
-		const logs = new IaRepository();
 		const model = IaService.getModelByProvider(provider);
 		const service = IaService.getServiceByModel(provider);
 
@@ -45,7 +44,7 @@ export async function POST({ locals, request, params }) {
 		}
 
 		const message = response.text;
-		await logs.register({
+		await ia.register({
 			model: model,
 			service: provider,
 			request_id: response.request_id,

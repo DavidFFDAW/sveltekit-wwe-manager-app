@@ -1,12 +1,11 @@
-import { WrestlerRepository } from '$lib/server/dao/repositories/wrestler.repository';
+import { wrestlers } from '$lib/server/dao/repositories/wrestler.repository';
 import { Helpers } from '$lib/server/server.helpers';
 
 export async function load({ url }) {
 	const perPage = 150;
 	const page = url.searchParams.get('page') ? parseInt(url.searchParams.get('page') as string) : 1;
 
-	const wrestlerRepo = new WrestlerRepository();
-	const wrestlers = await wrestlerRepo.paginateN(
+	const pagination = await wrestlers.paginateN(
 		page,
 		{
 			orderBy: { name: 'asc' }
@@ -15,9 +14,9 @@ export async function load({ url }) {
 	);
 
 	return {
-		wrestlers: wrestlers.list,
-		total: wrestlers.totalItems,
-		pages: wrestlers.pages,
+		wrestlers: pagination.list,
+		total: pagination.totalItems,
+		pages: pagination.pages,
 		page,
 		perPage
 	};
@@ -33,8 +32,7 @@ export const actions = {
 			if (!status || numericActiveIds.length === 0)
 				return Helpers.error('No se proporcionaron datos válidos', 400);
 
-			const wrestlerRepo = new WrestlerRepository();
-			await wrestlerRepo.bulkUpdate(
+			await wrestlers.bulkUpdate(
 				{
 					id: { in: numericActiveIds }
 				},

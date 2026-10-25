@@ -1,14 +1,11 @@
-import { RumbleRepository } from '$lib/server/dao/repositories/rumble.repository.js';
-import { WrestlerRepository } from '$lib/server/dao/repositories/wrestler.repository.js';
+import { rumble } from '$lib/server/dao/repositories/rumble.repository.js';
+import { wrestlers } from '$lib/server/dao/repositories/wrestler.repository.js';
 import { Helpers } from '$lib/server/server.helpers.js';
-
-const rumbleRepository = new RumbleRepository();
 
 export const load = async ({ locals, url, route }) => {
 	if (!Helpers.hasPermission(locals)) throw Helpers.redirection('/admin/login');
 
-	const wrestlerRepo = new WrestlerRepository();
-	const rumbles = await rumbleRepository.get({
+	const rumbles = await rumble.get({
 		include: {
 			winner: true
 		},
@@ -17,7 +14,7 @@ export const load = async ({ locals, url, route }) => {
 		}
 	});
 
-	const wrestlers = await wrestlerRepo.get({
+	const wrestlerList = await wrestlers.get({
 		select: { id: true, name: true, sex: true, brand: true },
 		where: { status: { not: 'released' } },
 		orderBy: { name: 'asc' }
@@ -25,7 +22,7 @@ export const load = async ({ locals, url, route }) => {
 
 	return {
 		rumbles,
-		wrestlers,
+		wrestlers: wrestlerList,
 		metas: {
 			title: 'Royal Rumble'
 		}
@@ -39,7 +36,7 @@ export const actions = {
 		const formData = await request.formData();
 		const { error, message } = Helpers.checkRequiredFields(
 			formData,
-			rumbleRepository.getRequiredFields()
+			rumble.getRequiredFields()
 		);
 		if (error) return Helpers.error(message, 400);
 
@@ -51,7 +48,7 @@ export const actions = {
 		}
 
 		try {
-			await rumbleRepository.create({
+			await rumble.create({
 				winner: {
 					connect: { id: winner }
 				},

@@ -1,5 +1,5 @@
 import { dev } from '$app/environment';
-import { AnalyticsRepository } from '$lib/server/dao/repositories/analytics.respository';
+import { analytics } from '$lib/server/dao/repositories/analytics.respository';
 import { Helpers } from '$lib/server/server.helpers';
 import { AnalyticsHelpers } from './analytics.helper';
 
@@ -22,7 +22,7 @@ export async function POST({ request, url }) {
 		if (!isSameOrigin(request, url.origin)) return Helpers.api.error('Origen no permitido', 403);
 
 		// if (url.pathname.startsWith('/admin')) return Helpers.api.error('No se pueden registrar analíticas desde páginas de administración', 403);
-		
+
 		const body = await request.json();
 		const path = String(body.url || '/');
 		const event = String(body.event || 'pageview');
@@ -32,16 +32,15 @@ export async function POST({ request, url }) {
 		const refererHeader = request.headers.get('referer') || '';
 		const ip = getClientIpAddress(request);
 
-		const repository = new AnalyticsRepository();
 		const analyticsData = await AnalyticsHelpers.getAnalyticsData(userAgent, ip);
 
-		await repository.create({
+		await analytics.create({
 			event,
 			page: path,
 			referer: refererHeader,
 			...analyticsData
 		});
-		
+
 		return Helpers.api.success('Evento de analítica registrado correctamente');
 	} catch (error) {
 		console.error('Error tracking analytics:', error);

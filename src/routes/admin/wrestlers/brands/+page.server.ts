@@ -1,4 +1,4 @@
-import { wrestlers } from '$lib/server/dao/repositories';
+import { wrestlers } from '$lib/server/dao/repositories/wrestler.repository';
 import { Helpers } from '$lib/server/server.helpers.js';
 
 export const load = async ({ url }) => {

@@ -1,4 +1,4 @@
-import { IaRepository } from '$lib/server/dao/repositories/ia.repository.js'
+import { ia } from '$lib/server/dao/repositories/ia.repository.js'
 
 type LogEntry = {
     model: string;
@@ -7,10 +7,9 @@ type LogEntry = {
     tokens: number;
 }
 
-
 export const load = async ({ url }) => {
-    const logs = new IaRepository();
-    const connection = logs.conn();
+
+    const connection = ia.conn();
     const filterDate = url.searchParams.get('date')?.replace(/\//g, '-');
 
     const dates: { dates: Date }[] = await connection.$queryRaw`SELECT DISTINCT(DATE(created_at)) AS dates FROM ia_log ORDER BY dates ASC`;

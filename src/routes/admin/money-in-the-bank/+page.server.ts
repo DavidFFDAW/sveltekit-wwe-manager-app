@@ -1,4 +1,4 @@
-import { ReignsRepository } from "$lib/server/dao/repositories/reigns.repository";
+import { reigns } from "$lib/server/dao/repositories/reigns.repository";
 import { Utils } from "$lib/utils/general.utils";
 import { ReignUtils } from "$lib/utils/reign.utils.js";
 
@@ -6,7 +6,6 @@ export const load = async ({ url }) => {
 	const filterYear = url.searchParams.get('year') as string | null;
 	const currentYear = url.searchParams.has('year') ? Number(filterYear) : new Date().getFullYear();
 
-	const reigns = new ReignsRepository();
 	const conn = reigns.conn();
 
 	const years: any = await conn.$queryRaw`SELECT DISTINCT EXTRACT(YEAR FROM won_date) AS year FROM championship_reigns r INNER JOIN championship c ON c.id = r.championship_id WHERE c.type = 'mitb' ORDER BY year DESC`;

@@ -2,7 +2,7 @@ import type { Actions } from './$types';
 import { Helpers } from '$lib/server/server.helpers';
 import { brandsArray } from '$lib/constants/app';
 import FormService from '$lib/services/form.service';
-import { championship } from '$lib/server/dao/repositories';
+import { championship } from '$lib/server/dao/repositories/championship.repository';
 
 export const load = (async ({ locals }) => {
 	if (!Helpers.hasPermission(locals, 'admin'))
@@ -54,7 +54,7 @@ export const actions: Actions = {
 			return Helpers.error('No se ha implementado aun la actualización de marcas de campeonatos.', 400);
 
 			// const updates = parseBrandUpdates(form);
-			// const Champions = new ChampionshipRepository();
+			// const Champions = championship;
 			// const activeChampionships = await Champions.get({
 			// 	...championshipsQuery,
 			// 	select: { id: true }

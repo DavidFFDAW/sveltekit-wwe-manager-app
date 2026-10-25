@@ -1,14 +1,13 @@
-import { Helpers } from './../../../../lib/server/server.helpers';
+import { Helpers } from '$lib/server/server.helpers';
 import DateUtils from '$lib/utils/date.utils';
-import { BlogRepository } from '$lib/server/dao/repositories/blog.repository';
+import { blog } from '$lib/server/dao/repositories/blog.repository';
 
 export const GET = async ({ request, url }) => {
 	try {
 		const perpage = 10;
-		const repository = new BlogRepository();
 		const page = parseInt(url.searchParams.get('page') || '1', 10);
 		const date = DateUtils.getDateInstanceTimezone(new Date(), 'Europe/Madrid');
-		const { list, pages } = await repository.paginateN(page, {
+		const { list, pages } = await blog.paginateN(page, {
 			where: {
 				status: 'published',
 				created_at: {

@@ -1,5 +1,5 @@
 import { Utils } from '$lib/utils/general.utils.js';
-import { PpvCardRepository } from '$lib/server/dao/repositories/matchcard.repository.js';
+import { matchcard } from '$lib/server/dao/repositories/matchcard.repository.js';
 import { Helpers } from '$lib/server/server.helpers.js';
 
 type MatchCardWithStats = {
@@ -22,10 +22,9 @@ export const load = async ({ url }) => {
     const dateFrom = new Date(`${yearFilter}-01-01`);
     const dateTo = new Date(`${yearFilter}-12-31`);
 
-    const ppvCardRepository = new PpvCardRepository();
-    const uniqueYears = await ppvCardRepository.getUniquePpvYears();
+    const uniqueYears = await matchcard.getUniquePpvYears();
 
-    const prisma = ppvCardRepository.conn();
+    const prisma = matchcard.conn();
     const rows = await prisma.$queryRaw<MatchCardWithStats[]>`
 		SELECT
             p.id AS id,
@@ -67,8 +66,8 @@ export const actions = {
 
         try {
             const id = formData.get('delete_event');
-            const matchcards = new PpvCardRepository();
-            await matchcards.delete({
+
+            await matchcard.delete({
                 id: Number(id)
             });
 

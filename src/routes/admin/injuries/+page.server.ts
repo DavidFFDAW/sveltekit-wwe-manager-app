@@ -1,5 +1,5 @@
 import { Utils } from '$lib/utils/general.utils.js';
-import { InjuriesRepository } from '$lib/server/dao/repositories/injuries.repository';
+import { injuries } from '$lib/server/dao/repositories/injuries.repository';
 
 const normalizeDate = (value: Date | string | null) => {
 	if (!value) return null;
@@ -29,8 +29,8 @@ const getDaysLabel = (startDate: Date | null, endDate: Date | null) => {
 
 export const load = async () => {
 	const today = new Date();
-	const Injuries = new InjuriesRepository();
-	const injuriesList = await Injuries.get({
+
+	const injuriesList = await injuries.get({
 		include: { Wrestler: { select: { id: true, name: true, image_name: true } } }
 	});
 

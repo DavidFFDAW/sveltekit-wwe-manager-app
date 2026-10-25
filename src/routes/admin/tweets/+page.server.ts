@@ -1,8 +1,8 @@
-import { TwitterRepository } from '$lib/server/dao/repositories/twitter.repository';
+import { twitter } from '$lib/server/dao/repositories/twitter.repository';
 
 export const load = async () => {
-	const twitterRepository = new TwitterRepository();
-	const tweets = await twitterRepository.get({
+
+	const tweets = await twitter.get({
 		orderBy: {
 			created_at: 'desc'
 		}

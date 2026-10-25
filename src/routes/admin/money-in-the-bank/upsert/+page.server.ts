@@ -1,6 +1,6 @@
-import { ChampionshipRepository } from "$lib/server/dao/repositories/championship.repository";
-import { ReignsRepository } from "$lib/server/dao/repositories/reigns.repository.js";
-import { WrestlerRepository } from "$lib/server/dao/repositories/wrestler.repository";
+import { championship } from "$lib/server/dao/repositories/championship.repository";
+import { reigns } from "$lib/server/dao/repositories/reigns.repository.js";
+import { wrestlers } from "$lib/server/dao/repositories/wrestler.repository";
 import { Helpers } from "$lib/server/server.helpers";
 import { DateUtils } from "$lib/utils/date.utils";
 import type { ChampionshipReign } from "@prisma/client";
@@ -17,8 +17,6 @@ type Wrestler = {
 
 export const load = async ({ url }) => {
 	const id = url.searchParams.get('id');
-	const wrestlers = new WrestlerRepository();
-	const reigns = new ReignsRepository();
 
 	const wrestlersList = await wrestlers.get({
 		select: { id: true, name: true, slug: true, sex: true, image_name: true, brand: true, status: true },
@@ -68,7 +66,7 @@ export const actions = {
 			return Helpers.error('Wrestler inválido', 400);
 
 		try {
-			const wrestlers = new WrestlerRepository();
+
 			const wrestler = await wrestlers.getSingleById(Number(wrestlerId));
 			if (!wrestler)
 				return Helpers.error('Wrestler no encontrado', 404);
@@ -77,8 +75,7 @@ export const actions = {
 			if (!gender || !['m', 'f'].includes(gender))
 				return Helpers.error('Género inválido', 400);
 
-			const championships = new ChampionshipRepository();
-			const mitb = await championships.getRow({
+			const mitb = await championship.getRow({
 				where: {
 					type: 'mitb',
 					gender: gender,
@@ -87,7 +84,6 @@ export const actions = {
 			if (!mitb)
 				return Helpers.error('MITB Championship no encontrado', 404);
 
-			const reigns = new ReignsRepository();
 			const currentMitbReign = await reigns.getRow({
 				where: {
 					championship_id: mitb.id,

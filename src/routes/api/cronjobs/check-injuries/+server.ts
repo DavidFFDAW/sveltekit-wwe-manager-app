@@ -1,7 +1,7 @@
 import type { RequestHandler } from './$types';
 import { CRON_JOB_SECRET } from '$env/static/private';
-import { InjuriesRepository } from '$lib/server/dao/repositories/injuries.repository';
-import { UsersRepository } from '$lib/server/dao/repositories/users.repository';
+import { injuries } from '$lib/server/dao/repositories/injuries.repository';
+import { users } from '$lib/server/dao/repositories/users.repository';
 import EmailService from '$lib/server/services/email.server.service';
 
 export const GET: RequestHandler = async ({ request }) => {
@@ -14,9 +14,8 @@ export const GET: RequestHandler = async ({ request }) => {
 	today.setUTCHours(1, 30, 0, 0);
 
 	try {
-		const Injuries = new InjuriesRepository();
-		const Users = new UsersRepository();
-		const finishedInjuries = await Injuries.get({
+
+		const finishedInjuries = await injuries.get({
 			where: {
 				end_date: {
 					lte: today
@@ -36,12 +35,12 @@ export const GET: RequestHandler = async ({ request }) => {
 			return new Response('No se encontró ninguna lesión que haya finalizado.', { status: 200 });
 
 		const injuriesIds = finishedInjuries.map((injury) => injury.id);
-		await Injuries.bulkUpdate(
+		await injuries.bulkUpdate(
 			{ id: { in: injuriesIds } },
 			{ is_notified: true }
 		);
 
-		const admins = await Users.getUsersBaseDataByRole('admin');
+		const admins = await users.getUsersBaseDataByRole('admin');
 		const wrestlers = finishedInjuries.map(injury => injury.Wrestler.name);
 		const emails = admins.map(user => user.email);
 

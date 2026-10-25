@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit';
-import { PpvCardRepository } from '$lib/server/dao/repositories/matchcard.repository.js';
+import { matchcard } from '$lib/server/dao/repositories/matchcard.repository.js';
 import { Helpers } from '$lib/server/server.helpers.js';
-import { BlogRepository } from '$lib/server/dao/repositories/blog.repository.js';
+import { blog } from '$lib/server/dao/repositories/blog.repository.js';
 import { Utils } from '$lib/utils/general.utils.js';
 
 export const load = async ({ url }) => {
@@ -11,8 +11,7 @@ export const load = async ({ url }) => {
 	const matchcardId = Number(id);
 	if (isNaN(matchcardId)) return redirect(302, '/admin/matchcards');
 
-	const repository = new PpvCardRepository();
-	const card_data = await repository.getRow({
+	const card_data = await matchcard.getRow({
 		where: {
 			id: matchcardId
 		},
@@ -92,9 +91,7 @@ export const actions = {
 			const title = `Resumen de ${datas.name}`;
 			const author = locals.user?.uuid ? Number(locals.user?.uuid) : 0;
 
-			const postRepository = new BlogRepository();
-			const ppvCardRepository = new PpvCardRepository();
-			const createdPost = await postRepository.create({
+			const createdPost = await blog.create({
 				title: title.trim(),
 				slug: Helpers.slugify(title),
 				content: datas.content.trim(),
@@ -109,7 +106,7 @@ export const actions = {
 
 			if (!createdPost) return Helpers.error('No se pudo crear el post', 500);
 
-			await ppvCardRepository.updateById(urlId, {
+			await matchcard.updateById(urlId, {
 				post_id: createdPost.id
 			});
 

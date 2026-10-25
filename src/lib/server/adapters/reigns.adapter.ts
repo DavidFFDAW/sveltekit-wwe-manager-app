@@ -63,7 +63,7 @@ export const ReignsAdapter = {
                     names: form.getAll('team-single-member-selector-name[]') as string[],
                 },
             },
-            days: form.get('days') ? Number(form.get('days')) : 0,
+            days: 0,
             current: lostDate ? false : true,
             show_won: form.get('show_won') ? (form.get('show_won') as string) : null,
             victory_way: (form.get('victory_way') as string) || 'Pinfall',

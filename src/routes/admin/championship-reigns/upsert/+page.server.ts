@@ -1,8 +1,8 @@
-import { ChampionshipRepository } from '$lib/server/dao/repositories/championship.repository.js';
-import { PPVRepository } from '$lib/server/dao/repositories/ppv.repository.js';
-import { ReignsRepository } from '$lib/server/dao/repositories/reigns.repository';
-import { TeamsRepository } from '$lib/server/dao/repositories/teams.repository';
-import { WrestlerRepository } from '$lib/server/dao/repositories/wrestler.repository';
+import { championship } from '$lib/server/dao/repositories/championship.repository.js';
+import { ppv } from '$lib/server/dao/repositories/ppv.repository.js';
+import { reigns } from '$lib/server/dao/repositories/reigns.repository';
+import { teams } from '$lib/server/dao/repositories/teams.repository';
+import { wrestlers } from '$lib/server/dao/repositories/wrestler.repository';
 import { Helpers } from '$lib/server/server.helpers.js';
 import DateUtils from '$lib/utils/date.utils.js';
 import { ReignUtils } from '$lib/utils/reign.utils.js';
@@ -13,17 +13,13 @@ type UpsertObject = Prisma.ChampionshipReignUpdateInput | Prisma.ChampionshipRei
 export async function load({ url }) {
 	const reignId = url.searchParams.get('reign');
 	let reign = null;
-	const championshipRepo = new ChampionshipRepository();
-	const wrestlersRepo = new WrestlerRepository();
-	const teamsRepository = new TeamsRepository();
-	const ppvRepo = new PPVRepository();
 
 	if (reignId) {
-		const reignsRepo = new ReignsRepository();
-		reign = await reignsRepo.getSingleById(Number(reignId));
+
+		reign = await reigns.getSingleById(Number(reignId));
 	}
 
-	const selectableTeams = await teamsRepository.get({
+	const selectableTeams = await teams.get({
 		where: { active: true },
 		orderBy: { name: 'asc' },
 		include: { WrestlerTeam: { include: { Wrestler: true } } }
@@ -35,12 +31,12 @@ export async function load({ url }) {
 		};
 	});
 
-	const wrestlers = await wrestlersRepo.get({
+	const wrestlerList = await wrestlers.get({
 		select: { id: true, name: true, slug: true, image_name: true, status: true, sex: true },
 		where: { status: { not: 'released' } },
 		orderBy: { slug: 'asc' }
 	});
-	const championships = await championshipRepo.get({
+	const championships = await championship.get({
 		select: {
 			id: true,
 			name: true,
@@ -65,12 +61,12 @@ export async function load({ url }) {
 		championships: championships,
 		isUpdate: Boolean(reignId) && reign !== null,
 		championshipsMap: new Map(championships.map((c) => [c.id, c])),
-		wrestlers: wrestlers.map((w) => ({
+		wrestlers: wrestlerList.map((w) => ({
 			...w,
 			image: w.image_name
 		})),
-		wrestlersMap: new Map(wrestlers.map((w) => [w.id, w])),
-		ppvs: await ppvRepo.getActiveNames(),
+		wrestlersMap: new Map(wrestlerList.map((w) => [w.id, w])),
+		ppvs: await ppv.getActiveNames(),
 		finalParsedTeams,
 		currentTagType
 	};
@@ -91,10 +87,8 @@ export const actions = {
 			if (isNaN(championshipId))
 				return Helpers.error('El ID del campeonato debe ser un número', 400);
 
-			const reignsRepo = new ReignsRepository();
-			const chpRepo = new ChampionshipRepository();
-			const championship = await chpRepo.getSingleById(championshipId);
-			if (!championship) return Helpers.error('El campeonato seleccionado no existe', 400);
+			const selectedChampionship = await championship.getSingleById(championshipId);
+			if (!selectedChampionship) return Helpers.error('El campeonato seleccionado no existe', 400);
 
 			const today = new Date();
 			const startTime = formData.has('start_date_time')
@@ -125,7 +119,7 @@ export const actions = {
 			const [hours, minutes] = startTime.split(':').map(t => Number(t));
 			datas.won_date.setHours(hours, minutes, 0);
 
-			const isTagTeam = championship.tag;
+			const isTagTeam = selectedChampionship.tag;
 			const isManualTeam = datas.currentTagType === 'manual';
 			const calculatedDays = ReignUtils.getDaysBetweenDates(
 				datas.won_date,
@@ -173,7 +167,7 @@ export const actions = {
 			}
 
 			if (datas.is_active) {
-				const activeReign = await reignsRepo.getRow({
+				const activeReign = await reigns.getRow({
 					where: {
 						championship_id: datas.championshipId,
 						current: true,
@@ -196,7 +190,7 @@ export const actions = {
 						updatedOldReignDays
 					});
 
-					await reignsRepo.updateById(activeReign.id, {
+					await reigns.updateById(activeReign.id, {
 						current: false,
 						lost_date: datas.won_date as Date,
 						days: updatedOldReignDays
@@ -207,9 +201,9 @@ export const actions = {
 
 			const upsertAction =
 				action === 'create'
-					? () => reignsRepo.create(upsertObject as Prisma.ChampionshipReignCreateInput)
+					? () => reigns.create(upsertObject as Prisma.ChampionshipReignCreateInput)
 					: () =>
-						reignsRepo.updateById(
+						reigns.updateById(
 							Number(updateId),
 							upsertObject as Prisma.ChampionshipReignUpdateInput
 						);
