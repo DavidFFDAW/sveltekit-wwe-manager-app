@@ -41,7 +41,8 @@
 
 <style>
 	.grid.list-container {
-		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 		gap: 1rem;
 	}
 	.grid.list-container .list-item.list-reign-item {
