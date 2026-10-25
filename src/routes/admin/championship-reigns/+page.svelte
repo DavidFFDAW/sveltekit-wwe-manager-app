@@ -4,6 +4,7 @@
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 
 	let { data } = $props();
+	$inspect(data.reigns_panel);
 </script>
 
 <PageWrapper page="championship-reigns">
@@ -31,33 +32,31 @@
 		<!-- <HttpButton href="/api/reigns/update-days/current" icon="refresh">Actualizar días</HttpButton> -->
 	</header>
 
-	{#if data.reigns_panel.type === 'championships'}
-		<ul class="w1 grid championships-list">
-			{#each data.reigns_panel.championships as group}
-				{@const championship = group.championship}
-				<li class="relative">
-					<a
-						href="{data.path}?championship={championship.id}"
-						class="w1 card box chp-card flex column astart gap-5"
-						class:inactive={!championship.active}
-					>
-						<img
-							src={championship.image}
-							alt={championship.name}
-							width="80"
-							height="80"
-							use:errorimage={'/unknown-championship.webp'}
-							class="championship-image"
-						/>
-						<h2>{championship.name}</h2>
-						{#if !championship.active}
-							<span class="badge badge-active">Desactivado</span>
-						{/if}
-					</a>
-				</li>
-			{/each}
-		</ul>
-	{/if}
+	<ul class="w1 grid championships-list">
+		{#each data.reigns_panel.championships as group}
+			{@const championship = group.championship}
+			<li class="relative">
+				<a
+					href="{data.path}?championship={championship.id}"
+					class="w1 card box chp-card flex column astart gap-5"
+					class:inactive={!championship.active}
+				>
+					<img
+						src={championship.image}
+						alt={championship.name}
+						width="80"
+						height="80"
+						use:errorimage={'/unknown-championship.webp'}
+						class="championship-image"
+					/>
+					<h2>{championship.name}</h2>
+					{#if !championship.active}
+						<span class="badge badge-active">Desactivado</span>
+					{/if}
+				</a>
+			</li>
+		{/each}
+	</ul>
 
 	<ButtonCreate endpoint="/championship-reigns/create" />
 </PageWrapper>

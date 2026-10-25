@@ -38,7 +38,7 @@ export const load = async ({ locals, url }) => {
     return {
         reigns_panel: {
             type: 'championship',
-            championship: unified,
+            championships: unified,
             reigns: [],
         },
     };

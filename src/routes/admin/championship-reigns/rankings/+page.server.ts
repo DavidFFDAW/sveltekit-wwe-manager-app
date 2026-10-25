@@ -3,61 +3,46 @@ import { wrestlers } from '$lib/server/dao/repositories/wrestler.repository';
 import { ReignUtils } from '$lib/utils/reign.utils';
 
 export const load = async () => {
-    const aggregation = await reigns.groupBy({
-        by: ['wrestler_id'],
-        _count: {
-            championship_id: true
-        },
-        _sum: {
-            days: true
-        },
-        // having: {
-        // 	championship_id: {
-        // 		_count: {
-        // 			gt: 1
-        // 		}
-        // 	}
-        // },
-        orderBy: {
-            _count: {
-                championship_id: 'desc'
-            }
-        }
-    });
+    const conn = reigns.conn();
+    const list = await conn.$queryRaw`SELECT
+        w.id AS wrestler_id,
+        w.name,
+        w.image_name AS wrestler_image,
+        COUNT(*) AS reigns,
+        SUM(
+            DATEDIFF(
+                COALESCE(r.lost_date, CURDATE()),
+                r.won_date
+            )
+        ) AS total_days
+    FROM (
+        SELECT id, wrestler_id, won_date, lost_date
+        FROM championship_reigns
 
-    const wrestlerIds = aggregation
-        .map((item: any) => [item.wrestler_id, item.partner])
-        .flat()
-        .filter(Boolean);
+        UNION ALL
 
-    const wrestlerDatas = await wrestlers.get({
-        select: {
-            id: true,
-            name: true,
-            slug: true,
-            image_name: true
-        },
-        where: {
-            id: {
-                in: wrestlerIds
-            }
-        }
-    });
-    const wrestlersMap = new Map(wrestlerDatas.map((w) => [w.id, w]));
-    console.log({ wrestlerIds, wrestlerDatas, wrestlersMap });
+        SELECT id, partner AS wrestler_id, won_date, lost_date
+        FROM championship_reigns
+        WHERE partner IS NOT NULL
+    ) r
+    INNER JOIN wrestler w ON w.id = r.wrestler_id
+    GROUP BY w.id, w.name
+    ORDER BY reigns DESC, total_days DESC;` as {
+        wrestler_id: number;
+        name: string;
+        wrestler_image: string;
+        reigns: number;
+        total_days: number;
+    }[];
 
-    const list = aggregation.map((item: any) => {
-        const wrestler = wrestlersMap.get(item.wrestler_id);
-        const partner = item.partner ? wrestlersMap.get(item.partner) : null;
-        return {
-            wrestler,
-            partner,
-            times_champion: item._count.championship_id,
-            days_str: ReignUtils.getDaysAndMonths(item._sum.days),
-            total_days: item._sum.days,
-            tag: Boolean(partner)
-        };
-    });
-
-    return { rankings: list };
+    return {
+        rankings: list.map(r => ({
+            wrestler_id: Number(r.wrestler_id),
+            name: r.name,
+            wrestler_image: r.wrestler_image,
+            reigns: Number(r.reigns),
+            total_days: Number(r.total_days),
+            calculated_time: Number(r.total_days).getEllapsedTimeFromDays()
+        }))
+    };
 };

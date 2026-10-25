@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { errorimage } from '$lib/actions/error.image';
-	import Debug from '$lib/components/visual/debug.svelte';
 	let { data } = $props();
 </script>
 
@@ -15,39 +14,27 @@
 		<ul class="grid list-container responsive">
 			{#each data.rankings as reign}
 				<li
-					class="item card wrestler-card wrestler-{reign.wrestler.id}"
-					class:tag={reign.tag}
-					data-reign-wrestler={reign.wrestler.id}
+					class="item card wrestler-card wrestler-{reign.wrestler_id}"
+					data-reign-wrestler={reign.wrestler_id}
 				>
 					<div class="card-header">
 						<img
 							width="80"
-							src={reign.wrestler.image_name}
-							alt={reign.wrestler.name}
+							src={reign.wrestler_image}
+							alt={reign.name}
 							use:errorimage={'vacant.webp'}
 						/>
-						{#if reign.partner}
-							<img
-								width="80"
-								src={reign.partner.image_name}
-								alt={reign.partner.name}
-								use:errorimage={'vacant.webp'}
-							/>
-						{/if}
-						<h3>
-							{reign.wrestler.name}
-							{#if reign.partner}
-								& {reign.partner.name}
-							{/if}
-						</h3>
 					</div>
 					<div class="card-body">
-						<p><strong>Reinados:</strong> {reign.times_champion}</p>
-						<p><strong>Días como campeón:</strong> {reign.days_str}</p>
+						<p><strong>Reinados:</strong> {reign.reigns}</p>
+						<p>
+							<strong>Días como campeón:</strong>
+							{reign.calculated_time.days} ({reign.calculated_time.formatted})
+						</p>
 					</div>
 
 					<a
-						href="/admin/championship-reigns/bywrestler?id={reign.wrestler.id}"
+						href="/admin/championship-reigns/bywrestler?id={reign.wrestler_id}"
 						class="btn small info card-footer inline-block"
 					>
 						<i class="fa-solid fa-eye"></i>
