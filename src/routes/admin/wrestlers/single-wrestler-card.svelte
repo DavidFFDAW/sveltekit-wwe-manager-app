@@ -59,8 +59,8 @@
 				</button>
 			</div>
 			<div class="action-buttons-container">
-				<a href="/admin/wrestlers/update/{wrestler.id}" class="btn small warn">
-					<i class="bi bi-pencil"></i> Editar
+				<a href="/admin/wrestlers/upsert/{wrestler.id}" class="btn small warn">
+					<i class="bi bi-pencil"></i> Editar simplificado
 				</a>
 			</div>
 		</div>

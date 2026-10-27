@@ -6,7 +6,7 @@
 	import RadioList from '$lib/components/forms/inputs/radio-list.svelte';
 	import { WrestlerConstants } from '$lib/constants/wrestler.constants';
 	import type { Wrestler } from '@prisma/client';
-	import CoverImage from '$lib/components/forms/inputs/cover-image.svelte';
+	// import CoverImage from '$lib/components/forms/inputs/cover-image.svelte';
 	import { Utils } from '$lib/utils/general.utils';
 
 	export let wrestler: Wrestler = {} as Wrestler;
@@ -67,6 +67,7 @@
 			options={WrestlerConstants.genders}
 			value={wrestler.sex as string}
 		/>
+		<ImageInput label="Imagen de luchador" name="image" bind:image />
 	</Box>
 
 	<Box title="Datos de estados" icon="file-bar-graph">
@@ -85,7 +86,7 @@
 		<BrandsSelector value={wrestler.brand as any} />
 	</Box>
 
-	<Box title="Datos de Twitter" icon="twitter" classes="twitter-panel">
+	<!-- <Box title="Datos de Twitter" icon="twitter" classes="twitter-panel">
 		<Input
 			label="Twitter"
 			name="twitter_acc"
@@ -107,13 +108,13 @@
 			name="twitter-image"
 			image={wrestler.twitter_image as string}
 		/>
-	</Box>
+	</Box> -->
 
-	<Box title="Imagenes" icon="image">
+	<!-- <Box title="Imagenes" icon="image">
 		<ImageInput label="Imagen de luchador" name="image" bind:image />
-	</Box>
+	</Box> -->
 
-	<Box title="Bloque imagen" icon="image-fill">
+	<!-- <Box title="Bloque imagen" icon="image-fill">
 		<CoverImage
 			width={512}
 			height={512}
@@ -124,5 +125,5 @@
 			bind:imageName={slug}
 			bind:value={image}
 		/>
-	</Box>
+	</Box> -->
 </div>
