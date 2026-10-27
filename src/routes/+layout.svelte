@@ -24,7 +24,7 @@
 			url.hostname !== data.hostname ? url.href : url.pathname + url.searchParams.toString();
 
 		// if (path.startsWith('admin') || path.startsWith('/admin')) return;
-		AnalyticsHelpers.track('link_click', path);
+		// AnalyticsHelpers.track('link_click', path);
 	};
 
 	$effect(() => {

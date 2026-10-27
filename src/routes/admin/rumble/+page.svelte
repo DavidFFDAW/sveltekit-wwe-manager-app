@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Box from '$lib/components/box/box.svelte';
+	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import NumberInputControls from '$lib/components/forms/inputs/number-input-controls.svelte';
 	import RadioList from '$lib/components/forms/inputs/radio-list.svelte';
@@ -121,6 +122,9 @@
 
 					<div class="wrestler-info">
 						<h3 class="wrestler-name dreadnotus uppercase">{rumble.winner.name}</h3>
+						<a href={`/admin/rumble/upsert/${rumble.id}`} class="btn secondary small">
+							Editar ganador
+						</a>
 						<p class="wrestler-successful">
 							{rumble.successful ? 'Tuvo' : 'No tuvo'} éxito en WrestleMania
 						</p>
@@ -137,6 +141,8 @@
 	{:else}
 		<h2>No hay ganadores de Royal Rumble registrados.</h2>
 	{/if}
+
+	<ButtonCreate endpoint="/rumble/upsert" />
 </section>
 
 <style>

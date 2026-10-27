@@ -1,5 +1,6 @@
 import { Prisma, type Rumble } from '@prisma/client';
 import { Repository } from './Repository';
+import prisma from '$lib/server/prisma';
 
 export class RumbleRepository extends Repository<
 	Rumble,
@@ -10,6 +11,7 @@ export class RumbleRepository extends Repository<
 	Prisma.RumbleGroupByArgs,
 	Prisma.RumbleAggregateArgs
 > {
+	private _model = prisma.rumble;
 	protected requiredFields: string[] = ['year', 'entry_number', 'winner_id'];
 
 	constructor() {
