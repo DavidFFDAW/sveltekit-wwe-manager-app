@@ -45,8 +45,6 @@ export const actions = {
 				categories: datas.getAll('categories').join(',')
 			};
 
-			console.log({ data: datas.entries(), wrestlerObject, updateId });
-
 			const databaseOperation = isUpdate
 				? wrestlers.updateById(updateId, wrestlerObject)
 				: wrestlers.create(wrestlerObject)
