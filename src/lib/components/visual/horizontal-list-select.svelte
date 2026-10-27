@@ -25,6 +25,13 @@
 	let selectedLetter = $state<string>('');
 
 	let filtered = $derived.by(() => {
+		if (!selectedLetter && search.length < 3 && value) {
+			const selectedItem = list.find((item) => item.id === value);
+			if (selectedItem) {
+				return [selectedItem, ...list.filter((item) => item.id !== value)].slice(0, maxVisibleItems);
+			}
+		}
+
 		const letterFilter =
 			selectedLetter !== ''
 				? list.filter((item) => item.name.toLowerCase().startsWith(selectedLetter))
