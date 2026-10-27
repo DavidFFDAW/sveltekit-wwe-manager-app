@@ -13,6 +13,10 @@ export class FormService {
 		if (!this.datas.has(key)) return defaultValue;
 		return this.datas.get(key)!.toString().trim();
 	}
+	public getOrNull(key: string, defaultValue: string | null = null): string | null {
+		if (!this.datas.has(key)) return defaultValue;
+		return this.datas.get(key)?.toString().trim() ?? defaultValue;
+	}
 	public getNumber(key: string): number {
 		return Number(this.get(key));
 	}
@@ -28,8 +32,8 @@ export class FormService {
 		return date ? new Date(date) : new Date();
 	}
 	public getUpdateId(): number {
-		if (!this.datas.has('update_id')) return 0;
-		return this.getNumber('update_id');
+		if (!this.datas.has('_update_id')) return 0;
+		return this.getNumber('_update_id');
 	}
 	public getDeleteId(): number {
 		if (!this.datas.has('delete_id')) return 0;
@@ -51,6 +55,13 @@ export class FormService {
 			updateId: updateId,
 			action: action,
 		};
+	}
+	public checkRequiredFields(requiredFields: string[]): { error: boolean; message: string } {
+		const missingFields = requiredFields.filter(field => !this.datas.has(field) || !this.get(field));
+		if (missingFields.length > 0) {
+			return { error: true, message: `Faltan campos requeridos: ${missingFields.join(', ')}` };
+		}
+		return { error: false, message: '' };
 	}
 	public entries() {
 		return Object.fromEntries(this.datas.entries());
