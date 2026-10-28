@@ -7,12 +7,13 @@
 	import { errorimage } from '$lib/actions/error.image';
 	import MembersSelector from './members-selector.svelte';
 	import './page.css';
+	import DatasetInput from '$lib/components/forms/inputs/dataset-input.svelte';
 
 	const today = new Date();
 
 	let { data } = $props();
 	let currentStep = $state(1);
-	let ppvWon = $state(data.reign?.ppv_won);
+	let ppvWon = $state(data.reign?.ppv_won || '');
 	let currentTagType = $state<'team' | 'manual'>(data.currentTagType || 'team');
 	let selectedChampionshipId = $state(data.reign?.championship_id || null);
 	let selectedChampionship = $derived(data.championshipsMap.get(selectedChampionshipId || 0));
@@ -441,33 +442,18 @@
 						required={false}
 					/>
 
-					<div class="ppv-won-container form-item">
-						<span class="label form-label">Evento en que se gano</span>
-						<div class="ppv-won-list">
-							{#each data.ppvs as ppv}
-								<label class="relative">
-									<input
-										type="radio"
-										class="app-radio"
-										name="ppv_won"
-										value={ppv}
-										bind:group={ppvWon}
-									/>
-									<div class="inner">
-										<span>{ppv}</span>
-									</div>
-								</label>
-							{/each}
-						</div>
-					</div>
+					<DatasetInput
+						name="ppv_won"
+						label="Evento en que se gano"
+						options={data.ppvs}
+						bind:value={ppvWon}
+					/>
 
-					<Input
-						type="text"
+					<DatasetInput
 						label="Forma en que se gano el campeonato"
 						name="victory_way"
 						value={data.reign?.victory_way || 'Pinfall'}
 						placeholder="Forma en que se gano el campeonato"
-						required={false}
 						options={['Pinfall', 'Submission', 'Countout', 'Disqualification', 'Cash-in', 'Otro']}
 					/>
 
