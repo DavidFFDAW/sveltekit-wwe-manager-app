@@ -4,13 +4,36 @@
 	import ActionsCsv from '$lib/components/buttons/grouped-actions/actions-csv.svelte';
 	import ActionsLink from '$lib/components/buttons/grouped-actions/actions-link.svelte';
 	import GroupedActions from '$lib/components/buttons/grouped-actions/grouped-actions.svelte';
-	import Input from '$lib/components/forms/inputs/input.svelte';
-	import RadioList from '$lib/components/forms/inputs/radio-list.svelte';
 	import Pagination from '$lib/components/visual/pagination.svelte';
 	import { WrestlerConstants } from '$lib/constants/wrestler.constants.js';
 	import SingleWrestlerCard from './single-wrestler-card.svelte';
 
 	let { data } = $props();
+	const activeFilters = $derived(
+		[
+			{ name: 'search', value: data.filters.search, label: `Nombre: ${data.filters.search}` },
+			{
+				name: 'gender',
+				value: data.filters.sex,
+				label:
+					WrestlerConstants.genders.find((item) => item.value === data.filters.sex)?.label ?? ''
+			},
+			{
+				name: 'status',
+				value: data.filters.status,
+				label: WrestlerConstants.statusDict[data.filters.status] ?? ''
+			}
+		].filter((filter) => filter.value)
+	);
+
+	function removeFilter(name: string) {
+		const params = new URLSearchParams();
+		for (const filter of activeFilters) {
+			if (filter.name !== name) params.set(filter.name, filter.value);
+		}
+		const query = params.toString();
+		return `/admin/wrestlers${query ? `?${query}` : ''}`;
+	}
 </script>
 
 <div class="admin-page-wrapper admin-wrestlers">
@@ -55,188 +78,286 @@
 		</GroupedActions>
 	</div>
 
-	<div class="w1 box p down">
-		<h2 class="w1 dreadnotus title uppercase">Filtros</h2>
-		<form action="/admin/wrestlers" method="get" class="down">
-			<div class="flex search-wrapper column gap-small">
-				<Input
-					label="Buscar por nombre"
-					name="search"
-					placeholder="Buscar por nombre"
-					bind:value={data.filters.search}
-					icon="search"
-				/>
+	<section class="filters-panel" aria-labelledby="filters-title">
+		<div class="filters-heading">
+			<h2 id="filters-title">
+				<i class="bi bi-sliders" aria-hidden="true"></i> Filtrar luchadores
+			</h2>
+			{#if activeFilters.length > 0}<a href="/admin/wrestlers" class="clear-filters"
+					>Limpiar filtros</a
+				>{/if}
+		</div>
+		{#key JSON.stringify(data.filters)}
+			<form
+				action="/admin/wrestlers"
+				method="get"
+				class="filters-form"
+				role="search"
+				aria-label="Buscar luchadores"
+			>
+				<label class="filter-field search-field">
+					<span>Nombre</span>
+					<input
+						type="search"
+						name="search"
+						value={data.filters.search}
+						placeholder="Buscar por nombre..."
+						maxlength="255"
+					/>
+				</label>
+				<label class="filter-field">
+					<span>Género</span>
+					<select name="gender" value={data.filters.sex}>
+						<option value="">Todos los géneros</option>
+						{#each WrestlerConstants.genders as option}<option value={option.value}
+								>{option.label}</option
+							>{/each}
+					</select>
+				</label>
+				<label class="filter-field">
+					<span>Estado</span>
+					<select name="status" value={data.filters.status}>
+						<option value="">Todos los estados</option>
+						{#each WrestlerConstants.statuses as option}<option value={option.value}
+								>{option.label}</option
+							>{/each}
+					</select>
+				</label>
+				<button type="submit" class="apply-filters"
+					><i class="bi bi-search" aria-hidden="true"></i> Aplicar filtros</button
+				>
+			</form>
+		{/key}
 
-				<RadioList
-					label="Genero"
-					name="gender"
-					bind:value={data.filters.sex as string}
-					options={[{ label: 'Todos', value: '' }, ...WrestlerConstants.genders]}
-				/>
-
-				<RadioList
-					label="Estado"
-					name="status"
-					bind:value={data.filters.status as string}
-					options={[{ label: 'Todos', value: '' }, ...WrestlerConstants.statuses]}
-				/>
+		{#if activeFilters.length > 0}
+			<div class="active-filters" aria-label="Filtros aplicados">
+				<span>Aplicados:</span>
+				{#each activeFilters as filter (filter.name)}
+					<a
+						href={removeFilter(filter.name)}
+						class="filter-chip"
+						aria-label="Quitar filtro: {filter.label}"
+						>{filter.label}<i class="bi bi-x-lg" aria-hidden="true"></i></a
+					>
+				{/each}
 			</div>
-			<div class="w1 flex end acenter">
-				<button type="submit" aria-label="Search" class="btn cta">
-					<i class="bi bi-search"></i>
-				</button>
-			</div>
-		</form>
-	</div>
-
-	<div class="w1 title-margin flex between gap-small responsive responsive-astart down">
-		<h1 class="uppercase">Wrestlers</h1>
-		<Pagination total={data.total} itemsPerPage={10} bind:currentPage={data.page} />
-	</div>
-
-	<div class="admin-wrestlers-list grid-display down">
-		{#if data.wrestlers.length > 0}
-			{#each data.wrestlers as wrestler}
-				<SingleWrestlerCard {wrestler} />
-				<!-- <div class="w1 flex gap-medium admin-wrestler-card responsive">
-					<div class="w1 flex gap-small astart responsive">
-						<img use:errorimage src={wrestler.image_name} alt={wrestler.name} width="100" />
-
-						<div class="w1 admin-wrestler-card-info gap-0">
-							<h2>{wrestler.name}</h2>
-							<small>{wrestler.slug}</small>
-							<div class="status-quick-change-action-block">
-								<AsyncForm
-									action="updateStatus"
-									updateId={wrestler.id}
-									method="put"
-									showButtons={false}
-								>
-									<div class="flex nogap responsive">
-										<select name="status" bind:value={wrestler.status}>
-											{#each WrestlerConstants.statuses as status}
-												<option value={status.value}>{status.label}</option>
-											{/each}
-										</select>
-
-										<button type="submit" class="w1 btn">Actualizar</button>
-									</div>
-								</AsyncForm>
-							</div>
-						</div>
-					</div>
-
-					<div class="wrestler-actions responsive-w1">
-						<a
-							href="/admin/wrestlers/update/{wrestler.id}"
-							class="block tcenter btn secondary blue responsive-w1"
-						>
-							Editar
-						</a>
-					</div>
-				</div> -->
-			{/each}
-		{:else}
-			<p>No wrestlers found</p>
 		{/if}
+	</section>
+
+	<div class="results-toolbar">
+		<div>
+			<h1 class="uppercase">Wrestlers</h1>
+			<p class="results-count">
+				{data.total}
+				{data.total === 1 ? 'luchador encontrado' : 'luchadores encontrados'}
+			</p>
+		</div>
 	</div>
+
+	{#if data.wrestlers.length > 0}
+		<div class="results-footer">
+			<p class="results-count">
+				Mostrando {(data.page - 1) * 10 + 1}–{Math.min(data.page * 10, data.total)} de {data.total}
+			</p>
+			<Pagination total={data.total} itemsPerPage={10} bind:currentPage={data.page} />
+		</div>
+		<ul class="wrestlers-grid" aria-label="Luchadores">
+			{#each data.wrestlers as wrestler (wrestler.id)}
+				<li><SingleWrestlerCard {wrestler} /></li>
+			{/each}
+		</ul>
+	{:else}
+		<div class="empty-state">
+			<i class="bi bi-search" aria-hidden="true"></i>
+			<h2>No se han encontrado luchadores</h2>
+			<p>Prueba otro nombre o cambia los filtros.</p>
+			<a href="/admin/wrestlers" class="btn secondary">Limpiar filtros</a>
+		</div>
+	{/if}
 
 	<ButtonCreate endpoint="wrestlers/create" />
 </div>
 
 <style>
-	.title-margin {
-		margin-top: 50px;
+	.filters-panel {
+		width: 100%;
+		padding: 1.25rem;
+		border: 1px solid var(--border, #e0e4e9);
+		border-radius: 12px;
+		background: var(--surface, #fff);
+		color: var(--text, #252b36);
 	}
-	.search-wrapper {
+	.filters-heading {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		flex-wrap: wrap;
 		margin-bottom: 1rem;
 	}
-
-	.admin-wrestlers-list.grid-display {
+	.filters-heading h2 {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 1rem;
+		margin: 0;
+	}
+	.clear-filters {
+		font-size: 0.85rem;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+		padding: 0.4rem 0;
+	}
+	.filters-form {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(280px, 0.5fr));
-		align-items: start;
-		gap: 15px;
+		grid-template-columns: minmax(180px, 2fr) repeat(2, minmax(140px, 1fr)) auto;
+		align-items: end;
+		gap: 0.85rem;
 	}
-	@media only screen and (max-width: 600px) {
-		.admin-wrestlers-list.grid-display {
-			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-		}
+	.filter-field {
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+		min-width: 0;
+		font-size: 0.85rem;
+		font-weight: 600;
 	}
-
-	.search-wrapper input {
-		padding: 0.5rem;
-		border: 1px solid #ccc;
-		border-radius: 5px;
+	.filter-field input,
+	.filter-field select {
 		width: 100%;
+		min-width: 0;
+		height: 44px;
+		padding: 0.6rem 0.75rem;
+		border: 1px solid var(--border, #cbd2dc);
+		border-radius: 7px;
+		background: var(--surface, #fff);
+		color: var(--text, #252b36);
+		font: inherit;
+		font-weight: 400;
 	}
-
-	.search-wrapper button {
-		padding: 0.5rem 1rem;
-		border: 1px solid #ccc;
-		border-radius: 5px;
-		background-color: #f9f9f9;
-		margin-left: 1rem;
+	.filter-field input::placeholder {
+		color: var(--muted, #646b78);
+	}
+	.apply-filters {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		min-height: 44px;
+		padding: 0.6rem 1rem;
+		border: 1px solid #17181c;
+		border-radius: 7px;
+		background: #17181c;
+		color: #fff;
+		font-size: 0.85rem;
+		font-weight: 600;
 		cursor: pointer;
 	}
-
-	.admin-wrestler-card {
-		padding: 5px;
+	.apply-filters:hover {
+		background: #343842;
+	}
+	.filters-panel :is(input, select, button, a):focus-visible {
+		outline: 2px solid var(--blue);
+		outline-offset: 3px;
+	}
+	.active-filters {
 		display: flex;
-		background-color: #f9f9f9;
-		border-radius: 5px;
-		overflow: hidden;
-		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		margin-top: 1rem;
+		padding-top: 1rem;
+		border-top: 1px solid var(--border, #e0e4e9);
+		font-size: 0.8rem;
 	}
-
-	.admin-wrestler-card .admin-wrestler-card-info {
-		padding: 6px 0;
+	.active-filters > span {
+		color: var(--muted, #646b78);
 	}
-
-	.status-quick-change-action-block {
-		max-width: 220px;
+	.filter-chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.6rem;
+		padding: 0.5rem 0.7rem;
+		min-height: 36px;
+		max-width: 100%;
+		overflow-wrap: anywhere;
+		background: var(--surface2, #f0f3f7);
+		border: 1px solid var(--border, #dce0e6);
+		border-radius: 6px;
 	}
-	.status-quick-change-action-block select {
-		border-radius: 5px 0 0 5px;
-		height: 40px;
+	.filter-chip:hover {
+		border-color: var(--muted, #646b78);
 	}
-	.status-quick-change-action-block .btn {
-		border-radius: 0 5px 5px 0;
-		height: 40px;
+	.filter-chip i {
+		flex-shrink: 0;
+	}
+	@media (max-width: 1000px) {
+		.filters-form {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+		.search-field {
+			grid-column: 1 / -1;
+		}
+		.apply-filters {
+			grid-column: 1 / -1;
+		}
+	}
+	@media (max-width: 480px) {
+		.filters-panel {
+			padding: 1rem;
+		}
+		.filters-form {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+	.results-toolbar,
+	.results-footer {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 1rem;
+		flex-wrap: wrap;
+		width: 100%;
+	}
+	.results-toolbar {
+		margin: 2rem 0 1rem;
+	}
+	.results-toolbar h1 {
+		margin: 0;
+	}
+	.results-count {
+		color: var(--muted, #646b78);
+		font-size: 0.9rem;
+		margin: 0.25rem 0;
+	}
+	.wrestlers-grid {
+		width: 100%;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+		gap: 1rem;
 		padding: 0;
-		background-color: #415972;
-		color: white;
+		margin: 0 0 1rem;
+		list-style: none;
 	}
-
-	@media only screen and (max-width: 768px) {
-		.admin-wrestlers-list {
-			display: grid;
-			grid-template-columns: repeat(2, 1fr);
-			gap: 20px;
-			align-items: start;
-		}
-		.admin-wrestler-card img {
-			width: 100%;
-		}
-
-		.admin-wrestler-card .admin-wrestler-card-info h2 {
-			white-space: pre;
-			overflow-y: hidden;
-			overflow-x: auto;
-			padding: 0 5px;
-			max-width: 100%;
-		}
-		.admin-wrestler-card .admin-wrestler-card-info h2::-webkit-scrollbar {
-			display: none;
-		}
-		.status-quick-change-action-block {
-			max-width: 100%;
-		}
-		.status-quick-change-action-block select {
-			border-radius: 5px 5px 0 0;
-		}
-		.status-quick-change-action-block .btn {
-			border-radius: 0 0 5px 5px;
-		}
+	.wrestlers-grid li {
+		min-width: 0;
+	}
+	.results-footer {
+		margin-bottom: 2rem;
+	}
+	.empty-state {
+		width: 100%;
+		padding: 3rem 1rem;
+		text-align: center;
+		background: var(--surface, #fff);
+		border: 1px dashed var(--border, #dce0e6);
+		border-radius: 12px;
+	}
+	.empty-state > i {
+		font-size: 2rem;
+		color: var(--muted, #646b78);
+	}
+	.empty-state p {
+		margin: 0.5rem 0 1.5rem;
 	}
 </style>

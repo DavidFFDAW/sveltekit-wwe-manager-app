@@ -3,7 +3,6 @@
 	import NumberInputControls from '$lib/components/forms/inputs/number-input-controls.svelte';
 	import ToggleInput from '$lib/components/forms/inputs/toggle-input.svelte';
 	import HorizontalListSelect from '$lib/components/visual/horizontal-list-select.svelte';
-	import Image from '$lib/components/visual/image.svelte';
 
 	let { data } = $props();
 	let search = $state('');

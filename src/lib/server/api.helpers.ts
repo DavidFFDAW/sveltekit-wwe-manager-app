@@ -10,7 +10,7 @@ export const Api = {
 		);
 	},
 	error: (message: string, code?: number) => {
-		return json({ message }, { status: code || 500 });
+		return json({ message, error: message }, { status: code || 500 });
 	},
 	response: (data: Record<string, any>, status: number = 200) => {
 		return json(data, { status });

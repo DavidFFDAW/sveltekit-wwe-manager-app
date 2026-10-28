@@ -3,6 +3,7 @@
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
 	import ActionsAsync from '$lib/components/buttons/grouped-actions/actions-async.svelte';
 	import GroupedActions from '$lib/components/buttons/grouped-actions/grouped-actions.svelte';
+	import LoadButton from '$lib/components/buttons/load-button.svelte';
 	import Input from '$lib/components/forms/inputs/input.svelte';
 	import PpvList from './ppv-list.svelte';
 	// import Calendar from './calendar.svelte';
@@ -30,6 +31,11 @@
 		<a href="/admin/ppvs/update/calendar" class="btn cta icon">
 			<i class="bi bi-calendar-event"></i> Ir a panel de cambio masivo de fechas
 		</a>
+
+		<LoadButton href={'/admin/ppvs/dates'} method="post" class="btn icon">
+			<i class="bi bi-calendar-event"></i>
+			Actualizar fechas de PPVs
+		</LoadButton>
 	</div>
 
 	<header class="page-header down">
