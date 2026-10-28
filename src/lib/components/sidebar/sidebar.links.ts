@@ -1,4 +1,4 @@
-type SidebarLink = {
+export type SidebarLink = {
 	url: string;
 	label: string;
 	icon: string;
@@ -36,7 +36,7 @@ export const SidebarLinks: SidebarLink[] = [
 	{
 		url: '/admin/wrestlers',
 		label: 'Luchadores',
-		icon: 'user',
+		icon: 'person',
 		equals: false
 	},
 	{
@@ -74,13 +74,13 @@ export const SidebarLinks: SidebarLink[] = [
 	{
 		url: '/admin/teams',
 		label: 'Equipos',
-		icon: 'users',
+		icon: 'people',
 		equals: false
 	},
 	{
 		url: '/admin/users',
-		label: 'Users',
-		icon: 'persons',
+		label: 'Usuarios',
+		icon: 'person-gear',
 		equals: false
 	},
 	{
@@ -144,3 +144,19 @@ export const SidebarLinks: SidebarLink[] = [
 		equals: false
 	}
 ];
+
+export const SidebarGroups = [
+	{ label: 'General', paths: ['dashboard', 'blog'] },
+	{
+		label: 'Roster',
+		paths: ['wrestlers', 'teams', 'championships', 'championship-reigns', 'injuries', 'draft']
+	},
+	{ label: 'Eventos', paths: ['ppvs', 'matchcards', 'money-in-the-bank', 'rumble'] },
+	{
+		label: 'Administraci\u00f3n',
+		paths: ['users', 'image-editor', 'cronjobs', 'subscriptions', 'push']
+	}
+].map(({ label, paths }) => ({
+	label,
+	links: paths.flatMap((path) => SidebarLinks.filter((link) => link.url === `/admin/${path}`))
+}));

@@ -53,7 +53,7 @@
 		color: #fff;
 		border: none;
 		padding: 6px 12px;
-		border-radius: 8px;
+		border-radius: 4px;
 		overflow: hidden;
 		text-align: start;
 		cursor: pointer;

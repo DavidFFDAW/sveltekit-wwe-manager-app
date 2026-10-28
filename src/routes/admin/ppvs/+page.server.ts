@@ -12,11 +12,22 @@ const getFilters = (typeFilter: string) => {
 
 export async function load({ url }) {
 	const params = url.searchParams;
-	const activeFilter = params.has('type') ? params.get('type') : 'active';
-	const searchFilter = params.get('search') || '';
-	const filters = getFilters(activeFilter as string);
+	const requestedType = params.get('type') ?? 'active';
+	const activeFilter = ['all', 'active', 'inactive', 'no-date', 'to-be-announced'].includes(
+		requestedType
+	)
+		? requestedType
+		: 'active';
+	const searchFilter = (params.get('search') ?? '').trim().slice(0, 255);
+	const filters = getFilters(activeFilter);
 
 	return {
+		targetYear:
+			Number(
+				new Intl.DateTimeFormat('en', { timeZone: 'Europe/Madrid', year: 'numeric' }).format(
+					new Date()
+				)
+			) + 1,
 		ppvs: await ppv.get({
 			where: {
 				...filters,
