@@ -34,7 +34,7 @@
 					</div>
 
 					<a
-						href="/admin/championship-reigns/bywrestler?id={reign.wrestler_id}"
+						href="/admin/reigns/bywrestler?id={reign.wrestler_id}"
 						class="btn small info card-footer inline-block"
 					>
 						<i class="fa-solid fa-eye"></i>

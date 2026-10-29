@@ -37,19 +37,19 @@ export const SidebarLinks: SidebarLink[] = [
 		equals: false
 	},
 	{
-		url: '/admin/championship-reigns',
+		url: '/admin/reigns',
 		label: 'Reinados',
 		icon: 'trophy-fill',
 		equals: false
 	},
 	{
-		url: '/admin/championship-reigns/defences/update',
+		url: '/admin/reigns/defences/update',
 		label: 'Defensas titulares',
 		icon: 'shield-fill',
 		equals: false
 	},
 	{
-		url: '/admin/championship-reigns/create',
+		url: '/admin/reigns/create',
 		label: 'Crear reinado',
 		icon: 'trophy-fill',
 		equals: false
@@ -136,9 +136,9 @@ export const SidebarGroups = [
 			'wrestlers',
 			'teams',
 			'championships',
-			'championship-reigns',
-			'championship-reigns/defences/update',
-			'championship-reigns/create',
+			'reigns',
+			'reigns/defences/update',
+			'reigns/create',
 			'injuries',
 			'draft'
 		]

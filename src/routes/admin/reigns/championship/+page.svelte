@@ -1,64 +1,63 @@
 <script lang="ts">
-	import { errorimage } from '$lib/actions/error.image';
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
+	import ChampionshipReignCard from '../championship-reign-card.svelte';
 
 	let { data } = $props();
-	$inspect(data.reigns_panel);
 </script>
 
 <PageWrapper page="championship-reigns">
 	<header class="championship-reign-page-header">
 		<h1 class="w1">Reinados de Campeonatos</h1>
-
-		<div class="buttons down">
-			<a class="btn info inline-block" href="{data.path}/rankings">
-				<i class="bi bi-trophy"></i>
-				<span class="tooltip">Rankings</span>
-			</a>
-			<a href="{data.path}/upsert" class="btn success inline-block">
-				<i class="bi bi-plus"></i>
-				<span class="tooltip">Nuevo reinado</span>
-			</a>
-			<a href="{data.path}/defences/update" class="btn warn inline-block">
-				<i class="bi bi-shield"></i>
-				<span class="tooltip">Actualizar defensas</span>
-			</a>
-			<a href="{data.path}/bydate" class="btn info inline-block">
-				<i class="bi bi-calendar"></i>
-				<span class="tooltip">Consultar reinados por fecha</span>
-			</a>
-		</div>
+		<a class="btn info inline-block" href="{data.path}/rankings">
+			<i class="bi bi-trophy"></i>
+			<span class="tooltip">Rankings</span>
+		</a>
+		<a href="{data.path}/upsert" class="btn success inline-block">
+			<i class="bi bi-plus"></i>
+			<span class="tooltip">Nuevo reinado</span>
+		</a>
 		<!-- <HttpButton href="/api/reigns/update-days/current" icon="refresh">Actualizar días</HttpButton> -->
 	</header>
 
-	<ul class="w1 grid championships-list">
-		{#each data.reigns_panel.championships as group}
-			{@const championship = group.championship}
-			<li class="relative">
-				<a
-					href="{data.path}?championship={championship.id}"
-					class="w1 card box chp-card flex column astart gap-5"
-					class:inactive={!championship.active}
+	<form action="" method="get" class="w1 box">
+		<input type="hidden" name="id" value={data.reigns_panel.championshipId} />
+		<div class="w1 flex start acenter gap-small buttons year-buttons-container">
+			{#each data.reigns_panel.years as yr}
+				<button
+					type="submit"
+					name="year"
+					value={yr}
+					class="btn filter"
+					class:active={yr === data.reigns_panel.currentYear}
+					disabled={yr === data.reigns_panel.currentYear}
 				>
-					<img
-						src={championship.image}
-						alt={championship.name}
-						width="80"
-						height="80"
-						use:errorimage={'/unknown-championship.webp'}
-						class="championship-image"
-					/>
-					<h2>{championship.name}</h2>
-					{#if !championship.active}
-						<span class="badge badge-active">Desactivado</span>
-					{/if}
-				</a>
-			</li>
-		{/each}
-	</ul>
+					{yr}
+				</button>
+			{/each}
+		</div>
+	</form>
 
-	<ButtonCreate endpoint="/championship-reigns/create" />
+	<!-- <Debug datas={data.reigns_panel} /> -->
+
+	{#if data.reigns_panel.reigns.length > 0}
+		<div class="grouped-championship-reigns">
+			<ul class="w1 championship-reigns-list">
+				{#each data.reigns_panel.reigns as reign}
+					{@const isTag = reign.Partner && reign.Championship.tag}
+					<li
+						class="w1 championship-reign-item"
+						data-championship-id={reign.championship_id}
+						data-reign-id={reign.id}
+					>
+						<ChampionshipReignCard isTag={isTag as boolean} reign={reign as any} />
+					</li>
+				{/each}
+			</ul>
+		</div>
+	{/if}
+
+	<ButtonCreate endpoint="/reigns/create" />
 </PageWrapper>
 
 <style>

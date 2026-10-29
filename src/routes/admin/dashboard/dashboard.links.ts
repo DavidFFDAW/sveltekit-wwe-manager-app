@@ -30,7 +30,7 @@ export const DashboardLinks: DashboardLink[] = [
 		equals: false
 	},
 	{
-		url: '/admin/championship-reigns',
+		url: '/admin/reigns',
 		label: 'Reinados',
 		image: 'https://davidfernandezdeveloper.es/2k/images/roman-reigns.webp',
 		testb: 'https://img.solowrestling.com/images/139/139513-cody-rhodes-rr.jpg',
@@ -111,7 +111,7 @@ export const DashboardLinks: DashboardLink[] = [
 		label: 'PPVs',
 		background:
 			'https://www.wwe.com/f/styles/gallery_img_l/public/all/2024/01/131_RR_01272024GD_37295--a0647e43afa91c64976613f63e4c387c.jpg',
-			// 'https://www.wwe.com/f/styles/wwe_16_9_xl/public/all/2020/04/WWEBackdrops_Ring--55000519632927d93bfe17d9a8755fe1.jpg',
+		// 'https://www.wwe.com/f/styles/wwe_16_9_xl/public/all/2020/04/WWEBackdrops_Ring--55000519632927d93bfe17d9a8755fe1.jpg',
 		testb: 'https://static0.thesportsterimages.com/wordpress/wp-content/uploads/2022/05/WrestleMania-33-Stage.jpg?q=50&fit=crop&w=825&dpr=1.5',
 		equals: false
 	}

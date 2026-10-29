@@ -32,10 +32,10 @@ type ChampionshipReignWithRelations = ChampionshipReign & {
 
 export const load = async ({ url }) => {
     const id = url.searchParams.get('id');
-    if (!id || isNaN(Number(id))) return Helpers.redirection('/admin/championship-reigns');
+    if (!id || isNaN(Number(id))) return Helpers.redirection('/admin/reigns');
 
     const wrestler = await wrestlers.getSingleById(Number(id));
-    if (!wrestler) return Helpers.redirection('/admin/championship-reigns');
+    if (!wrestler) return Helpers.redirection('/admin/reigns');
 
     const { page, limit } = Helpers.getPaginationFromSearchParams(url.searchParams, 20);
     const { list, ...pagination } = (await reigns.paginateN(
@@ -75,7 +75,7 @@ export const load = async ({ url }) => {
         limit,
     )) as PaginationDatas<ChampionshipReignWithRelations>;
 
-    if (list.length <= 0) return Helpers.redirection('/admin/championship-reigns');
+    if (list.length <= 0) return Helpers.redirection('/admin/reigns');
     const format: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
 
     return {

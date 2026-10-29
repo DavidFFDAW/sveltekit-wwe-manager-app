@@ -1,6 +1,5 @@
 <script>
 	import Icon from '../icons/icon.svelte';
-
 	export let endpoint = '';
 </script>
 

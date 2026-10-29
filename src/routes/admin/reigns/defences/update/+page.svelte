@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { errorimage } from '$lib/actions/error.image';
-	// /admin\championship-reigns\defences\update
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import NumberInputControls from '$lib/components/forms/inputs/number-input-controls.svelte';
 

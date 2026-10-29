@@ -31,11 +31,7 @@
 				</a>
 			</li>
 			<li class="link-item">
-				<a
-					href="/admin/championship-reigns/defences/update"
-					class="btn icon"
-					on:click={closeOpenedLinksMenu}
-				>
+				<a href="/admin/reigns/defences/update" class="btn icon" on:click={closeOpenedLinksMenu}>
 					<i class="bi bi-shield-fill-check"></i>
 					<span>Defensas titulares</span>
 				</a>

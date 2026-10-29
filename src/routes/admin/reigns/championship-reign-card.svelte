@@ -23,7 +23,7 @@
 			alt={reign.Wrestler.name}
 			width="120"
 			height="120"
-			classes="championship-image"
+			class="championship-image"
 		/>
 
 		{#if reign.Partner && reign.Championship.tag}
@@ -32,7 +32,7 @@
 				alt={reign.Partner.name}
 				width="120"
 				height="120"
-				classes="championship-image"
+				class="championship-image"
 			/>
 		{/if}
 	</div>
@@ -46,8 +46,7 @@
 				alt={reign.Championship.name || 'Campeonato'}
 				width="80"
 				height="80"
-				classes="championship-image"
-				type="championship"
+				class="championship-image"
 			/>
 		</div>
 
@@ -153,7 +152,7 @@
 		</div>
 
 		<!-- <div class="w1 flex end acenter gap-smaller">
-			<a href="/admin/championship-reigns/update/{reign.id}" class="btn cta icon">
+			<a href="/admin/reigns/update/{reign.id}" class="btn cta icon">
 				<i class="bi bi-pencil"></i>
 				<span class="btn-text">Ir a panel de edición</span>
 			</a>

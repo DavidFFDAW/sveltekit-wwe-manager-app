@@ -42,7 +42,7 @@
 		</small>
 	</div>
 	<div class="w1 flex end acenter">
-		<a href="/admin/championship-reigns/defences/update" class="btn small cta">
+		<a href="/admin/reigns/defences/update" class="btn small cta">
 			Actualizar días de defensas titulares
 		</a>
 	</div>

@@ -23,7 +23,7 @@
 						<div class="old-reigns-block">
 							{#each data.championship.ChampionshipReign as reign}
 								<a
-									href="/admin/championship-reigns/update/{reign.id}"
+									href="/admin/reigns/update/{reign.id}"
 									class="w1 flex gap-smaller old-reign-item astart"
 									class:active={reign.current}
 								>
