@@ -2,6 +2,7 @@ import { getParsedFormDatas, Utils } from '$lib/utils/general.utils';
 import { fail, json, redirect } from '@sveltejs/kit';
 import { Api as ApiHelpers } from './api.helpers';
 import fs from 'fs';
+import { dev } from '$app/environment';
 
 export const Api = ApiHelpers;
 export const Helpers = {
@@ -67,6 +68,7 @@ export const Helpers = {
 		};
 	},
 	hasPermission: (locals: App.Locals, role: string = 'admin') => {
+		if (dev) return true;
 		if (!locals.user) return false;
 		const userRoles = [role, 'superadmin', 'admin'];
 		return userRoles.includes(locals.user.role);

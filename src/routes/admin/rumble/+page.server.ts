@@ -2,8 +2,9 @@ import { rumble } from '$lib/server/dao/repositories/rumble.repository.js';
 import { wrestlers } from '$lib/server/dao/repositories/wrestler.repository.js';
 import { Helpers } from '$lib/server/server.helpers.js';
 
-export const load = async ({ locals, url, route }) => {
+export const load = async ({ locals, url, route, depends }) => {
 	if (!Helpers.hasPermission(locals)) throw Helpers.redirection('/admin/login');
+	depends(url.pathname);
 
 	const rumbles = await rumble.get({
 		include: {

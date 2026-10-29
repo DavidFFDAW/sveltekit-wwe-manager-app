@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
+	import LoadButton from '$lib/components/buttons/load-button.svelte';
 	import type { Rumble, Wrestler } from '@prisma/client';
 
 	let { data } = $props();
@@ -35,6 +36,15 @@
 						<p class="wrestler-successful">
 							{rumble.successful ? 'Tuvo' : 'No tuvo'} éxito en WrestleMania
 						</p>
+
+						<LoadButton
+							method="post"
+							invalidate={`app:rumble`}
+							href={`/admin/rumble/toggle-success?id=${rumble.id}`}
+							class="btn primary small"
+						>
+							{rumble.successful ? 'Marcar como no exitoso' : 'Marcar como exitoso'}
+						</LoadButton>
 					</div>
 					<p class="year">{rumble.year}</p>
 					<p class="entry entry-number rumble">
