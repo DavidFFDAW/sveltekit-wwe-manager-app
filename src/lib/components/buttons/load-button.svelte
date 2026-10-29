@@ -4,24 +4,30 @@
 	import SpinnerSimple from '../spinner/spinner-simple.svelte';
 	import { Toast, Utils } from '$lib/utils';
 	import { HttpService } from '$lib/services/http.service';
+	import { invalidate, invalidateAll } from '$app/navigation';
+	import { page } from '$app/state';
 
 	interface LoadButtonProps extends HTMLButtonAttributes {
 		href: string;
+		sleep?: number;
 		method?: 'get' | 'post' | 'put' | 'delete';
 		children: Snippet;
 	}
 
 	let loading = $state(false);
-	let { href, method = 'get', children, ...rest }: LoadButtonProps = $props();
+	let { href, method = 'get', children, sleep = 500, ...rest }: LoadButtonProps = $props();
 
 	const handleClick = async () => {
 		if (!href) return;
-
 		loading = true;
-		const response = await HttpService.request(href, method);
-		const message = response.response.error || '';
-		console.log({ load: response });
-		if (message) Toast.info(message);
+		const [response] = await Promise.all([HttpService.request(href, method), Utils.sleep(sleep)]);
+		const message: string =
+			response.response.message ||
+			response.response.error ||
+			(response.ok ? 'Operación exitosa' : 'Ocurrió un error');
+		const toastMethod = response.ok ? Toast.success : Toast.error;
+		if (message) toastMethod.call(null, message);
+		if (response.ok) await invalidateAll();
 		loading = false;
 	};
 </script>
