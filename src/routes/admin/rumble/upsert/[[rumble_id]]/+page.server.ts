@@ -1,4 +1,5 @@
 import { rumble, wrestlers } from '$lib/server/dao/repositories';
+import type { Rumble } from '@prisma/client';
 
 export const load = async ({ params }) => {
 	const { rumble_id } = params;
@@ -7,7 +8,7 @@ export const load = async ({ params }) => {
 
 	const rumbleData = isUpdate
 		? await rumble.getById(rumbleId)
-		: {};
+		: {} as Rumble;
 
 	const wrestlerList = await wrestlers.getNonReleasedWrestlers({
 		select: { id: true, name: true, image_name: true, overall: true, sex: true }
@@ -17,7 +18,7 @@ export const load = async ({ params }) => {
 		isUpdate,
 		id: rumbleId,
 		rumble: rumbleData,
-		wrestlers: wrestlerList.map(w => ({ ...w, image: w.image_name })),
+		wrestlers: wrestlerList.map(w => ({ ...w, image: w.image_name as string })),
 		currentYear: new Date().getFullYear()
 	};
 }

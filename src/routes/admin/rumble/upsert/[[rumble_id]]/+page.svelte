@@ -5,8 +5,6 @@
 	import HorizontalListSelect from '$lib/components/visual/horizontal-list-select.svelte';
 
 	let { data } = $props();
-	let search = $state('');
-	let filteredWrestlers = data.wrestlers.slice(0, 10);
 </script>
 
 <section>
@@ -51,6 +49,7 @@
 						name="successful"
 						checked={data.rumble?.successful ?? false}
 					/>
+
 					<div class="form-actions">
 						<a href="/admin/rumble" class="btn secondary">Cancelar</a>
 						<button type="submit" class="btn cta" disabled={!data.wrestlers.length}>
