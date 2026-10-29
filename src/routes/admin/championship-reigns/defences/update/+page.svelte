@@ -4,7 +4,7 @@
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import NumberInputControls from '$lib/components/forms/inputs/number-input-controls.svelte';
 
-	let { data } = $props();
+	let { data }: { data: { reigns: any[] } } = $props();
 </script>
 
 <section class="reigns-defences-update-page">
@@ -54,13 +54,15 @@
 							label="Defensas"
 							name="defenses"
 							min={0}
-							value={reign.defences}
+							value={reign.defences || 0}
 							step={1}
 						/>
 						<p class="duration">{reign.time_days}</p>
-						{#if reign.updated_ellapsed}
-							<p class="elapsed-time">Actualizado: {reign.updated_ellapsed}</p>
+						{#if reign.ellapsed_time}
+							<p class="elapsed-time">Actualizado: {reign.ellapsed_time.formatted}</p>
 						{/if}
+
+						<p class="tag reign-rating-tag">{reign.ranking_status}</p>
 					</div>
 				{/each}
 			</div>
@@ -70,21 +72,26 @@
 
 <style>
 	.grid.wrestlers-reigns-grid {
-		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 		gap: 1rem;
 	}
 	.wrestler-team-container {
 		position: relative;
 	}
+	.wrestler-team-container .wrestler-image {
+		width: 150px;
+		object-fit: contain;
+	}
 	.wrestler-team-container .championship-image {
 		position: absolute;
-		top: 50%;
 		left: 50%;
-		transform: translate(-50%, -50%) rotate(-15deg);
-		width: 100px;
+		bottom: -20px;
+		transform: translateX(-50%);
 		object-fit: contain;
-		opacity: 0.9;
-		z-index: 0;
+		width: 100px;
+		opacity: 1;
+		filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.5));
+		z-index: 2;
 	}
 	.wrestler-team-container .wrestler-image {
 		position: relative;
@@ -98,6 +105,7 @@
 	}
 
 	.box.single-wrestler-reign-card {
+		position: relative;
 		overflow: hidden;
 		padding: 10px;
 	}
@@ -112,6 +120,18 @@
 	.box.single-wrestler-reign-card .duration {
 		font-size: 0.9rem;
 		color: #666;
+	}
+
+	.tag.reign-rating-tag {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		display: inline-block;
+		padding: 2px 16px;
+		background-color: #27355d;
+		border-radius: 25px;
+		font-size: 12px;
+		color: #fff;
 	}
 
 	/* @media only screen and (max-width: 767px) {
