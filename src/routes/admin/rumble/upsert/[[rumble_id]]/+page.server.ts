@@ -1,5 +1,7 @@
 import { rumble, wrestlers } from '$lib/server/dao/repositories';
-import type { Rumble } from '@prisma/client';
+import FormService from '$lib/services/form.service';
+import type { Prisma, Rumble } from '@prisma/client';
+import { Helpers } from '$lib/server/server.helpers.js';
 
 export const load = async ({ params }) => {
 	const { rumble_id } = params;
@@ -22,3 +24,35 @@ export const load = async ({ params }) => {
 		currentYear: new Date().getFullYear()
 	};
 }
+
+export const actions = {
+	upsert: async ({ request, params }) => {
+		const rumbleId = Number(params.rumble_id);
+		const isUpdate = Boolean(rumbleId) && Number.isNaN(rumbleId) === false;
+		try {
+			const datas = await FormService.fromRequest(request);
+			const rumbleData: Prisma.RumbleCreateInput = {
+				year: datas.get('year'),
+				winner: {
+					connect: {
+						id: datas.getNumber('winner_id'),
+					}
+				},
+				entry_number: datas.getNumber('entry_number'),
+				successful: datas.getToggle('successful'),
+			};
+
+			const result = isUpdate
+				? await rumble.updateById(rumbleId, rumbleData)
+				: await rumble.create(rumbleData);
+
+			if (!result || !result.id)
+				return Helpers.error('Ha ocurrido algo inesperado y no se pudo procesar la solicitud');
+			return Helpers.success('Operación realizada con éxito');
+
+		} catch (error) {
+			console.error('Error in rumble upsert action', error);
+			return Helpers.error('An unexpected error occurred');
+		}
+	}
+};

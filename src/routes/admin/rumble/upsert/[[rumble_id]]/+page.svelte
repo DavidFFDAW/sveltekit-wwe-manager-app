@@ -13,7 +13,7 @@
 		<h1>{data.isUpdate ? 'Editar ganador' : 'Crear ganador'}</h1>
 	</header>
 
-	<AsyncForm method="post" showButtons={false} redirect="/admin/rumble">
+	<AsyncForm action="upsert" method="post" showButtons={false} redirect="/admin/rumble">
 		<div class="rumble-panels">
 			<HorizontalListSelect
 				list={data.wrestlers}

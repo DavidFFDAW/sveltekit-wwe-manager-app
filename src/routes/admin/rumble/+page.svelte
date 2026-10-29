@@ -1,23 +1,8 @@
 <script lang="ts">
-	import Box from '$lib/components/box/box.svelte';
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
-	import AsyncForm from '$lib/components/forms/async-form.svelte';
-	import NumberInputControls from '$lib/components/forms/inputs/number-input-controls.svelte';
-	import RadioList from '$lib/components/forms/inputs/radio-list.svelte';
-	import ToggleInput from '$lib/components/forms/inputs/toggle-input.svelte';
 	import type { Rumble, Wrestler } from '@prisma/client';
 
 	let { data } = $props();
-	const currentYear = new Date().getFullYear();
-	const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
-	let activeLetter = $state<string>('a');
-	let rumbleType = $state<string>('m');
-	let wrestlerList = $derived(
-		data.wrestlers.filter((wrestler) => wrestler.sex.toLowerCase() === rumbleType)
-	);
-	let filteredList = $derived(
-		wrestlerList.filter((wrestler) => wrestler.name.toLowerCase().startsWith(activeLetter))
-	);
 	const winners = $derived(data.rumbles) as (Rumble & { winner: Wrestler })[];
 </script>
 
@@ -28,94 +13,16 @@
 	</header>
 </div>
 
-<Box title="Crear ganador" icon="people">
-	<AsyncForm method="post" showButtons={false} reset={true}>
-		<div class="w1 rumble-form-details flex total responsive start astart gap-small">
-			<div class="rumble-wrestlers-block">
-				<div class="letters-container">
-					{#each letters as letter}
-						<button
-							type="button"
-							class="btn small icon-sm {activeLetter === letter ? 'cta' : 'secondary'}"
-							value={letter}
-							onclick={() => (activeLetter = letter)}
-						>
-							{letter.toUpperCase()}
-						</button>
-					{/each}
-				</div>
-
-				<ul class="wrestlers-list">
-					{#each filteredList as wrestler}
-						<li class="wrestler-item block wrestler-brand-{wrestler.brand.toLowerCase()}">
-							<label class="relative block">
-								<input
-									type="radio"
-									name="winner_id"
-									checked={true}
-									value={wrestler.id}
-									class="app-radio"
-								/>
-								<div class="inner app-radio-inner">
-									<p>{wrestler.name}</p>
-								</div>
-							</label>
-						</li>
-					{/each}
-				</ul>
-			</div>
-			<div class="rumble-datas-block flex column gap-small astart">
-				<RadioList
-					label="Tipo de Royal Rumble"
-					name="rumble_type"
-					bind:value={rumbleType}
-					options={[
-						{ label: 'Masculino', value: 'm' },
-						{ label: 'Femenino', value: 'f' }
-					]}
-				/>
-
-				<NumberInputControls
-					label="Año del Royal Rumble"
-					name="year"
-					min="1988"
-					max={currentYear}
-					value={currentYear}
-					required={true}
-				/>
-
-				<NumberInputControls
-					label="Posicion de entrada"
-					name="entry_number"
-					min="1"
-					max="30"
-					value={25}
-					required={true}
-				/>
-
-				<ToggleInput label="¿Tuvo exito en WrestleMania?" name="successful" checked={false} />
-			</div>
-		</div>
-
-		<div class="w1 flex end acenter down">
-			<button class="btn cta icon icon-gap-5" type="submit">
-				<i class="bi bi-plus-circle-fill"></i>
-				Crear ganador
-			</button>
-		</div>
-	</AsyncForm>
-</Box>
-
 <section class="royal-rumble-page">
 	{#if data.rumbles.length > 0}
 		<ul class="rumble-winners-list">
 			{#each winners as rumble}
 				<li class="w1 item list-item wrestler-rumble-winner rumble-winner-item">
 					<img
+						width="100"
+						height="auto"
 						src={rumble.winner.image_name}
 						alt={rumble.winner.name}
-						width="120"
-						height="auto"
 						class="wrestler-image"
 						draggable="false"
 					/>
@@ -151,75 +58,6 @@
 	}
 	.page > *:first-child {
 		margin-top: 0;
-	}
-
-	.rumble-wrestlers-block {
-		min-height: 300px;
-		max-height: 300px;
-		border: 1px solid #ccc;
-		padding: 10px 15px;
-		border-radius: 5px;
-		overflow-y: auto;
-	}
-	.rumble-wrestlers-block .letters-container {
-		display: flex;
-		overflow: auto;
-		padding-bottom: 4px;
-		gap: 5px;
-	}
-
-	.rumble-wrestlers-block .wrestlers-list {
-		margin-top: 10px;
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-		gap: 10px;
-	}
-	.rumble-wrestlers-block .wrestlers-list .wrestler-item.wrestler-brand-raw {
-		--brand-color: var(--raw);
-	}
-	.rumble-wrestlers-block .wrestlers-list .wrestler-item.wrestler-brand-smackdown,
-	.rumble-wrestlers-block .wrestlers-list .wrestler-item.wrestler-brand-sd {
-		--brand-color: var(--sd);
-	}
-	.rumble-wrestlers-block .wrestlers-list .wrestler-item.wrestler-brand-awl {
-		--brand-color: var(--awl);
-	}
-	.rumble-wrestlers-block .wrestlers-list .wrestler-item label .inner {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		min-height: 40px;
-		position: relative;
-		padding: 5px;
-		border: 1px solid #ddd;
-		border-radius: 5px;
-		text-align: center;
-		overflow: hidden;
-		cursor: pointer;
-	}
-	.rumble-wrestlers-block .wrestlers-list .wrestler-item label .inner::after {
-		content: '';
-		position: absolute;
-		bottom: 0;
-		right: -2px;
-		width: 50%;
-		height: 100%;
-		background-color: var(--brand-color);
-		opacity: 0.2;
-		clip-path: polygon(0 100%, 100% 100%, 100% 0);
-		pointer-events: none;
-		z-index: 1;
-	}
-	.rumble-wrestlers-block
-		.wrestlers-list
-		.wrestler-item
-		label
-		input[type='radio']:checked
-		+ .inner {
-		border-color: #0070f3;
-		box-shadow: none;
-		background-color: #e6f0ff;
-		font-weight: 600;
 	}
 
 	.rumble-winners-list {
@@ -291,7 +129,7 @@
 		flex-direction: column;
 		align-items: center;
 		text-align: center;
-		gap: 2px;
 		z-index: 2;
+		gap: 2px;
 	}
 </style>
