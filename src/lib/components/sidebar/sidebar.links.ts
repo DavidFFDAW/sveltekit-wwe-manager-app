@@ -3,7 +3,6 @@ export type SidebarLink = {
 	label: string;
 	icon: string;
 	equals: boolean;
-	submenu?: SidebarLink[];
 };
 
 export const SidebarLinks: SidebarLink[] = [
@@ -17,21 +16,13 @@ export const SidebarLinks: SidebarLink[] = [
 		url: '/admin/blog',
 		label: 'Blog',
 		icon: 'book',
-		equals: false,
-		submenu: [
-			{
-				url: '/admin/blog',
-				label: 'Posts',
-				icon: 'file-text',
-				equals: true
-			},
-			{
-				url: '/admin/blog/create',
-				label: 'Crear post',
-				icon: 'file-plus',
-				equals: true
-			}
-		]
+		equals: false
+	},
+	{
+		url: '/admin/blog/create',
+		label: 'Crear post',
+		icon: 'file-plus',
+		equals: false
 	},
 	{
 		url: '/admin/wrestlers',
@@ -49,27 +40,19 @@ export const SidebarLinks: SidebarLink[] = [
 		url: '/admin/championship-reigns',
 		label: 'Reinados',
 		icon: 'trophy-fill',
-		equals: false,
-		submenu: [
-			{
-				url: '/admin/championship-reigns',
-				label: 'Reinados',
-				icon: 'shield',
-				equals: true
-			},
-			{
-				url: '/admin/championship-reigns/defences/update',
-				label: 'Defensas',
-				icon: 'shield-fill',
-				equals: true
-			},
-			{
-				url: '/admin/championship-reigns/create',
-				label: 'Crear',
-				icon: 'trophy-fill',
-				equals: true
-			}
-		]
+		equals: false
+	},
+	{
+		url: '/admin/championship-reigns/defences/update',
+		label: 'Defensas titulares',
+		icon: 'shield-fill',
+		equals: false
+	},
+	{
+		url: '/admin/championship-reigns/create',
+		label: 'Crear reinado',
+		icon: 'trophy-fill',
+		equals: false
 	},
 	{
 		url: '/admin/teams',
@@ -146,10 +129,19 @@ export const SidebarLinks: SidebarLink[] = [
 ];
 
 export const SidebarGroups = [
-	{ label: 'General', paths: ['dashboard', 'blog'] },
+	{ label: 'General', paths: ['dashboard', 'blog', 'blog/create'] },
 	{
 		label: 'Roster',
-		paths: ['wrestlers', 'teams', 'championships', 'championship-reigns', 'injuries', 'draft']
+		paths: [
+			'wrestlers',
+			'teams',
+			'championships',
+			'championship-reigns',
+			'championship-reigns/defences/update',
+			'championship-reigns/create',
+			'injuries',
+			'draft'
+		]
 	},
 	{ label: 'Eventos', paths: ['ppvs', 'matchcards', 'money-in-the-bank', 'rumble'] },
 	{

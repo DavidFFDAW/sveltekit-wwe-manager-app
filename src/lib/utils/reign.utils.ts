@@ -54,9 +54,20 @@ export const ReignUtils = {
 		return reign.Wrestler.name;
 	},
 	getReignRankingStatus: (reign: ChampionshipReign): string => {
-		// aqui analizaremos la cantidad de dias que lo ha tenido, para asignar un tag según acredite.
-		// lo normal es defender el campeonato, al menos una vez cada mes. Se tendrá esto en cuenta para asignar un label
-		if (reign.defences === 0) return 'terrible';
-		return '';
+		if (reign.defences === null) return 'Sin defensas';
+		const lostDate = reign.lost_date ? reign.lost_date : new Date();
+		const days = Math.floor(Math.abs(reign.won_date.getTime() - lostDate.getTime()) / (1000 * 60 * 60 * 24));
+		if (days <= 15) return 'Reciente';
+		const months = Math.max(days / 30, 1);
+		const ritmo = reign.defences / months;
+		const rating = Math.floor(Math.min(10, 6 * ritmo));
+
+		if (rating == 0) return 'Nefasto';
+		if (rating == 1) return 'Muy malo';
+		if (rating == 2) return 'Malo';
+		if (rating < 3) return 'Regular';
+		if (rating < 5) return 'Buena';
+		if (rating < 7) return 'Muy buena';
+		return 'Excelente';
 	},
 };

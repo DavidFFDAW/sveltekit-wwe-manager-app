@@ -2,22 +2,24 @@
 	import { onMount, tick } from 'svelte';
 	import { afterNavigate, goto } from '$app/navigation';
 	import { Toast } from '$lib/utils/toast.helper';
-	import { SidebarGroups, type SidebarLink } from './sidebar.links';
+	import { SidebarGroups, SidebarLinks, type SidebarLink } from './sidebar.links';
 
 	let { url }: { url: string } = $props();
 	let mobile = $state(false);
 	let open = $state(false);
-	let expanded = $state<Record<string, boolean>>({});
 	let loggingOut = $state(false);
 	let panel: HTMLElement;
 	let trigger: HTMLButtonElement;
 	let closeButton: HTMLButtonElement;
 	const pathname = $derived(url.split('?')[0].replace(/\/$/, ''));
-	const active = (link: SidebarLink) =>
+	const matches = (link: SidebarLink) =>
 		link.equals
 			? pathname === link.url
 			: pathname === link.url || pathname.startsWith(`${link.url}/`);
-	const isExpanded = (link: SidebarLink) => expanded[link.url] ?? active(link);
+	const activeLink = $derived(
+		SidebarLinks.filter(matches).sort((a, b) => b.url.length - a.url.length)[0]
+	);
+	const active = (link: SidebarLink) => link === activeLink;
 
 	onMount(() => {
 		const query = window.matchMedia('(max-width: 768px)');
@@ -32,7 +34,6 @@
 
 	afterNavigate(() => {
 		open = false;
-		expanded = {};
 	});
 
 	$effect(() => {
@@ -148,45 +149,14 @@
 							<div class="nav-row" class:active={active(link)}>
 								<a
 									href={link.url}
-									aria-current={active(link) && !link.submenu ? 'page' : undefined}
+									aria-current={active(link) ? 'page' : undefined}
 									onclick={() => {
 										if (mobile) open = false;
 									}}
 								>
 									<i class="bi bi-{link.icon}" aria-hidden="true"></i><span>{link.label}</span>
 								</a>
-								{#if link.submenu}
-									<button
-										type="button"
-										class="submenu-toggle"
-										aria-label="Opciones de {link.label}"
-										aria-expanded={isExpanded(link)}
-										aria-controls="submenu-{index}-{link.icon}"
-										onclick={() => (expanded[link.url] = !isExpanded(link))}
-										><i
-											class="bi bi-chevron-down"
-											class:rotated={isExpanded(link)}
-											aria-hidden="true"
-										></i></button
-									>
-								{/if}
 							</div>
-							{#if link.submenu && isExpanded(link)}
-								<ul class="submenu" id="submenu-{index}-{link.icon}">
-									{#each link.submenu as child}
-										<li>
-											<a
-												href={child.url}
-												class:current={active(child)}
-												aria-current={active(child) ? 'page' : undefined}
-												onclick={() => {
-													if (mobile) open = false;
-												}}>{child.label}</a
-											>
-										</li>
-									{/each}
-								</ul>
-							{/if}
 						</li>
 					{/each}
 				</ul>
@@ -307,41 +277,6 @@
 	}
 	.nav-row.active > a i {
 		color: #ff7483;
-	}
-	.submenu-toggle {
-		display: grid;
-		place-items: center;
-		width: 40px;
-		height: 40px;
-		padding: 0;
-		background: transparent;
-		color: inherit;
-	}
-	.submenu-toggle:hover {
-		background: #ffffff12;
-	}
-	.submenu-toggle i {
-		font-size: 0.7rem;
-	}
-	.rotated {
-		transform: rotate(180deg);
-	}
-	.submenu {
-		margin: 0.4rem 0 0.6rem 1.3rem;
-		padding-left: 0.75rem;
-		border-left: 1px solid #3b404b;
-	}
-	.submenu a {
-		display: block;
-		padding: 0.6rem 0.75rem;
-		font-size: 0.8rem;
-		border-radius: 6px;
-		color: #a6afbf;
-	}
-	.submenu a:hover,
-	.submenu a.current {
-		color: #fff;
-		background: #242831;
 	}
 	.sidebar-footer {
 		padding: 0.75rem;
