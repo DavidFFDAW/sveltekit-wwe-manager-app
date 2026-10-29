@@ -2,10 +2,9 @@ import { reigns } from '$lib/server/dao/repositories/reigns.repository.js';
 import { Helpers } from '$lib/server/server.helpers.js';
 import { Utils } from '$lib/utils/general.utils';
 import { ReignUtils } from '$lib/utils/reign.utils.js';
-import type { ChampionshipReign } from '@prisma/client';
 
 export const load = async () => {
-	const reignList = await reigns.get({
+	const reignList = await reigns.getModel().findMany({
 		where: {
 			current: true,
 			lost_date: null,
@@ -21,23 +20,26 @@ export const load = async () => {
 			Partner: true,
 			Team: true
 		},
-		orderBy: [
-			{ won_date: 'desc' },
-			{ days: 'desc' }
-		]
+		orderBy: { won_date: 'desc' },
 	});
 
+	const reignss = reignList.map((reign) => {
+		return {
+			...reign,
+			ellapsed_time: reign.won_date.getEllapsedTimeBetweenDates(reign.lost_date),
+			ranking_status: ReignUtils.getReignRankingStatus(reign),
+			calculated_name: ReignUtils.getWrestlerOrTeamName(reign as any),
+			wonDateStr: reign.won_date.toReadableString(),
+			updated_ellapsed: reign.last_time_updated ? Utils.getEllapsedTime(reign.last_time_updated) : null
+		};
+	});
+
+	// const grouped = Object.groupBy(reignss, (reign) => {
+	// 	return reign.Championship.brand ? reign.Championship.brand.toLowerCase() : 'unknown';
+	// });
+
 	return {
-		reigns: reignList.map((reign: ChampionshipReign) => {
-			return {
-				...reign,
-				time_days: ReignUtils.getDaysAndMonths(reign.days),
-				ellapsed_time: reign.won_date.getEllapsedTimeBetweenDates(reign.lost_date),
-				ranking_status: ReignUtils.getReignRankingStatus(reign),
-				calculated_name: ReignUtils.getWrestlerOrTeamName(reign as any),
-				updated_ellapsed: reign.last_time_updated ? Utils.getEllapsedTime(reign.last_time_updated) : null
-			};
-		})
+		reigns: reignss,
 	};
 };
 

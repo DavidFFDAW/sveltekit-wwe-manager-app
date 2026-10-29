@@ -4,7 +4,7 @@
 	import AsyncForm from '$lib/components/forms/async-form.svelte';
 	import NumberInputControls from '$lib/components/forms/inputs/number-input-controls.svelte';
 
-	let { data }: { data: { reigns: any[] } } = $props();
+	let { data } = $props();
 </script>
 
 <section class="reigns-defences-update-page">
@@ -21,7 +21,9 @@
 					<input type="hidden" name="reign-id" value={reign.id} />
 					<div class="box single-wrestler-reign-card flex column gap-smaller acenter">
 						<header class="single-reign-header flex column gap-5">
-							<h2 class="w1 block tcenter title wrestler-or-team-name">{reign.calculated_name}</h2>
+							<h2 class="w1 block tcenter title wrestler-or-team-name">
+								{reign.calculated_name}
+							</h2>
 							<small class="w1 block tcenter">{reign.Championship.name}</small>
 						</header>
 						<div class="wrestler-team-container" class:tag-team={reign.Partner}>
@@ -57,9 +59,11 @@
 							value={reign.defences || 0}
 							step={1}
 						/>
-						<p class="duration">{reign.time_days}</p>
-						{#if reign.ellapsed_time}
-							<p class="elapsed-time">Actualizado: {reign.ellapsed_time.formatted}</p>
+						<p class="duration">{reign.ellapsed_time.formatted}</p>
+						<p class="duration">{reign.wonDateStr} - Presente</p>
+
+						{#if reign.updated_ellapsed}
+							<p class="elapsed-time">Actualizado: {reign.updated_ellapsed}</p>
 						{/if}
 
 						<p class="tag reign-rating-tag">{reign.ranking_status}</p>
