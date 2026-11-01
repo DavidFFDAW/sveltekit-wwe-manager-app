@@ -208,9 +208,7 @@ model ChampionshipReign {
     Team              Team?        @relation(fields: [team_id], references: [id])
     won_date          DateTime     @db.DateTime
     lost_date         DateTime?    @db.DateTime
-    is_adjustable     Boolean      @default(true) @db.TinyInt
     victory_way       String?      @db.VarChar(250)
-    can_stats_count   Boolean      @default(true) @db.TinyInt
     ppv_won           String?      @db.VarChar(255)
     created_at        DateTime?    @default(now())
     updated_at        DateTime?    @updatedAt

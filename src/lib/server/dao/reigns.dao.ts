@@ -65,7 +65,6 @@ export const ReignsDao = {
             where: {
                 current: true,
                 lost_date: null,
-                can_stats_count: true,
                 Championship: {
                     active: true
                 }
@@ -84,7 +83,6 @@ export const ReignsDao = {
             where: {
                 current: true,
                 lost_date: null,
-                can_stats_count: true,
                 Championship: {
                     active: true
                 }

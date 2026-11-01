@@ -31,7 +31,7 @@ export const load = async ({ url }) => {
     const mindateSQL = await conn.$queryRaw<{ min: Date }[]>`SELECT MIN(won_date) AS min FROM championship_reigns LIMIT 1`;
     const mindate: Date = mindateSQL[0].min;
 
-    const currentDateReigns = await conn.$queryRaw<DBReign[]>`SELECT r.id, r.days, r.current, r.won_date, r.lost_date, w.id AS wid, w.name AS wname, w.image_name AS wimage, p.id AS pid, p.name AS pname, p.image_name AS pimage, c.id AS cid, c.name AS cname, c.tag AS ctag, c.image AS cimage, t.name AS tname FROM championship_reigns r INNER JOIN wrestler w ON w.id = r.wrestler_id LEFT JOIN wrestler p ON p.id = r.partner INNER JOIN championship c ON c.id = r.championship_id LEFT JOIN teams t ON t.id = r.team_id WHERE r.won_date <= ${dateISO} AND(r.lost_date IS NULL OR r.lost_date >= ${dateISO}) AND can_stats_count = true`;
+    const currentDateReigns = await conn.$queryRaw<DBReign[]>`SELECT r.id, r.days, r.current, r.won_date, r.lost_date, w.id AS wid, w.name AS wname, w.image_name AS wimage, p.id AS pid, p.name AS pname, p.image_name AS pimage, c.id AS cid, c.name AS cname, c.tag AS ctag, c.image AS cimage, t.name AS tname FROM championship_reigns r INNER JOIN wrestler w ON w.id = r.wrestler_id LEFT JOIN wrestler p ON p.id = r.partner INNER JOIN championship c ON c.id = r.championship_id LEFT JOIN teams t ON t.id = r.team_id WHERE r.won_date <= ${dateISO} AND(r.lost_date IS NULL OR r.lost_date >= ${dateISO})`;
     const parsedCurrentDateReigns = currentDateReigns.map((reign) => {
         return {
             id: Number(reign.id),
