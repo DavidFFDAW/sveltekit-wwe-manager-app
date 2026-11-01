@@ -1,282 +1,339 @@
 <script lang="ts">
 	let { match = $bindable(), matches, handleToggleDelete, handleChangeOrder } = $props();
 	let key = $derived(`match[${match.id}]`);
-	let tmpInput: HTMLInputElement;
-
+	let tmpInput = $state<HTMLInputElement>();
 	const handleAddToTextarea = (type: 'vs' | 'wrestler' | 'champion') => () => {
 		const participants = match.participants?.trim() || '';
-
 		let valueToAdd = '';
-		if (type === 'vs' && participants) {
-			valueToAdd = ' VS';
-		} else if (type === 'wrestler') {
+		if (type === 'vs' && participants) valueToAdd = ' VS';
+		else if (type === 'wrestler') {
 			const wrestler = tmpInput?.value.trim();
 			if (!wrestler) return;
-
 			valueToAdd = participants ? ` ${wrestler}` : wrestler;
-			tmpInput.value = '';
-		} else if (type === 'champion' && participants) {
-			valueToAdd = ' (c)';
-		}
-
+			if (tmpInput) tmpInput.value = '';
+		} else if (type === 'champion' && participants) valueToAdd = ' (c)';
 		match.participants = participants + valueToAdd;
 	};
 </script>
 
-<div class="w1 match box relative match-type-{match.type}" data-identifier={match.id}>
-	<h3 class="match-title">
-		Combate {match.order}
-		<div class="match-title-badges">
-			{#if match.type === 'create'}
-				<span class="badge small create-badge">Creacion</span>
-			{/if}
-			{#if match.order === 1 || match.order === matches}
-				<span class="badge small">{match.order === 1 ? 'Opener' : 'Main event'}</span>
-			{/if}
-		</div>
-	</h3>
-
+<div class="match-row" class:pending-delete={match.type === 'delete'} data-identifier={match.id}>
 	<input type="hidden" name="matches[{match.type}]" value={match.id} />
 	<input type="hidden" name="{key}[type]" value={match.type} />
-
-	<div class="w1 down flex column start astart gap-small">
-		<label class="form-label form-item">
-			<span class="label form-label">Estipulacion</span>
-			<input
-				type="text"
-				list="stipulations"
-				name="{key}[stipulation]"
-				value={match.stipulation}
-				class="form-input"
-			/>
-		</label>
-		<label class="form-label form-item">
-			<span class="label form-label">Campeonato</span>
-			<input
-				type="text"
-				list="championships"
-				name="{key}[championship]"
-				value={match.championship}
-				class="form-input"
-			/>
-		</label>
-
-		<label class="form-label form-item textarea-whole-container">
-			<span class="label form-label">Participantes</span>
-			<div class="w1 textarea-container flex column">
-				<textarea name="{key}[participants]" value={match.participants} class="form-input"
-				></textarea>
-				<input
-					id="wrestler-input-{match.id}"
-					bind:this={tmpInput}
-					type="text"
-					list="wrestlers"
-					placeholder="Añadir luchador..."
-					class="form-input wrestler-selector"
-				/>
-				<div class="w1 flex total start acenter nogap textarea-buttons-container">
-					<button type="button" class="btn small" onclick={handleAddToTextarea('vs')}>
-						<span class="label">VS</span>
-					</button>
-					<button type="button" class="btn small icon" onclick={handleAddToTextarea('wrestler')}>
-						<i class="bi bi-plus-circle"></i>
-						<span class="label">Luchador</span>
-					</button>
-					<button type="button" class="btn small" onclick={handleAddToTextarea('champion')}>
-						<span class="label">Campeón</span>
-					</button>
-				</div>
-			</div>
-		</label>
-
-		<label class="form-label form-item manual-order-container">
-			<span class="label form-label">Orden</span>
-			<input
+	<div class="order-cell">
+		<label
+			><span>Orden</span><input
 				type="number"
 				name="{key}[order]"
 				bind:value={match.order}
-				class="form-input"
 				min="1"
 				max={matches}
-			/>
-		</label>
-
-		<div class="form-label form-item nights-container">
-			<span class="label form-label">Noche</span>
-			<div class="nights-label-container">
-				<label class="relative">
-					<input
-						type="radio"
-						name="{key}[night]"
-						value={1}
-						bind:group={match.night}
-						class="form-input app-radio first-night"
-					/>
-					<span class="label inner">Noche 1</span>
-				</label>
-				<label class="relative">
-					<input
-						type="radio"
-						name="{key}[night]"
-						bind:group={match.night}
-						value={2}
-						class="form-input app-radio second-night"
-					/>
-					<span class="label inner">Noche 2</span>
-				</label>
-			</div>
-		</div>
-
-		<div
-			class="w1 flex between gap-5 order-buttons"
-			class:single={match.order == 1 || match.order >= matches}
-			class:delete={match.type === 'delete'}
+				readonly={match.type === 'delete'}
+			/></label
 		>
-			{#if match.order < matches}
-				<button
-					type="button"
-					class="btn order-move-button"
-					aria-label="Mover combate hacia abajo"
-					onclick={handleChangeOrder(match, 'down')}
-				>
-					<i class="bi bi-arrow-down"></i>
-					<span>Bajar orden</span>
-				</button>
-			{/if}
-			{#if match.order > 1}
-				<button
-					type="button"
-					class="btn order-move-button"
-					aria-label="Mover combate hacia arriba"
-					onclick={handleChangeOrder(match, 'up')}
-				>
-					<i class="bi bi-arrow-up"></i>
-					<span>Subir orden</span>
-				</button>{/if}
+		<div class="order-buttons">
+			<button
+				type="button"
+				aria-label="Subir combate {match.order}"
+				title="Subir combate"
+				disabled={match.type === 'delete' || match.order <= 1}
+				onclick={handleChangeOrder(match, 'up')}
+				><i class="bi bi-arrow-up" aria-hidden="true"></i></button
+			>
+			<button
+				type="button"
+				aria-label="Bajar combate {match.order}"
+				title="Bajar combate"
+				disabled={match.type === 'delete' || match.order >= matches}
+				onclick={handleChangeOrder(match, 'down')}
+				><i class="bi bi-arrow-down" aria-hidden="true"></i></button
+			>
 		</div>
+		{#if match.type === 'create'}<small class="new-badge">Nuevo</small>{/if}
 	</div>
-
-	<div class="action-buttons-container">
+	<div class="participants-cell">
+		<label
+			><span>Participantes</span><textarea
+				name="{key}[participants]"
+				bind:value={match.participants}
+				rows="2"
+				placeholder="Luchador VS Luchador"
+				readonly={match.type === 'delete'}
+			></textarea></label
+		>
+		{#if match.type !== 'delete'}
+			<details class="participant-tools">
+				<summary>Insertar luchador / VS / campeón</summary>
+				<div class="tools">
+					<input
+						bind:this={tmpInput}
+						type="text"
+						list="wrestlers"
+						placeholder="Buscar luchador…"
+						aria-label="Buscar luchador para el combate {match.order}"
+						onkeydown={(event) => {
+							if (event.key === 'Enter') {
+								event.preventDefault();
+								handleAddToTextarea('wrestler')();
+							}
+						}}
+					/>
+					<button type="button" onclick={handleAddToTextarea('wrestler')}>Añadir</button>
+					<button type="button" onclick={handleAddToTextarea('vs')}>VS</button>
+					<button type="button" onclick={handleAddToTextarea('champion')}>(c)</button>
+				</div>
+			</details>
+		{/if}
+	</div>
+	<div class="details-cell">
+		<label
+			><span>Estipulación</span><input
+				type="text"
+				list="stipulations"
+				name="{key}[stipulation]"
+				bind:value={match.stipulation}
+				placeholder="Single Match"
+				readonly={match.type === 'delete'}
+			/></label
+		>
+		<label
+			><span>Campeonato</span><input
+				type="text"
+				list="championships"
+				name="{key}[championship]"
+				bind:value={match.championship}
+				placeholder="Sin campeonato"
+				readonly={match.type === 'delete'}
+			/></label
+		>
+	</div>
+	<div class="night-cell">
+		<label
+			><span>Noche</span><select name="{key}[night]" bind:value={match.night}
+				><option value={1}>Noche 1</option><option value={2}>Noche 2</option></select
+			></label
+		>
 		<button
 			type="button"
-			class="btn danger"
-			aria-label="Eliminar combate"
+			class="delete-button"
+			class:undo={match.type === 'delete'}
+			aria-label={match.type === 'delete'
+				? `Deshacer eliminación del combate ${match.order}`
+				: `Eliminar combate ${match.order}`}
+			title={match.type === 'delete' ? 'Deshacer eliminación' : 'Eliminar combate'}
 			onclick={() => handleToggleDelete(match)}
+			><i
+				class="bi bi-{match.type === 'delete' ? 'arrow-counterclockwise' : 'trash'}"
+				aria-hidden="true"
+			></i><span>{match.type === 'delete' ? 'Deshacer' : 'Eliminar'}</span></button
 		>
-			<i class="bi bi-{match.type === 'delete' ? 'x' : 'trash'}"></i>
-		</button>
 	</div>
+	{#if match.type === 'delete'}<p class="delete-notice">
+			Este combate se eliminará al guardar los cambios.
+		</p>{/if}
 </div>
 
 <style>
-	.match.box {
+	.match-row {
+		display: grid;
+		grid-template-columns: 66px minmax(0, 1.5fr) minmax(0, 1fr) 106px;
+		gap: 16px;
+		align-items: start;
+		padding: 16px;
+		border: 1px solid #e0e5ed;
+		border-radius: 10px;
+		background: #fff;
+		color: #344054;
+	}
+	.match-row.pending-delete {
+		border-color: #edbaba;
+		background: #fff8f8;
+	}
+	label {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		min-width: 0;
+		margin: 0;
+	}
+	label > span {
+		font-size: 0.72rem;
+		font-weight: 600;
+		color: #667085;
+		text-transform: none;
+	}
+	input,
+	textarea,
+	select {
+		box-sizing: border-box;
+		width: 100%;
+		min-width: 0;
+		min-height: 38px;
+		margin: 0;
+		padding: 8px 9px;
+		border: 1px solid #d8dee8;
 		border-radius: 6px;
-		border: 1px solid #aaa;
-		transition: all 0.1s ease-in-out;
-	}
-	.match.match-type-delete {
-		border: 2px solid red;
-		opacity: 0.7;
-	}
-	.match .match-title {
-		display: flex;
-		align-items: center;
-		gap: 10px;
-	}
-	.match .match-title .match-title-badges {
-		display: flex;
-		gap: 2px;
-	}
-	.match.box textarea {
-		min-height: 80px;
-	}
-
-	.match .badge.create-badge {
-		background-color: #28a745;
-		color: white;
-	}
-	.match .nights-label-container {
-		width: 100%;
-		display: flex;
-		align-self: center;
-		gap: 10px;
-	}
-	.match .nights-label-container > label {
-		width: 100%;
-		flex: 1;
-	}
-	.match .nights-label-container > label span.inner {
-		width: 100%;
-		display: block;
-		text-align: center;
-		border: 1px solid #333;
-		box-shadow: none;
-		border-radius: 25px;
+		background: #fcfcfd;
+		color: #172033;
+		font: inherit;
 		font-size: 0.85rem;
-		padding: 5px;
 	}
-	.match .nights-label-container > label input.first-night:checked + span.inner {
-		background-color: #28a745;
-		border-color: #28a745;
-		color: white;
+	textarea {
+		display: block;
+		resize: vertical;
+		min-height: 74px;
+		line-height: 1.5;
 	}
-	.match .nights-label-container > label input.second-night:checked + span.inner {
-		background-color: #7fb7f4;
-		border-color: #7fb7f4;
-		color: white;
+	input:focus-visible,
+	textarea:focus-visible,
+	select:focus-visible,
+	button:focus-visible,
+	summary:focus-visible {
+		outline: 2px solid #7da6ef;
+		outline-offset: 2px;
 	}
-	.match .textarea-whole-container .textarea-container {
-		gap: 0;
+	.order-cell,
+	.details-cell,
+	.night-cell {
+		display: grid;
+		gap: 8px;
+		min-width: 0;
 	}
-	.match .textarea-whole-container .textarea-container textarea {
-		border-bottom: 0;
-		border-radius: 5px 5px 0 0;
-		border-color: #ccc;
+	.order-cell input {
+		text-align: center;
+		padding-inline: 2px;
 	}
-	.match .textarea-whole-container .textarea-container input.wrestler-selector {
-		border-radius: 0;
-		border-color: #ccc;
-		background-color: #fff;
-		padding: 8px 12px;
+	button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		min-height: 36px;
+		padding: 6px 8px;
+		border: 1px solid #d8dee8;
+		border-radius: 6px;
+		background: #fff;
+		color: #475467;
+		font: inherit;
+		font-size: 0.75rem;
+		cursor: pointer;
 	}
-	.match .textarea-whole-container .textarea-container .textarea-buttons-container {
-		border: 1px solid #ccc;
-		border-top: 0;
-		border-radius: 0 0 5px 5px;
+	button:hover:not(:disabled) {
+		background: #edf3ff;
+		color: #215cc5;
 	}
-	.match .textarea-whole-container .textarea-container .textarea-buttons-container button {
-		background-color: transparent;
-		border: none;
-		padding: 8px 12px;
-		border-radius: 0;
-		border-right: 1px solid #ccc;
+	button:disabled {
+		opacity: 0.35;
+		cursor: default;
 	}
-	.match
-		.textarea-whole-container
-		.textarea-container
-		.textarea-buttons-container
-		button:last-child {
-		border-right: none;
-	}
-
 	.order-buttons {
 		display: flex;
-		align-items: stretch;
+		gap: 4px;
 	}
-	.order-buttons.single {
-		justify-content: flex-end;
-		align-items: center;
+	.order-buttons button {
+		flex: 1;
+		padding-inline: 4px;
 	}
-
-	.order-buttons.delete {
-		display: none;
+	.new-badge {
+		text-align: center;
+		color: #187246;
+		background: #eaf7ef;
+		border-radius: 4px;
+		padding: 3px;
+		font-size: 0.65rem;
 	}
-	.order-buttons button.order-move-button {
-		background-color: #fff;
-		border: 1px solid #333;
-		padding: 8px 20px;
-		color: #333;
-		border-radius: 8px;
-		align-self: stretch;
+	.participants-cell {
+		min-width: 0;
+	}
+	.participant-tools summary {
+		padding: 8px 0 0;
+		color: #596579;
+		font-size: 0.72rem;
+		cursor: pointer;
+	}
+	.tools {
+		display: flex;
+		gap: 5px;
+		flex-wrap: wrap;
+		padding-top: 8px;
+	}
+	.tools input {
+		flex: 1 1 120px;
+		width: 0;
+	}
+	.delete-button {
+		margin-top: 2px;
+		border-color: transparent;
+		color: #bd3030;
+		min-height: 38px;
+	}
+	.delete-button:hover:not(:disabled) {
+		background: #fff0f0;
+		color: #bd3030;
+	}
+	.delete-button.undo {
+		color: #215cc5;
+	}
+	.delete-notice {
+		grid-column: 1 / -1;
+		margin: 0;
+		color: #b12e2e;
+		font-size: 0.78rem;
+	}
+	@media (max-width: 1000px) and (min-width: 641px) {
+		.match-row {
+			grid-template-columns: 60px minmax(0, 1fr) 106px;
+			gap: 12px;
+		}
+		.participants-cell {
+			grid-column: 2;
+			grid-row: 1;
+		}
+		.details-cell {
+			grid-column: 2;
+			grid-row: 2;
+			grid-template-columns: 1fr 1fr;
+		}
+		.night-cell {
+			grid-column: 3;
+			grid-row: 1 / 3;
+		}
+		.order-cell {
+			grid-row: 1 / 3;
+		}
+	}
+	@media (max-width: 640px) {
+		.match-row {
+			grid-template-columns: 64px minmax(0, 1fr);
+			gap: 14px 12px;
+			padding: 14px;
+		}
+		.participants-cell {
+			grid-column: 1 / -1;
+			grid-row: 2;
+		}
+		.details-cell {
+			grid-column: 1 / -1;
+		}
+		.night-cell {
+			grid-column: 2;
+			grid-row: 1;
+			grid-template-columns: minmax(0, 1fr) auto;
+			align-items: end;
+		}
+		.night-cell button {
+			min-height: 42px;
+		}
+		.order-buttons button {
+			min-height: 40px;
+		}
+		input,
+		textarea,
+		select {
+			font-size: 16px;
+			min-height: 42px;
+		}
+		.tools button {
+			min-height: 42px;
+		}
 	}
 </style>

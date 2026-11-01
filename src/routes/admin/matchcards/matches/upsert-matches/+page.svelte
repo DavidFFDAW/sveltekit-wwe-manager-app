@@ -4,15 +4,10 @@
 	import MatchItem from './match-item.svelte';
 
 	let { data = $bindable() } = $props();
-	let selectedNight = $state(1);
+	let showSecondNight = $state(false);
 	let _inner = $state(data.match_card);
 	let matches = $state(data.match_card.matches);
-	let orders = $derived(matches.map((m) => m.order));
-	let hasMultipleNights = $derived(matches.some((m) => m.night !== 1));
-	let currentNightMatches = $derived(matches.filter((m) => m.night === selectedNight));
-
-	let firstNightCount = $derived(matches.filter((m) => m.night === 1).length);
-	let secondNightCount = $derived(matches.length - firstNightCount);
+	let hasMultipleNights = $derived(showSecondNight || matches.some((m) => m.night === 2));
 
 	$effect(() => {
 		_inner = data.match_card;
@@ -32,45 +27,54 @@
 
 		const currentOrder = match.order;
 		const targetOrder = direction === 'up' ? currentOrder - 1 : currentOrder + 1;
-		const targetMatch = matches.find((m) => m.order === targetOrder && m.night === selectedNight);
-		if (targetOrder < 1 || targetOrder > orders.length) return;
+		const targetMatch = matches.find((m) => m.order === targetOrder && m.night === match.night);
+		const lastOrder = Math.max(
+			0,
+			...matches.filter((m) => m.night === match.night).map((m) => m.order)
+		);
+		if (targetOrder < 1 || targetOrder > lastOrder) return;
 
 		if (targetMatch) targetMatch.order = currentOrder;
 		match.order = targetOrder;
 		matches = [...matches];
 	};
 
-	const handleAddMatch = () => {
+	const handleAddMatch = (night: number) => {
 		const id = Date.now();
 		matches = [
 			...matches,
 			{
 				id: id,
-				order: orders.length > 0 ? Math.max(...orders) + 1 : 1,
+				order: Math.max(0, ...matches.filter((m) => m.night === night).map((m) => m.order)) + 1,
 				stipulation: '',
 				championship: '',
 				participants: '',
-				night: selectedNight,
+				night,
 				type: 'create'
 			}
 		];
 
 		tick().then(() => {
 			const matchElement = document.querySelector(`[data-identifier="${id}"]`);
-			if (matchElement) matchElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			if (matchElement) {
+				matchElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				matchElement
+					.querySelector<HTMLInputElement>('input:not([type=hidden])')
+					?.focus({ preventScroll: true });
+			}
 		});
 	};
 </script>
 
-<header class="sticky-page-header flex between">
-	<div class="flex gap-small">
-		<h1 class="page-title">{_inner.matchCard.ppv_name}</h1>
+<header class="editor-header">
+	<div>
+		<a href="/admin/matchcards">← Volver a eventos</a>
+		<h1>{_inner.matchCard.ppv_name}</h1>
+		<p>Edita la cartelera por noche y guarda los cambios al terminar.</p>
 	</div>
-
-	<button type="button" class="btn rounded cta" onclick={handleAddMatch}>
-		<i class="bi bi-plus"></i>
-		<span class="label">Añadir combate</span>
-	</button>
+	{#if !hasMultipleNights}<button type="button" onclick={() => (showSecondNight = true)}
+			><i class="bi bi-plus-lg" aria-hidden="true"></i> Añadir noche 2</button
+		>{/if}
 </header>
 
 <div class="matchcard-page">
@@ -112,144 +116,139 @@
 			<input type="hidden" name="slug" bind:value={_inner.slug} />
 			<input type="hidden" name="ppv_card_id" bind:value={_inner.matchCard.id} />
 
-			{#if hasMultipleNights}
-				<div class="radio-group-container">
-					<label class="relative radio-container radio-label">
-						<input
-							class="app-radio"
-							type="radio"
-							name="night"
-							value={1}
-							bind:group={selectedNight}
-						/>
-						<span class="checkmark inner">Noche 1 <small>({firstNightCount})</small></span>
-					</label>
-					<label class="relative radio-container radio-label">
-						<input
-							class="app-radio"
-							type="radio"
-							name="night"
-							value={2}
-							bind:group={selectedNight}
-						/>
-						<span class="checkmark inner">Noche 2 <small>({secondNightCount})</small></span>
-					</label>
-				</div>
-			{/if}
-
-			<div class="w1 grid ppv-matches-container">
-				{#each matches as _, index (_.id)}
-					{@const match = matches[index]}
-					<div
-						class="match-item-container"
-						class:hidden={match.night !== selectedNight}
-						style="order: {match.night * 10 + match.order}"
-					>
-						<MatchItem
-							matches={currentNightMatches.length}
-							bind:match={matches[index]}
-							{handleToggleDelete}
-							{handleChangeOrder}
-						/>
-					</div>
+			<div class="night-lists">
+				{#each hasMultipleNights ? [1, 2] : [1] as night}
+					<section class="night-section" aria-labelledby="night-{night}">
+						<header class="night-header">
+							<div>
+								<h2 id="night-{night}">Noche {night}</h2>
+								<span
+									>{matches.filter((m) => m.night === night && m.type !== 'delete').length} combates</span
+								>
+							</div>
+							<button type="button" onclick={() => handleAddMatch(night)}
+								><i class="bi bi-plus-lg" aria-hidden="true"></i> Añadir combate</button
+							>
+						</header>
+						<div class="match-list">
+							{#each matches as match, index (match.id)}
+								{#if match.night === night}
+									<div class="match-row" style:order={match.order}>
+										<MatchItem
+											matches={Math.max(
+												0,
+												...matches.filter((m) => m.night === night).map((m) => m.order)
+											)}
+											bind:match={matches[index]}
+											{handleToggleDelete}
+											{handleChangeOrder}
+										/>
+									</div>
+								{/if}
+							{/each}
+							{#if !matches.some((m) => m.night === night)}<p class="empty-night">
+									Esta noche todavía no tiene combates. A?ade el primero para preparar la cartelera.
+								</p>{/if}
+						</div>
+					</section>
 				{/each}
 			</div>
-
-			<div class="w1 flex end"></div>
 		</AsyncForm>
 	</div>
 </div>
 
 <style>
-	header.sticky-page-header h1.page-title {
+	.editor-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		flex-wrap: wrap;
+		margin-bottom: 24px;
+	}
+	.editor-header a {
+		color: #596579;
+		font-size: 0.82rem;
+		text-decoration: none;
+	}
+	.editor-header h1 {
+		margin: 10px 0 6px;
 		font-size: 1.5rem;
-		font-family: 'SourceSans', sans-serif;
-		letter-spacing: 0.02em;
-		text-transform: uppercase;
-		word-spacing: 0.1em;
-		white-space: nowrap;
+		overflow-wrap: anywhere;
 	}
-	.grid.ppv-matches-container {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-		gap: 15px;
+	.editor-header p {
+		margin: 0;
+		color: #667085;
+		font-size: 0.88rem;
 	}
-	.sticky-page-header {
-		position: sticky;
-		top: 0;
-		left: 0;
-		width: calc(100% + 30px);
+	button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		padding: 10px 14px;
+		border: 1px solid #d6deeb;
+		border-radius: 8px;
 		background: #fff;
-		padding: 15px;
-		margin: 0 -15px;
-		margin-top: -15px;
-		display: flex;
-		align-items: center;
-		gap: 15px;
-		border-radius: 0;
-		border-bottom: 1px solid #333;
-		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-		z-index: 5;
+		color: #215cc5;
+		font: inherit;
+		font-size: 0.82rem;
+		cursor: pointer;
+		min-height: 42px;
 	}
-	.sticky-page-header button {
-		font-size: 0.91rem;
-		border-color: #333;
-		background-color: transparent;
-		padding: 6px 12px;
-		color: #333;
+	button:hover {
+		background: #edf3ff;
 	}
-
-	.sticky-page-header h1.page-title {
-		font-size: 1.2rem !important;
+	button:focus-visible {
+		outline: 3px solid #7da6ef;
+		outline-offset: 2px;
 	}
-
-	.radio-group-container {
-		display: flex;
-		justify-content: flex-start;
-		align-items: center;
-		padding: 10px 0;
-		gap: 15px;
-	}
-	.radio-group-container label.relative.radio-container.radio-label {
-		display: block;
+	.night-lists {
+		display: grid;
+		gap: 28px;
+		padding-bottom: 24px;
 		width: 100%;
 	}
-	.radio-group-container label.relative.radio-container.radio-label .inner {
-		display: block;
-		padding: 6px 12px;
-		border-radius: 4px;
-		font-size: 0.91rem;
-		color: #333;
-		background-color: #fff;
-		border: 1px solid #333;
+	.night-section {
+		min-width: 0;
+	}
+	.night-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 12px;
+		margin-bottom: 12px;
+		flex-wrap: wrap;
+	}
+	.night-header > div {
+		display: flex;
+		align-items: baseline;
+		gap: 12px;
+	}
+	.night-header h2 {
+		margin: 0;
+		font-size: 1.1rem;
+	}
+	.night-header span {
+		font-size: 0.8rem;
+		color: #667085;
+	}
+	.match-list {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+	.match-row {
+		min-width: 0;
+	}
+	.empty-night {
+		margin: 0;
+		padding: 28px 20px;
 		text-align: center;
-	}
-	.radio-group-container label.relative.radio-container.radio-label input:checked + .inner {
-		background-color: #333;
-		color: #fff;
-	}
-
-	.match-item-container.hidden {
-		display: none;
-	}
-
-	@media only screen and (max-width: 768px) {
-		.sticky-page-header {
-			margin-top: -45px;
-			flex-direction: column;
-			align-items: center;
-		}
-		.sticky-page-header button {
-			width: 100%;
-			padding: 4px 12px;
-		}
-
-		.grid.ppv-matches-container {
-			grid-template-columns: 1fr;
-			margin-top: 20px;
-			margin-bottom: 20px;
-			padding: 0 10px;
-			gap: 20px;
-		}
+		color: #667085;
+		background: #fff;
+		border: 1px dashed #cdd5e0;
+		border-radius: 10px;
+		font-size: 0.88rem;
 	}
 </style>

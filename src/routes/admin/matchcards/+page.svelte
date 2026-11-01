@@ -1,247 +1,429 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { enhance } from '$app/forms';
 	import { errorimage } from '$lib/actions/error.image.js';
-	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
 	let { data } = $props();
 
 	function checkConfirmation(event: Event) {
-		if (!confirm('¿Estás seguro de que deseas realizar esta acción?')) {
-			event.preventDefault();
-		}
+		if (!confirm('¿Estás seguro de que deseas eliminar este evento?')) event.preventDefault();
 	}
 </script>
 
 <div class="matchcards-page">
 	<header class="page-header">
-		<h1>Cartelera de eventos</h1>
-		<small>Consulta aquí los combates de cada evento registrado</small>
+		<div>
+			<h1>Cartelera de eventos</h1>
+			<p>Gestiona los combates, las valoraciones y los resúmenes de tus eventos.</p>
+		</div>
+		<a class="create-event" href="/admin/matchcards/event"
+			><i class="bi bi-plus-lg" aria-hidden="true"></i> Crear evento</a
+		>
 	</header>
 
-	<!-- <pre>{JSON.stringify(data.aggregatedMatches, null, 2)}</pre> -->
+	<nav class="year-filters" aria-label="Filtrar eventos por año">
+		{#each data.uniqueYears as year}
+			<a
+				href="?year={year}"
+				class:active={data.selectedYear === year}
+				aria-current={data.selectedYear === year ? 'page' : undefined}>{year}</a
+			>
+		{/each}
+	</nav>
 
-	<div class="box filters-box">
-		<form action="" method="get" class="flex acenter gap-smaller">
-			{#each data.uniqueYears as year}
-				<button
-					type="submit"
-					name="year"
-					value={year}
-					class="btn filter rounded"
-					class:active={data.selectedYear === year}
-					disabled={data.selectedYear === year}
-				>
-					{year}
-				</button>
-			{/each}
-		</form>
-	</div>
-
-	<section class="w1 down eventcard-events-list">
-		<h2 class="w1">Eventos del año: {data.selectedYear}</h2>
-
-		<div class="w1 ppv-match-card-list">
-			{#each data.matchcards as matchcard}
-				<div
-					class="w1 matchcard matchcard-item relative box"
-					data-href="/admin/matchcards/upsert?slug={matchcard.id}"
-				>
-					<div class="w1 relative flex start astart column gap-smaller responsive matchcard-header">
+	<section aria-labelledby="events-heading">
+		<div class="section-heading">
+			<h2 id="events-heading">Eventos de {data.selectedYear}</h2>
+			<span>{data.matchcards.length} {data.matchcards.length === 1 ? 'evento' : 'eventos'}</span>
+		</div>
+		<div class="event-grid">
+			{#each data.matchcards as matchcard (matchcard.id)}
+				<article class="event-card" aria-labelledby="event-{matchcard.id}">
+					<div class="event-artwork">
 						<img
-							width="120"
 							src={matchcard.ppv_image}
-							class="responsive-w1 w1-responsive rounded"
 							use:errorimage={data.statics.noimage}
 							alt={matchcard.ppv_name}
-							title={matchcard.ppv_name}
 							loading="lazy"
 							draggable="false"
 						/>
-						<span class="badge badge-matchcard-year">
+					</div>
+					<div class="event-content">
+						<p class="event-date">
+							<i class="bi bi-calendar3" aria-hidden="true"></i>
 							{matchcard.formatted_date}
-						</span>
-
-						<div class="flex column start astart nogap">
-							<h2>
-								{matchcard.ppv_name}
-								<small class="year">({matchcard.ppv_date?.getFullYear()})</small>
-								<small class="average-star-rating-container flex acenter gap-5">
-									<i class="bi bi-star-fill"></i>
-									<p>{matchcard.average}</p>
-								</small>
-							</h2>
-							<small><strong>{matchcard.matches} combates</strong> registrados</small>
-							{#if matchcard.ppv_date}
-								<small>
-									{matchcard.ppv_date.toLocaleDateString('es-ES', {
-										weekday: 'long',
-										year: 'numeric',
-										month: 'long',
-										day: 'numeric'
-									})}
-								</small>
-							{/if}
-							<small><strong>{matchcard.nights}</strong> noches</small>
+						</p>
+						<div class="event-title">
+							<h3 id="event-{matchcard.id}">{matchcard.ppv_name}</h3>
+							<span class="rating" aria-label="Valoración media: {matchcard.average}"
+								><i class="bi bi-star-fill" aria-hidden="true"></i> {matchcard.average}</span
+							>
+						</div>
+						<div class="event-stats">
+							<span
+								><strong>{matchcard.matches}</strong>
+								{matchcard.matches === 1 ? 'combate' : 'combates'}</span
+							>
+							<span
+								><strong>{matchcard.nights}</strong>
+								{matchcard.nights === 1 ? 'noche' : 'noches'}</span
+							>
 						</div>
 					</div>
-
-					<footer class="custom-action-buttons-container">
-						<a
-							href="/admin/matchcards/event?slug={matchcard.id}"
-							class="btn small warn rounded icon"
-							aria-label="Editar"
-						>
-							<i class="bi bi-pencil"></i>
-							<span>Editar evento</span>
-						</a>
-						<a
-							href="/admin/matchcards/matches/upsert-matches?slug={matchcard.id}"
-							class="btn small warn rounded icon"
-							aria-label="Editar combates"
-						>
-							<i class="bi bi-pencil"></i>
-							<span>Editar combates</span>
-						</a>
-						<a
-							href="/admin/matchcards/rating?slug={matchcard.id}"
-							class="btn small success rounded icon"
-							aria-label="Valoraciones"
-						>
-							<i class="bi bi-star"></i>
-							<span>Editar valoraciones</span>
-						</a>
-						{#if matchcard.hasSummaryPost}
+					<footer class="event-actions">
+						<div class="primary-actions">
 							<a
-								href="/admin/blog/update/{matchcard.id}"
-								class="btn small warn rounded icon"
-								aria-label="Editar resumen del evento"
+								class="matches-link"
+								href="/admin/matchcards/matches/upsert-matches?slug={matchcard.id}"
+								><i class="bi bi-pencil" aria-hidden="true"></i> Combates</a
 							>
-								<i class="bi bi-pencil"></i>
-								<span>Editar resumen</span>
-							</a>
-						{:else}
-							<a
-								href="/admin/matchcards/summary?id={matchcard.id}"
-								class="btn small success rounded icon"
-								aria-label="Crear resumen del evento"
+							<a href="/admin/matchcards/rating?slug={matchcard.id}"
+								><i class="bi bi-star" aria-hidden="true"></i> Valoraciones</a
 							>
-								<i class="bi bi-card-text"></i>
-								<span>Crear resumen</span>
-							</a>
-						{/if}
-						<a
-							href="/admin/matchcards/export/{matchcard.id}"
-							class="btn small info rounded icon"
-							aria-label="Exportar evento"
-							download
-						>
-							<i class="bi bi-file-earmark-code"></i>
-							<span>Exportar JSON</span>
-						</a>
-						<a
-							href="/admin/matchcards/export/txt?id={matchcard.id}"
-							class="btn small info rounded icon"
-							aria-label="Exportar evento a csv"
-							download
-						>
-							<i class="bi bi-file-earmark-spreadsheet"></i>
-							<span>Exportar CSV</span>
-						</a>
-						<form action="" method="post" use:enhance onsubmit={checkConfirmation}>
-							<button
-								type="submit"
-								name="delete_event"
-								value={matchcard.id}
-								class="btn small danger rounded icon"
-								aria-label="Eliminar evento"
+						</div>
+						<details class="more-actions">
+							<summary
+								><span>Más opciones</span><i class="bi bi-chevron-down" aria-hidden="true"></i><span
+									class="sr-only"
+								>
+									para {matchcard.ppv_name}</span
+								></summary
 							>
-								<i class="bi bi-trash"></i>
-								<span>Eliminar evento</span>
-							</button>
-						</form>
+							<div class="secondary-actions">
+								<a href="/admin/matchcards/event?slug={matchcard.id}"
+									><i class="bi bi-pencil-square" aria-hidden="true"></i> Editar evento</a
+								>
+								<a
+									href={matchcard.hasSummaryPost
+										? `/admin/blog/update/${matchcard.id}`
+										: `/admin/matchcards/summary?id=${matchcard.id}`}
+									><i class="bi bi-card-text" aria-hidden="true"></i>
+									{matchcard.hasSummaryPost ? 'Editar resumen' : 'Crear resumen'}</a
+								>
+								<div class="export-actions">
+									<a href="/admin/matchcards/export/{matchcard.id}" download
+										><i class="bi bi-file-earmark-code" aria-hidden="true"></i> Exportar JSON</a
+									>
+									<a href="/admin/matchcards/export/txt?id={matchcard.id}" download
+										><i class="bi bi-file-earmark-spreadsheet" aria-hidden="true"></i> Exportar CSV</a
+									>
+								</div>
+								<form method="post" use:enhance onsubmit={checkConfirmation}>
+									<button type="submit" name="delete_event" value={matchcard.id}
+										><i class="bi bi-trash" aria-hidden="true"></i> Eliminar evento</button
+									>
+								</form>
+							</div>
+						</details>
 					</footer>
+				</article>
+			{:else}
+				<div class="empty-state">
+					<i class="bi bi-calendar2-event" aria-hidden="true"></i>
+					<h3>Todavía no hay eventos en {data.selectedYear}</h3>
+					<p>Crea un evento para empezar a preparar su cartelera.</p>
+					<a href="/admin/matchcards/event"
+						>Crear evento <i class="bi bi-arrow-right" aria-hidden="true"></i></a
+					>
 				</div>
 			{/each}
 		</div>
 	</section>
-
-	<ButtonCreate endpoint="matchcards/event" />
 </div>
 
 <style>
-	.ppv-match-card-list {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	.matchcards-page {
+		color: #172033;
+	}
+	.page-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 		gap: 20px;
+		flex-wrap: wrap;
 	}
-	.ppv-match-card-list .matchcard-header img {
-		width: 100%;
-		height: auto;
-		max-height: 150px;
-		aspect-ratio: 16 / 9;
+	.page-header h1 {
+		margin: 0;
 	}
-	.ppv-match-card-list .matchcard-header .badge.badge-matchcard-year {
-		position: absolute;
-		top: 5px;
-		right: 5px;
-		color: #fff;
-		padding: 4px 8px;
-		font-size: 0.75rem;
-		border: 1px solid #fff;
-		background-color: rgba(0, 0, 0, 0.5);
+	.page-header p {
+		margin: 8px 0 0;
+		color: #667085;
+		font-size: 0.9rem;
 	}
-	.average-star-rating-container {
-		color: #000;
-		padding: 4px 8px;
-		border-radius: 50px;
-		font-size: 0.8rem;
-		gap: 4px;
-		background-color: #fff;
-		border: 1px solid #333;
+	.create-event {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		background: #215cc5;
+		color: white;
+		padding: 12px 18px;
+		border-radius: 10px;
+		font-weight: 600;
+		text-decoration: none;
 	}
-	.average-star-rating-container i.bi-star-fill {
-		color: orange;
-		line-height: 1;
+	.create-event:hover {
+		background: #18499f;
+	}
+	.year-filters {
+		display: flex;
+		gap: 6px;
+		flex-wrap: wrap;
+		margin: 24px 0;
+	}
+	.year-filters a {
+		padding: 8px 16px;
+		border-radius: 8px;
+		color: #596579;
+		text-decoration: none;
+		font-weight: 600;
+	}
+	.year-filters a:hover {
+		background: #e8edf5;
+	}
+	.year-filters a.active {
+		color: #194fa7;
+		background: #e5edfc;
+	}
+	.section-heading {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 12px;
+		margin-bottom: 16px;
+	}
+	.section-heading h2 {
+		margin: 0;
+		font-size: 1.15rem;
+	}
+	.section-heading > span {
+		color: #667085;
+		font-size: 0.85rem;
 		white-space: nowrap;
 	}
-	.average-star-rating-container p {
+	.event-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+		gap: 20px;
+		align-items: start;
+	}
+	.event-card {
+		min-width: 0;
+		overflow: hidden;
+		background: #fff;
+		border: 1px solid #e4e7ec;
+		border-radius: 16px;
+		box-shadow: 0 3px 12px #17203308;
+	}
+	.event-artwork {
+		margin: 16px 16px 0;
+		height: 160px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.event-artwork img {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		border-radius: 10px;
+	}
+	.event-content {
+		padding: 18px 20px 20px;
+	}
+	.event-date {
+		display: flex;
+		gap: 7px;
+		align-items: center;
+		margin: 0 0 10px;
+		color: #667085;
+		font-size: 0.78rem;
+	}
+	.event-title {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 12px;
+	}
+	.event-title h3 {
 		margin: 0;
+		font-size: 1.3rem;
+		line-height: 1.25;
+		overflow-wrap: anywhere;
+	}
+	.rating {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+		flex-shrink: 0;
+		padding: 5px 8px;
+		border-radius: 7px;
+		background: #fff6e4;
+		color: #895600;
 		font-size: 0.8rem;
 		font-weight: 600;
 	}
-	.filters-box {
-		margin: 20px 0;
+	.rating i {
+		color: #d88a00;
 	}
-
-	.matchcard.box {
+	.event-stats {
 		display: flex;
-		flex-direction: column;
-		gap: 10px;
-	}
-	.matchcard.box h2 {
-		display: flex;
-		align-items: center;
-		gap: 6px;
-	}
-	.matchcard.box h2 .year {
-		font-size: 0.8rem;
-		font-weight: light;
-		color: #7f7f7f;
-	}
-	.custom-action-buttons-container {
-		width: 100%;
-		display: flex;
-		margin-top: 5px;
-		padding-top: 15px;
-		border-top: 1px solid #ccc;
-		justify-content: flex-start;
-		align-items: center;
 		flex-wrap: wrap;
-		gap: 5px;
+		gap: 8px 16px;
+		margin-top: 12px;
+		font-size: 0.82rem;
+		color: #667085;
 	}
-
-	.custom-action-buttons-container a {
-		flex-grow: 1;
-		flex-shrink: 0;
+	.event-stats strong {
+		color: #344054;
+		font-weight: 600;
+	}
+	.event-actions {
+		border-top: 1px solid #edf0f4;
+		padding: 14px 16px 8px;
+	}
+	.primary-actions {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 8px;
+	}
+	.primary-actions a {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 7px;
+		min-height: 42px;
+		border: 1px solid #e0e5ed;
+		border-radius: 8px;
+		color: #344054;
+		text-decoration: none;
+		font-size: 0.82rem;
+		font-weight: 600;
+	}
+	.primary-actions .matches-link {
+		color: #215cc5;
+		background: #eef4ff;
+		border-color: #e0eaff;
+	}
+	.primary-actions a:hover {
+		background: #e5edfa;
+		border-color: #c1d2ee;
+	}
+	.more-actions summary {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		min-height: 44px;
+		padding: 0 4px;
+		color: #667085;
+		font-size: 0.8rem;
+		cursor: pointer;
+		list-style: none;
+	}
+	.more-actions summary::-webkit-details-marker {
+		display: none;
+	}
+	.more-actions summary > i {
+		font-size: 0.7rem;
+	}
+	.more-actions[open] summary > i {
+		transform: rotate(180deg);
+	}
+	.secondary-actions {
+		display: grid;
+		gap: 2px;
+		border-top: 1px solid #edf0f4;
+		padding: 8px 0 4px;
+	}
+	.secondary-actions a,
+	.secondary-actions button {
+		display: flex;
+		align-items: center;
+		gap: 9px;
+		width: 100%;
+		box-sizing: border-box;
+		padding: 11px 8px;
+		border: 0;
+		border-radius: 6px;
+		background: transparent;
+		color: #475467;
+		text-decoration: none;
+		font-family: inherit;
+		font-size: 0.8rem;
+		text-align: left;
+		cursor: pointer;
+	}
+	.secondary-actions a:hover {
+		background: #f3f5f8;
+	}
+	.export-actions {
+		display: flex;
+		flex-wrap: wrap;
+		border-top: 1px solid #edf0f4;
+		margin-top: 4px;
+		padding-top: 4px;
+	}
+	.export-actions a {
+		flex: 1;
+		white-space: nowrap;
+	}
+	.secondary-actions form {
+		margin: 4px 0 0;
+		border-top: 1px solid #edf0f4;
+		padding-top: 4px;
+	}
+	.secondary-actions button {
+		color: #bd3030;
+	}
+	.secondary-actions button:hover {
+		background: #fff1f1;
+	}
+	a:focus-visible,
+	summary:focus-visible,
+	button:focus-visible {
+		outline: 3px solid #7da6ef;
+		outline-offset: 3px;
+	}
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+	.empty-state {
+		grid-column: 1 / -1;
 		text-align: center;
+		background: #fff;
+		border: 1px dashed #d0d5dd;
+		border-radius: 16px;
+		padding: 48px 20px;
+	}
+	.empty-state > i {
+		color: #667085;
+		font-size: 2rem;
+	}
+	.empty-state h3 {
+		margin: 16px 0 8px;
+	}
+	.empty-state p {
+		color: #667085;
+		margin: 0 0 20px;
+	}
+	.empty-state a {
+		color: #215cc5;
+		font-weight: 600;
+	}
+	@media (max-width: 480px) {
+		.page-header {
+			gap: 16px;
+		}
+		.event-grid {
+			gap: 16px;
+		}
+		.section-heading h2 {
+			font-size: 1rem;
+		}
 	}
 </style>
