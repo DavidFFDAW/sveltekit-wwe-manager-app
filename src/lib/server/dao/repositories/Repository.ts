@@ -31,6 +31,9 @@ export abstract class Repository<
 	conn() {
 		return this.prisma;
 	}
+	getPrisma() {
+		return this.prisma;
+	}
 
 	aggregate(args: AggregateArgs): Promise<any> {
 		return this.model.aggregate(args);

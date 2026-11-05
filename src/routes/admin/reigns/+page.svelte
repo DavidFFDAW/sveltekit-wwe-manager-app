@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { errorimage } from '$lib/actions/error.image';
 	import ButtonCreate from '$lib/components/buttons/button-create.svelte';
+	import LoadButton from '$lib/components/buttons/load-button.svelte';
 	import PageWrapper from '$lib/components/page-wrapper/page-wrapper.svelte';
 
 	let { data } = $props();
@@ -29,6 +30,9 @@
 			</a>
 		</nav>
 		<!-- <HttpButton href="/api/reigns/update-days/current" icon="refresh">Actualizar días</HttpButton> -->
+		<LoadButton href="{data.path}/update-days" method="post" icon="clock-history">
+			Actualizar días
+		</LoadButton>
 	</header>
 
 	<ul class="w1 grid championships-list">

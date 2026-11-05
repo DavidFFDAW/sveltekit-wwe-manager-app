@@ -4,18 +4,18 @@
 	import SpinnerSimple from '../spinner/spinner-simple.svelte';
 	import { Toast, Utils } from '$lib/utils';
 	import { HttpService } from '$lib/services/http.service';
-	import { invalidate, invalidateAll } from '$app/navigation';
-	import { page } from '$app/state';
+	import { invalidateAll } from '$app/navigation';
 
 	interface LoadButtonProps extends HTMLButtonAttributes {
 		href: string;
+		icon?: string;
 		sleep?: number;
 		method?: 'get' | 'post' | 'put' | 'delete';
 		children: Snippet;
 	}
 
 	let loading = $state(false);
-	let { href, method = 'get', children, sleep = 500, ...rest }: LoadButtonProps = $props();
+	let { href, method = 'get', children, icon, sleep = 500, ...rest }: LoadButtonProps = $props();
 
 	const handleClick = async () => {
 		if (!href) return;
@@ -37,11 +37,16 @@
 	type="button"
 	data-async-button
 	data-loading={loading}
-	class="relative async-button {rest.class}"
+	data-href={href}
+	class="relative btn async-button {rest.class}"
 	class:button-loading={loading}
+	class:icon={Boolean(icon)}
 	disabled={loading}
 	onclick={handleClick}
 >
+	{#if icon}
+		<i class="bi bi-{icon}"></i>
+	{/if}
 	{#if loading}
 		<div class="async-spinner-loading-container">
 			<SpinnerSimple />

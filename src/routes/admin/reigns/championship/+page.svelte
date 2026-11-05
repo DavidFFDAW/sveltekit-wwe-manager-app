@@ -9,11 +9,11 @@
 <PageWrapper page="championship-reigns">
 	<header class="championship-reign-page-header">
 		<h1 class="w1">Reinados de Campeonatos</h1>
-		<a class="btn info inline-block" href="{data.path}/rankings">
+		<a class="btn info inline-block" href="/admin/reigns/rankings">
 			<i class="bi bi-trophy"></i>
 			<span class="tooltip">Rankings</span>
 		</a>
-		<a href="{data.path}/upsert" class="btn success inline-block">
+		<a href="/admin/reigns/upsert" class="btn success inline-block">
 			<i class="bi bi-plus"></i>
 			<span class="tooltip">Nuevo reinado</span>
 		</a>
