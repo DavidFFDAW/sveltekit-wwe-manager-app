@@ -29,37 +29,44 @@
 			<a class="panel-button secondary" href="/admin/ppvs/update/calendar"
 				><i class="bi bi-calendar3" aria-hidden="true"></i> Gestionar calendario</a
 			>
-			<a class="panel-button primary" href="/admin/ppvs/create"
-				><i class="bi bi-plus-lg" aria-hidden="true"></i> Crear PPV</a
-			>
+			<a class="panel-button secondary" href="/admin/ppvs/calendar">
+				<i class="bi bi-plus-lg" aria-hidden="true"></i>
+				Ver calendario
+			</a>
+			<a class="panel-button primary" href="/admin/ppvs/create">
+				<i class="bi bi-plus-lg" aria-hidden="true"></i>
+				Crear PPV
+			</a>
 		</div>
 	</header>
 
 	<section class="filter-panel" aria-label="Filtrar PPVs">
 		{#key JSON.stringify(data.filters)}
 			<form method="get" action="/admin/ppvs" role="search" aria-label="Buscar PPVs">
-				<label class="search-field"
-					><span>Buscar evento</span><input
+				<label class="search-field">
+					<span>Buscar evento</span>
+					<input
 						type="search"
 						name="search"
 						placeholder="Nombre del PPV…"
 						maxlength="255"
 						value={data.filters.search}
-					/></label
-				>
-				<label
-					><span>Mostrar</span><select name="type" value={data.filters.type}
-						>{#each filterOptions as option}<option value={option.value}>{option.label}</option
-							>{/each}</select
-					></label
-				>
+					/>
+				</label>
+				<label>
+					<span>Mostrar</span>
+					<select name="type" value={data.filters.type}>
+						{#each filterOptions as option}
+							<option value={option.value}>{option.label}</option>
+						{/each}
+					</select>
+				</label>
 				<button type="submit" class="panel-button primary"
 					><i class="bi bi-search" aria-hidden="true"></i> Buscar</button
 				>
-				{#if data.filters.search || data.filters.type !== 'all'}<a
-						href="/admin/ppvs?type=all"
-						class="clear-filters">Ver todos</a
-					>{/if}
+				{#if data.filters.search || data.filters.type !== 'all'}
+					<a href="/admin/ppvs?type=all" class="clear-filters"> Ver todos</a>
+				{/if}
 			</form>
 		{/key}
 	</section>
@@ -74,7 +81,7 @@
 		</div>
 
 		<LoadButton href="/admin/ppvs/dates" method="post" icon="calendar2-week" color="warn">
-			Mover activos a domingos de {data.targetYear}
+			Mover PPVs activos a domingos de {data.targetYear}
 		</LoadButton>
 	</div>
 

@@ -29,7 +29,8 @@ export const load = async () => {
             ranking_status: ReignUtils.getReignRankingStatus(reign),
             calculated_name: ReignUtils.getWrestlerOrTeamName(reign as any),
             wonDateStr: reign.won_date.toReadableString(),
-            updated_ellapsed: reign.last_time_updated ? Utils.getEllapsedTime(reign.last_time_updated) : null
+            updated_ellapsed: reign.last_time_updated ? Utils.getEllapsedTime(reign.last_time_updated) : null,
+            defence_ratio: ReignUtils.getReignDefenceRatio(reign.days, reign.defences ?? 0),
         };
     });
 

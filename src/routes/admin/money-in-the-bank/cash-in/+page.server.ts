@@ -94,6 +94,7 @@ export const actions = {
 
             const today = new Date();
             const cashedDate = new Date(datas.cashinDate);
+            cashedDate.setHours(today.getHours(), today.getMinutes(), today.getSeconds());
             if (cashedDate > today) return Helpers.error('La fecha de canjeo no puede ser futura a hoy.', 400);
             const newCreateDays = ReignUtils.getDaysBetweenDates(cashedDate, today);
 

@@ -58,7 +58,7 @@
 							value={reign.defences || 0}
 							step={1}
 						/>
-						<p class="duration">{reign.ellapsed_time.formatted}</p>
+						<p class="duration">{reign.ellapsed_time.formatted} ({reign.days} días)</p>
 						<p class="duration">{reign.wonDateStr} - Presente</p>
 
 						{#if reign.updated_ellapsed}
@@ -66,6 +66,7 @@
 						{/if}
 
 						<p class="tag reign-rating-tag">{reign.ranking_status}</p>
+						<p class="tag reign-ratio">{reign.defence_ratio}</p>
 					</div>
 				{/each}
 			</div>
