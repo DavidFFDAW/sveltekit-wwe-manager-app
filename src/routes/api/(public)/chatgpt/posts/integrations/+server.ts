@@ -41,9 +41,12 @@ export async function POST({ request }) {
         if (!createdPost)
             return Api.error('Failed to create post', 500);
 
+        const baseURL = new URL(request.url).origin;
         return Api.response({
             post_id: createdPost.id,
             message: 'Blog post has been created successfully',
+            upsert_url: `${baseURL}/admin/blog/upsert?id=${createdPost.id}`,
+            review_post_url: `${baseURL}/admin/blog/bulk/review`,
         }, 201);
     } catch (error) {
         return Api.error('An unexpected error occurred', 500);
