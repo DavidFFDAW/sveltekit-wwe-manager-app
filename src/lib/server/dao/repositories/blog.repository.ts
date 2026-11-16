@@ -4,164 +4,165 @@ import DateUtils from '$lib/utils/date.utils';
 import prisma from '$lib/server/prisma';
 
 export class BlogRepository extends Repository<
-	BlogPost,
-	Prisma.BlogPostCreateInput,
-	Prisma.BlogPostUpdateInput,
-	Prisma.BlogPostWhereInput,
-	Prisma.BlogPostFindManyArgs,
-	Prisma.BlogPostGroupByArgs,
-	Prisma.BlogPostAggregateArgs
+    BlogPost,
+    Prisma.BlogPostCreateInput,
+    Prisma.BlogPostUpdateInput,
+    Prisma.BlogPostWhereInput,
+    Prisma.BlogPostFindManyArgs,
+    Prisma.BlogPostGroupByArgs,
+    Prisma.BlogPostAggregateArgs
 > {
-	protected requiredFields: string[] = [];
-	public allowedStatuses: string[] = ['draft', 'published', 'private'];
+    protected requiredFields: string[] = [];
+    public allowedStatuses: string[] = ['draft', 'published', 'private'];
 
-	constructor() {
-		super('blogPost');
-	}
+    constructor() {
+        super('blogPost');
+    }
 
-	public getPublishedPosts(): Promise<BlogPost[]> {
-		return this.model.findMany({
-			where: {
-				visible: true,
-				status: 'published',
-				created_at: {
-					lte: new Date()
-				}
-			},
-			orderBy: {
-				created_at: 'desc'
-			}
-		});
-	}
-	public getPublishedPostsByStatuses(statuses: string[]): Promise<BlogPost[]> {
-		const timezoneDate = DateUtils.getDateInstanceTimezone(new Date(), 'Europe/Madrid');
-		return this.model.findMany({
-			where: {
-				visible: true,
-				status: {
-					in: statuses
-				},
-				created_at: {
-					lte: timezoneDate
-				}
-			},
-			orderBy: {
-				created_at: 'desc'
-			}
-		});
-	}
+    public getPublishedPosts(): Promise<BlogPost[]> {
+        return this.model.findMany({
+            where: {
+                visible: true,
+                status: 'published',
+                created_at: {
+                    lte: new Date()
+                }
+            },
+            orderBy: {
+                created_at: 'desc'
+            }
+        });
+    }
+    public getPublishedPostsByStatuses(statuses: string[]): Promise<BlogPost[]> {
+        const timezoneDate = DateUtils.getDateInstanceTimezone(new Date(), 'Europe/Madrid');
+        return this.model.findMany({
+            where: {
+                visible: true,
+                status: {
+                    in: statuses
+                },
+                created_at: {
+                    lte: timezoneDate
+                }
+            },
+            orderBy: {
+                created_at: 'desc'
+            }
+        });
+    }
 
-	public getReadablePostBySlug(slug: string) {
-		return this.model.findFirst({
-			where: {
-				slug,
-				visible: true,
-				status: 'published',
-				created_at: {
-					lte: DateUtils.getDateInstanceTimezone(new Date(), 'Europe/Madrid'),
-				}
-			},
-			take: 1
-		});
-	}
+    public getReadablePostBySlug(slug: string) {
+        return this.model.findFirst({
+            where: {
+                slug,
+                visible: true,
+                status: 'published',
+                created_at: {
+                    lte: DateUtils.getDateInstanceTimezone(new Date(), 'Europe/Madrid'),
+                }
+            },
+            take: 1
+        });
+    }
 
-	public getTransformedObject(form: FormData): Prisma.BlogPostCreateInput {
-		const datePublished = form.has('published_at')
-			? new Date(form.get('published_at') as string)
-			: new Date();
+    public getTransformedObject(form: FormData): Prisma.BlogPostCreateInput {
+        const datePublished = form.has('published_at')
+            ? new Date(form.get('published_at') as string)
+            : new Date();
 
-		const haAutodelete = form.get('auto_delete') === 'active';
-		const status = form.has('post_status') ? (form.get('post_status') as string) : 'draft';
-		const f_status = this.isStatusAllowed(status) ? status : 'draft';
-		const visible = f_status === 'published';
+        const haAutodelete = form.get('auto_delete') === 'active';
+        const status = form.has('post_status') ? (form.get('post_status') as string) : 'draft';
+        const f_status = this.isStatusAllowed(status) ? status : 'draft';
+        const visible = f_status === 'published';
 
-		return {
-			title: form.get('title') as string,
-			slug: form.get('slug') as string,
-			image: (form.get('image') as string) || '',
-			content: form.get('content') as string,
-			admin: { connect: { id: Number(form.get('author')) } },
-			exceptr: form.get('excerpt') as string,
-			visible: visible,
-			status: f_status,
-			category: form.has('category') ? (form.get('category') as string) : undefined,
-			deletable: haAutodelete,
-			created_at: datePublished
-		};
-	}
+        return {
+            title: form.get('title') as string,
+            slug: form.get('slug') as string,
+            image: (form.get('image') as string) || '',
+            content: form.get('content') as string,
+            admin: { connect: { id: Number(form.get('author')) } },
+            exceptr: form.get('excerpt') as string,
+            visible: visible,
+            status: f_status,
+            category: form.has('category') ? (form.get('category') as string) : undefined,
+            deletable: haAutodelete,
+            created_at: datePublished
+        };
+    }
 
-	public getRequiredFields(): string[] {
-		return ['title', 'slug', 'content', 'author', 'excerpt'];
-	}
+    public getRequiredFields(): string[] {
+        return ['title', 'slug', 'content', 'author', 'excerpt'];
+    }
 
-	public isStatusAllowed(status: string): boolean {
-		return this.allowedStatuses.includes(status);
-	}
+    public isStatusAllowed(status: string): boolean {
+        return this.allowedStatuses.includes(status);
+    }
 
-	public getPostStatus(status: string): string {
-		return this.isStatusAllowed(status) ? status : 'draft';
-	}
+    public getPostStatus(status: string): string {
+        return this.isStatusAllowed(status) ? status : 'draft';
+    }
 
-	public getDrafts(args?: Prisma.BlogPostFindManyArgs): Promise<BlogPost[]> {
-		return this.model.findMany({
-			...args,
-			where: {
-				...args?.where,
-				status: 'draft'
-			},
-			orderBy: {
-				created_at: 'desc'
-			}
-		});
-	}
+    public getDrafts(args?: Prisma.BlogPostFindManyArgs): Promise<BlogPost[]> {
+        return this.model.findMany({
+            ...args,
+            where: {
+                ...args?.where,
+                status: 'draft'
+            },
+            orderBy: {
+                created_at: 'desc'
+            }
+        });
+    }
 
-	async getMaxMinViewsRange() {
-		const result = await this.model.aggregate({
-			_max: {
-				views: true
-			},
-			_min: {
-				views: true
-			}
-		});
+    async getMaxMinViewsRange() {
+        const result = await this.model.aggregate({
+            _max: {
+                views: true
+            },
+            _min: {
+                views: true
+            }
+        });
 
-		return {
-			max: result._max.views || 0,
-			min: result._min.views || 0
-		};
-	}
+        return {
+            max: result._max.views || 0,
+            min: result._min.views || 0
+        };
+    }
 
-	async getPostAverageViews() {
-		const result = await this.model.aggregate({
-			_avg: {
-				views: true
-			}
-		});
-		return result._avg.views || 0;
-	}
+    async getPostAverageViews() {
+        const result = await this.model.aggregate({
+            _avg: {
+                views: true
+            }
+        });
+        return result._avg.views || 0;
+    }
 
-	getRelatedPosts(postId: number, category: string, take: number = 2): Promise<BlogPost[]> {
-		return this.model.findMany({
-			where: {
-				id: {
-					not: postId
-				},
-				visible: true,
-				status: 'published',
-				category: category,
-				created_at: {
-					lte: DateUtils.getDateInstanceTimezone(new Date(), 'Europe/Madrid')
-				}
-			},
-			orderBy: {
-				created_at: 'desc'
-			},
-			take: take
-		});
-	}
-	getPrismaModel() {
-		return prisma.blogPost;
-	}
+    getRelatedPosts(postId: number, category: string, take: number = 2): Promise<BlogPost[]> {
+        return this.model.findMany({
+            where: {
+                id: {
+                    not: postId
+                },
+                visible: true,
+                status: 'published',
+                category: category,
+                created_at: {
+                    lte: DateUtils.getDateInstanceTimezone(new Date(), 'Europe/Madrid')
+                }
+            },
+            orderBy: {
+                created_at: 'desc'
+            },
+            take: take
+        });
+    }
+    getPrismaModel() {
+        return prisma.blogPost;
+    }
 }
 
 export const blog = new BlogRepository();
+export const posts = blog;

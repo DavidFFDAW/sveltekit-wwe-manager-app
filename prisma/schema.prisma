@@ -127,6 +127,7 @@ model BlogPost {
     status         String           @default("draft") @db.VarChar(50)
     category       String?          @db.VarChar(255)
     deletable      Boolean?         @default(false) @db.TinyInt
+    provider       String?          @default("internal") @db.VarChar(25)
     views          Int              @default(0) @db.Int
     ReportComments ReportComments[]
     Injury         Injuries?        @relation("injury_post")
