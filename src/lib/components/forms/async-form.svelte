@@ -21,7 +21,7 @@
 	export let preProcess: ((formData: FormData) => boolean) | null = null;
 	export let afterSubmit: ((response: ActionResult) => void) | null = null;
 	export let afterResponse: ((response: ActionResult) => void) | null = null;
-	let loading = false;
+	export let loading = false;
 
 	const submitForm: SubmitFunction = ({ formData }) => {
 		const redirectURL = redirect.trim();
@@ -99,7 +99,7 @@
 			</div>
 		{/if}
 
-		<slot />
+		<slot {loading} />
 
 		{#if showButtons}
 			<div class="w1 buttons-block flex">

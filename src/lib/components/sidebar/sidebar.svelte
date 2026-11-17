@@ -127,9 +127,9 @@
 	aria-label="Navegación de administración"
 >
 	<header class="sidebar-header">
-		<a class="brand" href="/admin/dashboard" aria-label="Versatile: ir al dashboard">
+		<a class="brand" href="/admin/dashboard" aria-label="WWE Manager: ir al dashboard">
 			<img src="/icons/versatile.png" alt="" width="42" height="42" />
-			<span><strong>VERSATILE</strong><small>Panel de administración</small></span>
+			<span><strong>WWE Manager</strong><small>Panel de administración</small></span>
 		</a>
 		<button
 			bind:this={closeButton}
