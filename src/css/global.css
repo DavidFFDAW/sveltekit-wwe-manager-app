@@ -19,6 +19,7 @@
 	--font-color: #2f2f2f;
 	--imgur: #1bb76e;
 	--brand-color: #c91727;
+	--indigo: #3F00FF;
 
 	--color-success: #deffec;
 	--color-danger: #fde7e7;
@@ -162,13 +163,13 @@ input,
 textarea,
 select {
 	font-size: 1em;
-	padding: 5px 10px;
+	padding: 10px 15px;
 	background-color: rgb(238, 238, 238);
 	border: 1px solid #ccc;
-	background: #f9f9f9;
-	border-radius: 5px;
-	width: 100%;
+	background: #fcfcfc;
+	border-radius: 10px;
 	outline: none;
+	width: 100%;
 }
 
 input[type='radio'].app-radio,
@@ -236,8 +237,29 @@ input:placeholder-shown {
 }
 
 input:focus,
-textarea:focus {
-	border-color: #1bb76e;
+input[type='date']:focus-within,
+textarea:focus,
+select:focus {
+	border-color: color-mix(in srgb, var(--indigo) 45%, #ccc);
+	outline: 2px solid transparent;
+	box-shadow:
+		0 0 0 2px color-mix(in srgb, var(--indigo) 8%, transparent),
+		0 0 8px 2px color-mix(in srgb, var(--indigo) 12%, transparent);
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled {
+	background-color: #eee;
+	color: #6c757d;
+	cursor: not-allowed;
+	opacity: 0.6;
+}
+
+input::placeholder,
+textarea::placeholder {
+	color: #6c757d;
+	opacity: 1;
 }
 
 textarea {

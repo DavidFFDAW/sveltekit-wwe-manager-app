@@ -1,8 +1,12 @@
 <script lang="ts">
-	export let name: string;
-	export let label: string;
-	export let checked = false;
-	export let disabled = false;
+	import type { HTMLInputAttributes } from 'svelte/elements';
+	interface ToggleInputProps extends HTMLInputAttributes {
+		name: string;
+		label: string;
+		checked?: boolean;
+		disabled?: boolean;
+	}
+	let { name, label, checked = $bindable(false), disabled = false }: ToggleInputProps = $props();
 </script>
 
 <div class="toggle-container form-item form-input-toggle-switch">
@@ -66,7 +70,7 @@
 	}
 
 	input:checked + .slider {
-		background-color: #4caf50;
+		background-color: var(--indigo);
 	}
 
 	input:checked + .slider:before {

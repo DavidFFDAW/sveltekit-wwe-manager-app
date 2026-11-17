@@ -1,6 +1,7 @@
 import { posts } from "$lib/server/dao/repositories";
 import { Helpers } from "$lib/server/server.helpers.js";
 import FormService from "$lib/services/form.service.js";
+import type { Prisma } from "@prisma/client";
 
 export const load = async () => {
 	const list = await posts.get({
@@ -18,7 +19,7 @@ export const load = async () => {
 			provider: 'chatgpt',
 		},
 		orderBy: {
-			created_at: 'desc'
+			created_at: 'asc'
 		}
 	});
 
@@ -27,17 +28,26 @@ export const load = async () => {
 
 export const actions = {
 	update: async ({ request }) => {
-		const data = await FormService.fromRequest(request);
-		const postIds = data.getAll('post_ids[]').map(Number);
-		const updatingPosts = postIds.map(id => ({
-			id,
-			date: data.get(`post[${id}][date]`),
-			title: data.get(`post[${id}][title]`),
-			published: data.getToggle(`post[${id}][published]`)
-		}));
+		try {
+			const data = await FormService.fromRequest(request);
+			const postIds = data.getAll('post_ids[]').map(Number);
+			const updatingPosts: { id: number, update: Prisma.BlogPostUpdateInput }[] = postIds.map(id => {
+				return {
+					id,
+					update: {
+						title: data.get(`post[${id}][title]`),
+						created_at: new Date(data.get(`post[${id}][date]`) + 'T00:00:00'),
+						status: data.getToggle(`post[${id}][published]`) ? 'published' : 'draft',
+					}
+				};
+			});
 
-		console.log({ updatingPosts });
-		return Helpers.error('Form submission failed');
+			await Promise.all(updatingPosts.map(post => posts.updateById(post.id, post.update)));
+			return Helpers.success('Form submission successful');
+		} catch (error) {
+			console.error(error);
+			return Helpers.error('Form submission failed');
+		}
 	},
 	delete: async ({ request }) => {
 		const data = await FormService.fromRequest(request);
