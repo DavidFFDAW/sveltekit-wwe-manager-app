@@ -1,5 +1,7 @@
 import { PPVDao } from '$lib/server/dao/ppv.dao.js';
+import { ppv } from '$lib/server/dao/repositories/ppv.repository.js';
 import { Helpers } from '$lib/server/server.helpers.js';
+import FormService from '$lib/services/form.service';
 
 export const load = async ({ params }) => {
 	const slug = Number(params.slug);
@@ -19,32 +21,33 @@ export const actions = {
 		if (!slug) return Helpers.error('PPV no encontrado', 404);
 		if (Number.isNaN(slug)) return Helpers.error('PPV no encontrado', 404);
 
-		const formData = await request.formData();
+		const formData = await FormService.fromRequest(request);
 		const requiredFields = ['name', 'game_date'];
-		const { error, message } = Helpers.checkRequiredFields(formData, requiredFields);
+		const { error, message } = formData.checkRequiredFields(requiredFields);
 		if (error) return Helpers.error(message, 400);
 
 		try {
-			const ppv = await PPVDao.getFilterPPVs({
+			const gameDate = new Date(formData.get('game_date') + 'T21:00:00Z');
+			const exists = await ppv.exists({
 				AND: [
 					{
 						OR: [
 							{ name: formData.get('name') as string },
-							{ game_date: new Date(formData.get('game_date') as string) }
+							{ game_date: gameDate }
 						]
 					},
 					{ id: { not: slug } }
 				]
 			});
 
-			if (ppv.length > 0)
+			if (exists)
 				return Helpers.error('Ya existe un PPV con ese nombre o en la misma fecha', 400);
 
-			const gameDate = new Date(formData.get('game_date') as string);
 			const createdPPV = await PPVDao.updatePPV(slug, {
 				name: formData.get('name') as string,
 				game_date: gameDate,
-				active: Helpers.getToggleInput(formData, 'active'),
+				active: formData.getToggle('active'),
+				annual_order: ppv.getAnnualOrder(gameDate),
 				image: formData.get('image') as string,
 				stadium: formData.get('stadium') as string,
 				city: formData.get('city') as string,
@@ -55,11 +58,11 @@ export const actions = {
 				description: formData.get('description') as string
 			});
 
-			if (!createdPPV) return Helpers.error('Error creando el PPV', 500);
-			return Helpers.success('PPV creado correctamente');
+			if (!createdPPV) return Helpers.error('Error actualizando el PPV', 500);
+			return Helpers.success('PPV actualizado correctamente');
 		} catch (error) {
 			console.error(error);
-			return Helpers.error('Error creando el PPV', 500);
+			return Helpers.error('Error actualizando el PPV', 500);
 		}
 	}
 };

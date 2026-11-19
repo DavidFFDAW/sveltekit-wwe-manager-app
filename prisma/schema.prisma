@@ -236,6 +236,7 @@ model PPV {
     description         String?   @db.Text
     specific_match_type String?   @db.VarChar(50)
     game_date           DateTime? @db.DateTime
+    annual_order        Int       @default(1) @db.Int()
     estimated_real_date DateTime? @db.DateTime
     type                String    @db.VarChar(150)
     image               String?   @db.VarChar(255)

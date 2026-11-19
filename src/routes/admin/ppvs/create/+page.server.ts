@@ -1,41 +1,50 @@
-import { PPVDao } from '$lib/server/dao/ppv.dao.js';
+import { ppv } from '$lib/server/dao/repositories/ppv.repository.js';
 import { Helpers } from '$lib/server/server.helpers.js';
+import FormService from '$lib/services/form.service';
 
 export const load = async () => {
-	return { ppvs: await PPVDao.getActivePPVs() };
+	return {
+		ppvs: await ppv.get({
+			where: { active: true },
+			orderBy: { annual_order: 'asc' }
+		})
+	};
 };
 
 export const actions = {
 	createPPV: async ({ request, locals }) => {
 		if (!Helpers.hasPermission(locals)) return Helpers.error('Unauthorized', 401);
-		const formData = await request.formData();
+		const form = await FormService.fromRequest(request);
+
 		const requiredFields = ['name', 'game_date'];
-		const { error, message } = Helpers.checkRequiredFields(formData, requiredFields);
+		const { error, message } = form.checkRequiredFields(requiredFields);
 		if (error) return Helpers.error(message, 400);
 
 		try {
-			const ppv = await PPVDao.getFilterPPVs({
+			const gameDate = new Date(form.get('game_date') + 'T21:00:00Z');
+			const existing = await ppv.exists({
 				OR: [
-					{ name: formData.get('name') as string },
-					{ game_date: new Date(formData.get('game_date') as string) }
+					{ name: form.get('name') as string },
+					{ game_date: gameDate }
 				]
 			});
-			if (ppv.length > 0)
+
+			if (existing)
 				return Helpers.error('Ya existe un PPV con ese nombre o en la misma fecha', 400);
 
-			const gameDate = new Date(formData.get('game_date') as string);
-			const createdPPV = await PPVDao.createPPV({
-				name: formData.get('name') as string,
+			const createdPPV = await ppv.create({
+				name: form.get('name') as string,
 				game_date: gameDate,
-				active: Helpers.getToggleInput(formData, 'active'),
-				image: formData.get('image') as string,
-				stadium: formData.get('stadium') as string,
-				city: formData.get('city') as string,
-				type: formData.get('ppv_type') as string,
+				annual_order: ppv.getAnnualOrder(gameDate),
+				active: form.getToggle('active'),
+				image: form.get('image') as string,
+				stadium: form.get('stadium') as string,
+				city: form.get('city') as string,
+				type: form.get('ppv_type') as string,
 				estimated_real_date: gameDate,
-				abbreviation: formData.get('abbreviation') as string,
-				specific_match_type: formData.get('specific_match') as string,
-				description: formData.get('description') as string
+				abbreviation: form.get('abbreviation') as string,
+				specific_match_type: form.get('specific_match') as string,
+				description: form.get('description') as string
 			});
 
 			if (!createdPPV) return Helpers.error('Error creando el PPV', 500);

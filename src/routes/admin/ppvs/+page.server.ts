@@ -33,7 +33,7 @@ export async function load({ url }) {
 				...filters,
 				name: { contains: searchFilter }
 			},
-			orderBy: [{ active: 'desc' }, { game_date: 'asc' }, { name: 'asc' }]
+			orderBy: [{ active: 'desc' }, { annual_order: 'asc' }, { name: 'asc' }]
 		}),
 		filters: {
 			search: searchFilter,
