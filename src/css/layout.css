@@ -7,7 +7,7 @@
 }
 
 .wvh {
-	width: 100vh;
+	width: 100dvh;
 }
 
 .h1 {
@@ -15,7 +15,7 @@
 }
 
 .vh {
-	height: 100vh;
+	height: 100dvh;
 }
 
 .pointer {
@@ -285,7 +285,7 @@ body.no-scroll {
 body main.app-main-entrypoint {
 	/* height: 100%; */
 	height: auto;
-	min-height: 100vh;
+	min-height: 100dvh;
 }
 
 body main.app-main-entrypoint .page-wrapper-content {
