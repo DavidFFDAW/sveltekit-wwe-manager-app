@@ -6,6 +6,7 @@
 	import { goto, invalidateAll } from '$app/navigation';
 	import { Toast } from '$lib/utils/toast.helper';
 	import { Utils } from '$lib/utils/general.utils';
+	import { onMount } from 'svelte';
 
 	export let form: HTMLFormElement | null = null;
 	export let method: 'post' | 'get' | 'put' | 'delete' = 'post';
@@ -21,6 +22,7 @@
 	export let preProcess: ((formData: FormData) => boolean) | null = null;
 	export let afterSubmit: ((response: ActionResult) => void) | null = null;
 	export let afterResponse: ((response: ActionResult) => void) | null = null;
+	let hasPanelFixedNavigation = false;
 	export let loading = false;
 
 	const submitForm: SubmitFunction = ({ formData }) => {
@@ -74,6 +76,13 @@
 			}
 		};
 	};
+
+	onMount(() => {
+		document.body.classList.add('has-async-form');
+		return () => {
+			document.body.classList.remove('has-async-form');
+		};
+	});
 </script>
 
 <form
@@ -102,7 +111,7 @@
 		<slot {loading} />
 
 		{#if showButtons}
-			<div class="w1 buttons-block flex">
+			<div class="w1 buttons-block flex" class:hasPanelFixedNavigation>
 				{#if showReset}
 					<button type="reset" class="btn secondary">Reset</button>
 				{/if}
@@ -142,5 +151,8 @@
 		border-top: 1px solid #333;
 		box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 		z-index: 50;
+	}
+	:global(body.has-panel-fixed-navigation) form.app-custom-form .buttons-block {
+		bottom: 50px;
 	}
 </style>

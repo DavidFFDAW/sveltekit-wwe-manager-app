@@ -69,6 +69,11 @@
 		text-align: start;
 		cursor: pointer;
 	}
+	.async-button.secondary {
+		background-color: #fff;
+		color: #121212;
+		border: 1px solid #121212;
+	}
 	.async-button.button-loading {
 		opacity: 0.6;
 		pointer-events: none;

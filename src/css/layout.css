@@ -277,7 +277,12 @@
 .overflow-hidden {
 	overflow: hidden;
 }
-
+body.has-panel-fixed-navigation .admin-panel-container {
+    padding-bottom: 50px;
+}
+body.has-async-form.has-panel-fixed-navigation .admin-panel-container {
+    padding-bottom: 70px;
+}
 body.no-scroll {
 	overflow: hidden;
 }

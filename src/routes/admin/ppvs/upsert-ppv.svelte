@@ -97,7 +97,7 @@
 			</div>
 
 			<div class="w1 grid grid-two-column gap-small">
-				<ToggleInput label="Activo" name="active" bind:checked={ppv.active} />
+				<ToggleInput label="Activo" name="active" checked={ppv.active} />
 			</div>
 		</div>
 	</Box>
