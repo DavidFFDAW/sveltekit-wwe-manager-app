@@ -2,6 +2,7 @@
 	import { onMount, tick } from 'svelte';
 	import { afterNavigate, goto } from '$app/navigation';
 	import { Toast } from '$lib/utils/toast.helper';
+	import { PUBLIC_DOWNLOAD_DB_BACKUP } from '$env/static/public';
 	import { SidebarGroups, SidebarLinks, type SidebarLink } from './sidebar.links';
 
 	let { url }: { url: string } = $props();
@@ -140,7 +141,43 @@
 		>
 	</header>
 	<nav class="sidebar-navigation" aria-label="Menú principal">
-		{#each SidebarGroups as group, index}
+		<section aria-labelledby="nav-group-general-0">
+			<h2 id="nav-group-general-0">General</h2>
+			<ul>
+				<li>
+					<div class="nav-row">
+						<a
+							download
+							href={PUBLIC_DOWNLOAD_DB_BACKUP}
+							aria-label="Descargar backup de la base de datos"
+							title="Descargar backup de la base de datos"
+							rel="noopener noreferrer"
+						>
+							<i class="bi bi-database" aria-hidden="true"></i>
+							DB backup
+						</a>
+					</div>
+				</li>
+
+				{#each SidebarGroups[0].links as link}
+					<li>
+						<div class="nav-row" class:active={active(link)}>
+							<a
+								href={link.url}
+								aria-current={active(link) ? 'page' : undefined}
+								onclick={() => {
+									if (mobile) open = false;
+								}}
+							>
+								<i class="bi bi-{link.icon}" aria-hidden="true"></i><span>{link.label}</span>
+							</a>
+						</div>
+					</li>
+				{/each}
+			</ul>
+		</section>
+
+		{#each SidebarGroups.slice(1) as group, index}
 			<section aria-labelledby="nav-group-{index}">
 				<h2 id="nav-group-{index}">{group.label}</h2>
 				<ul>

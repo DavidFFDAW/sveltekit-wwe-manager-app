@@ -73,6 +73,7 @@
 		opacity: 0.6;
 		pointer-events: none;
 		user-select: none;
+		cursor: wait;
 	}
 	.async-button:disabled {
 		opacity: 0.6;

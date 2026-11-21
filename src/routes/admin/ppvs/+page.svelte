@@ -1,6 +1,4 @@
 ﻿<script lang="ts">
-	import ActionsAsync from '$lib/components/buttons/grouped-actions/actions-async.svelte';
-	import GroupedActions from '$lib/components/buttons/grouped-actions/grouped-actions.svelte';
 	import LoadButton from '$lib/components/buttons/load-button.svelte';
 	import PpvList from './ppv-list.svelte';
 
