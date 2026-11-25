@@ -3,8 +3,8 @@ export const load = ({ url }) => {
 	const adminPreRoute = '/' + url.pathname.split('/').slice(2, 4).join('/');
 
 	return {
-		adminMainRoute,
-		adminPreRoute,
+		adminMainRoute: `/admin${adminMainRoute}`,
+		adminPreRoute: `/admin${adminPreRoute}`,
 		metas: {
 			robots: 'noindex, nofollow'
 		}

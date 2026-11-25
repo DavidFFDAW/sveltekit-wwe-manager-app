@@ -17,13 +17,13 @@
 					</label>
 
 					<label class="form-label">
-						<span class="form-label-text">Fecha</span>
-						<input type="text" name="ppvs[{ppv.id}][annual_order]" value={ppv.annual_order} />
-					</label>
-
-					<label class="form-label">
-						<span class="form-label-text">Fecha</span>
-						<input type="text" name="ppvs[{ppv.id}][abbreviation]" value={ppv.abbreviation} />
+						<span class="form-label-text">Abreviatura</span>
+						<input
+							type="text"
+							maxlength="8"
+							name="ppvs[{ppv.id}][abbreviation]"
+							value={ppv.abbreviation}
+						/>
 					</label>
 
 					<label class="form-label">
@@ -53,6 +53,14 @@
 		max-width: 1200px;
 	}
 
+	.ppvs-list {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: flex-start;
+		gap: 15px;
+	}
+
 	.ppv-item {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -61,7 +69,7 @@
 		background-color: #fff;
 		border: 1px solid #ddd;
 		border-radius: 8px;
-		padding: 8px 20px;
+		padding: 20px;
 		gap: 20px;
 		box-shadow:
 			0 2px 4px rgba(0, 0, 0, 0.1),
@@ -69,8 +77,14 @@
 	}
 	.ppv-item img.ppv-image {
 		max-width: 100%;
-		border-radius: 8px 0 0 8px;
+		border-radius: 8px;
 		object-fit: cover;
+		background-color: #000;
+		padding: 8px;
+	}
+
+	.form-label {
+		width: 100%;
 	}
 
 	.buttons-container {
