@@ -87,10 +87,11 @@
 
 <form
 	bind:this={form}
+	data-method={method}
 	action={action ? `?/${action}` : ''}
 	class="relative app-custom-form w1 h1 {classes}"
-	data-method={method}
 	method={method === 'get' ? 'get' : 'post'}
+	data-redirect={redirect}
 	use:enhance={submitForm}
 	{...$$restProps}
 >

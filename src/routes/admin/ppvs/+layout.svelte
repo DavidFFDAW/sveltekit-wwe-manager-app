@@ -7,6 +7,7 @@
 	const links = [
 		{ href: '/admin/ppvs', icon: 'list-ul', label: 'PPVs' },
 		{ href: '/admin/ppvs/calendar', icon: 'calendar3', label: 'Ver calendario' },
+		{ href: '/admin/ppvs/bulk/active', icon: 'list', label: 'Edicion masiva' },
 		{ href: '/admin/ppvs/update/calendar', icon: 'calendar-week', label: 'Gestionar calendario' },
 		{ href: '/admin/ppvs/create', icon: 'plus-lg', label: 'Crear PPV' }
 	];
